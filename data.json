@@ -1,14 +1,14 @@
 {
  "meta": {
-  "generated_ts": 1795377386.37995,
-  "generated_wib": "23 Nov 2026, 02:56 WIB",
+  "generated_ts": 1795377708.5297313,
+  "generated_wib": "23 Nov 2026, 03:01 WIB",
   "rules_version": "v2.1.2",
-  "next_close_ts": 1795377600.0,
+  "next_close_ts": 1795392000.0,
   "source": "Binance Futures Mainnet (local)"
  },
  "kpis": {
-  "total": 24,
-  "last24": 16,
+  "total": 25,
+  "last24": 15,
   "win_rate": 36.36363636363637,
   "wins": 4,
   "n_eval": 11,
@@ -18,6 +18,7 @@
   "gap_blocked": 0,
   "universe_total": 849,
   "classes": {
+   "BELUM DINILAI": 1,
    "REVERSAL": 3,
    "INSUFFICIENT DATA": 13,
    "SIDEWAYS": 4,
@@ -33,9 +34,9 @@
   "eligible": 840,
   "gap_blocked": 0,
   "universe_total": 849,
-  "signals_total": 30,
-  "heartbeat_age_s": 10.0,
-  "uptime_s": 3254.2,
+  "signals_total": 32,
+  "heartbeat_age_s": 2.0,
+  "uptime_s": 3584.3,
   "backfill_missing": 50,
   "backfill_pending": 0,
   "backfill_filled": 3360
@@ -96,6 +97,11 @@
     "close_ts": 1795363200.0,
     "close_wib": "22 Nov 23:00",
     "count": 2
+   },
+   {
+    "close_ts": 1795377600.0,
+    "close_wib": "23 Nov 03:00",
+    "count": 1
    }
   ],
   "cum_net_curve": [
@@ -182,9 +188,42 @@
    }
   ],
   "n_eval": 11,
-  "n_total": 24
+  "n_total": 25
  },
  "signals": [
+  {
+   "signal_id": "PROD WS:USD-M:VVVUSDT:LONG SIGNAL:1795377600.0",
+   "symbol": "VVVUSDT",
+   "market": "USD-M",
+   "close_ts": 1795377600.0,
+   "close_wib": "23 Nov 03:00",
+   "close_utc": "22 Nov 20:00",
+   "price": 26.115,
+   "open": 25.515,
+   "chg_4h": 2.359581389879656,
+   "ema20": 23.28527271011683,
+   "ema50": 21.920745865752142,
+   "ema500": 21.29122941612568,
+   "rvol": 1.548416133035764,
+   "taker_buy": 0.5497131812091566,
+   "breakout_level": 25.908,
+   "breakout_margin": 0.7989810097267144,
+   "hh": 2,
+   "hl": 3,
+   "atr14_pct": 4.296399281485745,
+   "rsi_5m": null,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 75.91723293724041,
+   "spread": 0.382797098397102,
+   "impact": null,
+   "depth": 200.62485999999998,
+   "liq_validated": false,
+   "quote_volume": 10875507.21076,
+   "qv24h": 84265981.67771,
+   "chart": "charts/VVVUSDT_1795377600.png",
+   "tracker": null
+  },
   {
    "signal_id": "PROD WS:USD-M:BRUSDT:LONG SIGNAL:1795363200.0",
    "symbol": "BRUSDT",
