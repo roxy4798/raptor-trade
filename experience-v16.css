@@ -1,0 +1,130 @@
+/* RAPTOR TRADE v16 — tactile curve, typography discipline, coherent kinetic hierarchy.
+   Type: Inter for communication, JetBrains Mono for instrument readings and small labels.
+   Motion: transform/opacity compositor paths; historical financial geometry never changes. */
+:root{--v16-ink:#e6f6ef;--v16-muted:#a0bdb6;--v16-cyan:#31e8ed;--v16-lime:#bfff19;--v16-ease:cubic-bezier(.16,1,.3,1);--v16-font-ui:var(--font-sans);--v16-font-data:var(--font-mono)}
+@keyframes v16-orbit-gradient{0%,100%{transform:translate3d(-6%,0,0);opacity:.2}50%{transform:translate3d(6%,0,0);opacity:.5}}
+@keyframes v16-marker-breath{0%,100%{opacity:.18;transform:scale(.83)}50%{opacity:.8;transform:scale(1.15)}}
+@keyframes v16-chart-pulse{0%,100%{opacity:.25}50%{opacity:.65}}
+@keyframes v16-corners{0%,100%{opacity:.24}50%{opacity:.7}}
+@keyframes v16-focus{0%{box-shadow:0 0 0 rgba(49,232,237,0)}50%{box-shadow:0 0 30px rgba(49,232,237,.12)}100%{box-shadow:0 0 0 rgba(49,232,237,0)}}
+@keyframes v16-bubble{0%{transform:translateX(-50%) translateY(8px) scale(.95);opacity:0}100%{transform:translateX(-50%) translateY(0) scale(1);opacity:1}}
+@keyframes v16-node-wave{0%,100%{opacity:.14;transform:scale(.6)}50%{opacity:.55;transform:scale(1.15)}}
+
+/* Bigger, predictable reading sizes and no forced tracking on long labels. */
+body{font-family:var(--v16-font-ui);font-optical-sizing:auto;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
+:where(.tagline,.ins-sum,.guide dd,.rules-list li,.hrow>span:first-child,.fineprint,.table-hint,footer p,.obs-heading p){font-family:var(--v16-font-ui);font-size:clamp(12.5px,.94vw,14px);line-height:1.72;letter-spacing:0;color:#a9bfb9}
+.tagline{font-size:clamp(13px,1.12vw,16px);max-width:60ch;line-height:1.7;color:#b5d0c7}
+:where(.section-heading h2,section.card h2,.obs-heading h2,.ins-head h2){font-family:var(--v16-font-ui);font-weight:750;line-height:1.17;letter-spacing:-.042em;color:#eefcf2}
+.section-heading h2{font-size:clamp(24px,2.3vw,32px)}
+section.card h2{font-size:clamp(20px,1.7vw,25px);line-height:1.35;margin-bottom:22px}
+.h2-note{font-family:var(--v16-font-ui);font-size:clamp(11px,.82vw,12.5px);font-weight:450;color:#94b5a9;letter-spacing:0;line-height:1.5;margin-left:6px;display:inline;vertical-align:baseline;overflow-wrap:normal}
+:where(.section-kicker,.sub-h,.obs-kicker,.heading-meta,.ins-hl small,.obs-side-title){font-family:var(--v16-font-data);font-size:clamp(10px,.75vw,11.5px);letter-spacing:.095em;line-height:1.55}
+.kpi-label{font-family:var(--v16-font-data);font-size:11px;line-height:1.3;letter-spacing:.035em;min-height:16px}
+.kpi-value{font-weight:780;line-height:1.15;font-variant-numeric:tabular-nums;letter-spacing:-.052em}
+.kpi-sub{font-family:var(--v16-font-ui);font-size:11.5px;line-height:1.54;max-width:30ch;color:#9bb7a9}
+.kpi-number{font-family:var(--v16-font-data);font-size:9.5px;letter-spacing:0}
+:where(.hrow,.metric,.hl,.obs-metric){min-width:0}
+.hrow>span:first-child{font-size:13px}
+.hval{font-variant-numeric:tabular-nums;font-size:12.5px;line-height:1.45}
+.rules-list li{font-size:13.4px;line-height:1.78;margin-bottom:9px}
+.rules-list b{color:#edfff2}
+.ins-sum{font-size:13px;max-width:104ch;line-height:1.75;color:#d1e8df}
+.ins-hl .hl small{font-size:10px}.ins-hl .hl strong{font-variant-numeric:tabular-nums}
+.guide dt{font-family:var(--v16-font-data);font-weight:700;letter-spacing:0;font-size:11px}
+.guide dd,.mix-leg li{font-size:12.5px;line-height:1.56}
+.bar-sym{font-family:var(--v16-font-data);font-weight:650;font-size:12px;letter-spacing:.005em}
+.bar-val{font-family:var(--v16-font-data);font-size:12px;font-variant-numeric:tabular-nums}
+:where(.table-wrap th,.table-wrap td){white-space:nowrap}
+.table-wrap th{font-size:11px;letter-spacing:.025em;line-height:1.4}
+.table-wrap td{font-size:12px;line-height:1.55}
+:where(.badge,.chip,.filter-btn){font-size:11px;line-height:1.5}
+footer{padding-bottom:clamp(24px,4vw,44px)}
+footer p{font-size:12.2px;line-height:1.75;max-width:104ch;margin-bottom:8px}
+.footer-brand{margin-bottom:17px}
+.footer-brand b{font-size:14px;letter-spacing:.06em}
+.footer-brand small,.footer-right{letter-spacing:.055em;font-size:10px}
+:where(.primary-btn,.secondary-btn,.obs-mode,.filter-btn,.lang-btn,.motion-toggle){font-family:var(--v16-font-data);letter-spacing:.04em}
+:where(button,a,input,[tabindex="0"]):focus-visible{outline:2px solid var(--v16-cyan);outline-offset:3px}
+
+/* KPI and surface mouse position creates responsive glow without shifting facts. */
+.v16-tactile{--v16-px:50%;--v16-py:50%;transition:border-color .28s ease,box-shadow .28s ease,background .28s ease}
+.v16-tactile.v16-touched{border-color:rgba(49,232,237,.32)!important;box-shadow:0 0 0 1px rgba(191,255,25,.08),0 18px 34px -25px rgba(49,232,237,.29)}
+.v16-tactile.v16-touched::after{background:radial-gradient(290px circle at var(--v16-px) var(--v16-py),rgba(49,232,237,.105),rgba(191,255,25,.035) 38%,transparent 75%)!important;opacity:.9!important;pointer-events:none}
+.v16-tactile.v16-tap{animation:v16-focus .34s ease-out 1}
+.kpi{min-height:180px;padding:22px 21px 21px}
+.kpi .kpi-value{margin:16px 0 12px}
+.kpi .spark{bottom:18px;opacity:.55}
+.kpi .kpi-sub{padding-right:12px}
+.ins-hl .hl{transition:border-color .2s ease,background .2s ease}
+.ins-hl .hl.v16-touched{background:linear-gradient(135deg,rgba(49,232,237,.08),transparent 72%),#0a1720}
+
+/* Interactive chart uses exact v15 vertices, never redraws price or return values. */
+.v16-curve-panel{position:relative;isolation:isolate;overflow:visible}
+.v16-curve-panel .sub-h{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:9px;line-height:1.5}
+.v16-hint{font:650 9px/1.4 var(--v16-font-data);color:#83ccc7;letter-spacing:.04em;opacity:.78;white-space:normal;max-width:29ch;text-align:right}
+.v16-curve-panel .v15-historical-pill{margin-left:7px}
+.v16-equity{display:block;overflow:visible;touch-action:pan-y;cursor:crosshair;outline:none;user-select:none;-webkit-user-select:none}
+.v16-equity:focus-visible{outline:2px solid rgba(49,232,237,.54);outline-offset:3px;border-radius:6px}
+.v16-curve-panel .v16-scrub-graphics{opacity:0;pointer-events:none;transition:opacity .3s ease}
+.v16-curve-panel.v16-chart-active .v16-scrub-graphics,.v16-equity:focus .v16-scrub-graphics{opacity:1}
+.v16-scrub-line{stroke:rgba(49,232,237,.53);stroke-width:1;stroke-dasharray:3 4}
+.v16-scrub-horizontal{stroke:rgba(191,255,25,.24);stroke-width:.7;stroke-dasharray:3 5}
+.v16-scrub-halo{fill:rgba(49,232,237,.035);stroke:#31e8ed;stroke-width:.75;stroke-opacity:.32;transform-box:fill-box;transform-origin:center;animation:v16-marker-breath 2.8s ease-in-out infinite}
+.v16-scrub-outer{fill:rgba(3,17,24,.92);stroke:#c6ff4d;stroke-width:2;filter:drop-shadow(0 0 5px rgba(191,255,25,.6))}
+.v16-scrub-core{fill:#e6fff1;filter:drop-shadow(0 0 4px rgba(49,232,237,.85))}
+.v16-curve-tooltip{position:absolute;z-index:25;min-width:170px;left:var(--tip-x,50%);top:52px;pointer-events:none;visibility:hidden;opacity:0;transform:translate(-50%,10px);transition:opacity .2s ease,transform .26s var(--v16-ease),visibility .2s;background:linear-gradient(135deg,rgba(11,36,43,.98),rgba(5,19,28,.98));border:1px solid rgba(49,232,237,.3);border-radius:10px;padding:10px 13px;box-shadow:0 15px 35px rgba(0,0,0,.55),0 0 24px rgba(49,232,237,.08);display:flex;gap:5px;flex-direction:column}
+.v16-curve-panel.v16-chart-active .v16-curve-tooltip{visibility:visible;opacity:1;transform:translate(-50%,0)}
+.v16-tip-overline{font:650 9px/1.45 var(--v16-font-data);color:#91c6be;letter-spacing:.11em}
+.v16-curve-tooltip strong{font:750 12px/1.4 var(--v16-font-data);letter-spacing:.02em;color:#e9fff3}
+.v16-tip-value{font:800 23px/1.15 var(--v16-font-ui);letter-spacing:-.04em;color:#bbff5f}
+.v16-tip-value.negative{color:#ff728f}
+.v16-curve-tooltip small{font:450 10px/1.35 var(--v16-font-ui);color:#acc9bd}
+.v16-curve-readout{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:9px 11px;margin:7px 0 4px;border:1px solid rgba(49,232,237,.12);border-radius:7px;background:linear-gradient(95deg,rgba(49,232,237,.052),rgba(191,255,25,.027));font:500 10px/1.45 var(--v16-font-data);color:#9cbbb6}
+.v16-curve-readout b{color:#ddf6df;font-size:11px;margin-left:5px}.v16-curve-readout strong{white-space:nowrap;color:#bfff19;font-size:13px}
+
+/* Data bars are now tangible controls. Hover/touch reveals truth, not a synthetic simulation. */
+.bar-row[role="button"]{cursor:pointer;touch-action:manipulation;transition:background .2s ease,border-color .2s ease,filter .2s ease;min-height:30px;border-radius:5px}
+.bar-row[role="button"]::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;background:radial-gradient(220px circle at var(--v16-x,50%) 50%,rgba(49,232,237,.09),transparent 62%);transition:opacity .2s ease}
+.bar-row:is(:hover,:focus-visible,.v16-bar-selected)::before{opacity:1}
+.bar-row.v16-bar-selected{background:rgba(49,232,237,.04);filter:brightness(1.11)}
+.bar-row.v16-bar-selected .bar-track{box-shadow:0 0 16px rgba(49,232,237,.17)}
+.bar-row.v16-bar-selected .bar-fill{box-shadow:0 0 15px rgba(191,255,25,.33)}
+.v16-bar-explainer{display:flex;flex-wrap:wrap;align-items:center;gap:8px 13px;min-height:29px;margin:7px 0 9px;color:#91bdb2;font:550 10px/1.4 var(--v16-font-data);letter-spacing:.035em}
+.v16-bar-explainer span{font-weight:750;color:#e6ffeb}.v16-bar-explainer strong{font-weight:800;color:#bfff19;font-size:12px}.v16-bar-explainer small{font:450 11px/1.4 var(--v16-font-ui);color:#91aaa2}
+
+/* Summary 4H columns are real selectable histories — native button role and keyboard. */
+.cl>div[role="button"]{cursor:pointer;position:relative;transition:filter .2s ease,transform .22s var(--v16-ease)}
+.cl>div[role="button"]:hover,.cl>div.v16-histo-active{transform:translateY(-3px);filter:brightness(1.13) saturate(1.1)}
+.cl>div.v16-histo-active i{box-shadow:0 0 14px rgba(49,232,237,.24),0 0 0 1px rgba(191,255,25,.31)}
+.cl>div[role="button"]:focus-visible{outline:2px solid rgba(49,232,237,.55);outline-offset:3px}
+.v16-histo-readout{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:7px;padding:8px 11px;border:1px solid rgba(49,232,237,.12);border-radius:6px;background:rgba(4,24,28,.5);font:600 10px/1.45 var(--v16-font-data);color:#8cbdbe}
+.v16-histo-readout strong{font-weight:600;color:#d3f2e9}.v16-histo-readout b{color:#bfff19;margin-left:6px}
+
+/* Intentionally keep curve and KPI values fixed on reduced motion; interaction can still reveal data. */
+html.motion-off .v16-scrub-halo,html.motion-off .v16-tactile.v16-tap{animation:none!important}
+@media(prefers-reduced-motion:reduce){.v16-scrub-halo,.v16-tactile.v16-tap{animation:none!important}.v16-curve-tooltip{transition:none}}
+@media(max-width:1100px){.perf-grid{gap:16px}.perf-col{padding:19px}.kpi-sub{font-size:11px}.v16-hint{font-size:8.5px}}
+@media(max-width:820px){.perf-grid{grid-template-columns:minmax(0,1fr)!important}.perf-col{min-width:0}.kpi-sub{max-width:none}.v16-curve-tooltip{top:46px}.v16-tactile.v16-touched{box-shadow:none}}
+@media(max-width:580px){
+ .kpi{min-height:158px;padding:17px 16px}.kpi-label{font-size:10px}.kpi-sub{font-size:11.5px}.kpi .spark{width:60px;bottom:12px}
+ section.card{padding:21px 15px!important}
+ section.card h2{font-size:21px;line-height:1.25}.h2-note{font-size:11.5px;display:block;margin:6px 0 0}
+ .perf-col{padding:16px 13px}.perf-grid{gap:12px}
+ .bar-row{grid-template-columns:83px minmax(0,1fr) 75px;gap:7px}.bar-val{font-size:10px}.bar-sym{font-size:10.5px}
+ .v16-curve-tooltip{top:49px;min-width:156px;padding:9px 10px}
+ .v16-curve-readout{font-size:9px}.v16-curve-readout strong{font-size:11px}
+ :where(.fineprint,.table-hint,footer p){font-size:11.5px}
+ .ins-hl small,.sub-h,.section-kicker{letter-spacing:.05em}
+ .v16-histo-readout{font-size:9px;gap:5px}
+ .hero-meta-block strong{white-space:normal}
+}
+@media print{.v16-curve-tooltip,.v16-hint,.v16-bar-explainer,.v16-histo-readout{display:none!important}}
+
+/* Pointer-reactive lighting for the existing single radar / observatory renderers. */
+@keyframes v16-impact-pulse{from{opacity:.8;transform:translate(-50%,-50%) scale(.15)}to{opacity:0;transform:translate(-50%,-50%) scale(9)}}
+.radar-stage,#obs-viewport{--v16-gesture-x:50%;--v16-gesture-y:50%;isolation:isolate}
+.v16-gesture-glow{position:absolute;z-index:2;inset:0;pointer-events:none;opacity:0;background:radial-gradient(115px circle at var(--v16-gesture-x) var(--v16-gesture-y),rgba(49,232,237,.15),rgba(191,255,25,.045) 40%,transparent 74%);transition:opacity .25s ease}
+.v16-gesture-active>.v16-gesture-glow{opacity:1}
+.v16-impact{position:absolute;z-index:8;pointer-events:none;width:18px;height:18px;border-radius:50%;border:1px solid #31e8ed;box-shadow:0 0 12px rgba(49,232,237,.55),inset 0 0 12px rgba(191,255,25,.25);animation:v16-impact-pulse .8s ease-out both}
+html.motion-off .v16-gesture-glow{display:none!important}
+@media(prefers-reduced-motion:reduce){.v16-gesture-glow,.v16-impact{display:none!important}}

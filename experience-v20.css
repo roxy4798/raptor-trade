@@ -1,0 +1,154 @@
+/* RAPTOR TRADE v20 / Optical Precision
+   Design rule: animate LIGHT, never data, text, tabs, or control geometry.
+   The underlying snapshot, PNGs, and interactive curve are untouched. */
+:root{--v20-cyan:#43e6ea;--v20-lime:#c4fc6c;--v20-ink:#e9f9f3;--v20-secondary:#a9c1bc;--v20-border:rgba(97,194,184,.21)}
+
+/* 1. Freeze the layout layers that were animated by overlapping v14/v17 rules.
+   These transforms/filter animations caused fuzzy subpixel glyph rendering. */
+:where(.topline,.topline-in,.app-rail,.footer-brand,.footer-right,
+       .hero-copy,.hero-visual,.hero-bottom,
+       .card,.perf-col,.kpi,.ins-hl .hl,.guide>div,.mix-leg li,
+       .hrow,.metric,.obs-metric,.health-card,.rules-list li,
+       .table-wrap,.table-wrap table,.table-wrap thead,.table-wrap th,.table-wrap td,
+       #signal-rows tr,.filter-switch,.filter-btn,.searchbox,.results-label,
+       .v19-tablist,.v19-tab,.v19-metric-page,.v19-section-heading,
+       .lang-btn,.lang-switch,.motion-toggle,.rail-link,.obs-mode,.obs-legend-item,
+       .primary-btn,.secondary-btn,.chart-actions button,.chart-actions a,
+       .v16-bar-explainer,.v16-curve-readout,.v16-curve-tooltip,
+       .bar-row,.bar-fill,.ins-hl strong,.hl span,.guide dt,.guide dd,
+       .mix-leg b,.v16-tip-value,.hval,.kpi-value,.bar-val,.bar-sym,
+       .tape-label,.tape-edge,.footer-right) {
+  animation:none!important;
+  filter:none!important;
+  transform:none!important;
+  will-change:auto!important;
+}
+/* Keep changing pointer spotlight off primary text/interactive controls. */
+:where(.filter-btn,.lang-btn,.v19-tab,.motion-toggle,.rail-link,.obs-mode,.obs-legend-item,
+  .primary-btn,.secondary-btn,.chart-actions button,.chart-actions a,
+  .table-wrap tbody tr,.kpi,.metric,.perf-col,.hrow,.v19-metric-page,.bar-row,
+  .searchbox,.v16-tactile.v17-engaged,.v16-tactile.v16-touched){
+  animation:none!important;transform:none!important;filter:none!important;
+}
+.v16-tactile.v17-engaged,.v16-tactile.v16-touched,
+.v16-tactile.v17-engaged:hover,.v16-tactile.v16-touched:hover{
+  transform:none!important;filter:none!important;
+}
+.v16-tactile.v16-touched::after{display:none!important}
+.v17-ripple,.v17-pointer-orb{display:none!important}
+/* No periodic full-row sweep; a static edge indicator is enough. */
+#signal-rows tr.rt13-cycle,#signal-rows tr.v15-audit-scan,#signal-rows tr.v16-live{
+  animation:none!important;transform:none!important;filter:none!important;box-shadow:none!important;
+}
+#signal-rows tr.v15-audit-scan td,#signal-rows tr.rt13-cycle td{
+  background:transparent!important;box-shadow:none!important;
+}
+#signal-rows tr.v15-audit-scan td:first-child{border-left-color:transparent!important}
+.table-wrap::before,.table-wrap::after,.table-wrap thead::after,
+.table-wrap tbody tr::after,#signal-rows tr::after{display:none!important}
+/* Overlay sweeps from older layers were crossing over text on the table. */
+#signals>.v15-surface,#signals>.v15-surface::after,#signals::before,#signals::after{display:none!important}
+#signals,#signals .table-wrap{filter:none!important;transform:none!important}
+
+/* 2. Sharp, calm text hierarchy with a carefully controlled cyan/lime palette. */
+#signals{border-color:rgba(69,206,203,.22)!important;background:linear-gradient(155deg,rgba(11,35,38,.97),rgba(4,17,23,.98))!important}
+#signals .section-kicker{font-size:11px;line-height:1.5;letter-spacing:.13em;color:#51e9ed}
+#signals h2{font-family:var(--font-sans);font-weight:760;letter-spacing:-.035em;line-height:1.25;color:#f0fff7;word-spacing:normal}
+#signals .h2-note{font-family:var(--font-sans);font-size:12.5px;line-height:1.65;color:#abc6be;font-weight:450;letter-spacing:0}
+#signals .signals-toolbar{align-items:center;gap:12px;flex-wrap:wrap;margin-top:18px;margin-bottom:18px}
+#signals .searchbox{min-height:44px;border-radius:9px;background:rgba(4,17,22,.93);border-color:rgba(97,182,174,.25);transition:background-color .2s ease,border-color .2s ease,box-shadow .2s ease}
+#signals .searchbox:focus-within{border-color:rgba(67,230,234,.7);box-shadow:0 0 0 3px rgba(67,230,234,.09)}
+#signals .searchbox input{font-size:13px;line-height:1.4;color:#f0fff7;font-weight:450;letter-spacing:0}
+#signals .searchbox input::placeholder{color:#91aaa5;opacity:1}
+#signals .filter-switch{display:flex;align-items:center;gap:4px;border-radius:10px;padding:4px;background:rgba(3,15,20,.85);border:1px solid rgba(98,178,172,.24);box-shadow:none}
+#signals .filter-btn{position:relative;min-height:35px;min-width:0;border:1px solid transparent;border-radius:7px;padding:7px 12px;background:transparent;color:#a2bcb3;font-size:11px;font-weight:700;letter-spacing:.035em;cursor:pointer;white-space:nowrap;overflow:visible;transition:background-color .18s ease,color .18s ease,border-color .18s ease,box-shadow .18s ease}
+#signals .filter-btn:hover:not(.selected){color:#e9fff5;background:rgba(67,230,234,.075)}
+#signals .filter-btn.selected{color:#10231c;background:#c0f96a;border-color:#d5ff93;box-shadow:0 0 0 1px rgba(193,255,113,.09),inset 0 1px rgba(255,255,255,.1)}
+#signals .filter-btn.selected::after{content:"";position:absolute;left:22%;right:22%;bottom:-4px;height:2px;border-radius:4px;background:rgba(201,255,105,.55);pointer-events:none}
+#signals .filter-btn::before{display:none!important}
+#signals .results-label{font-size:11px;color:#a6c3ba;letter-spacing:.06em;white-space:nowrap}
+#signals .table-wrap{position:relative;overflow-x:auto;overflow-y:hidden;border:1px solid rgba(77,151,146,.15);border-radius:10px;background:#071920;scrollbar-width:thin;scrollbar-color:#236565 #071920;isolation:isolate}
+#signals .table-wrap table{border-collapse:separate;border-spacing:0;background:transparent}
+#signals th{background:#10282b!important;color:#b6d4c9!important;font:700 11px/1.45 var(--font-mono);letter-spacing:.02em;border-bottom:1px solid rgba(98,193,182,.24);padding-top:15px;padding-bottom:15px;text-shadow:none!important}
+#signals th:hover{color:#e7fff4!important;background:#123037!important}
+#signals th[aria-sort="ascending"],#signals th[aria-sort="descending"]{color:#d4ff98!important}
+#signals td{font-size:12px;line-height:1.6;color:#d8eae1!important;text-shadow:none!important;border-bottom:1px solid rgba(86,157,150,.12);background:transparent;transition:background-color .18s ease!important}
+#signals tbody tr{background:#081b20;outline:none;transition:background-color .18s ease!important;cursor:pointer}
+#signals tbody tr:nth-child(2n){background:#091d22}
+#signals tbody tr:hover,#signals tbody tr:focus-visible{background:#0e2930!important}
+#signals tbody tr:focus-visible{outline:2px solid rgba(67,230,234,.55);outline-offset:-2px}
+#signals tbody tr.latest{background:#0d2529!important;box-shadow:inset 2px 0 #bee96b!important}
+#signals tbody tr.latest:hover{background:#123137!important}
+#signals tbody tr td:first-child{border-left:2px solid transparent!important}
+#signals tbody tr.latest td:first-child{border-left-color:#d2ff79!important}
+#signals .sym-name{color:#f1fff7;font-weight:760;letter-spacing:-.01em}
+#signals .sym-mkt{color:#a7c4b5}
+#signals .num.up{color:#7ff4bf!important}#signals .num.down{color:#ff9ba8!important}
+#signals .close-utc,#signals .close-wib{color:#b1cdc5}
+#signals .badge{filter:none!important;box-shadow:none!important}
+#signals .badge::after{display:none!important}
+#signals .table-hint{font-size:12px;line-height:1.7;color:#a9c4bb}
+
+/* 3. Tab focus is never a movement. State is conveyed by color and a precise edge. */
+.v19-tablist{isolation:isolate}
+.v19-tab{min-height:37px;position:relative;transform:none!important;filter:none!important;overflow:visible!important;font-size:10px;line-height:1.25;letter-spacing:.025em;transition:background-color .18s ease,border-color .18s ease,color .18s ease,box-shadow .18s ease!important}
+.v19-tab[aria-selected="true"]{background:rgba(192,251,98,.10);border-color:rgba(191,255,99,.55);color:#e0ffab;box-shadow:inset 0 0 0 1px rgba(192,251,98,.09)}
+.v19-tab:hover{transform:none!important;background:rgba(67,230,234,.08);color:#ecfff9}
+.v19-tab[aria-selected="true"]:hover{background:rgba(192,251,98,.12)}
+.v19-metric-page{transform:none!important;animation:none!important;opacity:1!important}
+.v19-metric-page .metric{filter:none!important;transform:none!important}
+.v19-metric-page .metric .ml{color:#aec8c0}
+.v19-metric-page .metric .mv{color:#f0fff7}
+:where(.v19-tab,.filter-btn,.obs-mode,.lang-btn,.rail-link,.motion-toggle):focus-visible{outline:2px solid #5be4ed;outline-offset:3px}
+
+/* 4. Motion is confined to dedicated visual layers and historical curve markers. */
+@keyframes v20-beam{0%{transform:translate3d(-110%,0,0);opacity:0}18%{opacity:.13}54%{opacity:.22}100%{transform:translate3d(110%,0,0);opacity:0}}
+@keyframes v20-pulse{0%,100%{opacity:.22}50%{opacity:.65}}
+.v20-light-track{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;border-radius:inherit}
+.v20-light-track::before{content:"";position:absolute;inset:0;width:100%;background:linear-gradient(90deg,transparent 38%,rgba(67,230,234,.075) 49%,rgba(190,249,110,.065) 51%,transparent 62%);transform:translate3d(-130%,0,0);animation:v20-beam 8.2s linear infinite;will-change:transform}
+.v20-light-track::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(67,230,234,.23),rgba(190,249,110,.22),transparent);opacity:.4;animation:v20-pulse 5.2s ease-in-out infinite}
+/* The light layer is behind text; the rest of each panel remains static. */
+.v20-optical-surface{isolation:isolate;position:relative}
+.v20-optical-surface>.v20-light-track{z-index:0}
+.v20-optical-surface>:not(.v20-light-track):not(.v15-surface):not(.v15-corner){z-index:1}
+.v20-curve .v15-trace,.v20-curve .v15-marker-ring{animation-play-state:running}
+.v20-curve:hover .v16-scrub-halo{stroke:#d2ff81}
+/* Continuous ticker is deliberately the only moving container of text. */
+.market-tape .tape-item,.market-tape .tape-item strong,.market-tape .tape-item em{animation:none!important;filter:none!important;transform:none!important}
+.market-tape .tape-track{filter:none!important;will-change:transform!important}
+.market-tape .tape-track:hover{animation-play-state:running!important}
+.market-tape .tape-track[aria-hidden="true"]{pointer-events:none}
+
+/* 5. Reduced motion and explicit Motion OFF apply to optical-only layers. */
+@media(prefers-reduced-motion:reduce){.v20-light-track::before,.v20-light-track::after{animation:none!important}}
+html.motion-off .v20-light-track::before,html.motion-off .v20-light-track::after{animation:none!important}
+@media(max-width:650px){
+  #signals .signals-toolbar{gap:10px}
+  #signals .filter-btn{padding:7px 8px;font-size:10px}
+  #signals th{font-size:10px;padding-top:13px;padding-bottom:13px}
+  #signals td{font-size:11.5px}
+  #signals .section-kicker{font-size:10px}
+  #signals h2{font-size:clamp(20px,5vw,26px)}
+  #signals .h2-note{font-size:11.5px}
+}
+
+/* Eliminate the legacy scale-and-blur entrance of the ENTIRE modal.
+   Optical fade does not resample fonts, buttons, or screenshot pixels. */
+@keyframes v20-modal-appear{from{opacity:.55}to{opacity:1}}
+.modal-backdrop.open .modal{animation:v20-modal-appear .16s ease-out both!important;transform:none!important;filter:none!important;will-change:auto!important}
+.modal-backdrop.open .modal :where(.modal-head h3,.modal-head .sub,.v19-section-heading,.v19-tab,.v19-metric-page,.chart-viewer-toolbar){
+  filter:none!important;text-shadow:none!important;transform:none!important;
+}
+.modal-backdrop.open .modal-head h3{animation:none!important}
+/* Sticky navigation should not obscure deep linked sections. */
+#overview,#performance,#signals,#filters,#system,#observatory{scroll-margin-top:82px}
+@media(max-width:650px){#overview,#performance,#signals,#filters,#system,#observatory{scroll-margin-top:72px}}
+@media(prefers-reduced-motion:reduce){.modal-backdrop.open .modal{animation:none!important}}
+html.motion-off .modal-backdrop.open .modal{animation:none!important}
+/* No brightness/filter keyframes on the moving ticker text itself. */
+.market-tape .tape-track,.market-tape.v17-speed .tape-track{
+  animation:v19-marquee 23s linear infinite!important;
+  animation-play-state:running!important;
+}
+html.motion-off .market-tape .tape-track,html.motion-off .market-tape.v17-speed .tape-track{animation:none!important}
+@media(prefers-reduced-motion:reduce){.market-tape .tape-track,.market-tape.v17-speed .tape-track{animation:none!important}}

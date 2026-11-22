@@ -1,0 +1,195 @@
+/* Raptor Trade v13 — micro-motion polish layer
+   Focus: subtle, synchronized detail motion without changing data structure. */
+:root{
+  --rt-v13-glow-lime: rgba(191,255,25,.18);
+  --rt-v13-glow-cyan: rgba(0,224,255,.16);
+  --rt-v13-panel-haze: rgba(255,255,255,.03);
+}
+
+@keyframes rt13-sheen{0%{transform:translateX(-130%) skewX(-18deg);opacity:0}10%{opacity:.0}35%{opacity:.42}100%{transform:translateX(150%) skewX(-18deg);opacity:0}}
+@keyframes rt13-breathe{0%,100%{transform:translate3d(0,0,0) scale(1);filter:brightness(1)}50%{transform:translate3d(0,-2px,0) scale(1.012);filter:brightness(1.08)}}
+@keyframes rt13-pulseRing{0%{box-shadow:0 0 0 0 rgba(191,255,25,.0),0 0 0 0 rgba(0,224,255,0)}30%{box-shadow:0 0 0 7px rgba(191,255,25,.08),0 0 20px 1px rgba(0,224,255,.09)}100%{box-shadow:0 0 0 14px rgba(191,255,25,0),0 0 32px 4px rgba(0,224,255,0)}}
+@keyframes rt13-sparkDrift{0%,100%{transform:translate3d(0,0,0) scale(.9);opacity:.18}25%{transform:translate3d(2px,-7px,0) scale(1.05);opacity:.68}50%{transform:translate3d(-3px,-12px,0) scale(.95);opacity:.42}75%{transform:translate3d(4px,-5px,0) scale(1.08);opacity:.82}}
+@keyframes rt13-gridShift{0%{background-position:0 0,0 0}100%{background-position:20px 12px,-20px 0}}
+@keyframes rt13-scanSweep{0%{transform:translateX(-100%);opacity:0}18%{opacity:0}48%{opacity:.6}100%{transform:translateX(100%);opacity:0}}
+@keyframes rt13-rowPing{0%,100%{box-shadow:inset 0 0 0 1px rgba(191,255,25,0),0 0 0 rgba(0,0,0,0)}40%{box-shadow:inset 0 0 0 1px rgba(191,255,25,.18),0 0 18px rgba(0,224,255,.06)}}
+@keyframes rt13-softFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes rt13-orbitSlow{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+@keyframes rt13-textGlow{0%,100%{text-shadow:0 0 0 rgba(0,224,255,0),0 0 0 rgba(191,255,25,0)}50%{text-shadow:0 0 14px rgba(0,224,255,.12),0 0 20px rgba(191,255,25,.06)}}
+
+html.v13-enhanced body::after{
+  content:"";position:fixed;inset:-10%;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(40% 30% at 15% 10%,rgba(0,224,255,.05),transparent 65%),
+    radial-gradient(30% 20% at 82% 18%,rgba(191,255,25,.05),transparent 68%),
+    radial-gradient(28% 20% at 50% 88%,rgba(129,89,255,.035),transparent 70%);
+  filter:blur(18px);
+  animation:rt13-breathe 16s ease-in-out infinite;
+}
+
+.topline::before{
+  content:"";position:absolute;left:0;right:0;top:0;height:1px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(0,224,255,.4),rgba(191,255,25,.55),transparent);
+  background-size:30% 100%;background-repeat:no-repeat;animation:rt13-scanSweep 9s linear infinite;
+}
+.topline-location b,.obs-status,.section-kicker{animation:rt13-textGlow 10s ease-in-out infinite}
+.topline-market .tiny-dot,.snapshot-led,.radar-led,.obs-pulse{animation:rt13-breathe 2.5s ease-in-out infinite,rt13-pulseRing 2.6s ease-out infinite}
+.hero-identity-mark img,.topline-emblem{animation:rt13-breathe 6s ease-in-out infinite}
+.hero-identity-line,.eyebrow-line{position:relative;overflow:hidden}
+.hero-identity-line::after,.eyebrow-line::after{
+  content:"";position:absolute;top:0;bottom:0;width:50px;left:-60px;
+  background:linear-gradient(90deg,transparent,rgba(0,224,255,.0),rgba(191,255,25,.55),rgba(0,224,255,.0),transparent);
+  filter:blur(3px);animation:rt13-sheen 7.5s linear infinite;
+}
+.hero-trust{position:relative}
+.hero-trust .trust-check{display:inline-grid;place-items:center;min-width:17px;animation:rt13-breathe 4s ease-in-out infinite}
+.hero-trust .trust-check:nth-of-type(2){animation-delay:.35s}.hero-trust .trust-check:nth-of-type(3){animation-delay:.7s}
+
+:where(.primary-btn,.secondary-btn,.motion-toggle,.obs-mode,.obs-legend-item,.chart-actions button,.chart-actions a,.rail-link){position:relative;overflow:hidden}
+:where(.primary-btn,.secondary-btn,.motion-toggle,.obs-mode,.obs-legend-item,.chart-actions button,.chart-actions a,.rail-link)::after{
+  content:"";position:absolute;top:-20%;bottom:-20%;width:28%;left:-35%;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.05),rgba(255,255,255,.24),rgba(255,255,255,.04),transparent);
+  transform:skewX(-18deg);opacity:0;
+}
+:where(.primary-btn,.secondary-btn,.motion-toggle,.obs-mode,.obs-legend-item,.chart-actions button,.chart-actions a,.rail-link):hover::after,
+:where(.primary-btn,.secondary-btn,.motion-toggle,.obs-mode,.obs-legend-item,.chart-actions button,.chart-actions a,.rail-link):focus-visible::after{animation:rt13-sheen 1.45s ease-out 1;opacity:1}
+.primary-btn:hover,.secondary-btn:hover,.motion-toggle:hover,.chart-actions button:hover,.chart-actions a:hover{transform:translateY(-1px)}
+.rail-link{transition:transform .22s ease,filter .22s ease,background .22s ease,border-color .22s ease}
+.rail-link:hover{transform:translateX(2px);filter:brightness(1.06)}
+.rail-link.active{animation:rt13-rowPing 2.6s ease-in-out infinite}
+
+.metric,.hrow,.tracker-box,.obs-side,.observatory,.signals-card{position:relative}
+.kpi{overflow:hidden}
+.kpi .kpi-value{position:relative;display:inline-block;animation:rt13-textGlow 12s ease-in-out infinite}
+.kpi .spark rect{transform-box:fill-box;transform-origin:50% 100%;animation:rt13-softFloat 2.6s ease-in-out infinite}
+.kpi .spark rect:nth-child(2n){animation-delay:.18s}.kpi .spark rect:nth-child(3n){animation-delay:.42s}
+.metric:hover,.hrow:hover{transform:translateY(-1px)}
+.metric::after,.hrow::after,.tracker-box::after,.signals-card::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;
+  background:linear-gradient(90deg,transparent,rgba(0,224,255,.05),rgba(191,255,25,.04),transparent);
+}
+.metric:hover::after,.hrow:hover::after,.tracker-box:hover::after,.signals-card:hover::after{opacity:1;animation:rt13-sheen 1.3s ease-out 1}
+
+.table-wrap{position:relative}
+.table-wrap::after{
+  content:"";position:absolute;left:22px;right:22px;top:0;height:1px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(0,224,255,.08),rgba(191,255,25,.15),transparent)
+}
+tbody tr{position:relative;transition:transform .2s ease,background-color .2s ease,box-shadow .2s ease}
+tbody tr:hover{transform:translateX(1px)}
+tbody tr::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.03),transparent)}
+tbody tr:hover::after{opacity:1;animation:rt13-sheen 1s ease-out 1}
+tbody tr.rt13-cycle{animation:rt13-rowPing 1.8s ease-in-out 1}
+.badge.good,.badge.warn,.badge.neutral{position:relative;overflow:hidden}
+.badge.good::after,.badge.warn::after,.badge.neutral::after{content:"";position:absolute;inset:0;opacity:.35;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);transform:translateX(-100%)}
+.badge.good::after{animation:rt13-sheen 4.5s ease-in-out infinite 1.1s}
+
+.radar-stage,.obs-viewport{--mx:50%;--my:50%;transform-style:preserve-3d}
+.radar-stage{
+  background-image:
+    radial-gradient(circle at 50% 58%,rgba(191,255,25,.03),transparent 37%),
+    linear-gradient(transparent,transparent),
+    linear-gradient(90deg,rgba(0,224,255,.04) 1px,transparent 1px),
+    linear-gradient(rgba(191,255,25,.03) 1px,transparent 1px);
+  background-size:auto,auto,24px 24px,24px 24px;
+  animation:rt13-gridShift 12s linear infinite;
+}
+.radar-stage::before{
+  content:"";position:absolute;inset:8% 10%;border-radius:50%;pointer-events:none;opacity:.35;
+  background:radial-gradient(circle,transparent 58%,rgba(191,255,25,.12) 59%,transparent 61%,transparent 68%,rgba(0,224,255,.12) 69%,transparent 71%);
+  animation:rt13-orbitSlow 22s linear infinite;
+}
+.radar-stage::after{
+  content:"";position:absolute;inset:18%;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,transparent 58%,rgba(255,255,255,.08) 60%,transparent 61%);
+  filter:blur(.4px);opacity:.22;animation:rt13-orbitSlow 30s linear infinite reverse;
+}
+.radar-center{transform:translate3d(var(--rx,0px),var(--ry,0px),12px)!important}
+.radar-tech,.radar-footer,.radar-coordinate{transform:translate3d(var(--rxs,0px),var(--rys,0px),0)}
+.radar-crest{animation:rt-v12-crest-float 7s ease-in-out infinite,rt13-breathe 5s ease-in-out infinite}
+.radar-crest::after{
+  content:"";position:absolute;inset:16%;border-radius:50%;pointer-events:none;opacity:.45;
+  background:radial-gradient(circle,transparent 52%,rgba(191,255,25,.14) 57%,transparent 62%);
+  animation:rt13-orbitSlow 12s linear infinite reverse;
+}
+.radar-tech span:last-child,.radar-footer strong{animation:rt13-textGlow 8s ease-in-out infinite}
+.radar-micro,.obs-spark{position:absolute;border-radius:50%;pointer-events:none;mix-blend-mode:screen}
+.radar-micro{
+  width:var(--size,3px);height:var(--size,3px);left:var(--x,50%);top:var(--y,50%);
+  background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.9),rgba(0,224,255,.55) 42%,rgba(191,255,25,.08) 72%,transparent 73%);
+  box-shadow:0 0 12px rgba(0,224,255,.28),0 0 18px rgba(191,255,25,.1);
+  animation:rt13-sparkDrift var(--dur,6s) ease-in-out infinite;
+  animation-delay:var(--delay,0s);
+}
+
+.obs-viewport{
+  background-image:
+    radial-gradient(circle at 50% 40%,rgba(191,255,25,.035),transparent 45%),
+    linear-gradient(90deg,rgba(0,224,255,.03) 1px,transparent 1px),
+    linear-gradient(rgba(191,255,25,.025) 1px,transparent 1px);
+  background-size:auto,26px 26px,26px 26px;
+  animation:rt13-gridShift 13s linear infinite reverse;
+}
+.obs-reticle,.obs-scanline{will-change:transform,opacity}
+.obs-scanline{opacity:.45;animation:rt13-sheen 5.5s linear infinite}
+.obs-fallback{transform:translate3d(var(--ox,0px),var(--oy,0px),0)}
+.obs-fallback-column{position:relative}
+.obs-fallback-column::before{content:"";position:absolute;left:50%;bottom:0;width:1px;height:100%;opacity:.25;background:linear-gradient(180deg,transparent,rgba(0,224,255,.12),transparent);transform:translateX(-50%)}
+.obs-fallback-bar{position:relative;overflow:hidden;animation:rt13-softFloat 4.5s ease-in-out infinite;animation-delay:calc(var(--idx,0) * .12s)}
+.obs-fallback-bar::before{content:"";position:absolute;inset:0;opacity:.65;background:linear-gradient(180deg,rgba(255,255,255,.14),transparent 32%,transparent 68%,rgba(191,255,25,.12) 100%)}
+.obs-fallback-bar::after{content:"";position:absolute;top:-10%;bottom:-10%;width:40%;left:-50%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.24),transparent);filter:blur(1px);animation:rt13-sheen 4.2s ease-in-out infinite;animation-delay:calc(var(--idx,0) * .18s)}
+.obs-fallback-column.is-hover .obs-fallback-bar,.obs-fallback-column.is-active .obs-fallback-bar{filter:brightness(1.13) saturate(1.04)}
+.obs-overlay{backdrop-filter:blur(3px)}
+.obs-legend-item{position:relative}
+.obs-legend-item b{transition:transform .2s ease,color .2s ease}
+.obs-legend-item:hover b,.obs-legend-item[aria-pressed="true"] b{transform:translateY(-1px)}
+.obs-legend-item[aria-pressed="true"]{animation:rt13-rowPing 2.8s ease-in-out infinite}
+.obs-spark{
+  width:var(--size,5px);height:var(--size,5px);left:var(--x,50%);top:var(--y,50%);
+  background:radial-gradient(circle,rgba(255,255,255,.95),rgba(0,224,255,.55) 45%,rgba(191,255,25,.05) 72%,transparent 73%);
+  box-shadow:0 0 16px rgba(0,224,255,.22),0 0 24px rgba(191,255,25,.09);
+  animation:rt13-sparkDrift var(--dur,5.5s) ease-in-out infinite;
+  animation-delay:var(--delay,0s);
+}
+
+.modal,.chart-viewer,.chart-viewport{position:relative;overflow:hidden}
+.modal::before,.chart-viewer::before{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.26;
+  background:radial-gradient(100% 85% at 0% 0%,rgba(0,224,255,.07),transparent 48%),radial-gradient(80% 80% at 100% 100%,rgba(191,255,25,.06),transparent 50%);
+}
+.chart-viewer-toolbar{position:relative;overflow:hidden}
+.chart-viewer-toolbar::after{content:"";position:absolute;top:0;bottom:0;width:18%;left:-22%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.16),transparent);animation:rt13-sheen 6.2s ease-in-out infinite 1.4s}
+.modal-head h3{animation:rt13-textGlow 14s ease-in-out infinite}
+
+/* Small-screen restraint so motion remains premium, not noisy */
+@media(max-width:900px){
+  .radar-stage{animation-duration:18s}
+  .obs-viewport{animation-duration:18s}
+  .radar-micro:nth-child(n+11),.obs-spark:nth-child(n+9){display:none}
+}
+
+/* Respect user motion preferences and the existing explicit toggle. */
+@media (prefers-reduced-motion:reduce){
+  html.v13-enhanced body::after,.topline::before,.hero-identity-line::after,.eyebrow-line::after,
+  :where(.primary-btn,.secondary-btn,.motion-toggle,.obs-mode,.obs-legend-item,.chart-actions button,.chart-actions a,.rail-link)::after,
+  .radar-stage,.obs-viewport,.radar-stage::before,.radar-stage::after,.obs-scanline,.obs-fallback-bar,.radar-micro,.obs-spark,
+  .kpi .spark rect,.badge.good::after,.chart-viewer-toolbar::after{animation:none!important}
+}
+html.motion-off body::after,
+html.motion-off .topline::before,
+html.motion-off .hero-identity-line::after,
+html.motion-off .eyebrow-line::after,
+html.motion-off :where(.primary-btn,.secondary-btn,.motion-toggle,.obs-mode,.obs-legend-item,.chart-actions button,.chart-actions a,.rail-link)::after,
+html.motion-off .radar-stage,
+html.motion-off .obs-viewport,
+html.motion-off .radar-stage::before,
+html.motion-off .radar-stage::after,
+html.motion-off .obs-scanline,
+html.motion-off .obs-fallback-bar,
+html.motion-off .radar-micro,
+html.motion-off .obs-spark,
+html.motion-off .kpi .spark rect,
+html.motion-off .badge.good::after,
+html.motion-off .chart-viewer-toolbar::after{animation:none!important}
+html.motion-off .radar-center,html.motion-off .radar-tech,html.motion-off .radar-footer,html.motion-off .radar-coordinate,
+html.motion-off .obs-fallback{transform:none!important}

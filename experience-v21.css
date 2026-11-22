@@ -1,0 +1,296 @@
+/* RAPTOR TRADE v21 — mobile hero geometry / centered orbital repair
+ * Fixes scale-induced blank area, oversized inherited surface beams, and
+ * orbit animations whose rotation used to override translate(-50%,-50%).
+ * Text, signal data, and interactive components remain unchanged. */
+@keyframes v21-orbit-clockwise {
+  from { transform: translate(-50%,-50%) rotate(0deg); }
+  to   { transform: translate(-50%,-50%) rotate(360deg); }
+}
+@keyframes v21-orbit-counter {
+  from { transform: translate(-50%,-50%) rotate(0deg); }
+  to   { transform: translate(-50%,-50%) rotate(-360deg); }
+}
+@keyframes v21-sweep {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes v21-inner-breathe {
+  0%,100% { opacity:.27; transform:translate(-50%,-50%) scale(1); }
+  50%     { opacity:.43; transform:translate(-50%,-50%) scale(1.04); }
+}
+/* Center the real radar rings on every screen; rotate never replaces the
+ * alignment transform. This also corrects the desktop/tablet orbit offset. */
+.radar-stage .radar-orb-outer {
+  animation:v21-orbit-clockwise 29s linear infinite !important;
+}
+.radar-stage .radar-orb-mid {
+  animation:v21-orbit-counter 22s linear infinite !important;
+}
+.radar-stage .radar-orb-inner {
+  animation:v21-inner-breathe 7.2s ease-in-out infinite !important;
+}
+
+@media(max-width:650px) {
+  /* The v10-v20 optical systems should not stack a full-height neon diagonal
+     over the mobile radar. Retain the interior radar sweep and LED effects. */
+  header.mission-hero::before,
+  header.mission-hero::after,
+  header.mission-hero .hero-copy::before,
+  header.mission-hero .hero-copy::after,
+  header.mission-hero .hero-visual::before,
+  header.mission-hero .hero-visual::after,
+  header.mission-hero .hero-bottom::before,
+  header.mission-hero .hero-bottom::after {
+    content:none !important;
+    animation:none !important;
+  }
+  header.mission-hero > .v15-surface,
+  header.mission-hero > .v20-light-track,
+  header.mission-hero > .v15-ambient,
+  .v15-ambient { display:none !important; }
+  /* A precise nonanimated line replaces the moving oversized overlay. */
+  header.mission-hero {
+    position:relative;
+    overflow:hidden;
+    isolation:isolate;
+    min-height:0 !important;
+    background:radial-gradient(360px 300px at 50% 66%,rgba(0,175,184,.075),transparent 78%),linear-gradient(145deg,#091a23,#07151e 78%) !important;
+  }
+  header.mission-hero .hero-copy {
+    min-width:0;
+    height:auto !important;
+    padding-bottom:0 !important;
+    position:relative;
+  }
+  header.mission-hero .hero-trust {
+    gap:6px 9px !important;
+    line-height:1.65;
+    margin-top:17px !important;
+    padding-bottom:0;
+  }
+  header.mission-hero .hero-trust .trust-divider { display:none !important; }
+  header.mission-hero .hero-trust .trust-item {
+    display:inline-flex;align-items:center;gap:5px;
+    flex:0 0 auto;
+    max-width:100%;
+    white-space:nowrap;
+    font-size:clamp(7px,1.85vw,9px);
+    letter-spacing:.02em;
+  }
+  header.mission-hero .hero-trust .trust-item .trust-check {
+    flex:0 0 auto;
+    font-size:12px;
+  }
+  /* Never scale a block with a retained unscaled layout box.
+     The stage and hero shrink intrinsically to each handset width. */
+  header.mission-hero .hero-visual {
+    min-height:0 !important;
+    height:auto !important;
+    margin:17px 0 0 !important;
+    padding:13px 0 14px !important;
+    border-left:0 !important;
+    border-top:1px solid rgba(53,240,255,.16) !important;
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr);
+    grid-template-rows:auto auto auto;
+    align-items:center;
+    align-content:center;
+    gap:8px;
+    overflow:hidden;
+    transform:none !important;
+  }
+  header.mission-hero .radar-header,
+  header.mission-hero .radar-footer {
+    position:relative !important;
+    inset:auto !important;
+    padding:0 !important;
+    margin:0 !important;
+    width:100%;
+    min-width:0;
+    min-height:17px;
+    z-index:5;
+    font-size:clamp(8px,2.1vw,10px) !important;
+    line-height:1.45;
+    letter-spacing:.055em !important;
+    overflow:visible;
+    transform:none !important;
+  }
+  header.mission-hero .radar-footer {
+    padding-top:10px !important;
+    border-top:1px solid rgba(53,240,255,.13);
+    display:flex;
+    gap:5px;
+    white-space:normal !important;
+  }
+  header.mission-hero .radar-footer > span {
+    min-width:0;
+    flex-shrink:1;
+    white-space:nowrap;
+  }
+  header.mission-hero .radar-footer .radar-bars {flex:0 0 auto}
+  header.mission-hero .radar-stage {
+    width:min(100%,292px) !important;
+    height:auto !important;
+    min-height:0 !important;
+    max-height:none !important;
+    aspect-ratio:1 / 1;
+    padding:0 !important;
+    margin:0 auto !important;
+    position:relative;
+    transform:none !important;
+    translate:none !important;
+    filter:none !important;
+    align-self:center;
+    justify-self:center;
+    flex:none;
+    overflow:hidden;
+    contain:layout paint;
+    isolation:isolate;
+    border-radius:50%;
+    background:radial-gradient(circle,rgba(11,51,58,.25),rgba(4,17,25,.04) 66%,transparent 74%);
+  }
+  header.mission-hero .radar-center {
+    position:absolute !important;
+    inset:0 !important;
+    z-index:6 !important;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:5px !important;
+    margin:0;
+    transform:none !important;
+    filter:none !important;
+  }
+  header.mission-hero .radar-center::before {
+    width:73% !important;
+    height:auto !important;
+    aspect-ratio:1;
+    left:50%;top:50%;
+    transform:translate(-50%,-50%);
+  }
+  header.mission-hero .radar-crest {
+    width:clamp(104px,35vw,146px) !important;
+    height:clamp(104px,35vw,146px) !important;
+    max-width:52%;
+    max-height:52%;
+    flex:none;
+  }
+  header.mission-hero .radar-crest img {
+    max-width:100%; max-height:100%; object-fit:contain;
+  }
+  header.mission-hero .radar-center-top {
+    font-size:clamp(7px,1.8vw,9px) !important;
+    letter-spacing:.065em !important;
+  }
+  header.mission-hero .radar-center small {
+    font-size:clamp(6.5px,1.75vw,8px) !important;
+    line-height:1.35;
+    max-width:90%;
+  }
+  /* Ring sizes adapt; their animation always includes correct centering. */
+  header.mission-hero .radar-orb-outer {
+    width:90% !important;height:auto !important;aspect-ratio:1;
+  }
+  header.mission-hero .radar-orb-mid {
+    width:69% !important;height:auto !important;aspect-ratio:1;
+  }
+  header.mission-hero .radar-orb-inner {
+    width:46% !important;height:auto !important;aspect-ratio:1;
+  }
+  header.mission-hero .radar-sweep {
+    width:88% !important;height:auto !important;aspect-ratio:1;
+    inset:0 !important;
+    margin:auto !important;
+    animation:v21-sweep 13s linear infinite !important;
+    opacity:.22 !important;
+    border-radius:50%;
+  }
+  header.mission-hero .radar-axis.axis-h { width:80% !important; }
+  header.mission-hero .radar-axis.axis-v { height:80% !important; }
+  header.mission-hero .radar-hud-line { inset:9% !important; }
+  header.mission-hero .radar-hud-line.alt { inset:23% !important; }
+  /* Eliminate unnecessary heavyweight GPU layers on mobile.
+     The CSS radar stays continuously animated and the logo stays prominent. */
+  header.mission-hero .radar-three,
+  header.mission-hero #radar-three,
+  header.mission-hero .radar-native,
+  header.mission-hero .radar-watermark,
+  header.mission-hero .v16-gesture-glow,
+  header.mission-hero .radar-micro {display:none !important}
+  header.mission-hero .radar-grid {
+    inset:11%;
+    opacity:.26 !important;
+  }
+  header.mission-hero .radar-tech {display:none !important}
+  header.mission-hero .radar-coordinate {font-size:7px !important;letter-spacing:.04em}
+  header.mission-hero .coord-top{top:9px}
+  header.mission-hero .coord-bottom{bottom:9px}
+  header.mission-hero .hero-bottom {
+    margin:8px -20px 0 !important;
+    position:relative;
+    transform:none !important;
+  }
+  /* Extra restraint for low-powered phones; no large paint-heavy haze. */
+  header.mission-hero .radar-stage::before,
+  header.mission-hero .radar-stage::after {
+    opacity:.12 !important;
+    filter:none !important;
+  }
+}
+
+@media(max-width:410px) {
+  .topline-in {
+    min-height:54px !important;
+    padding:0 8px !important;
+    gap:6px !important;
+    justify-content:space-between;
+    flex-wrap:nowrap;
+  }
+  .topline-location {
+    display:flex;
+    gap:6px !important;
+    align-items:center;
+    flex:0 1 auto;
+    overflow:hidden;
+    white-space:nowrap;
+    min-width:0;
+  }
+  /* Use the short product mark only in this tiny header; don't truncate
+     the word Intelligence into a broken pseudo-brand. */
+  .topline-location b,.topline-location .slash,.topline-location>span:last-child {
+    display:none !important;
+  }
+  .topline-location::after {
+    content:"RAPTOR";
+    color:#e3f9ee;
+    font:750 10px/1 var(--font-mono);
+    letter-spacing:.09em;
+    flex-shrink:0;
+  }
+  .topline-emblem {width:22px;height:22px;flex-shrink:0}
+  .topline-tools {margin-left:auto;gap:5px !important;flex-shrink:0;min-width:0}
+  .lang-switch{padding:2px !important;gap:1px !important}
+  .lang-btn{padding:5px 6px !important;font-size:9px !important}
+  .motion-toggle {padding:5px 6px !important;font-size:8px !important;white-space:nowrap}
+  .motion-toggle .motion-icon{font-size:10px}
+  header.mission-hero .radar-stage {width:min(100%,265px) !important}
+  header.mission-hero .radar-footer {font-size:7.5px !important}
+  header.mission-hero .radar-bars i {width:2px}
+}
+@media(max-width:350px) {
+  header.mission-hero {padding-left:15px !important;padding-right:15px !important}
+  header.mission-hero .radar-stage{width:min(100%,246px) !important}
+  header.mission-hero .hero-bottom{margin-left:-15px !important;margin-right:-15px !important}
+  .topline-location::after {content:"R/"}
+  .topline-tools{gap:3px !important}
+}
+@media(prefers-reduced-motion:reduce) {
+  .radar-stage .radar-orb-outer,
+  .radar-stage .radar-orb-mid,
+  .radar-stage .radar-orb-inner,
+  .radar-stage .radar-sweep {animation:none !important}
+}
+html.motion-off .radar-stage .radar-orb-outer,
+html.motion-off .radar-stage .radar-orb-mid,
+html.motion-off .radar-stage .radar-orb-inner,
+html.motion-off .radar-stage .radar-sweep {animation:none !important}

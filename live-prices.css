@@ -1,0 +1,37 @@
+/* Raptor Trade — live price layer styles (Jenni, 23 Nov 2026).
+   New file for the v23 live layer; Raka's CSS files are untouched.
+   Colors reuse the dashboard palette: --pos green, --neg red, --warn amber. */
+
+/* Live column cells (table + modal value). */
+.live-cell{white-space:nowrap}
+.live-cell .live-price{font-variant-numeric:tabular-nums}
+.live-chg{font-variant-numeric:tabular-nums;margin-left:4px}
+.live-chg.up{color:#7ff4bf}
+.live-chg.down{color:#ff9ba8}
+.live-tag{font-size:10px;color:#8fa8a0;margin-left:5px;letter-spacing:.02em}
+
+/* Status dot: live = green pulse, stale = amber, connecting = grey pulse,
+   unavailable = grey still. Never color alone: the tag text carries state. */
+.live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px;background:#5b6b66;flex:none}
+.live-dot.live{background:var(--pos,#2ebd85);box-shadow:0 0 8px rgba(46,189,133,.7);animation:live-pulse 1.6s ease-in-out infinite}
+.live-dot.stale{background:var(--warn,#e8a33d);box-shadow:0 0 8px rgba(232,163,61,.55)}
+.live-dot.connecting{background:#7d8f89;animation:live-pulse 2.4s ease-in-out infinite}
+.live-dot.unavailable{background:#4a5a55;box-shadow:none}
+@keyframes live-pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* LIVE badge in the signals toolbar. */
+.live-badge{display:inline-flex;align-items:center;gap:6px;font:700 10px/1 var(--font-mono,ui-monospace,monospace);letter-spacing:.14em;color:#b6d4c9;border:1px solid rgba(98,193,182,.24);border-radius:999px;padding:7px 10px;background:rgba(16,40,43,.6)}
+.live-badge .live-dot{margin-right:0}
+
+/* Honesty note under the table (same tone as .table-hint). */
+.live-note{font-size:12px;line-height:1.7;color:#a9c4bb;margin:14px 0 0}
+.live-note .live-updated{color:#7fa398;white-space:nowrap}
+
+/* Modal live value reuses the table cell styles; keep it compact. */
+.metric .mv .live-dot{vertical-align:1px}
+
+/* Reduced motion / explicit Motion OFF: no pulsing dots. */
+@media (prefers-reduced-motion: reduce){
+  .live-dot.live,.live-dot.connecting{animation:none}
+}
+html.motion-off .live-dot.live,html.motion-off .live-dot.connecting{animation:none}

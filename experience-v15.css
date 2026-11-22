@@ -1,0 +1,140 @@
+/* RAPTOR V15 | Unified motion system.
+   Physical, purposeful ambient motion: UI values remain stable historical snapshots.
+   Compositor-friendly overlays, phase-coordinated scan, clear reduced-motion behavior. */
+:root{--v15-beat:2.8s;--v15-scan:8.4s;--v15-cyan:#08eaff;--v15-lime:#bfff19;--v15-ease:cubic-bezier(.22,1,.36,1)}
+@keyframes v15-ambient{0%,100%{transform:translate3d(-2%,-1%,0) scale(1);opacity:.42}50%{transform:translate3d(3%,2%,0) scale(1.1);opacity:.66}}
+@keyframes v15-traverse{0%,14%{transform:translate3d(-110%,0,0);opacity:0}30%{opacity:.78}70%{opacity:.62}92%,100%{transform:translate3d(110%,0,0);opacity:0}}
+@keyframes v15-rail{0%{transform:translate3d(-108%,0,0);opacity:0}12%{opacity:.52}50%{opacity:.96}91%{opacity:.4}100%{transform:translate3d(108%,0,0);opacity:0}}
+@keyframes v15-halo{0%,100%{opacity:.5;transform:scale(.985)}50%{opacity:.9;transform:scale(1.017)}}
+@keyframes v15-ring{to{transform:rotate(360deg)}}
+@keyframes v15-ring-back{to{transform:rotate(-360deg)}}
+@keyframes v15-blip{0%,100%{transform:translate3d(0,0,0) scale(.74);opacity:.27}32%{transform:translate3d(2px,-5px,0) scale(1.15);opacity:.85}65%{transform:translate3d(-2px,-8px,0) scale(.9);opacity:.48}}
+@keyframes v15-trace{from{stroke-dashoffset:0}to{stroke-dashoffset:-800}}
+@keyframes v15-curve-glow{0%,100%{opacity:.22}50%{opacity:.65}}
+@keyframes v15-tick{0%,100%{opacity:.34}50%{opacity:.95}}
+@keyframes v15-enter{from{opacity:.78;transform:translate3d(0,8px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+@keyframes v15-bar-glint{0%,11%{transform:translateX(-140%) skewX(-17deg);opacity:0}31%{opacity:.7}80%{opacity:.5}100%{transform:translateX(230%) skewX(-17deg);opacity:0}}
+@keyframes v15-led{0%,100%{box-shadow:0 0 0 0 rgba(8,234,255,.08);opacity:.65}50%{box-shadow:0 0 0 5px rgba(8,234,255,0);opacity:1}}
+
+/* Clean up previous version's layout-warping motion. Decorative layers animate, never financial values. */
+.hero-copy,.hero-visual,.obs-side,.perf-col,.ins-hl .hl,.guide>div,.mix-leg li,.hrow,.metric,.obs-metric{animation:none!important}
+.kpi .spark rect,.equity polygon,.equity circle,.bar-fill{animation:none!important;transform:none!important}
+/* Preserve original data-series shape while adding separate animated trace overlay. */
+.equity polyline{animation:none!important}
+
+/* A single layered ambient backdrop does not obscure the information. */
+.v15-ambient{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;isolation:isolate}
+.v15-ambient::before,.v15-ambient::after{content:"";position:absolute;inset:-13%;opacity:.44;filter:blur(50px);will-change:transform,opacity}
+.v15-ambient::before{background:radial-gradient(ellipse 26% 25% at 20% 25%,rgba(0,223,243,.115),transparent 82%),radial-gradient(ellipse 28% 28% at 73% 72%,rgba(171,255,33,.065),transparent 85%);animation:v15-ambient 19s ease-in-out infinite}
+.v15-ambient::after{background:radial-gradient(ellipse 20% 25% at 88% 17%,rgba(25,167,174,.075),transparent 88%);animation:v15-ambient 25s ease-in-out infinite reverse}
+
+/* Hero: radar actually scans continuously, fine orbit motion frames the crest instead of hiding it. */
+.radar-stage{overflow:hidden;isolation:isolate}
+.radar-stage .radar-sweep{animation:radarrotate var(--v15-scan) linear infinite!important;opacity:.29!important}
+.radar-stage .radar-orb-outer{animation:v15-ring 29s linear infinite;opacity:.36!important}
+.radar-stage .radar-orb-mid{animation:v15-ring-back 22s linear infinite;opacity:.39!important}
+.radar-stage .radar-orb-inner{animation:v15-halo 7s ease-in-out infinite;opacity:.36!important}
+.radar-crest{animation:rt-v12-crest-float 6s ease-in-out infinite!important}
+.radar-center-top,.radar-center small{animation:v15-tick 5.6s ease-in-out infinite}
+.radar-center small{animation-delay:-2s}
+.radar-hud-line{position:absolute;z-index:3;inset:20% 9%;border:1px solid rgba(8,234,255,.085);border-radius:50%;pointer-events:none;animation:v15-ring 37s linear infinite}
+.radar-hud-line::after{content:"";position:absolute;width:4px;height:4px;top:4.2%;left:27%;border-radius:50%;background:var(--v15-cyan);box-shadow:0 0 10px var(--v15-cyan)}
+.radar-hud-line.alt{inset:31% 23%;border-color:rgba(191,255,25,.07);animation:v15-ring-back 24s linear infinite}
+.radar-hud-line.alt::after{background:var(--v15-lime);box-shadow:0 0 9px var(--v15-lime);left:72%;top:1%}
+.v15-dot{position:absolute;z-index:2;left:var(--x);top:var(--y);width:var(--sz,2px);height:var(--sz,2px);border-radius:50%;background:var(--v15-cyan);opacity:.45;box-shadow:0 0 8px rgba(8,234,255,.38);pointer-events:none;animation:v15-blip var(--duration,5.6s) ease-in-out infinite;animation-delay:var(--delay,0s)}
+.v15-dot.lime{background:var(--v15-lime);box-shadow:0 0 9px rgba(191,255,25,.38)}
+.hero-identity-line::after,.eyebrow-line::after{animation-duration:var(--v15-scan)!important}
+.mission-hero{isolation:isolate}
+.mission-hero::after{content:"";pointer-events:none;position:absolute;z-index:0;top:0;left:-20%;width:42%;height:1.5px;background:linear-gradient(90deg,transparent,#bfff19,#08eaff,transparent);filter:drop-shadow(0 0 5px #08eaff);opacity:.7;animation:v15-rail 10.8s linear infinite}
+.hero-bottom>div{position:relative;overflow:hidden}
+.hero-bottom>div::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(8,234,255,.3),rgba(191,255,25,.2),transparent);transform:translateX(-115%);animation:v15-rail 9.2s linear infinite;pointer-events:none}
+.hero-bottom>div:nth-child(2)::after{animation-delay:-2.3s}.hero-bottom>div:nth-child(3)::after{animation-delay:-4.6s}.hero-bottom>div:nth-child(4)::after{animation-delay:-6.9s}
+#world-clock,#countdown{font-variant-numeric:tabular-nums;transition:color .2s ease}
+
+/* Section accent rails: a low-cost overlay glides through visible panels, without moving content. */
+.v15-panel{position:relative;isolation:isolate}
+.v15-panel>.v15-surface{position:absolute;inset:1px;border-radius:inherit;pointer-events:none;z-index:0;overflow:hidden;opacity:.35}
+.v15-panel>.v15-surface::after{content:"";position:absolute;inset:-18% -2%;background:linear-gradient(105deg,transparent 38%,rgba(8,234,255,.038) 48%,rgba(191,255,25,.062) 52%,transparent 63%);transform:translateX(-100%);animation:v15-traverse var(--v15-scan) linear infinite;animation-delay:var(--v15-phase,0s);animation-play-state:paused}
+.v15-panel.v15-in-view>.v15-surface::after{animation-play-state:running}
+.v15-panel:hover>.v15-surface{opacity:1}
+.v15-panel:focus-within>.v15-surface{opacity:.88}
+.v15-corner{position:absolute;z-index:3;width:9px;height:9px;right:11px;top:11px;border-top:1px solid rgba(191,255,25,.52);border-right:1px solid rgba(8,234,255,.35);pointer-events:none;opacity:.55;animation:v15-tick 4.8s ease-in-out infinite;animation-delay:var(--v15-phase,0s)}
+
+/* KPI values stay fixed; micro-indicators and borders carry animation. */
+.kpi{overflow:hidden;min-width:0}
+.kpi .kpi-value{animation:none!important}
+.kpi .kpi-number{position:relative}
+.kpi .kpi-number::after{content:"";display:inline-block;vertical-align:middle;width:3px;height:3px;border-radius:50%;background:#bfff19;margin-left:5px;animation:v15-led var(--v15-beat) ease-in-out infinite;animation-delay:var(--v15-phase,0s)}
+.kpi .spark rect{animation:v15-tick 5.6s ease-in-out infinite!important;animation-delay:calc(var(--v15-index,0) * .16s)}
+.kpi .spark rect:nth-child(2n){animation-delay:-2s}.kpi .spark rect:nth-child(3n){animation-delay:-3s}
+
+/* Summary bars: count geometry remains locked. Moving light only. */
+.ins-hl .hl{position:relative;overflow:hidden}
+.ins-hl .hl::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(110deg,transparent 40%,rgba(191,255,25,.035) 52%,transparent 64%);animation:v15-traverse 9s linear infinite;animation-delay:var(--v15-phase,0s)}
+.mix,.cl i,.bar-track,.bar-fill,.obs-fallback-bar{position:relative;overflow:hidden}
+.mix::after,.cl i::after,.bar-track::after,.bar-fill::after{content:"";pointer-events:none;position:absolute;top:-15%;bottom:-15%;left:0;width:47%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);transform:translateX(-140%) skewX(-17deg);animation:v15-bar-glint 5.7s ease-in-out infinite}
+.cl>div:nth-child(2n) i::after{animation-delay:-1.2s}.cl>div:nth-child(3n) i::after{animation-delay:-2.4s}
+.mix::after{width:24%;animation-duration:8s}
+.bar-track::after{opacity:.24;animation-duration:7.4s}
+.bar-fill::after{opacity:.74;animation-duration:5.8s}
+.bar-row:nth-child(2) .bar-fill::after{animation-delay:-1.45s}.bar-row:nth-child(3) .bar-fill::after{animation-delay:-2.9s}.bar-row:nth-child(4) .bar-fill::after{animation-delay:-4.35s}
+
+/* Performance SVG follows the recorded vertices only: a trace sweeps, chart points do not move. */
+.equity polyline.v15-trace{stroke:#08eaff;stroke-width:2.9;stroke-opacity:.75;fill:none;stroke-dasharray:25 775!important;stroke-dashoffset:0;stroke-linecap:round;filter:drop-shadow(0 0 5px rgba(8,234,255,.65));animation:v15-trace 11.6s linear infinite!important;pointer-events:none}
+.equity .v15-marker-ring{fill:none;stroke:#bfff19;stroke-opacity:.3;stroke-width:.7;transform-box:fill-box;transform-origin:center;animation:v15-halo 4.4s ease-in-out infinite;pointer-events:none}
+.v15-historical-pill{display:inline-flex;align-items:center;vertical-align:middle;white-space:nowrap;margin-left:9px;padding:3px 7px;border:1px solid rgba(8,234,255,.2);border-radius:4px;background:rgba(6,32,36,.55);font:700 8px/1.45 var(--rt-mono,monospace);letter-spacing:.03em;color:#97bbc0}
+.v15-historical-pill::before{content:"";display:inline-block;margin-right:6px;width:4px;height:4px;border-radius:50%;background:#08eaff;animation:v15-led 4.2s ease-in-out infinite}
+
+/* Table HUD beam, without changing classes or classification values. */
+.table-wrap{isolation:isolate}
+.table-wrap::before{content:"";position:absolute;z-index:0;left:0;right:0;top:0;height:48px;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(8,234,255,.045),transparent);transform:translateX(-120%);animation:v15-rail 13s linear infinite}
+#signal-rows tr{transition:background .22s ease,box-shadow .22s ease}
+#signal-rows tr.v15-audit-scan td{background:linear-gradient(90deg,rgba(8,234,255,.037),rgba(191,255,25,.025));box-shadow:inset 0 1px 0 rgba(8,234,255,.08)}
+#signal-rows tr.v15-audit-scan td:first-child{border-left:2px solid rgba(8,234,255,.5)}
+#signal-rows tr:hover td{background:rgba(8,234,255,.04)}
+
+/* Modal: the chart is an immutable exported PNG; scan frame and metric tiles only. */
+.chart-viewport{position:relative;overflow:auto}
+.chart-viewer-toolbar{overflow:hidden;isolation:isolate}
+.chart-viewer-toolbar::before{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,#bfff19,#08eaff,transparent);animation:v15-rail 11s linear infinite;pointer-events:none}
+.chart-viewer .chart{position:relative;z-index:1;animation:none!important;transform:none!important}
+.metric-grid .metric,.tracker-grid .metric{position:relative;overflow:hidden}
+.metric-grid .metric::before,.tracker-grid .metric::before{content:"";position:absolute;z-index:0;right:9px;top:8px;width:3px;height:3px;border-radius:50%;background:#08eaff;opacity:.28;animation:v15-blip 6s ease-in-out infinite;animation-delay:var(--v15-phase,0s);pointer-events:none}
+.metric-grid .metric:hover,.tracker-grid .metric:hover{box-shadow:0 0 0 1px rgba(8,234,255,.18),0 9px 20px rgba(0,0,0,.16)}
+.v15-original-chart-note{font:500 10px/1.55 var(--rt-mono,monospace);color:#a4c7cb;padding:9px 13px;border-top:1px solid rgba(8,234,255,.13);background:rgba(7,27,30,.8)}
+
+/* Motion respects accessibility, time semantics and GPU constraints. */
+@media(max-width:800px){
+  .v15-ambient::before,.v15-ambient::after{filter:blur(32px);opacity:.3}
+  .v15-dot:nth-of-type(n+12){display:none}
+  .topline-tools{min-width:0;gap:5px}
+  .lang-switch{flex-shrink:0;gap:2px;padding:2px 3px}
+  .lang-btn{padding:5px 7px;font-size:10px}
+  .lang-switch-label{display:none}
+  .topline-market{display:none!important}
+  .topline-location>b{max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+}
+@media(max-width:410px){
+  .topline-in{padding:0 8px!important;gap:5px}
+  .topline-location span:last-child{display:none}
+  .topline-location b{font-size:8px!important;max-width:102px}
+  .topline-tools{gap:4px!important}
+  .motion-toggle{padding:5px!important;font-size:8px!important}
+  .lang-btn{font-size:9px;padding:5px 6px}
+  .v15-historical-pill{white-space:normal;font-size:7px;margin:4px 0 0}
+}
+@media (prefers-reduced-motion:reduce){
+  .v15-ambient,.v15-dot,.radar-hud-line,.v15-surface,.v15-corner,.v15-trace,.v15-marker-ring,.v15-historical-pill::before{animation:none!important}
+  .v15-ambient{display:none!important}
+  .v15-panel>.v15-surface{display:none!important}
+}
+html.motion-off .v15-ambient,html.motion-off .v15-panel>.v15-surface{display:none!important}
+html.motion-off .v15-dot,html.motion-off .radar-hud-line,html.motion-off .equity .v15-trace{animation:none!important}
+html.motion-off .equity .v15-trace{opacity:0!important}
+@media print{.v15-ambient,.v15-dot,.v15-surface,.v15-corner,.radar-hud-line{display:none!important}}
+
+/* Keep the exported timestamp visible even on small screens. */
+@media(max-width:540px){.hero-bottom .last{display:flex!important;flex-direction:column;justify-content:center}.hero-bottom .last strong{font-size:11px;line-height:1.35}.hero-bottom .last strong small{font-size:10px}}
+/* Ambient layers stop in background tabs. */
+html.v15-document-hidden .v15-ambient,html.v15-document-hidden .v15-dot,html.v15-document-hidden .v15-historical-pill::before{animation-play-state:paused!important}
+html.v15-document-hidden .v15-panel .v15-surface::after{animation-play-state:paused!important}
