@@ -54,7 +54,7 @@ async function serveKlines(request) {
     if (!resp.ok) return json({error:resp.status===400 || resp.status===404
        ? 'Binance does not provide candles for this futures contract.'
        : 'Binance upstream unavailable.',status:resp.status,
-       upstream:text.slice(0,200)},resp.status===400||resp.status===404?404:502);
+       upstream:text.slice(0,1500)},resp.status===400||resp.status===404?404:502);
     if(text.length>2500000) return json({error:'Upstream data exceeded limit.'},502);
     let rows;
     try {rows=JSON.parse(text)}catch{return json({error:'Invalid Binance response.'},502)}

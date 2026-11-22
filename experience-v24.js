@@ -2,6 +2,15 @@
    Exact selected-symbol REST candles + 4H WebSocket updates.
    Snapshot markers remain immutable; no synthetic OHLCV is ever generated.
    Only one WebSocket/chart is active, with cleanup on selection/tab changes.
+
+   JENNI build-owned change (23 Nov 2026, v25): Binance's WAF returns
+   HTTP 403 (HTML error page) to the Pages Worker's REST fetch from
+   every Cloudflare colo — the Worker path cannot load candles. Candle
+   history is now fetched FIRST from the Binance WebSocket API
+   (wss://ws-fapi/ws-dapi …/v1, klines method — same official 4H OHLCV
+   arrays as REST, no CORS/WAF issue in browsers), with the Worker REST
+   endpoint kept as fallback. Row validation is unchanged and shared by
+   both paths (normalizeRows); no synthetic OHLCV is ever generated.
  */
 (()=>{'use strict';
 const D=window.RAPTOR_DATA||{};
@@ -9,6 +18,7 @@ const L=window.RaptorLang||{get:()=>"en",useWIB:()=>false};
 const $=(s,r=document)=>r.querySelector(s);
 const streamHosts={'USD-M':'wss://fstream.binance.com/ws/','COIN-M':'wss://dstream.binance.com/ws/'};
 const REST_HOSTS={'USD-M':'https://fapi.binance.com/fapi/v1/klines','COIN-M':'https://dapi.binance.com/dapi/v1/klines'};
+const WS_API_HOSTS={'USD-M':'wss://ws-fapi.binance.com/ws-fapi/v1','COIN-M':'wss://ws-dapi.binance.com/ws-dapi/v1'};
 const INTERVAL=14400;
 let current=null;
 let serial=0;
@@ -74,6 +84,32 @@ function fail(message){status('error',str('OFFLINE · ','OFFLINE · ')+message);
  safeSet('v24-error-message',message);
  $('#v24-show-png')?.addEventListener('click',()=>window.RaptorTerminal?.setMode('source'));
 }
+function normalizeRows(arr){
+ if(!Array.isArray(arr))throw new Error('Invalid JSON market payload');
+ const rows=arr.map(parseRow).filter(Boolean).sort((a,b)=>a.time-b.time);
+ const dedup=rows.filter((row,i)=>i===0||row.time!==rows[i-1].time);
+ if(dedup.length<20)throw new Error('Not enough official 4H candles for indicators');
+ return dedup;
+}
+function candlesViaWsApi(s,abort){
+ return new Promise((resolve,reject)=>{
+  let socket=null,settled=false,timer=null;
+  const done=(fn,v)=>{if(settled)return;settled=true;clearTimeout(timer);try{socket?.close()}catch{};fn(v);};
+  try{socket=new WebSocket(WS_API_HOSTS[signalMarket(s)])}catch(e){reject(e);return}
+  const id='klines-'+Date.now()+'-'+Math.floor(Math.random()*1e6);
+  timer=setTimeout(()=>done(reject,new Error('Binance WS API timed out')),10000);
+  abort.signal.addEventListener('abort',()=>done(reject,new DOMException('Aborted','AbortError')),{once:true});
+  socket.onopen=()=>{try{socket.send(JSON.stringify({id,method:'klines',params:{symbol:s.symbol,interval:'4h',limit:600}}))}catch(e){done(reject,e)}};
+  socket.onmessage=e=>{
+   let msg;try{msg=JSON.parse(e.data)}catch{return}
+   if(msg.id!==id)return;
+   if(msg.status!==200||!Array.isArray(msg.result)){done(reject,new Error(msg.error?.msg||'Binance WS API error'));return}
+   done(resolve,msg.result);
+  };
+  socket.onerror=()=>done(reject,new Error('Binance WS API connection failed'));
+  socket.onclose=()=>done(reject,new Error('Binance WS API closed before responding'));
+ });
+}
 async function candles(s,abort){
  const qs=new URLSearchParams({symbol:s.symbol,market:signalMarket(s),limit:'600'});
  const targets=['/api/futures/klines?'+qs.toString()];
@@ -82,6 +118,13 @@ async function candles(s,abort){
    targets.push(REST_HOSTS[signalMarket(s)]+'?symbol='+encodeURIComponent(s.symbol)+'&interval=4h&limit=600');
  }
  let lastError='Data feed unavailable';
+ // 1. Binance WebSocket API first: same official 4H OHLCV as REST, and
+ // browsers can reach it directly (no CORS, no WAF block on a proxy IP).
+ try{
+   const arr=await candlesViaWsApi(s,abort);
+   return normalizeRows(arr);
+ }catch(e){if(e?.name==='AbortError')throw e;lastError=e?.message||String(e);}
+ // 2. Worker REST proxy (and direct REST on local preview).
  for(const target of targets){
    try{
      const response=await fetch(target,{signal:abort.signal,headers:{Accept:'application/json'},cache:'no-store'});
@@ -89,11 +132,7 @@ async function candles(s,abort){
      const payload=await response.json();
      if(!Array.isArray(payload) && (payload.symbol!==s.symbol || payload.market!==signalMarket(s) || payload.interval!=='4h'))throw new Error('Unexpected symbol or interval returned by market endpoint');
      const arr=Array.isArray(payload)?payload:payload.klines;
-     if(!Array.isArray(arr))throw new Error('Invalid JSON market payload');
-     const rows=arr.map(parseRow).filter(Boolean).sort((a,b)=>a.time-b.time);
-     const dedup=rows.filter((row,i)=>i===0||row.time!==rows[i-1].time);
-     if(dedup.length<20)throw new Error('Not enough official 4H candles for indicators');
-     return dedup;
+     return normalizeRows(arr);
    }catch(e){if(e?.name==='AbortError')throw e;lastError=e?.message||String(e);}
  }
  throw new Error(lastError);
