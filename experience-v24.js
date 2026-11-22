@@ -118,12 +118,13 @@ async function candles(s,abort){
    targets.push(REST_HOSTS[signalMarket(s)]+'?symbol='+encodeURIComponent(s.symbol)+'&interval=4h&limit=600');
  }
  let lastError='Data feed unavailable';
+ let wsErr='not tried';
  // 1. Binance WebSocket API first: same official 4H OHLCV as REST, and
  // browsers can reach it directly (no CORS, no WAF block on a proxy IP).
  try{
    const arr=await candlesViaWsApi(s,abort);
    return normalizeRows(arr);
- }catch(e){if(e?.name==='AbortError')throw e;lastError=e?.message||String(e);}
+ }catch(e){if(e?.name==='AbortError')throw e;wsErr=e?.message||String(e);lastError=wsErr;}
  // 2. Worker REST proxy (and direct REST on local preview).
  for(const target of targets){
    try{
@@ -135,7 +136,8 @@ async function candles(s,abort){
      return normalizeRows(arr);
    }catch(e){if(e?.name==='AbortError')throw e;lastError=e?.message||String(e);}
  }
- throw new Error(lastError);
+ // Both paths failed: report each, so the next screenshot diagnoses it.
+ throw new Error('WS API: '+wsErr+' | Worker: '+lastError);
 }
 function createChart(c){
  const LW=window.LightweightCharts;
