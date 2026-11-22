@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_ts": 1795380392.4793663,
-  "generated_wib": "23 Nov 2026, 03:46 WIB",
+  "generated_ts": 1795381315.844344,
+  "generated_wib": "23 Nov 2026, 04:01 WIB",
   "rules_version": "v2.1.2",
   "next_close_ts": 1795392000.0,
   "source": "Binance Futures Mainnet (local)"
@@ -9,19 +9,19 @@
  "kpis": {
   "total": 25,
   "last24": 15,
-  "win_rate": 33.33333333333333,
-  "wins": 4,
-  "n_eval": 12,
-  "mean_net": 1.2389825130756424,
-  "median_net": 0.023779333108930427,
+  "win_rate": 27.77777777777778,
+  "wins": 5,
+  "n_eval": 18,
+  "mean_net": 0.8288953147471492,
+  "median_net": 0.023746576975886065,
   "eligible": 840,
   "gap_blocked": 0,
   "universe_total": 849,
   "classes": {
-   "SIDEWAYS": 5,
-   "REVERSAL": 3,
-   "INSUFFICIENT DATA": 13,
-   "PUMP CONTINUED": 4
+   "SIDEWAYS": 8,
+   "REVERSAL": 5,
+   "INSUFFICIENT DATA": 7,
+   "PUMP CONTINUED": 5
   },
   "first_signal_date": "21 Nov 2026"
  },
@@ -34,8 +34,8 @@
   "gap_blocked": 0,
   "universe_total": 849,
   "signals_total": 32,
-  "heartbeat_age_s": 15.0,
-  "uptime_s": 6255.3,
+  "heartbeat_age_s": 8.0,
+  "uptime_s": 7185.6,
   "backfill_missing": 50,
   "backfill_pending": 0,
   "backfill_filled": 3360
@@ -123,77 +123,119 @@
     "cum_net_pct": 2.3261056174481043
    },
    {
+    "symbol": "BTWUSDT",
+    "close_ts": 1795262400.0,
+    "close_wib": "21 Nov 19:00",
+    "net_pct": 0.7729275613436517,
+    "cum_net_pct": 3.1170122902149933
+   },
+   {
     "symbol": "PARTIUSDT",
     "close_ts": 1795262400.0,
     "close_wib": "21 Nov 19:00",
     "net_pct": 0.8826236245111493,
-    "cum_net_pct": 3.22925999966992
+    "cum_net_pct": 4.027147401578501
+   },
+   {
+    "symbol": "ORCAUSDT",
+    "close_ts": 1795276800.0,
+    "close_wib": "21 Nov 23:00",
+    "net_pct": -1.8213279241838587,
+    "cum_net_pct": 2.1324719172216566
+   },
+   {
+    "symbol": "IDOLUSDT",
+    "close_ts": 1795276800.0,
+    "close_wib": "21 Nov 23:00",
+    "net_pct": 1.9005632482040777,
+    "cum_net_pct": 4.073564142962716
+   },
+   {
+    "symbol": "CTUSDT",
+    "close_ts": 1795276800.0,
+    "close_wib": "21 Nov 23:00",
+    "net_pct": -0.49712972005056133,
+    "cum_net_pct": 3.556183524892176
+   },
+   {
+    "symbol": "GPSUSDT",
+    "close_ts": 1795276800.0,
+    "close_wib": "21 Nov 23:00",
+    "net_pct": -0.42660670151898744,
+    "cum_net_pct": 3.114405906137696
    },
    {
     "symbol": "IDOLUSDT",
     "close_ts": 1795291200.0,
     "close_wib": "22 Nov 03:00",
     "net_pct": 10.183284399242343,
-    "cum_net_pct": 13.741389128669624
+    "cum_net_pct": 13.614839116148847
+   },
+   {
+    "symbol": "VVVUSDT",
+    "close_ts": 1795291200.0,
+    "close_wib": "22 Nov 03:00",
+    "net_pct": 0.12389904474665302,
+    "cum_net_pct": 13.755606816504207
    },
    {
     "symbol": "SKYAIUSDT",
     "close_ts": 1795334400.0,
     "close_wib": "22 Nov 15:00",
     "net_pct": -5.082251571678502,
-    "cum_net_pct": 7.960765592028851
+    "cum_net_pct": 7.97426070120002
    },
    {
     "symbol": "NIGHTUSDT",
     "close_ts": 1795348800.0,
     "close_wib": "22 Nov 19:00",
     "net_pct": -0.16568750855224695,
-    "cum_net_pct": 7.781888089305489
+    "cum_net_pct": 7.795360838766485
    },
    {
     "symbol": "KITEUSDT",
     "close_ts": 1795348800.0,
     "close_wib": "22 Nov 19:00",
     "net_pct": -0.5467459685321628,
-    "cum_net_pct": 7.19259496136937
+    "cum_net_pct": 7.205994049115838
    },
    {
     "symbol": "BULLAUSDT",
     "close_ts": 1795348800.0,
     "close_wib": "22 Nov 19:00",
     "net_pct": 10.559871924502847,
-    "cum_net_pct": 18.511995701841077
+    "cum_net_pct": 18.526809716092618
    },
    {
     "symbol": "YGGUSDT",
     "close_ts": 1795348800.0,
     "close_wib": "22 Nov 19:00",
     "net_pct": 0.12396455701274174,
-    "cum_net_pct": 18.65890857231982
+    "cum_net_pct": 18.67374095069849
    },
    {
     "symbol": "CATIUSDT",
     "close_ts": 1795348800.0,
     "close_wib": "22 Nov 19:00",
     "net_pct": -0.5278013100096137,
-    "cum_net_pct": 18.032625298432016
+    "cum_net_pct": 18.047379391323283
    },
    {
     "symbol": "BRUSDT",
     "close_ts": 1795363200.0,
     "close_wib": "22 Nov 23:00",
     "net_pct": -3.34350228644196,
-    "cum_net_pct": 14.086201772831464
+    "cum_net_pct": 14.100462562289584
    },
    {
     "symbol": "VVVUSDT",
     "close_ts": 1795377600.0,
     "close_wib": "23 Nov 03:00",
     "net_pct": 0.45609161546059945,
-    "cum_net_pct": 14.606539373514815
+    "cum_net_pct": 14.620865205237955
    }
   ],
-  "n_eval": 12,
+  "n_eval": 18,
   "n_total": 25
  },
  "signals": [
@@ -981,19 +1023,19 @@
    "qv24h": 71954833.87498,
    "chart": "charts/VVVUSDT_1795291200.png",
    "tracker": {
-    "classification": "INSUFFICIENT DATA",
-    "reason": null,
-    "r1": null,
-    "r5": null,
-    "r15": null,
-    "r30": null,
-    "mfe": null,
-    "mae": null,
-    "net": null,
-    "evaluated_ts": 1795293408.6847017,
-    "candles_used": 0,
-    "insufficient_reason": "candle 1m prod lokal tidak lengkap: 30/31 candle (gap atau window sudah terpotong dari store rolling 120 bar)",
-    "insufficient_reason_en": "incomplete local prod 1m candles: 30/31 candles (gap, or window already trimmed from the rolling 120-bar store)"
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m +0.21%, MFE +0.62%",
+    "r1": -0.003412259165244791,
+    "r5": -0.004577420831426093,
+    "r15": -0.005534517914360548,
+    "r30": 0.0020806458324664767,
+    "mfe": 0.006200324580749816,
+    "mae": -0.007864841246722931,
+    "net": 0.0012389904474665301,
+    "evaluated_ts": 1795381232.71502,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
    }
   },
   {
@@ -1028,19 +1070,19 @@
    "qv24h": 30836268.9512,
    "chart": "charts/ORCAUSDT_1795276800.png",
    "tracker": {
-    "classification": "INSUFFICIENT DATA",
-    "reason": null,
-    "r1": null,
-    "r5": null,
-    "r15": null,
-    "r30": null,
-    "mfe": null,
-    "mae": null,
-    "net": null,
-    "evaluated_ts": 1795279009.1982863,
-    "candles_used": 0,
-    "insufficient_reason": "candle 1m prod lokal tidak lengkap: 30/31 candle (gap atau window sudah terpotong dari store rolling 120 bar)",
-    "insufficient_reason_en": "incomplete local prod 1m candles: 30/31 candles (gap, or window already trimmed from the rolling 120-bar store)"
+    "classification": "REVERSAL",
+    "reason": "return +30m -1.66% <= -1,00%",
+    "r1": 0.0024875621890547706,
+    "r5": -0.00746268656716409,
+    "r15": -0.02238805970149249,
+    "r30": -0.016583747927031545,
+    "mfe": 0.005804311774461057,
+    "mae": -0.029021558872305064,
+    "net": -0.018213279241838586,
+    "evaluated_ts": 1795381232.71502,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
    }
   },
   {
@@ -1075,19 +1117,19 @@
    "qv24h": 94621171.923123,
    "chart": "charts/IDOLUSDT_1795276800.png",
    "tracker": {
-    "classification": "INSUFFICIENT DATA",
-    "reason": null,
-    "r1": null,
-    "r5": null,
-    "r15": null,
-    "r30": null,
-    "mfe": null,
-    "mae": null,
-    "net": null,
-    "evaluated_ts": 1795279009.1982863,
-    "candles_used": 0,
-    "insufficient_reason": "candle 1m prod lokal tidak lengkap: 30/31 candle (gap atau window sudah terpotong dari store rolling 120 bar)",
-    "insufficient_reason_en": "incomplete local prod 1m candles: 30/31 candles (gap, or window already trimmed from the rolling 120-bar store)"
+    "classification": "PUMP CONTINUED",
+    "reason": "return +30m +2.04% >= +1,00%",
+    "r1": -0.003967843218438238,
+    "r5": 0.01614739674981891,
+    "r15": 0.010937446089086755,
+    "r30": 0.02039126384432266,
+    "mfe": 0.02887899803332994,
+    "mae": -0.010557913259496843,
+    "net": 0.019005632482040777,
+    "evaluated_ts": 1795381232.71502,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
    }
   },
   {
@@ -1122,19 +1164,19 @@
    "qv24h": 10203329.21809,
    "chart": "charts/CTUSDT_1795276800.png",
    "tracker": {
-    "classification": "INSUFFICIENT DATA",
-    "reason": null,
-    "r1": null,
-    "r5": null,
-    "r15": null,
-    "r30": null,
-    "mfe": null,
-    "mae": null,
-    "net": null,
-    "evaluated_ts": 1795279009.1982863,
-    "candles_used": 0,
-    "insufficient_reason": "file candle 1m prod lokal tidak ditemukan, rusak, atau kosong",
-    "insufficient_reason_en": "local prod 1m candle file not found, corrupt, or empty"
+    "classification": "REVERSAL",
+    "reason": "pump lalu dump: MFE +1.01% lalu return +30m -0.41%",
+    "r1": 0.0003724394785846741,
+    "r5": -0.0008193668528864162,
+    "r15": 0.007299813780260456,
+    "r30": -0.00409683426443197,
+    "mfe": 0.010055865921787532,
+    "mae": -0.00871508379888275,
+    "net": -0.004971297200505613,
+    "evaluated_ts": 1795381232.71502,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
    }
   },
   {
@@ -1169,19 +1211,19 @@
    "qv24h": 3248474.645377,
    "chart": "charts/GPSUSDT_1795276800.png",
    "tracker": {
-    "classification": "INSUFFICIENT DATA",
-    "reason": null,
-    "r1": null,
-    "r5": null,
-    "r15": null,
-    "r30": null,
-    "mfe": null,
-    "mae": null,
-    "net": null,
-    "evaluated_ts": 1795279009.1982863,
-    "candles_used": 0,
-    "insufficient_reason": "candle 1m prod lokal tidak lengkap: 30/31 candle (gap atau window sudah terpotong dari store rolling 120 bar)",
-    "insufficient_reason_en": "incomplete local prod 1m candles: 30/31 candles (gap, or window already trimmed from the rolling 120-bar store)"
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.34%, MFE +0.00%",
+    "r1": -0.001900715563506461,
+    "r5": -0.003801431127012589,
+    "r15": -0.004472271914132353,
+    "r30": -0.003354203935599376,
+    "mfe": 0.0,
+    "mae": -0.006596601073345254,
+    "net": -0.004266067015189875,
+    "evaluated_ts": 1795381232.71502,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
    }
   },
   {
@@ -1263,19 +1305,19 @@
    "qv24h": 62467238.947960004,
    "chart": "charts/BTWUSDT_1795262400.png",
    "tracker": {
-    "classification": "INSUFFICIENT DATA",
-    "reason": null,
-    "r1": null,
-    "r5": null,
-    "r15": null,
-    "r30": null,
-    "mfe": null,
-    "mae": null,
-    "net": null,
-    "evaluated_ts": 1795264608.2709305,
-    "candles_used": 0,
-    "insufficient_reason": "file candle 1m prod lokal tidak ditemukan, rusak, atau kosong",
-    "insufficient_reason_en": "local prod 1m candle file not found, corrupt, or empty"
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m +0.91%, MFE +1.88%",
+    "r1": -0.006398293788323128,
+    "r5": -0.00026659557451347293,
+    "r15": -0.005331911490269237,
+    "r30": 0.009064249533457858,
+    "mfe": 0.01879498800319923,
+    "mae": -0.011996800853105838,
+    "net": 0.007729275613436518,
+    "evaluated_ts": 1795381232.71502,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
    }
   },
   {
