@@ -18,7 +18,6 @@ const L=window.RaptorLang||{get:()=>"en",useWIB:()=>false};
 const $=(s,r=document)=>r.querySelector(s);
 const streamHosts={'USD-M':'wss://fstream.binance.com/ws/','COIN-M':'wss://dstream.binance.com/ws/'};
 const REST_HOSTS={'USD-M':'https://fapi.binance.com/fapi/v1/klines','COIN-M':'https://dapi.binance.com/dapi/v1/klines'};
-const WS_API_HOSTS={'USD-M':'wss://ws-fapi.binance.com/ws-fapi/v1','COIN-M':'wss://ws-dapi.binance.com/ws-dapi/v1'};
 const INTERVAL=14400;
 let current=null;
 let serial=0;
@@ -91,24 +90,32 @@ function normalizeRows(arr){
  if(dedup.length<20)throw new Error('Not enough official 4H candles for indicators');
  return dedup;
 }
-function candlesViaWsApi(s,abort){
- return new Promise((resolve,reject)=>{
-  let socket=null,settled=false,timer=null;
-  const done=(fn,v)=>{if(settled)return;settled=true;clearTimeout(timer);try{socket?.close()}catch{};fn(v);};
-  try{socket=new WebSocket(WS_API_HOSTS[signalMarket(s)])}catch(e){reject(e);return}
-  const id='klines-'+Date.now()+'-'+Math.floor(Math.random()*1e6);
-  timer=setTimeout(()=>done(reject,new Error('Binance WS API timed out')),10000);
-  abort.signal.addEventListener('abort',()=>done(reject,new DOMException('Aborted','AbortError')),{once:true});
-  socket.onopen=()=>{try{socket.send(JSON.stringify({id,method:'klines',params:{symbol:s.symbol,interval:'4h',limit:600}}))}catch(e){done(reject,e)}};
-  socket.onmessage=e=>{
-   let msg;try{msg=JSON.parse(e.data)}catch{return}
-   if(msg.id!==id)return;
-   if(msg.status!==200||!Array.isArray(msg.result)){done(reject,new Error(msg.error?.msg||'Binance WS API error'));return}
-   done(resolve,msg.result);
-  };
-  socket.onerror=()=>done(reject,new Error('Binance WS API connection failed'));
-  socket.onclose=()=>done(reject,new Error('Binance WS API closed before responding'));
- });
+// --- 4H candle history ---------------------------------------------
+// History comes FIRST from the same-origin snapshot klines-4h.json:
+// the last 200 closed 4H bars per signal, exported by build.py from
+// the same Mainnet candles the engine evaluates. Why not live from
+// Binance: the Worker REST proxy is blocked by Binance's CloudFront
+// WAF (403 on Cloudflare egress IPs), the browser cannot call REST
+// directly (no CORS), and the futures WebSocket API has NO klines
+// method at all (only depth / ticker.book / ticker.price — verified
+// from Binance's docs, 23 Nov 2026; the live error on Raka's phone
+// said "Method /fapi/v1/klines is invalid"). The snapshot refreshes
+// via the auto-sync cron (every 5 min when it changes, i.e. at each
+// 4H close); the live kline stream still supplies the current
+// partial bar, so the chart stays live where it matters. Cached in
+// memory for 5 min; a failed refresh falls back to the stale copy
+// rather than the (blocked) Worker.
+let snapshotCache=null,snapshotPromise=null,snapshotFetchedAt=0;
+function loadSnapshot(){
+ if(snapshotCache&&Date.now()-snapshotFetchedAt<=5*60*1000)
+   return Promise.resolve(snapshotCache);
+ if(!snapshotPromise){
+   snapshotPromise=fetch('klines-4h.json',{cache:'no-store',headers:{Accept:'application/json'}})
+     .then(response=>{if(!response.ok)throw new Error('HTTP '+response.status);return response.json();})
+     .then(data=>{snapshotCache=data;snapshotFetchedAt=Date.now();return data;})
+     .catch(error=>{snapshotPromise=null;throw error;});
+ }
+ return snapshotPromise;
 }
 async function candles(s,abort){
  const qs=new URLSearchParams({symbol:s.symbol,market:signalMarket(s),limit:'600'});
@@ -117,15 +124,21 @@ async function candles(s,abort){
  if(location.protocol==='file:' || location.hostname==='localhost' || location.hostname==='127.0.0.1'){
    targets.push(REST_HOSTS[signalMarket(s)]+'?symbol='+encodeURIComponent(s.symbol)+'&interval=4h&limit=600');
  }
- let lastError='Data feed unavailable';
- let wsErr='not tried';
- // 1. Binance WebSocket API first: same official 4H OHLCV as REST, and
- // browsers can reach it directly (no CORS, no WAF block on a proxy IP).
+ let snapErr='not tried';
+ // 1. Same-origin snapshot (present for every signal symbol).
  try{
-   const arr=await candlesViaWsApi(s,abort);
+   const snap=await loadSnapshot();
+   const arr=snap[s.symbol];
+   if(!Array.isArray(arr))throw new Error('symbol not in snapshot');
    return normalizeRows(arr);
- }catch(e){if(e?.name==='AbortError')throw e;wsErr=e?.message||String(e);lastError=wsErr;}
+ }catch(e){
+   snapErr=e?.message||String(e);
+   if(snapshotCache&&Array.isArray(snapshotCache[s.symbol])){
+     try{return normalizeRows(snapshotCache[s.symbol]);}catch{}
+   }
+ }
  // 2. Worker REST proxy (and direct REST on local preview).
+ let lastError='Data feed unavailable';
  for(const target of targets){
    try{
      const response=await fetch(target,{signal:abort.signal,headers:{Accept:'application/json'},cache:'no-store'});
@@ -137,7 +150,7 @@ async function candles(s,abort){
    }catch(e){if(e?.name==='AbortError')throw e;lastError=e?.message||String(e);}
  }
  // Both paths failed: report each, so the next screenshot diagnoses it.
- throw new Error('WS API: '+wsErr+' | Worker: '+lastError);
+ throw new Error('Snapshot: '+snapErr+' | Worker: '+lastError);
 }
 function createChart(c){
  const LW=window.LightweightCharts;
