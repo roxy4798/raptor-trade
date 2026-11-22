@@ -2,6 +2,17 @@
  * Raptor Trade v24 — Cloudflare Pages advanced-mode Worker.
  * Works with dashboard ZIP/direct uploads. Static assets remain served via ASSETS.
  * Public, read-only OHLCV proxy. Restricts market, symbol, interval and limit.
+ *
+ * JENNI build-owned change (23 Nov 2026, v25): Binance's WAF returns
+ * HTTP 403 to the Worker's upstream fetch (verified live: the Worker
+ * route answers, but fapi/dapi refuse it from every Cloudflare colo,
+ * including Singapore for a visitor in Indonesia — so it is a WAF
+ * block on the request, not a geo block on the visitor). The upstream
+ * fetch now sends a standard browser User-Agent (the default
+ * Cloudflare-Workers UA is what the WAF rejects), and error responses
+ * include the upstream status + a truncated upstream body for
+ * diagnosis. Validation, caching and the response contract are
+ * unchanged; the upstream hosts are still fixed Binance Futures hosts.
  */
 const MARKETS = {
   'USD-M': 'https://fapi.binance.com/fapi/v1/klines',
@@ -34,13 +45,16 @@ async function serveKlines(request) {
   const timeout = setTimeout(()=>ctl.abort(),8500);
   try {
     const resp = await fetch(api.toString(), {
-      method:'GET',signal:ctl.signal, headers:{Accept:'application/json'},
+      method:'GET',signal:ctl.signal,
+      headers:{Accept:'application/json',
+        'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'},
       cf:{cacheEverything:true, cacheTtl:20},
     });
     const text = await resp.text();
     if (!resp.ok) return json({error:resp.status===400 || resp.status===404
        ? 'Binance does not provide candles for this futures contract.'
-       : 'Binance upstream unavailable.',status:resp.status},resp.status===400||resp.status===404?404:502);
+       : 'Binance upstream unavailable.',status:resp.status,
+       upstream:text.slice(0,200)},resp.status===400||resp.status===404?404:502);
     if(text.length>2500000) return json({error:'Upstream data exceeded limit.'},502);
     let rows;
     try {rows=JSON.parse(text)}catch{return json({error:'Invalid Binance response.'},502)}
