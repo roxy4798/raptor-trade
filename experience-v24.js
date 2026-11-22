@@ -3,14 +3,20 @@
    Snapshot markers remain immutable; no synthetic OHLCV is ever generated.
    Only one WebSocket/chart is active, with cleanup on selection/tab changes.
 
-   JENNI build-owned change (23 Nov 2026, v25): Binance's WAF returns
-   HTTP 403 (HTML error page) to the Pages Worker's REST fetch from
-   every Cloudflare colo — the Worker path cannot load candles. Candle
-   history is now fetched FIRST from the Binance WebSocket API
-   (wss://ws-fapi/ws-dapi …/v1, klines method — same official 4H OHLCV
-   arrays as REST, no CORS/WAF issue in browsers), with the Worker REST
-   endpoint kept as fallback. Row validation is unchanged and shared by
-   both paths (normalizeRows); no synthetic OHLCV is ever generated.
+   JENNI build-owned changes (23 Nov 2026):
+   v25: Binance's WAF returns HTTP 403 (CloudFront block page) to the
+   Pages Worker's REST fetch from every Cloudflare colo, and the
+   futures WebSocket API has NO klines method (docs-checked) — so
+   candle history now comes FIRST from a same-origin snapshot
+   (klines-4h.json, built from the engine's Mainnet candles), Worker
+   REST kept as fallback. Row validation unchanged (normalizeRows);
+   no synthetic OHLCV is ever generated.
+   v26: expandable chart — a floating EXPAND button over the chart
+   opens a fullscreen-style overlay (fixed positioning, NOT the
+   Fullscreen API: iPhone Safari does not support it for arbitrary
+   elements). The shell is moved to <body> while expanded so no
+   ancestor transform/backdrop-filter can clip it; the existing
+   ResizeObserver resizes both renderers automatically.
  */
 (()=>{'use strict';
 const D=window.RAPTOR_DATA||{};
@@ -23,6 +29,63 @@ let current=null;
 let serial=0;
 let lastSignal=null;
 let wsEnabled=true;
+// --- Chart expand (JENNI build-owned, v26) ---
+// The expanded shell element is tracked explicitly: the terminal
+// rebuilds the detail pane (innerHTML) on every selection/mode change
+// and only then calls onRender, so a re-query by id could return the
+// NEW shell while the OLD one is still expanded in <body>.
+let expandState=null; // {shell, parent, next} while expanded
+function injectExpandStyles(){
+ if($('#v24-expand-style'))return;
+ const st=document.createElement('style');
+ st.id='v24-expand-style';
+ st.textContent=[
+  '.v24-expand-btn{position:absolute;top:8px;right:8px;z-index:5;display:inline-flex;align-items:center;gap:5px;background:rgba(3,12,20,.78);border:1px solid rgba(103,209,163,.38);border-radius:8px;padding:6px 9px;color:#baffe1;font:700 10px/1 var(--font-mono);letter-spacing:.04em;cursor:pointer;backdrop-filter:blur(2px)}',
+  '.v24-expand-btn:hover{background:rgba(38,132,109,.55);color:#e3fff7}',
+  '.v24-live-shell.v24-expanded{position:fixed;inset:0;z-index:10000;height:100vh;height:100dvh;width:100vw;max-width:none;background:#04090f;padding:0;border-radius:0;box-sizing:border-box}',
+  '.v24-live-shell.v24-expanded .v24-live-banner{min-height:46px}',
+  '.v24-live-shell.v24-expanded .v24-expand-btn{top:10px;right:10px;padding:8px 12px;font-size:11px}',
+ ].join('\n');
+ document.head.appendChild(st);
+}
+function updateExpandBtn(){
+ const root=expandState?expandState.shell:document;
+ const b=root.querySelector('#v24-expand-btn');if(!b)return;
+ b.textContent=expandState?'✕ '+str('CLOSE','TUTUP'):'⛶ '+str('EXPAND','PERBESAR');
+ b.setAttribute('aria-label',expandState?str('Close expanded chart','Tutup chart yang diperbesar'):str('Expand chart','Perbesar chart'));
+}
+function enterExpand(){
+ const shell=$('#v24-live-shell');
+ if(!shell||expandState)return;
+ expandState={shell:shell,parent:shell.parentNode,next:shell.nextSibling};
+ document.body.appendChild(shell);
+ shell.classList.add('v24-expanded');
+ document.body.style.overflow='hidden';
+ updateExpandBtn();
+}
+function exitExpand(){
+ if(!expandState)return;
+ const st=expandState;expandState=null;
+ st.shell.classList.remove('v24-expanded');
+ document.body.style.overflow='';
+ // The terminal may have rebuilt the detail pane while expanded
+ // (innerHTML) — the old parent is then detached and a fresh shell
+ // exists; the moved shell is stale and is dropped, not restored.
+ if(st.parent&&st.parent.isConnected)st.parent.insertBefore(st.shell,st.next);
+ else st.shell.remove();
+ updateExpandBtn();
+}
+function ensureExpandButton(){
+ const mount=$('#v24-live-chart');if(!mount)return;
+ if(mount.querySelector('#v24-expand-btn'))return;
+ injectExpandStyles();
+ const b=document.createElement('button');
+ b.type='button';b.id='v24-expand-btn';b.className='v24-expand-btn';
+ b.addEventListener('click',()=>{expandState?exitExpand():enterExpand();});
+ mount.appendChild(b);
+ updateExpandBtn();
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&expandState)exitExpand();});
 const isID=()=>L.get()==='id';
 const str=(en,id)=>isID()?id:en;
 const money=n=>Number.isFinite(n)?new Intl.NumberFormat('en-US',{maximumFractionDigits:n>=100?2:n>=1?4:6}).format(n):'—';
@@ -64,6 +127,7 @@ function status(kind,message){
 function note(text){safeSet('v24-live-alignment',text)}
 function setQuote(c,live=false){safeSet('v24-live-quote',Number.isFinite(c)?(live?str('Live 4H: ','Live 4J: '):str('Latest 4H: ','4J terbaru: '))+money(c):'—')}
 function cleanup(){
+ exitExpand();
  if(!current)return;
  current.dead=true;
  clearTimeout(current.reconnect);
@@ -254,6 +318,7 @@ async function load(s,version){
   if(current!==c||c.dead)return;
   const built=createChart(c);
   Object.assign(c,built);
+  ensureExpandButton();
   paint(c,rows,s);
   c.resize=new ResizeObserver(()=>{if(current!==c||c.dead)return;const e=$('#v24-live-chart');if(e)c.chart.applyOptions({width:Math.max(250,e.clientWidth),height:Math.max(260,e.clientHeight)})});
   c.resize.observe($('#v24-live-chart'));
