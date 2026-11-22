@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_ts": 1795379685.592555,
-  "generated_wib": "23 Nov 2026, 03:34 WIB",
+  "generated_ts": 1795380111.5661051,
+  "generated_wib": "23 Nov 2026, 03:41 WIB",
   "rules_version": "v2.1.2",
   "next_close_ts": 1795392000.0,
   "source": "Binance Futures Mainnet (local)"
@@ -9,19 +9,18 @@
  "kpis": {
   "total": 25,
   "last24": 15,
-  "win_rate": 36.36363636363637,
+  "win_rate": 33.33333333333333,
   "wins": 4,
-  "n_eval": 11,
-  "mean_net": 1.3101544128588283,
-  "median_net": -0.07640589079488089,
+  "n_eval": 12,
+  "mean_net": 1.2389825130756424,
+  "median_net": 0.023779333108930427,
   "eligible": 840,
   "gap_blocked": 0,
   "universe_total": 849,
   "classes": {
-   "BELUM DINILAI": 1,
+   "SIDEWAYS": 5,
    "REVERSAL": 3,
    "INSUFFICIENT DATA": 13,
-   "SIDEWAYS": 4,
    "PUMP CONTINUED": 4
   },
   "first_signal_date": "21 Nov 2026"
@@ -35,8 +34,8 @@
   "gap_blocked": 0,
   "universe_total": 849,
   "signals_total": 32,
-  "heartbeat_age_s": 29.0,
-  "uptime_s": 5535.0,
+  "heartbeat_age_s": 5.0,
+  "uptime_s": 5985.2,
   "backfill_missing": 50,
   "backfill_pending": 0,
   "backfill_filled": 3360
@@ -185,9 +184,16 @@
     "close_wib": "22 Nov 23:00",
     "net_pct": -3.34350228644196,
     "cum_net_pct": 14.086201772831464
+   },
+   {
+    "symbol": "VVVUSDT",
+    "close_ts": 1795377600.0,
+    "close_wib": "23 Nov 03:00",
+    "net_pct": 0.45609161546059945,
+    "cum_net_pct": 14.606539373514815
    }
   ],
-  "n_eval": 11,
+  "n_eval": 12,
   "n_total": 25
  },
  "signals": [
@@ -222,7 +228,21 @@
    "quote_volume": 10875507.21076,
    "qv24h": 84265981.67771,
    "chart": "charts/VVVUSDT_1795377600.png",
-   "tracker": null
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m +0.54%, MFE +0.93%",
+    "r1": -0.0004595060310165211,
+    "r5": -0.0041355542791498,
+    "r15": 0.0026421596783459123,
+    "r30": 0.005399195864445705,
+    "mfe": 0.00926670495883597,
+    "mae": -0.0054374880336970355,
+    "net": 0.004560916154605995,
+    "evaluated_ts": 1795379809.562243,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:BRUSDT:LONG SIGNAL:1795363200.0",
