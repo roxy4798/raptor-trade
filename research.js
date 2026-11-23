@@ -13,6 +13,14 @@
   var SELECTED_ID = null;
   var EXPLORER_SORT = { key: "signal_ts", dir: -1 };
 
+  /* ---- v36: close grouping (Structure at Scale) ---- */
+  /* Group open/closed + show-all state, keyed by close_ts (signal_ts).
+     In-memory only — no localStorage. */
+  var GROUP_PAGE_SIZE = 25;
+  var GROUP_COLLAPSED = {};
+  var GROUP_EXPANDED = {};
+  var GROUP_SHOW_ALL = {};
+
   /* ---------------------------------------------------------- language */
   /* Research-page language switch (EN/ID). The main page's
      language-v14.js is deliberately NOT loaded here: its
@@ -379,7 +387,14 @@
       "lbl.searchSignals": "Search signals",
       "lbl.searchExplorer": "Search explorer",
       "lbl.filterOutcome": "Filter by outcome",
-      "lbl.filterRegime": "Filter by BTC regime"
+      "lbl.filterRegime": "Filter by BTC regime",
+      "grp.signal": "1 signal",
+      "grp.signals": "{n} signals",
+      "grp.continued": "{n} continued",
+      "grp.reversed": "{n} reversed",
+      "grp.mean": "mean {v}",
+      "grp.showAll": "Show all {n}",
+      "grp.showLess": "Show less"
     },
     id: {
       "rail.overview": "Ikhtisar", "rail.signals": "Sinyal",
@@ -737,7 +752,14 @@
       "lbl.searchSignals": "Cari sinyal",
       "lbl.searchExplorer": "Cari di explorer",
       "lbl.filterOutcome": "Filter berdasarkan hasil",
-      "lbl.filterRegime": "Filter berdasarkan rezim BTC"
+      "lbl.filterRegime": "Filter berdasarkan rezim BTC",
+      "grp.signal": "1 sinyal",
+      "grp.signals": "{n} sinyal",
+      "grp.continued": "{n} lanjut naik",
+      "grp.reversed": "{n} berbalik",
+      "grp.mean": "rata-rata {v}",
+      "grp.showAll": "Tampilkan semua {n}",
+      "grp.showLess": "Tampilkan lebih sedikit"
     }
   };
 
@@ -1142,6 +1164,84 @@
       clsLabel[1] + '">' + clsLabel[0] + "</span></button>";
   }
 
+  /* ---- v36: close grouping helpers ---- */
+  function groupByClose(list) {
+    var groups = [];
+    var map = {};
+    list.forEach(function (s) {
+      var key = s.signal_ts;
+      if (!map[key]) {
+        map[key] = { close_ts: key, signals: [] };
+        groups.push(map[key]);
+      }
+      map[key].signals.push(s);
+    });
+    groups.sort(function (a, b) { return b.close_ts - a.close_ts; });
+    return groups;
+  }
+  function latestCloseTs() {
+    var max = null;
+    DATA.signals.forEach(function (s) {
+      if (max == null || s.signal_ts > max) max = s.signal_ts;
+    });
+    return max;
+  }
+  function groupHeadLabel(closeTs, sigs) {
+    var cont = 0, rev = 0, sum = 0, nNet = 0;
+    sigs.forEach(function (s) {
+      var c = clsOf(s);
+      if (c === "PUMP CONTINUED") cont++;
+      if (c === "REVERSAL") rev++;
+      var net = net30Of(s);
+      if (net != null) { sum += net; nNet++; }
+    });
+    var label = (fmtWib(closeTs) || "") + " WIB · " +
+      (sigs.length === 1 ? t("grp.signal")
+        : t("grp.signals", { n: sigs.length }));
+    if (nNet > 0) {
+      label += " · " + t("grp.continued", { n: cont }) +
+        " · " + t("grp.reversed", { n: rev }) +
+        " · " + t("grp.mean", { v: fmtPct(sum / nNet, 2) });
+    }
+    return label;
+  }
+  function groupIsOpen(g, forceOpen) {
+    if (forceOpen) return true;
+    if (g.signals.some(function (s) { return s.signal_id === SELECTED_ID; }))
+      return true;
+    if (GROUP_EXPANDED[g.close_ts]) return true;
+    if (GROUP_COLLAPSED[g.close_ts]) return false;
+    return g.close_ts === latestCloseTs();
+  }
+  function toggleGroup(closeTs, open) {
+    if (open) {
+      delete GROUP_COLLAPSED[closeTs];
+      GROUP_EXPANDED[closeTs] = true;
+    } else {
+      GROUP_COLLAPSED[closeTs] = true;
+      delete GROUP_EXPANDED[closeTs];
+    }
+  }
+  function toggleShowAll(closeTs) {
+    if (GROUP_SHOW_ALL[closeTs]) delete GROUP_SHOW_ALL[closeTs];
+    else GROUP_SHOW_ALL[closeTs] = true;
+  }
+  function groupHeadButtonHtml(g, open) {
+    return '<button type="button" class="close-group-head" data-close="' +
+      g.close_ts + '" aria-expanded="' + open + '"><span class="cg-chev">' +
+      (open ? "▾" : "▸") + '</span><span class="cg-label">' +
+      esc(groupHeadLabel(g.close_ts, g.signals)) + "</span></button>";
+  }
+  function groupMoreButtonHtml(g) {
+    var total = g.signals.length;
+    if (total <= GROUP_PAGE_SIZE) return "";
+    var all = !!GROUP_SHOW_ALL[g.close_ts];
+    return '<button type="button" class="close-group-more" data-close="' +
+      g.close_ts + '">' +
+      (all ? t("grp.showLess")
+        : t("grp.showAll", { n: total })) + "</button>";
+  }
+
   function renderSignalList(filter) {
     var list = DATA.signals.slice().reverse();
     if (filter) {
@@ -1150,12 +1250,43 @@
         return s.symbol.toLowerCase().indexOf(q) !== -1;
       });
     }
-    $("signal-list").innerHTML = list.length ? list.map(signalRowHtml).join("")
+    var forceOpen = !!filter;
+    var groups = groupByClose(list);
+    var html = "";
+    groups.forEach(function (g) {
+      var open = groupIsOpen(g, forceOpen);
+      html += groupHeadButtonHtml(g, open);
+      if (open) {
+        var showAll = !!GROUP_SHOW_ALL[g.close_ts];
+        var items = showAll ? g.signals
+          : g.signals.slice(0, GROUP_PAGE_SIZE);
+        html += '<div class="close-group-items" data-close="' + g.close_ts + '">' +
+          items.map(signalRowHtml).join("") + "</div>";
+        html += groupMoreButtonHtml(g);
+      }
+    });
+    $("signal-list").innerHTML = list.length ? html
       : '<p class="muted" style="padding:8px;font-size:13px">' + t("sig.noMatch") + "</p>";
     Array.prototype.forEach.call(
       $("signal-list").querySelectorAll(".signal-item"), function (el) {
         el.addEventListener("click", function () {
           selectSignal(el.getAttribute("data-id"));
+        });
+      });
+    Array.prototype.forEach.call(
+      $("signal-list").querySelectorAll(".close-group-head"), function (el) {
+        el.addEventListener("click", function () {
+          var closeTs = +el.getAttribute("data-close");
+          var open = el.getAttribute("aria-expanded") !== "true";
+          toggleGroup(closeTs, open);
+          renderSignalList($("signal-search").value);
+        });
+      });
+    Array.prototype.forEach.call(
+      $("signal-list").querySelectorAll(".close-group-more"), function (el) {
+        el.addEventListener("click", function () {
+          toggleShowAll(+el.getAttribute("data-close"));
+          renderSignalList($("signal-search").value);
         });
       });
   }
@@ -1865,6 +1996,34 @@
     }
   }
 
+  /* v36: one explorer data row (extracted so renderExplorer can emit
+     grouped or flat lists from the same markup) */
+  function explorerRowHtml(s) {
+    var d = (s.snapshot && s.snapshot.decisions) || {};
+    var m = (s.orderflow && s.orderflow.metrics) || {};
+    var rg = (s.regime && s.regime.metrics) || {};
+    var net = net30Of(s), r4h = r4hOf(s);
+    var dots = ["breakout", "reversal", "orderflow", "regime", "liquidity"].map(function (a) {
+      var st = s[a] && s[a].status;
+      var cls = st === "COMPLETED" ? "dot-ok" :
+        st === "PARTIAL DATA" ? "dot-part" : "dot-miss";
+      return '<i class="' + cls + '" title="' + esc(a) + ": " + esc(st || "?") + '"></i>';
+    }).join("");
+    return '<tr data-id="' + esc(s.signal_id) + '"><td>' + esc(s.symbol) +
+      "</td><td>" + esc(fmtWib(s.signal_ts) || "—") +
+      "</td><td>" + esc(fmtPrice(d.close) || "—") +
+      "</td><td class='" + (net == null ? "" : net >= 0 ? "pos" : "neg") + "'>" +
+      (net == null ? '<span class="na">N/A</span>' : fmtPct(net, 2)) +
+      "</td><td class='" + (r4h == null ? "" : r4h >= 0 ? "pos" : "neg") + "'>" +
+      (r4h == null ? '<span class="na">N/A</span>' : fmtPct(r4h, 2)) +
+      "</td><td>" + (d.rvol == null ? "—" : fmtNum(d.rvol, 2) + "×") +
+      "</td><td>" + ((s.reversal && s.reversal.markers_observed) == null ? "—" : s.reversal.markers_observed + "/6") +
+      "</td><td>" + esc(rg.btc_regime || "—") +
+      "</td><td>" + (m.oi_chg_24h_pct == null ? '<span class="na">N/A</span>' : fmtPct(m.oi_chg_24h_pct, 1)) +
+      "</td><td>" + (d.spread_bps == null ? "—" : fmtNum(d.spread_bps, 1) + " bps") +
+      '</td><td><span class="agent-dots">' + dots + "</span></td></tr>";
+  }
+
   function renderExplorer() {
     var q = ($("explorer-search").value || "").toLowerCase();
     var outF = $("explorer-outcome").value;
@@ -1893,36 +2052,53 @@
     });
     $("explorer-count").textContent = t("explorer.count", { n: rows.length, total: DATA.signals.length });
     $("explorer-empty").hidden = rows.length > 0;
-    $("explorer-body").innerHTML = rows.map(function (s) {
-      var d = (s.snapshot && s.snapshot.decisions) || {};
-      var m = (s.orderflow && s.orderflow.metrics) || {};
-      var rg = (s.regime && s.regime.metrics) || {};
-      var net = net30Of(s), r4h = r4hOf(s);
-      var dots = ["breakout", "reversal", "orderflow", "regime", "liquidity"].map(function (a) {
-        var st = s[a] && s[a].status;
-        var cls = st === "COMPLETED" ? "dot-ok" :
-          st === "PARTIAL DATA" ? "dot-part" : "dot-miss";
-        return '<i class="' + cls + '" title="' + esc(a) + ": " + esc(st || "?") + '"></i>';
-      }).join("");
-      return '<tr data-id="' + esc(s.signal_id) + '"><td>' + esc(s.symbol) +
-        "</td><td>" + esc(fmtWib(s.signal_ts) || "—") +
-        "</td><td>" + esc(fmtPrice(d.close) || "—") +
-        "</td><td class='" + (net == null ? "" : net >= 0 ? "pos" : "neg") + "'>" +
-        (net == null ? '<span class="na">N/A</span>' : fmtPct(net, 2)) +
-        "</td><td class='" + (r4h == null ? "" : r4h >= 0 ? "pos" : "neg") + "'>" +
-        (r4h == null ? '<span class="na">N/A</span>' : fmtPct(r4h, 2)) +
-        "</td><td>" + (d.rvol == null ? "—" : fmtNum(d.rvol, 2) + "×") +
-        "</td><td>" + ((s.reversal && s.reversal.markers_observed) == null ? "—" : s.reversal.markers_observed + "/6") +
-        "</td><td>" + esc(rg.btc_regime || "—") +
-        "</td><td>" + (m.oi_chg_24h_pct == null ? '<span class="na">N/A</span>' : fmtPct(m.oi_chg_24h_pct, 1)) +
-        "</td><td>" + (d.spread_bps == null ? "—" : fmtNum(d.spread_bps, 1) + " bps") +
-        '</td><td><span class="agent-dots">' + dots + "</span></td></tr>";
-    }).join("");
+    /* v36: group by 4H close ONLY on the default chronological sort.
+       Any other sort key renders the flat list exactly as before. */
+    var grouped = EXPLORER_SORT.key === "signal_ts";
+    var html = "";
+    if (grouped) {
+      var anyFilter = !!q || !!outF || !!regF;
+      var groups = groupByClose(rows);
+      groups.forEach(function (g) {
+        var open = groupIsOpen(g, anyFilter);
+        html += '<tr class="close-group-head"><td colspan="11">' +
+          groupHeadButtonHtml(g, open) + "</td></tr>";
+        if (open) {
+          var showAll = !!GROUP_SHOW_ALL[g.close_ts];
+          var items = showAll ? g.signals
+            : g.signals.slice(0, GROUP_PAGE_SIZE);
+          html += items.map(explorerRowHtml).join("");
+          if (g.signals.length > GROUP_PAGE_SIZE) {
+            html += '<tr class="close-group-more"><td colspan="11">' +
+              groupMoreButtonHtml(g) + "</td></tr>";
+          }
+        }
+      });
+    } else {
+      html = rows.map(explorerRowHtml).join("");
+    }
+    $("explorer-body").innerHTML = html;
     Array.prototype.forEach.call(
-      $("explorer-body").querySelectorAll("tr"), function (el) {
+      $("explorer-body").querySelectorAll("tr[data-id]"), function (el) {
         el.addEventListener("click", function () {
           selectSignal(el.getAttribute("data-id"));
           document.getElementById("signals").scrollIntoView({ behavior: "smooth" });
+        });
+      });
+    Array.prototype.forEach.call(
+      $("explorer-body").querySelectorAll(".close-group-head"), function (el) {
+        el.addEventListener("click", function () {
+          var closeTs = +el.getAttribute("data-close");
+          var open = el.getAttribute("aria-expanded") !== "true";
+          toggleGroup(closeTs, open);
+          renderExplorer();
+        });
+      });
+    Array.prototype.forEach.call(
+      $("explorer-body").querySelectorAll(".close-group-more"), function (el) {
+        el.addEventListener("click", function () {
+          toggleShowAll(+el.getAttribute("data-close"));
+          renderExplorer();
         });
       });
     Array.prototype.forEach.call(
@@ -2081,4 +2257,43 @@
       });
     load();
   });
+
+  /* v36 test hook: lets verification suites expand all groups before
+     counting rows. DATA-null guarded (no-op before the page loads). */
+  window.RaptorResearchDensity = {
+    expandAll: function () {
+      if (!DATA) return;
+      DATA.signals.forEach(function (s) {
+        delete GROUP_COLLAPSED[s.signal_ts];
+        GROUP_EXPANDED[s.signal_ts] = true;
+        GROUP_SHOW_ALL[s.signal_ts] = true;
+      });
+      renderSignalList($("signal-search").value);
+      renderExplorer();
+    },
+    collapseAll: function () {
+      if (!DATA) return;
+      DATA.signals.forEach(function (s) {
+        delete GROUP_EXPANDED[s.signal_ts];
+        delete GROUP_SHOW_ALL[s.signal_ts];
+        GROUP_COLLAPSED[s.signal_ts] = true;
+      });
+      renderSignalList($("signal-search").value);
+      renderExplorer();
+    },
+    getState: function () {
+      var groups = DATA ? groupByClose(DATA.signals) : [];
+      var open = {};
+      groups.forEach(function (g) {
+        open[g.close_ts] = groupIsOpen(g, false);
+      });
+      return {
+        groups: groups.length,
+        latestClose: DATA ? latestCloseTs() : null,
+        open: open,
+        showAll: Object.keys(GROUP_SHOW_ALL).map(Number),
+        collapsed: Object.keys(GROUP_COLLAPSED).map(Number)
+      };
+    }
+  };
 })();

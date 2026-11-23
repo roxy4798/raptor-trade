@@ -2,6 +2,11 @@
 //  * renderRows appends a Live price cell per row (live-prices.js fills it).
 //  * Empty-state colspan 9 -> 10 (Live column). Modal gains a Live Price
 //    metric row after Close Price. See JENNI-CHANGES.md.
+//  * v36 (23 Nov 2026): renderRows groups rows by 4H close when sorted by
+//    close_ts (default): collapsible close-group headers with mini-stats,
+//    25 rows per group + Show all / Show less. Other sorts render flat, as
+//    before. Exposes window.RaptorDensity (revealSignal/expandAll/
+//    collapseAll/getState) for the DDT overlay + verification suites.
 (function(){
 "use strict";
 var DATA = window.RAPTOR_DATA || {signals:[]};
@@ -30,6 +35,39 @@ tick(); setInterval(tick, 1000);
 var tbody = document.getElementById("signal-rows");
 var sortState = {key:"close_ts", dir:-1};
 var tableSearch = "", tableFilter = "all";
+
+/* ---- v36 close grouping (build-owned) ----
+   Groups apply only in the default close_ts sort; any other column sort
+   renders the flat list, as before — grouping by close under a different
+   sort would be incoherent. Collapse/expand state lives here so it
+   survives every applyTable() re-render. */
+var GROUP_PAGE = 25;
+var collapsedGroups = {};   // close_ts -> true (group hidden); default: all but latest
+var expandedGroups = {};    // close_ts -> true (show all rows, not just GROUP_PAGE)
+var groupDefaultsDone = false;
+var GROUP_T = {
+  en: {signals:"signals", continued:"continued", reversed:"reversed", mean:"mean",
+       showAll:"Show all", showLess:"Show less", of:"of"},
+  id: {signals:"sinyal", continued:"lanjut", reversed:"berbalik", mean:"rata-rata",
+       showAll:"Tampilkan semua", showLess:"Tampilkan lebih sedikit", of:"dari"}
+};
+function groupT(k){ return (GROUP_T[I18N.get()==="id"?"id":"en"]||GROUP_T.en)[k]||GROUP_T.en[k]||k; }
+function groupStats(list){
+  var cont=0, rev=0, nets=[];
+  list.forEach(function(s){
+    var c = s.tracker && s.tracker.classification;
+    if(c==="PUMP CONTINUED") cont++;
+    else if(c==="REVERSAL") rev++;
+    if(s.tracker && s.tracker.net!==null && s.tracker.net!==undefined) nets.push(s.tracker.net*100);
+  });
+  var mean = nets.length ? nets.reduce(function(a,b){return a+b;},0)/nets.length : null;
+  return {n:list.length, cont:cont, rev:rev, mean:mean};
+}
+function groupHeadHtml(ts, st, collapsed, closeStr){
+  var stats = "";
+  if(st.mean!==null) stats = ' &middot; <span class="gh-stat">'+st.cont+' '+groupT("continued")+'</span> &middot; <span class="gh-stat">'+st.rev+' '+groupT("reversed")+'</span> &middot; <span class="gh-stat">'+groupT("mean")+' '+(st.mean>=0?"+":"")+st.mean.toFixed(2)+'%</span>';
+  return '<tr class="close-group-head" data-close-ts="'+ts+'"><td colspan="10"><button type="button" class="close-group-toggle" aria-expanded="'+(!collapsed)+'" data-close-ts="'+ts+'"><span class="gh-chev">'+(collapsed?"▸":"▾")+'</span><span class="gh-close">'+closeStr+'</span><span class="gh-count">'+st.n+' '+groupT("signals")+'</span>'+stats+'</button></td></tr>';
+}
 var SORT_KEYS = { "symbol": function(s){ return s.symbol; }, "close_ts": function(s){ return s.close_ts; }, "price": function(s){ return s.price; }, "chg_4h": function(s){ return s.chg_4h; }, "rvol": function(s){ return s.rvol; }, "breakout_margin": function(s){ return s.breakout_margin; }, "rsi_4h": function(s){ return s.rsi_4h; }, "r30": function(s){ return s.tracker ? s.tracker.r30 : null; } };
 function glyph(v){ if(v===null||v===undefined) return ""; if(v>0) return "▲ "; if(v<0) return "▼ "; return "— "; }
 function fmtPct(v){ if(v===null||v===undefined) return I18N.t('na'); return (v>=0?"+":"")+v.toFixed(2)+"%"; }
@@ -41,8 +79,7 @@ function badgeInfo(c){ var map = {"PUMP CONTINUED":[I18N.t('badgeGood'),"good"],
 function badgeOf(c){ var e=badgeInfo(c); return '<span class="badge '+e[1]+'">'+e[0]+'</span>'; }
 function closeCellHtml(s){ return I18N.useWIB() ? '<span class="close-wib">'+s.close_wib+' WIB</span>' : '<span class="close-utc">'+s.close_utc+' UTC</span>'; }
 function closeText(s){ return I18N.useWIB() ? (s.close_wib+' WIB') : (s.close_utc+' UTC'); }
-function renderRows(list){
-  tbody.innerHTML = list.length ? list.map(function(s){
+function rowHtml(s){
     var t = s.tracker;
     var r30 = (t && t.r30!==null && t.r30!==undefined) ? fmtPctFracG(t.r30) : I18N.t('na');
     var r30c = (t && t.r30!==null && t.r30!==undefined) ? clsOf(t.r30*100) : "na";
@@ -58,7 +95,34 @@ function renderRows(list){
       +'<td class="num '+r30c+'" data-sort="'+(t&&t.r30!=null?t.r30*100:'')+'">'+r30+'</td>'
       +'<td>'+badgeOf(t ? t.classification : null)+'</td>'
       +'<td class="live-cell num" data-live-symbol="'+s.symbol+'" data-live-market="'+s.market+'" data-live-close="'+(s.price??'')+'"><span class="live-dot connecting"></span><span class="live-price">\u2026</span></td></tr>';
-  }).join("") : '<tr class="empty-state"><td class="no-results" colspan="10">'+(I18N.get()==='id'?'Tidak ada sinyal yang cocok. Coba simbol atau filter lain.':'No signals match this search. Try another symbol or filter.')+'</td></tr>';
+}
+function renderRows(list){
+  if(!list.length){ tbody.innerHTML = '<tr class="empty-state"><td class="no-results" colspan="10">'+(I18N.get()==='id'?'Tidak ada sinyal yang cocok. Coba simbol atau filter lain.':'No signals match this search. Try another symbol or filter.')+'</td></tr>'; return; }
+  if(sortState.key !== "close_ts"){ tbody.innerHTML = list.map(rowHtml).join(""); return; }
+  /* Grouped by close (default sort only). The list is already close_ts
+     desc, so groups are contiguous. */
+  var filtering = tableSearch !== "" || tableFilter !== "all";
+  var groups = [], cur = null;
+  list.forEach(function(s){
+    if(!cur || cur.ts !== s.close_ts){ cur = {ts:s.close_ts, rows:[]}; groups.push(cur); }
+    cur.rows.push(s);
+  });
+  var latestTs = groups.length ? groups[0].ts : null;
+  var html = "";
+  groups.forEach(function(g){
+    var collapsed = filtering ? false : (collapsedGroups[g.ts]!==undefined ? collapsedGroups[g.ts] : (g.ts !== latestTs));
+    html += groupHeadHtml(g.ts, groupStats(g.rows), collapsed, closeText(g.rows[0]));
+    if(collapsed) return;
+    var showAll = !!expandedGroups[g.ts];
+    var shown = showAll ? g.rows : g.rows.slice(0, GROUP_PAGE);
+    html += shown.map(rowHtml).join("");
+    if(g.rows.length > GROUP_PAGE){
+      html += '<tr class="close-group-more" data-close-ts="'+g.ts+'"><td colspan="10"><button type="button" class="close-group-more-btn" data-close-ts="'+g.ts+'">'
+        + (showAll ? groupT("showLess") : groupT("showAll")+" "+g.rows.length+" ("+shown.length+" "+groupT("of")+" "+g.rows.length+")")
+        + '</button></td></tr>';
+    }
+  });
+  tbody.innerHTML = html;
 }
 function applyTable(){
   var fn = SORT_KEYS[sortState.key];
@@ -140,6 +204,24 @@ backdrop.addEventListener("click", function(e){ if(e.target === backdrop) closeM
 document.addEventListener("keydown", function(e){ if(e.key === "Escape") closeModal(); if(e.key === "Tab" && backdrop.classList.contains("open")){ var nodes = Array.prototype.slice.call(modalBody.querySelectorAll('button,[href],[tabindex]:not([tabindex="-1"])')); if(!nodes.length) return; if(e.shiftKey && document.activeElement === nodes[0]){e.preventDefault();nodes[nodes.length-1].focus();} else if(!e.shiftKey && document.activeElement === nodes[nodes.length-1]){e.preventDefault();nodes[0].focus();} } });
 tbody.addEventListener("click", function(e){ var tr = e.target.closest("tr[data-sid]"); if(tr) openModal(tr.getAttribute("data-sid")); });
 tbody.addEventListener("keydown", function(e){ if(e.key === "Enter" || e.key === " "){ e.preventDefault(); var tr = e.target.closest("tr[data-sid]"); if(tr) openModal(tr.getAttribute("data-sid")); } });
+/* v36: group toggle + show-all delegation (group rows carry no data-sid,
+   so the modal handler above ignores them). */
+tbody.addEventListener("click", function(e){
+  var tg = e.target.closest(".close-group-toggle");
+  if(tg){ e.stopPropagation(); var ts = tg.getAttribute("data-close-ts"); collapsedGroups[ts] = tg.getAttribute("aria-expanded")==="true"; applyTable(); return; }
+  var more = e.target.closest(".close-group-more-btn");
+  if(more){ e.stopPropagation(); var mts = more.getAttribute("data-close-ts"); if(expandedGroups[mts]) delete expandedGroups[mts]; else expandedGroups[mts]=true; applyTable(); }
+});
+/* v36: public hook for the DDT overlay (density-v36.js) + test suites.
+   revealSignal expands the signal's close group + pagination so its row
+   exists in the DOM (no-op in a flat sort, where all rows are present).
+   It does NOT clear an active table search/filter. */
+window.RaptorDensity = {
+  revealSignal: function(sid){ var s = SIGNALS[sid]; if(!s) return false; if(sortState.key !== "close_ts") return !!tbody.querySelector('tr[data-sid="'+sid+'"]'); collapsedGroups[s.close_ts]=false; expandedGroups[s.close_ts]=true; applyTable(); return !!tbody.querySelector('tr[data-sid="'+sid+'"]'); },
+  expandAll: function(){ DATA.signals.forEach(function(s){ collapsedGroups[s.close_ts]=false; expandedGroups[s.close_ts]=true; }); applyTable(); },
+  collapseAll: function(){ DATA.signals.forEach(function(s){ collapsedGroups[s.close_ts]=true; delete expandedGroups[s.close_ts]; }); applyTable(); },
+  getState: function(){ return {sortKey: sortState.key, collapsed: Object.keys(collapsedGroups).filter(function(k){return collapsedGroups[k];}), expanded: Object.keys(expandedGroups)}; }
+};
 window.addEventListener('raptor:lang',function(){ applyTable(); if(currentModalSid && backdrop.classList.contains('open')) openModal(currentModalSid); });
 openFromHash();
 })();

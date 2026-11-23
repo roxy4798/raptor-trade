@@ -1,0 +1,180 @@
+/* Raptor Trade v36 — density styles (build-owned, Jenni).
+   Close-group headers, sticky table header, mobile signal cards.
+   Group headers are quiet structural dividers, not cards: small caps,
+   muted text, thin rule. The visual identity stays Raka's v24. */
+
+/* ---------- close-group headers: main signal table ---------- */
+#signal-rows tr.close-group-head td {
+  padding: 0;
+  border-bottom: 1px solid rgba(185, 243, 138, 0.14);
+  background: rgba(185, 243, 138, 0.04);
+}
+#signal-rows tr.close-group-head td:first-child {
+  box-shadow: none;
+}
+.close-group-toggle {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  width: 100%;
+  padding: 9px 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font: 700 10.5px var(--font-mono, ui-monospace, monospace);
+  letter-spacing: 0.06em;
+  color: #9db8a8;
+}
+.close-group-toggle:hover {
+  color: #d7ecd2;
+  background: rgba(185, 243, 138, 0.05);
+}
+.close-group-toggle .gh-chev {
+  color: var(--accent, #b9f38a);
+  font-size: 11px;
+}
+.close-group-toggle .gh-close {
+  color: #eef6ed;
+  text-transform: uppercase;
+}
+.close-group-toggle .gh-count {
+  color: var(--accent, #b9f38a);
+}
+.close-group-toggle .gh-stat {
+  font-weight: 400;
+  color: #7e968a;
+  letter-spacing: 0.02em;
+}
+
+/* ---------- show-all / show-less rows ---------- */
+#signal-rows tr.close-group-more td {
+  padding: 0;
+  border-bottom: 1px solid rgba(197, 226, 220, 0.08);
+  text-align: center;
+}
+.close-group-more-btn {
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: 600 11px var(--font-mono, ui-monospace, monospace);
+  letter-spacing: 0.05em;
+  color: #7fd4c1;
+}
+.close-group-more-btn:hover {
+  color: var(--accent, #b9f38a);
+}
+
+/* ---------- sticky table header (desktop) ----------
+   The th rule in style.css is already position:sticky, but
+   #signals .table-wrap carries overflow-x:auto + overflow-y:hidden,
+   which makes it a scroll container and kills vertical sticking.
+   On desktop widths the table fits without horizontal scroll, so the
+   wrapper can go overflow:visible and the header sticks just under the
+   sticky .topline bar (~32px). */
+@media (min-width: 1080px) {
+  #signals .table-wrap {
+    overflow: visible;
+  }
+  #signals .table-wrap th {
+    top: 32px;
+    z-index: 30;
+  }
+}
+
+/* ---------- close-group headers: DDT signal list ---------- */
+#ddt-list .ddt-group-head {
+  border-bottom: 1px solid rgba(185, 243, 138, 0.14);
+  background: rgba(185, 243, 138, 0.04);
+}
+#ddt-list .ddt-group-head .close-group-toggle {
+  padding: 8px 10px;
+  font-size: 10px;
+}
+#ddt-list .ddt-group-more {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid rgba(197, 226, 220, 0.08);
+  cursor: pointer;
+  text-align: center;
+  font: 600 11px var(--font-mono, ui-monospace, monospace);
+  letter-spacing: 0.05em;
+  color: #7fd4c1;
+}
+#ddt-list .ddt-group-more:hover {
+  color: var(--accent, #b9f38a);
+}
+
+/* ---------- mobile signal cards (main table, <=780px) ----------
+   The thead goes away; each row becomes a 2-line card:
+   line 1 — symbol + close; line 2 — 4H change, RVOL, +30m, outcome.
+   Price / breakout / RSI / live stay available in the modal on tap. */
+@media (max-width: 780px) {
+  #signals table {
+    min-width: 0;
+  }
+  #signals thead {
+    display: none;
+  }
+  #signals tbody tr[data-sid] {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3px 10px;
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(197, 226, 220, 0.08);
+  }
+  #signals tbody tr[data-sid] td {
+    border: none;
+    padding: 1px 0;
+    white-space: normal;
+  }
+  #signals tbody tr[data-sid] td.sym {
+    grid-column: 1 / 3;
+  }
+  #signals tbody tr[data-sid] td:nth-child(2) {
+    grid-column: 3 / 5;
+    text-align: right;
+  }
+  #signals tbody tr[data-sid] td:nth-child(4) { grid-column: 1; }
+  #signals tbody tr[data-sid] td:nth-child(5) { grid-column: 2; }
+  #signals tbody tr[data-sid] td:nth-child(8) { grid-column: 3; }
+  #signals tbody tr[data-sid] td:nth-child(9) {
+    grid-column: 4;
+    text-align: right;
+  }
+  #signals tbody tr[data-sid] td:nth-child(3),
+  #signals tbody tr[data-sid] td:nth-child(6),
+  #signals tbody tr[data-sid] td:nth-child(7),
+  #signals tbody tr[data-sid] td.live-cell {
+    display: none;
+  }
+  #signals tbody tr[data-sid] td:nth-child(4)::before {
+    content: "4H ";
+    font-size: 9px;
+    color: #7e968a;
+  }
+  #signals tbody tr[data-sid] td:nth-child(5)::before {
+    content: "RVOL ";
+    font-size: 9px;
+    color: #7e968a;
+  }
+  #signals tbody tr[data-sid] td:nth-child(8)::before {
+    content: "+30m ";
+    font-size: 9px;
+    color: #7e968a;
+  }
+  /* Group headers + show-all rows stay full-width on mobile. */
+  #signal-rows tr.close-group-head td,
+  #signal-rows tr.close-group-more td {
+    display: block;
+    width: 100%;
+  }
+  .close-group-toggle .gh-stat {
+    display: none;
+  }
+}
