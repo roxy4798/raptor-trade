@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_ts": 1795392111.6879375,
-  "generated_wib": "23 Nov 2026, 07:01 WIB",
+  "generated_ts": 1795394508.1610734,
+  "generated_wib": "23 Nov 2026, 07:41 WIB",
   "rules_version": "v2.1.2",
   "next_close_ts": 1795406400.0,
   "source": "Binance Futures Mainnet (local)"
@@ -9,20 +9,19 @@
  "kpis": {
   "total": 27,
   "last24": 17,
-  "win_rate": 27.77777777777778,
-  "wins": 5,
-  "n_eval": 18,
-  "mean_net": 0.8288953147471492,
+  "win_rate": 30.0,
+  "wins": 6,
+  "n_eval": 20,
+  "mean_net": 0.24223376872898933,
   "median_net": 0.023746576975886065,
   "eligible": 840,
   "gap_blocked": 0,
   "universe_total": 849,
   "classes": {
-   "BELUM DINILAI": 2,
+   "REVERSAL": 6,
+   "PUMP CONTINUED": 6,
    "SIDEWAYS": 8,
-   "REVERSAL": 5,
-   "INSUFFICIENT DATA": 7,
-   "PUMP CONTINUED": 5
+   "INSUFFICIENT DATA": 7
   },
   "first_signal_date": "21 Nov 2026"
  },
@@ -35,8 +34,8 @@
   "gap_blocked": 0,
   "universe_total": 849,
   "signals_total": 34,
-  "heartbeat_age_s": 4.0,
-  "uptime_s": 3583.4,
+  "heartbeat_age_s": -0.0,
+  "uptime_s": 5983.9,
   "backfill_missing": 50,
   "backfill_pending": 0,
   "backfill_filled": 3360
@@ -239,9 +238,23 @@
     "close_wib": "23 Nov 03:00",
     "net_pct": 0.45609161546059945,
     "cum_net_pct": 14.620865205237955
+   },
+   {
+    "symbol": "BULLAUSDT",
+    "close_ts": 1795392000.0,
+    "close_wib": "23 Nov 07:00",
+    "net_pct": -12.102977361805749,
+    "cum_net_pct": 0.7483278375421287
+   },
+   {
+    "symbol": "LISTAUSDT",
+    "close_ts": 1795392000.0,
+    "close_wib": "23 Nov 07:00",
+    "net_pct": 2.0275370709368503,
+    "cum_net_pct": 2.7910375327973025
    }
   ],
-  "n_eval": 18,
+  "n_eval": 20,
   "n_total": 27
  },
  "signals": [
@@ -276,7 +289,21 @@
    "quote_volume": 21826824.50923,
    "qv24h": 121555075.286229,
    "chart": "charts/BULLAUSDT_1795392000.png",
-   "tracker": null
+   "tracker": {
+    "classification": "REVERSAL",
+    "reason": "return +30m -11.94% <= -1,00%",
+    "r1": -0.017871649065800188,
+    "r5": -0.005686433793663737,
+    "r15": -0.03452477660438669,
+    "r30": -0.11941510966693736,
+    "mfe": 0.006498781478472715,
+    "mae": -0.12997562956945563,
+    "net": -0.12102977361805749,
+    "evaluated_ts": 1795394210.4437177,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:LISTAUSDT:LONG SIGNAL:1795392000.0",
@@ -309,7 +336,21 @@
    "quote_volume": 6308815.80561,
    "qv24h": 12186552.04301,
    "chart": "charts/LISTAUSDT_1795392000.png",
-   "tracker": null
+   "tracker": {
+    "classification": "PUMP CONTINUED",
+    "reason": "return +30m +2.16% >= +1,00%",
+    "r1": 0.001439979054850049,
+    "r5": 0.0026181437360912607,
+    "r15": 0.00405812279094131,
+    "r30": 0.021599685822751624,
+    "mfe": 0.03259588951433434,
+    "mae": -0.003927215604136558,
+    "net": 0.020275370709368502,
+    "evaluated_ts": 1795394210.4437177,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:VVVUSDT:LONG SIGNAL:1795377600.0",
