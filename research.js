@@ -805,6 +805,89 @@
         "<th>+1H</th><th>+4H</th><th>+8H</th><th>MFE / MAE (+30m)</th>" +
         "</tr></thead><tbody>" + caseRows + "</tbody></table></div>" +
         "<p class='panel-sub' style='margin-top:12px'>" + caseNote + "</p>";
+
+    /* --- Phase 4.2: learning summary (auto-generated) --- */
+    var sum = L.learning_summary || {};
+    var sumList = function (items, empty) {
+      if (!items || items.length === 0) {
+        return '<p class="panel-sub" style="margin:0 0 8px">' + empty + "</p>";
+      }
+      return "<ul class='missing-list'>" + items.map(function (it) {
+        return "<li><span>" + esc(it.text) + "</span></li>";
+      }).join("") + "</ul>";
+    };
+    var topics = sum.topics || {};
+    var topicRows = Object.keys(topics).map(function (k) {
+      var t = topics[k] || {};
+      var badge = t.status === "observed" ? "var(--pos)"
+        : t.status === "mixed" ? "var(--warn)" : "var(--text-3)";
+      return "<tr><td>" + esc(t.label || k) + "</td><td>" +
+        '<span style="color:' + badge + '">' + esc(t.status || "—") +
+        "</span></td><td>" + esc(t.detail || "—") + "</td></tr>";
+    }).join("");
+    $("learning-summary").innerHTML =
+      "<h4 style='margin:0 0 8px'>Monitored topics</h4>" +
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>Topic</th><th>Status</th><th>Current read</th></tr></thead><tbody>" +
+      topicRows + "</tbody></table></div>" +
+      "<h4 style='margin:16px 0 8px'>What holds up</h4>" +
+      sumList(sum.worked, "Nothing has met the bar yet — no finding is presented as working.") +
+      "<h4 style='margin:16px 0 8px'>What failed to hold</h4>" +
+      sumList(sum.failed, "No tested pattern has failed yet.") +
+      "<h4 style='margin:16px 0 8px'>What changed since the previous evaluation</h4>" +
+      sumList(sum.changed, "No material change recorded.") +
+      "<h4 style='margin:16px 0 8px'>Not yet concludable</h4>" +
+      sumList(sum.inconclusive, "Everything evaluated has a verdict.") +
+      "<p class='panel-sub' style='margin-top:12px'>Based on " +
+      ((sum.based_on || {}).n_evaluable_30m || 0) + " evaluable +30m outcomes and " +
+      ((sum.based_on || {}).n_paired || 0) + " paired-cohort signals. " +
+      "“What holds up” lists exploratory associations only — nothing here is a predictive claim.</p>";
+
+    /* --- Phase 4.2: research checkpoints --- */
+    var cps = L.checkpoints || {};
+    var cur = cps.current_n_paired == null ? 0 : cps.current_n_paired;
+    var nxt = cps.next_threshold;
+    var pct = nxt == null ? 100 : Math.min(100, Math.round(cur / nxt * 100));
+    var reachedRows = (cps.reached || []).map(function (r) {
+      return "<li><span>Checkpoint " + r.threshold + " signals</span><span class='num'>" +
+        fmtDate(r.reached_ts) + "</span></li>";
+    }).join("");
+    $("learning-checkpoints").innerHTML =
+      "<ul class='missing-list'>" +
+      "<li><span>Complete outcomes (paired cohort)</span><span class='num'>" + cur + "</span></li>" +
+      "<li><span>Next checkpoint</span><span class='num'>" +
+        (nxt == null ? "all reached" : nxt + " signals (" + pct + "%)") + "</span></li>" +
+      "</ul>" +
+      '<div class="cov-bar" style="margin:12px 0"><i style="width:' + pct + '%"></i></div>' +
+      (reachedRows === ""
+        ? '<p class="panel-sub" style="margin:0">No checkpoint reached yet — the first is at 40 complete outcomes.</p>'
+        : "<ul class='missing-list'>" + reachedRows + "</ul>");
+
+    /* --- Phase 4.2: hypothesis registry --- */
+    var reg = L.hypothesis_registry || {};
+    var entries = reg.entries || [];
+    var split = reg.split;
+    var regRows = entries.map(function (e) {
+      var v = e.validation || {};
+      var st = e.status === "validated" ? "var(--pos)"
+        : e.status === "rejected" ? "var(--neg)" : "var(--warn)";
+      return "<tr><td>" + esc(e.id) + "</td><td>" + esc(e.text || "") +
+        "</td><td><span style='color:" + st + "'>" + esc(e.status) +
+        "</span></td><td>" + (v.verdict == null ? "—" : esc(v.verdict) +
+        " (n " + v.n_best + " vs " + v.n_worst + ")") + "</td></tr>";
+    }).join("");
+    $("learning-registry").innerHTML =
+      (split == null
+        ? '<p class="panel-sub" style="margin:0 0 12px">' +
+          esc(reg.split_pending_note || "Exploration/validation split not frozen yet.") + "</p>"
+        : '<p class="panel-sub" style="margin:0 0 12px">Split frozen ' + fmtDate(split.frozen_ts) +
+          " — first " + split.discovery_n + " evaluable signals are the discovery set.</p>") +
+      (entries.length === 0
+        ? '<p class="panel-sub" style="margin:0">No hypothesis has passed the sample bar yet (n≥10 both buckets + ≥2pp gap). When one does, it is recorded here frozen, before any new data tests it.</p>'
+        : '<div style="overflow-x:auto"><table class="version-table">' +
+          "<thead><tr><th>ID</th><th>Hypothesis (frozen at registration)</th>" +
+          "<th>Status</th><th>Validation on newer data</th></tr></thead><tbody>" +
+          regRows + "</tbody></table></div>");
   }
 
   /* ---------------------------------------------------------- timeline */
