@@ -641,6 +641,169 @@
       "<p class='panel-sub' style='margin-top:12px'>Markers stay research variables. " +
       "A gap between “with” and “without” at these sample sizes is an observation, " +
       "not evidence that the marker predicts anything.</p>";
+
+    /* --- Phase 4.1: paired horizons (same cohort, gross) --- */
+    var ph = L.paired_horizons || {};
+    var phz = ph.horizons || {};
+    var pcell = function (v) {
+      return v == null ? "—" : fmtPct(v, 2);
+    };
+    var prows = [["r30", "+30m"], ["r1h", "+1H"], ["r4h", "+4H"],
+                 ["r8h", "+8H"]].map(function (r) {
+      var d = phz[r[0]] || {};
+      return "<tr><td>" + r[1] + "</td><td>" + pcell(d.mean_pct) +
+        "</td><td>" + pcell(d.median_pct) + "</td><td>" +
+        (d.pct_gte_1pct == null ? "—" : fmtNum(d.pct_gte_1pct, 0) + "%") +
+        "</td><td>" + pcell(d.mean_mfe_pct) + "</td><td>" +
+        pcell(d.mean_mae_pct) + "</td></tr>";
+    }).join("");
+    var traj = (ph.trajectories || {}).counts || {};
+    var tdefs = (ph.trajectories || {}).definitions || {};
+    var trows = [["continued", "Continued"], ["reversed", "Reversed"],
+                 ["full_reversal", "— of which: full reversal"],
+                 ["late_bloom", "Late bloom"],
+                 ["never_up", "Never up"]].map(function (r) {
+      return "<li><span>" + r[1] +
+        (tdefs[r[0]] ? " <span style='color:var(--text-3)'>(" +
+          esc(tdefs[r[0]]) + ")</span>" : "") +
+        "</span><span class='num'>" + (traj[r[0]] == null ? "—" : traj[r[0]]) +
+        "</span></li>";
+    }).join("");
+    var excl = ph.excluded || {};
+    $("learning-paired").innerHTML = ph.n_paired == null || ph.n_paired < 5
+      ? '<p class="panel-sub" style="margin:0">Not enough signals with all four horizons evaluated yet (n&lt;5).</p>'
+      : "<p class='panel-sub' style='margin:0 0 12px'>Paired cohort: <b>" +
+        ph.n_paired + "</b> of " + ph.n_total + " signals. Excluded: " +
+        "no +30m " + (excl.missing_h30m || 0) + ", no +1H " +
+        (excl.missing_h1 || 0) + ", no +4H " + (excl.missing_h4 || 0) +
+        ", no +8H " + (excl.missing_h8 || 0) +
+        " (a signal can miss more than one horizon).</p>" +
+        '<table class="version-table"><thead><tr><th>Horizon</th><th>Mean</th>' +
+        "<th>Median</th><th>≥ +1%</th><th>Mean MFE</th><th>Mean MAE</th>" +
+        "</tr></thead><tbody>" + prows + "</tbody></table>" +
+        "<p class='panel-sub' style='margin-top:12px'>MFE/MAE are the average best/worst " +
+        "excursions within each horizon (+4H/+8H from 4H-bar extremes, not ticks). " +
+        "Gross returns throughout — compare with the +30m net table above, not against it.</p>" +
+        "<h4 style='margin:16px 0 4px'>Momentum trajectories</h4>" +
+        '<ul class="missing-list">' + trows + "</ul>" +
+        (ph.sample_note ? "<p class='panel-sub' style='margin-top:12px'>" +
+          esc(ph.sample_note) + "</p>" : "");
+
+    /* --- Phase 4.1: distribution, contributions, mean vs win --- */
+    var dist = out.distribution_net30 || {};
+    var dkeys = ["<−5%", "−5..−1%", "−1..+1%", "+1..+5%", ">+5%"];
+    var drows = dkeys.map(function (k) {
+      var c = dist[k] || 0;
+      var w = out.n ? Math.round(c / out.n * 100) : 0;
+      return "<li><span>" + esc(k) + "</span><span class='num'>" + c +
+        " <span style='color:var(--text-3)'>(" + w + "%)</span></span></li>";
+    }).join("");
+    var contribs = out.contributions || [];
+    var maxAbs = 0;
+    contribs.forEach(function (c) {
+      maxAbs = Math.max(maxAbs, Math.abs(c.net_pct || 0));
+    });
+    var crows = contribs.map(function (c) {
+      var w = maxAbs ? Math.round(Math.abs(c.net_pct) / maxAbs * 100) : 0;
+      var col = c.net_pct >= 0 ? "var(--pos)" : "var(--neg)";
+      return "<tr><td>" + esc(c.symbol) + "</td><td>" +
+        "<div style='background:" + col + ";height:8px;border-radius:99px;width:" +
+        w + "%;min-width:2px'></div></td><td>" + fmtPct(c.net_pct, 2) +
+        "</td><td>" + (c.share_of_sum_pct == null ? "—" :
+          fmtNum(c.share_of_sum_pct, 0) + "%") + "</td></tr>";
+    }).join("");
+    var mvw = out.mean_vs_win || {};
+    $("learning-distribution").innerHTML = out.n == null || out.n < 5
+      ? '<p class="panel-sub" style="margin:0">Not enough evaluable outcomes yet (n&lt;5).</p>'
+      : "<h4 style='margin:0 0 4px'>Distribution of +30m net outcomes (n=" +
+        out.n + ")</h4>" +
+        '<ul class="missing-list">' + drows + "</ul>" +
+        "<h4 style='margin:16px 0 4px'>Mean vs win rate</h4>" +
+        '<ul class="missing-list">' +
+        "<li><span>Win rate (+30m)</span><span class='num'>" +
+        fmtNum(mvw.win_rate_pct, 1) + "%</span></li>" +
+        "<li><span>Mean net</span><span class='num'>" +
+        fmtPct(mvw.mean_net_pct, 2) + "</span></li>" +
+        "<li><span>Median net</span><span class='num'>" +
+        fmtPct(mvw.median_net_pct, 2) + "</span></li></ul>" +
+        (mvw.note ? "<p class='panel-sub' style='margin-top:8px'>" +
+          esc(mvw.note) + "</p>" : "") +
+        "<h4 style='margin:16px 0 4px'>Contribution of every signal to the total</h4>" +
+        '<table class="version-table"><thead><tr><th>Signal</th><th></th>' +
+        "<th>Net</th><th>Share of sum</th></tr></thead><tbody>" +
+        crows + "</tbody></table>" +
+        "<p class='panel-sub' style='margin-top:12px'>Shares above 100% mean one signal " +
+        "outweighs the entire net sum — the rest of the signals cancel each other out.</p>";
+
+    /* --- Phase 4.1: agent learning evaluation --- */
+    var ae = L.agent_evaluation || {};
+    var ags = ae.agents || {};
+    var verdicts = {
+      association: ["Association observed", "var(--pos)"],
+      no_clear_association: ["No clear association", "var(--text-3)"],
+      consistent: ["Consistent with hypothesis", "var(--pos)"],
+      inconsistent: ["Against hypothesis", "var(--neg)"],
+      insufficient_data: ["Not enough data", "var(--warn)"],
+      no_data: ["No data yet", "var(--warn)"],
+      not_evaluable: ["Not evaluable", "var(--text-3)"]
+    };
+    var agOrder = ["breakout", "reversal", "orderflow", "regime",
+                   "liquidity", "performance"];
+    var agHtml = agOrder.map(function (key) {
+      var ag = ags[key];
+      if (!ag) return "";
+      var frows = (ag.findings || []).map(function (f) {
+        var v = verdicts[f.verdict] || [f.verdict, "var(--text-3)"];
+        return "<tr><td>" + esc(f.observation) + "</td><td><span style='color:" +
+          v[1] + "'>" + v[0] + "</span></td><td>" + esc(f.detail || "") +
+          "</td></tr>";
+      }).join("");
+      return "<h4 style='margin:16px 0 4px'>" + esc(ag.label) + "</h4>" +
+        "<p class='panel-sub' style='margin:0 0 8px'>" + esc(ag.basis || "") +
+        "</p>" +
+        '<table class="version-table"><thead><tr><th>Observation</th>' +
+        "<th>Verdict</th><th>Evidence</th></tr></thead><tbody>" +
+        frows + "</tbody></table>";
+    }).join("");
+    $("learning-agents").innerHTML =
+      "<p class='panel-sub' style='margin:0 0 4px'>Evaluated at n=" +
+      (ae.as_of_n_evaluable_30m == null ? "?" : ae.as_of_n_evaluable_30m) +
+      " evaluable +30m outcomes. " + esc(ae.anti_lookahead || "") + "</p>" +
+      "<p class='panel-sub' style='margin:0 0 4px'>" +
+      esc(ae.validation || "") + "</p>" + agHtml;
+
+    /* --- Phase 4.1: case examples (BULLA / IDOL) --- */
+    var cases = out.case_examples || [];
+    var caseRows = cases.map(function (c) {
+      var cell = function (v) {
+        return v == null ? "—" : fmtPct(v, 2);
+      };
+      return "<tr><td>" + esc(c.symbol) + "<br><span style='color:var(--text-3)'>" +
+        esc(fmtWib(c.signal_ts) || "") + " WIB</span></td><td>" +
+        cell(c.net30_pct) + "</td><td>" + cell(c.r1h_pct) + "</td><td>" +
+        cell(c.r4h_pct) + "</td><td>" + cell(c.r8h_pct) + "</td><td>" +
+        cell(c.mfe30_pct) + " / " + cell(c.mae30_pct) + "</td></tr>";
+    }).join("");
+    var bullas = cases.filter(function (c) {
+      return c.symbol === "BULLAUSDT" && c.r8h_pct != null; });
+    var idols = cases.filter(function (c) {
+      return c.symbol === "IDOLUSDT" && c.r8h_pct != null; });
+    var caseNote = "Same rule set, opposite paths — that is why single " +
+      "examples never justify a strategy change.";
+    if (bullas.length && idols.length) {
+      var bBest = bullas.reduce(function (a, b) {
+        return a.r8h_pct > b.r8h_pct ? a : b; });
+      var iWorst = idols.reduce(function (a, b) {
+        return a.r8h_pct < b.r8h_pct ? a : b; });
+      caseNote = "BULLA's best +8H: " + fmtPct(bBest.r8h_pct, 2) +
+        "; IDOL's worst +8H: " + fmtPct(iWorst.r8h_pct, 2) + ". " + caseNote;
+    }
+    $("learning-cases").innerHTML = cases.length === 0
+      ? '<p class="panel-sub" style="margin:0">No BULLA/IDOL outcomes evaluated yet.</p>'
+      : '<table class="version-table"><thead><tr><th>Signal</th><th>+30m net</th>' +
+        "<th>+1H</th><th>+4H</th><th>+8H</th><th>MFE / MAE (+30m)</th>" +
+        "</tr></thead><tbody>" + caseRows + "</tbody></table>" +
+        "<p class='panel-sub' style='margin-top:12px'>" + caseNote + "</p>";
   }
 
   /* ---------------------------------------------------------- timeline */
