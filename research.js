@@ -189,8 +189,8 @@
     var stats = [
       { label: "Signals analyzed", value: String(ov.n_analyzed == null ? 0 : ov.n_analyzed),
         note: "of " + (ov.n_signals == null ? "?" : ov.n_signals) + " published signals" },
-      { label: "Outcomes (+30m)", value: String(ov.n_evaluable_30m == null ? 0 : ov.n_evaluable_30m) + " evaluable",
-        note: "signals with a +30m outcome; the rest are pending or lack 1m candles" },
+      { label: "Outcomes (+30m)", value: String(ov.n_evaluable_30m == null ? 0 : ov.n_evaluable_30m),
+        note: "evaluable signals with a +30m outcome; the rest are pending or lack 1m candles" },
       { label: "Win rate (+30m)", value: overall.win_rate_pct == null ? "N/A" : fmtNum(overall.win_rate_pct, 1) + "%",
         note: "PUMP CONTINUED share, n=" + (ov.n_evaluable_30m == null ? 0 : ov.n_evaluable_30m) },
       { label: "Mean net (+30m)", value: overall.mean_net30_pct == null ? "N/A" : fmtPct(overall.mean_net30_pct, 2),

@@ -75,7 +75,7 @@ main{max-width:1240px;margin:0 auto;padding:28px 28px 64px;position:relative;z-i
 .panel-sub{margin:0 0 14px;font-size:13px;color:var(--text-2)}
 
 /* Coverage bars */
-.cov-row{display:grid;grid-template-columns:120px 1fr 74px;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line)}
+.cov-row{display:grid;grid-template-columns:106px 1fr 88px;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line)}
 .cov-row:last-child{border-bottom:0}
 .cov-name{font-size:13px;font-weight:600}
 .cov-bar{height:8px;background:var(--bg-3);border-radius:99px;overflow:hidden;display:flex}
@@ -83,7 +83,7 @@ main{max-width:1240px;margin:0 auto;padding:28px 28px 64px;position:relative;z-i
 .cov-bar .b-ok{background:var(--pos)}
 .cov-bar .b-part{background:var(--warn)}
 .cov-bar .b-miss{background:var(--neg)}
-.cov-val{font-family:var(--font-mono);font-size:12px;color:var(--text-2);text-align:right}
+.cov-val{font-family:var(--font-mono);font-size:12px;color:var(--text-2);text-align:right;white-space:nowrap}
 .cov-legend{display:flex;gap:14px;margin-top:12px;font-size:12px;color:var(--text-3)}
 .cov-legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px;vertical-align:-1px}
 .missing-list{margin:12px 0 0;padding:0;list-style:none}
@@ -237,7 +237,7 @@ main{max-width:1240px;margin:0 auto;padding:28px 28px 64px;position:relative;z-i
 }
 @media (max-width: 650px){
   main{padding:20px 16px 94px}
-  .cov-row{grid-template-columns:100px 1fr 60px}
+  .cov-row{grid-template-columns:86px 1fr 88px}
   .bucket-row{grid-template-columns:86px 1fr 104px}
   .section{margin-top:44px}
 }
