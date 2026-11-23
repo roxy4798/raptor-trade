@@ -201,7 +201,7 @@
         note: "signals with a complete analysis snapshot" },
     ];
     $("overview-stats").innerHTML = stats.map(function (s) {
-      return '<div class="stat-card"><p class="stat-label">' + esc(s.label) +
+      return '<div class="stat-card card"><p class="stat-label">' + esc(s.label) +
         '</p><p class="stat-value">' + esc(s.value) +
         '</p><p class="stat-note">' + esc(s.note) + "</p></div>";
     }).join("");
@@ -323,7 +323,7 @@
 
   function agentCard(title, section, kvPairs, extraHtml) {
     if (!section) return "";
-    var html = '<div class="agent-card"><h4>' + esc(title) + " " +
+    var html = '<div class="agent-card card"><h4>' + esc(title) + " " +
       statusBadge(section.status) + "</h4>";
     if (kvPairs && kvPairs.length) {
       html += '<table class="kv">' + kvPairs.map(function (p) {
@@ -388,7 +388,7 @@
     var btc = rg.btc || {};
     var breadth = rg.breadth || {};
 
-    var head = '<div class="detail-head"><h3><span class="sym">' +
+    var head = '<div class="detail-head card"><h3><span class="sym">' +
       esc(sig.symbol) + '</span> <span class="muted">· ' + esc(sig.market) +
       "</span></h3><p class='detail-meta'>Close " +
       esc(fmtWib(sig.signal_ts) || "") + " WIB · price <span class='num'>" +
@@ -469,7 +469,7 @@
         ? "recorded at signal time" : "not recorded (signals before 23 Nov 2026)"],
     ]);
     var pf = sig.performance || {};
-    cards += '<div class="agent-card"><h4>6 · Performance Learning</h4>' +
+    cards += '<div class="agent-card card"><h4>6 · Performance Learning</h4>' +
       '<div class="outcome-grid">' +
       horizonCell("+30m", pf.h30m) + horizonCell("+1H", pf.h1) +
       horizonCell("+4H", pf.h4) + horizonCell("+8H", pf.h8) +
@@ -485,6 +485,7 @@
     SELECTED_ID = id;
     renderSignalList($("signal-search").value);
     renderSignalDetail();
+    watchReveals();
   }
 
   /* ---------------------------------------------------------- insights */
@@ -519,7 +520,7 @@
     var insights = [];
 
     function add(title, sub, bucketHtml, scatterHtml, missingCount) {
-      insights.push('<div class="insight-card"><h3>' + esc(title) +
+      insights.push('<div class="insight-card card"><h3>' + esc(title) +
         '</h3><p class="insight-sub">' + esc(sub) + "</p>" + bucketHtml +
         scatterHtml + insightMeta(signals.length, evaluable, missingCount, period) +
         "</div>");
@@ -1103,6 +1104,49 @@
       });
   }
 
+  /* -------------------------------------------------- rail spy + reveal (v33) */
+  function initRailSpy() {
+    var links = Array.prototype.slice.call(
+      document.querySelectorAll(".rail-link[data-section]"));
+    if (!links.length || !("IntersectionObserver" in window)) return;
+    var map = {};
+    links.forEach(function (l) { map[l.getAttribute("data-section")] = l; });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var link = map[en.target.id];
+        if (!link) return;
+        links.forEach(function (l) { l.classList.toggle("active", l === link); });
+      });
+    }, { rootMargin: "-30% 0px -60% 0px" });
+    Object.keys(map).forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) io.observe(el);
+    });
+  }
+
+  var revealIO = null;
+  function watchReveals() {
+    if (!("IntersectionObserver" in window)) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!revealIO) {
+      revealIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (!en.isIntersecting) return;
+          en.target.classList.add("is-in-view");
+          revealIO.unobserve(en.target);
+        });
+      }, { threshold: 0.08, rootMargin: "0px 0px -4% 0px" });
+    }
+    var els = document.querySelectorAll(
+      ".section, .panel, .stat-card, .insight-card, .agent-card, .detail-head");
+    Array.prototype.forEach.call(els, function (el) {
+      if (el.classList.contains("reveal")) return;
+      el.classList.add("reveal");
+      revealIO.observe(el);
+    });
+  }
+
   /* ---------------------------------------------------------- boot */
   function showError() {
     $("loading").hidden = true;
@@ -1128,6 +1172,8 @@
     renderExplorer();
     $("loading").hidden = true;
     $("app").hidden = false;
+    initRailSpy();
+    watchReveals();
   }
 
   function load() {
