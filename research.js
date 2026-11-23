@@ -800,9 +800,10 @@
     }
     $("learning-cases").innerHTML = cases.length === 0
       ? '<p class="panel-sub" style="margin:0">No BULLA/IDOL outcomes evaluated yet.</p>'
-      : '<table class="version-table"><thead><tr><th>Signal</th><th>+30m net</th>' +
+      : '<div style="overflow-x:auto"><table class="version-table">' +
+        "<thead><tr><th>Signal</th><th>+30m net</th>" +
         "<th>+1H</th><th>+4H</th><th>+8H</th><th>MFE / MAE (+30m)</th>" +
-        "</tr></thead><tbody>" + caseRows + "</tbody></table>" +
+        "</tr></thead><tbody>" + caseRows + "</tbody></table></div>" +
         "<p class='panel-sub' style='margin-top:12px'>" + caseNote + "</p>";
   }
 
