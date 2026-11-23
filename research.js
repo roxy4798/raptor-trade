@@ -1803,7 +1803,7 @@
     var rows = versions.map(function (v) {
       if (v.n_records == null) {
         return "<tr><td>" + esc(v.version) + "</td><td colspan='4' style='font-family:var(--font-sans)'>" +
-          esc(v.note || t("tl.noArchive")) + "</td></tr>";
+          esc(bi(v.note, v.note_en) || t("tl.noArchive")) + "</td></tr>";
       }
       return "<tr><td>v" + esc(v.version) + "</td><td>" + v.n_records +
         "</td><td>" + v.oi_coverage + "/" + v.n_records +
