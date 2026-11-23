@@ -1,0 +1,12 @@
+/* Raptor Trade — TradingView DDT tab (build-owned). */
+.ddt-chart-tabs{flex-wrap:wrap}
+.ddt-tab[data-mode="tradingview"]{border-color:rgba(80,140,255,.30);color:#bcd6ff}
+.ddt-tab[data-mode="tradingview"][aria-pressed="true"]{background:rgba(41,98,255,.16);border-color:rgba(90,150,255,.55);color:#d6e6ff;box-shadow:inset 0 -1px 0 rgba(120,170,255,.14)}
+.ddt-section .tv-surface{display:block;padding:0;background:#050d16;border-color:rgba(80,140,255,.28);height:435px;min-height:435px}
+.ddt-section .tv-surface::before,.ddt-section .tv-surface::after{display:none}
+.tv-widget-wrap{height:100%;width:100%;position:relative;overflow:hidden;border-radius:inherit}
+.tv-chart{height:100%;width:100%}
+.tv-chart .tradingview-widget-container__widget{height:100%;width:100%}
+.tv-chart .tradingview-widget-container__widget iframe{height:100%!important;width:100%!important;display:block;border:0}
+.tv-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#8fa8b5;font:600 12px/1.4 var(--font-mono);letter-spacing:.04em;text-align:center;padding:0 18px;pointer-events:none}
+@media(max-width:1220px){.ddt-section .tv-surface{height:405px;min-height:405px}}
