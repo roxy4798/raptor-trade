@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Raptor Trade — AI Research Intelligence</title>
+<meta name="description" content="AI Research Intelligence for Raptor Trade 4H signals: six-agent analysis, outcome learning, and research insights. Research only — never a signal filter.">
+<link rel="icon" href="branding/official-raptor-icon.png">
+<link rel="stylesheet" href="research.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html" aria-label="Back to Signal Observatory">
+    <img class="brand-symbol" src="branding/official-raptor-logo.webp" alt="" width="36" height="36">
+    <span class="brand-name">RAPTOR <em>TRADE</em></span>
+    <span class="brand-sub">AI Research Intelligence</span>
+  </a>
+  <nav class="topnav" aria-label="Research sections">
+    <a href="#overview">Overview</a>
+    <a href="#signals">Signals</a>
+    <a href="#insights">Insights</a>
+    <a href="#timeline">Timeline</a>
+    <a href="#explorer">Explorer</a>
+    <a href="index.html" class="back-link">← Signals</a>
+  </nav>
+</header>
+
+<main>
+  <div id="loading" class="state-card" role="status">
+    <div class="spinner" aria-hidden="true"></div>
+    <p>Loading research data…</p>
+  </div>
+
+  <div id="load-error" class="state-card error" hidden>
+    <p class="state-title">Research data could not be loaded.</p>
+    <p class="state-sub">The research file (research.json) was not found or could not be parsed. The signal dashboard is unaffected.</p>
+    <button id="retry-load" type="button">Retry</button>
+  </div>
+
+  <div id="empty-state" class="state-card" hidden>
+    <p class="state-title">No signals analyzed yet.</p>
+    <p class="state-sub">The research pipeline analyzes each published signal within minutes. This page fills in automatically once the first analysis lands.</p>
+  </div>
+
+  <div id="app" hidden>
+    <section class="hero">
+      <p class="eyebrow">AI RESEARCH INTELLIGENCE · PHASE 3</p>
+      <h1>What the signals <span>teach us</span></h1>
+      <p class="hero-sub">Six research agents observe every published 4H signal and learn from real outcomes. This page never filters, approves, or blocks a signal — publication is decided by the scanner alone.</p>
+      <p class="hero-meta" id="hero-meta"></p>
+      <p class="hero-disclaimer">Correlation is not causation. Every statistic below carries its sample size; small samples are observations, not conclusions.</p>
+    </section>
+
+    <section id="overview" class="section">
+      <div class="section-head">
+        <h2>Research Overview</h2>
+        <p class="section-sub">How much has been analyzed, how complete the outcomes are, and what the pipeline knows so far.</p>
+      </div>
+      <div class="stat-grid" id="overview-stats"></div>
+      <div class="panel-grid">
+        <div class="panel" id="panel-agents">
+          <h3>Research coverage per agent</h3>
+          <p class="panel-sub">Each agent is scored independently — one agent's missing data never blocks another.</p>
+          <div id="agent-coverage"></div>
+        </div>
+        <div class="panel" id="panel-regimes">
+          <h3>Market regime at signal time</h3>
+          <p class="panel-sub">BTC regime recorded when each signal was published.</p>
+          <div id="regime-dist"></div>
+        </div>
+        <div class="panel" id="panel-outcomes">
+          <h3>Outcome completeness</h3>
+          <p class="panel-sub">Share of mature signals with an evaluated outcome per horizon.</p>
+          <div id="outcome-completeness"></div>
+        </div>
+        <div class="panel" id="panel-hypotheses">
+          <h3>Hypotheses</h3>
+          <p class="panel-sub">A hypothesis needs n≥10 on both buckets and a ≥2pp mean-net gap — and still requires out-of-sample validation.</p>
+          <div id="hypotheses"></div>
+        </div>
+      </div>
+      <div class="panel" id="panel-quality">
+        <h3>Data quality</h3>
+        <p class="panel-sub">Snapshot coverage and the per-input missing-data profile. Missing data is reported, never interpolated.</p>
+        <div id="data-quality"></div>
+      </div>
+    </section>
+
+    <section id="signals" class="section">
+      <div class="section-head">
+        <h2>Individual Signal Intelligence</h2>
+        <p class="section-sub">Six-agent analysis for one signal at a time. Pick a signal to inspect its structure, risks, order flow, market context, liquidity, and outcomes.</p>
+      </div>
+      <div class="signal-layout">
+        <aside class="signal-list-wrap">
+          <label class="sr-only" for="signal-search">Search signals</label>
+          <input id="signal-search" type="search" placeholder="Search symbol…" autocomplete="off">
+          <div id="signal-list" class="signal-list" role="listbox" aria-label="Signals"></div>
+        </aside>
+        <div class="signal-detail" id="signal-detail"></div>
+      </div>
+    </section>
+
+    <section id="insights" class="section">
+      <div class="section-head">
+        <h2>Research Insights</h2>
+        <p class="section-sub">Feature versus outcome, across every evaluable signal. Buckets follow the backend's sample rules (n&lt;5: no statistics). These are associations — never proof that a feature causes an outcome.</p>
+      </div>
+      <div class="insight-grid" id="insight-grid"></div>
+    </section>
+
+    <section id="timeline" class="section">
+      <div class="section-head">
+        <h2>Continuous Learning Timeline</h2>
+        <p class="section-sub">How the research system itself has evolved. Version comparison starts at v2.0.0 — the v1.0.0 archive is no longer available, and no historical data is reconstructed.</p>
+      </div>
+      <div class="panel-grid">
+        <div class="panel">
+          <h3>Milestones</h3>
+          <ol class="timeline" id="milestones"></ol>
+        </div>
+        <div class="panel">
+          <h3>Analysis versions</h3>
+          <p class="panel-sub">Each research version is archived immutably before it is replaced, so analyses can always be compared.</p>
+          <div id="version-compare"></div>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>What the data suggests next</h3>
+        <p class="panel-sub">Development recommendations, grounded in the current evidence — not promises.</p>
+        <ul class="reco-list" id="recommendations"></ul>
+      </div>
+    </section>
+
+    <section id="explorer" class="section">
+      <div class="section-head">
+        <h2>Research Data Explorer</h2>
+        <p class="section-sub">Explore every analyzed signal. Filters here only shape this table — they never affect which signals are published.</p>
+      </div>
+      <div class="explorer-controls">
+        <label class="sr-only" for="explorer-search">Search explorer</label>
+        <input id="explorer-search" type="search" placeholder="Search symbol…" autocomplete="off">
+        <label class="sr-only" for="explorer-outcome">Filter by outcome</label>
+        <select id="explorer-outcome">
+          <option value="">All outcomes</option>
+          <option value="PUMP CONTINUED">Continued</option>
+          <option value="REVERSAL">Reversal</option>
+          <option value="SIDEWAYS">Sideways</option>
+          <option value="__pending__">Not evaluated yet</option>
+        </select>
+        <label class="sr-only" for="explorer-regime">Filter by BTC regime</label>
+        <select id="explorer-regime">
+          <option value="">All regimes</option>
+          <option value="TRENDING_UP">BTC trending up</option>
+          <option value="RANGING">BTC ranging</option>
+          <option value="TRENDING_DOWN">BTC trending down</option>
+        </select>
+        <span class="explorer-count" id="explorer-count"></span>
+      </div>
+      <div class="table-scroll">
+        <table class="explorer-table" id="explorer-table">
+          <thead>
+            <tr>
+              <th data-sort="symbol">Symbol</th>
+              <th data-sort="signal_ts">Close (WIB)</th>
+              <th data-sort="price">Price</th>
+              <th data-sort="net30">+30m net</th>
+              <th data-sort="r4h">+4H</th>
+              <th data-sort="rvol">RVOL</th>
+              <th data-sort="markers">Markers</th>
+              <th data-sort="regime">BTC regime</th>
+              <th data-sort="oi">OI 24h</th>
+              <th data-sort="spread">Spread</th>
+              <th>Agents</th>
+            </tr>
+          </thead>
+          <tbody id="explorer-body"></tbody>
+        </table>
+      </div>
+      <p class="explorer-empty" id="explorer-empty" hidden>No signals match these filters.</p>
+    </section>
+
+    <footer class="page-foot">
+      <p>Research data is computed on the Raptor Trade VM from official Binance Futures Mainnet data and the project's own tracker. Nothing here is a trading recommendation, and no AI score gates publication.</p>
+      <p><a href="index.html">← Back to Signal Observatory</a></p>
+    </footer>
+  </div>
+</main>
+<script src="research.js" defer></script>
+</body>
+</html>
