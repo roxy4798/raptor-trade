@@ -2,13 +2,854 @@
    Renders research.json (built by build.py from the Phase 1+2
    research state). Read-only: this page never touches the scanner,
    the pipeline, or publication. Missing data is shown as N/A,
-   never estimated. Statistics follow the backend's sample rules. */
+   never estimated. Statistics follow the backend's sample rules.
+   Bilingual (EN/ID, research v2.2.0): UI strings live in the T
+   dictionary; agent prose renders text/text_en (and *_id twins for
+   English-base learnings) per the active language. */
 (function () {
   "use strict";
 
   var DATA = null;
   var SELECTED_ID = null;
   var EXPLORER_SORT = { key: "signal_ts", dir: -1 };
+
+  /* ---------------------------------------------------------- language */
+  /* Research-page language switch (EN/ID). The main page's
+     language-v14.js is deliberately NOT loaded here: its
+     updateStatic() rewrites main-page selectors (.eyebrow, .rail-nav,
+     #signals, footer) that exist on this page with different content,
+     and would corrupt them (it also throws on the research footer,
+     which has no .footer-brand). The preference itself is shared with
+     the main page through the same localStorage key, so the research
+     page follows the language chosen on the main page. */
+  var T = {
+    en: {
+      "rail.overview": "Overview", "rail.signals": "Signals",
+      "rail.insights": "Insights", "rail.learning": "Learning",
+      "rail.timeline": "Timeline", "rail.explorer": "Explorer",
+      "rail.home": "Home",
+      "rail.homeAria": "Back to Signal Observatory",
+      "loading": "Loading research data…",
+      "loadError.title": "Research data could not be loaded.",
+      "loadError.sub": "The research file (research.json) was not found or could not be parsed. The signal dashboard is unaffected.",
+      "retry": "Retry",
+      "empty.title": "No signals analyzed yet.",
+      "empty.sub": "The research pipeline analyzes each published signal within minutes. This page fills in automatically once the first analysis lands.",
+      "hero.eyebrow": "AI RESEARCH INTELLIGENCE · CONTINUOUS LEARNING",
+      "hero.title": "What the signals <span>teach us</span>",
+      "hero.sub": "Six research agents observe every published 4H signal and learn from real outcomes. This page never filters, approves, or blocks a signal — publication is decided by the scanner alone.",
+      "hero.disclaimer": "Correlation is not causation. Every statistic below carries its sample size; small samples are observations, not conclusions.",
+      "motion.on": "MOTION ON", "motion.off": "MOTION OFF",
+      "motion.ariaOn": "Turn visual motion on",
+      "motion.ariaOff": "Turn visual motion off",
+      "motion.reduced": "Reduced motion enabled in your device settings",
+      "sec.overview.kicker": "01 — Research overview",
+      "sec.overview.title": "Research Overview",
+      "sec.overview.sub": "How much has been analyzed, how complete the outcomes are, and what the pipeline knows so far.",
+      "sec.signals.kicker": "02 — Signal intelligence",
+      "sec.signals.title": "Individual Signal Intelligence",
+      "sec.signals.sub": "Six-agent analysis for one signal at a time. Pick a signal to inspect its structure, risks, order flow, market context, liquidity, and outcomes.",
+      "sec.insights.kicker": "03 — Research insights",
+      "sec.insights.title": "Research Insights",
+      "sec.insights.sub": "Feature versus outcome, across every evaluable signal. Buckets follow the backend's sample rules (n<5: no statistics). These are associations — never proof that a feature causes an outcome.",
+      "sec.learning.kicker": "04 — Learning evaluations",
+      "sec.learning.title": "Learning Evaluations",
+      "sec.learning.sub": "How results differ across horizons, how much single outcomes move the averages, whether exhaustion markers relate to outcomes — and what the six agents have actually learned so far. Every number carries its sample size, and every panel updates automatically as new signals are evaluated.",
+      "sec.timeline.kicker": "05 — Continuous learning",
+      "sec.timeline.title": "Continuous Learning Timeline",
+      "sec.timeline.sub": "How the research system itself has evolved. Version comparison starts at v2.0.0 — the v1.0.0 archive is no longer available. 1H context for older signals is reconstructed from the official Binance archive and always labeled HISTORICAL RECONSTRUCTION — it never replaces the frozen live snapshot.",
+      "sec.explorer.kicker": "06 — Data explorer",
+      "sec.explorer.title": "Research Data Explorer",
+      "sec.explorer.sub": "Explore every analyzed signal. Filters here only shape this table — they never affect which signals are published.",
+      "panel.agents": "Research coverage per agent",
+      "panel.agents.sub": "Each agent is scored independently — one agent's missing data never blocks another.",
+      "panel.regimes": "Market regime at signal time",
+      "panel.regimes.sub": "BTC regime recorded when each signal was published.",
+      "panel.outcomes": "Outcome completeness",
+      "panel.outcomes.sub": "Share of mature signals with an evaluated outcome per horizon.",
+      "panel.hypotheses": "Hypotheses",
+      "panel.hypotheses.sub": "A hypothesis needs n≥10 on both buckets and a ≥2pp mean-net gap — and still requires out-of-sample validation.",
+      "panel.quality": "Data quality",
+      "panel.quality.sub": "Snapshot coverage and the per-input missing-data profile. Missing data is reported, never interpolated.",
+      "panel.horizons": "Outcome by horizon",
+      "panel.horizons.sub": "All evaluable signals per horizon — n differs because data completeness differs. For the same-cohort comparison, see Paired horizons below.",
+      "panel.outliers": "Outlier influence on the average",
+      "panel.outliers.sub": "Mean versus median versus trimmed mean — and what the single largest outcome contributes.",
+      "panel.markers": "Reversal markers, one by one",
+      "panel.markers.sub": "Each exhaustion marker compared with and without it. Buckets with n<5 show no statistics.",
+      "panel.paired": "Paired horizons — same signals, all four readings",
+      "panel.paired.sub": "Only signals with every horizon evaluated, in gross returns so horizons are comparable. The cleanest read of how performance changes over time — at the cost of a smaller sample.",
+      "panel.distribution": "Distribution & contributions",
+      "panel.distribution.sub": "Where the +30m net outcomes sit, and how much each signal contributes to the total sum.",
+      "panel.agentsEval": "Agent learning evaluation",
+      "panel.agentsEval.sub": "Each agent's observations tested against actual outcomes. Everything here is exploratory — no predictive accuracy is claimed for any agent, and out-of-sample validation is not possible yet (holdout plan: once n reaches 40, the first 20 signals become the discovery set).",
+      "panel.cases": "Case examples — BULLA & IDOL",
+      "panel.cases.sub": "Research illustrations of how two signals behaved across horizons. Examples only — never the basis for a strategy conclusion.",
+      "panel.summary": "Learning summary — auto-generated",
+      "panel.summary.sub": "What the evidence supports so far, what failed to hold, what changed since the previous evaluation, and what cannot be concluded yet. Regenerated from the current data on every build — nothing here is written by hand.",
+      "panel.checkpoints": "Research checkpoints",
+      "panel.checkpoints.sub": "Progress toward the next evaluation checkpoint. A “complete outcome” means all four horizons (+30m/+1H/+4H/+8H) evaluated for the same signal. Checkpoints mark progress only — they are not a claim of statistical significance.",
+      "panel.registry": "Hypothesis registry",
+      "panel.registry.sub": "Hypotheses are recorded frozen the moment they first appear, and tested only on signals published after that moment. The exploration/validation split freezes once 40 evaluable signals exist (whole 4H closes until ≥20 evaluable signals = discovery set).",
+      "panel.clusters": "Close clusters — signals grouped by 4H close",
+      "panel.clusters.sub": "Signals on the same 4H close share market conditions, so outcomes within a close are not independent. This panel shows how signals and outcomes distribute across closes — and how concentrated the dataset is in a few market periods.",
+      "panel.milestones": "Milestones",
+      "panel.versions": "Analysis versions",
+      "panel.versions.sub": "Each research version is archived immutably before it is replaced, so analyses can always be compared.",
+      "panel.recos": "What the data suggests next",
+      "panel.recos.sub": "Development recommendations, grounded in the current evidence — not promises.",
+      "search.signals": "Search symbol…",
+      "search.explorer": "Search symbol…",
+      "filter.allOutcomes": "All outcomes",
+      "filter.continued": "Continued",
+      "filter.reversal": "Reversal",
+      "filter.sideways": "Sideways",
+      "filter.pending": "Not evaluated yet",
+      "filter.allRegimes": "All regimes",
+      "filter.up": "BTC trending up",
+      "filter.ranging": "BTC ranging",
+      "filter.down": "BTC trending down",
+      "th.symbol": "Symbol", "th.close": "Close (WIB)",
+      "th.price": "Price", "th.net30": "+30m net", "th.r4h": "+4H",
+      "th.rvol": "RVOL", "th.markers": "Markers",
+      "th.regime": "BTC regime", "th.oi": "OI 24h",
+      "th.spread": "Spread", "th.agents": "Agents",
+      "explorer.empty": "No signals match these filters.",
+      "explorer.count": "{n} of {total} signals",
+      "foot.1": "Research data is computed on the Raptor Trade VM from official Binance Futures Mainnet data and the project's own tracker. Nothing here is a trading recommendation, and no AI score gates publication.",
+      "foot.2": "← Back to Signal Observatory",
+      "ov.researchV": "research v", "ov.lastAnalysis": "last analysis",
+      "ov.stat1": "Signals analyzed",
+      "ov.stat1n": "of {n} published signals",
+      "ov.stat2": "Outcomes (+30m)",
+      "ov.stat2n": "evaluable signals with a +30m outcome; the rest are pending or lack 1m candles",
+      "ov.stat3": "Win rate (+30m)",
+      "ov.stat3n": "PUMP CONTINUED share, n={n}",
+      "ov.stat4": "Mean net (+30m)",
+      "ov.stat4n": "after spread + 8 bps fees (simulation, not profit)",
+      "ov.stat5": "Hypotheses",
+      "ov.stat5n": "0 validated — none has passed the bar yet",
+      "ov.stat6": "Snapshot coverage",
+      "ov.stat6n": "signals with a complete analysis snapshot",
+      "ov.agentBreakout": "Breakout", "ov.agentReversal": "Reversal",
+      "ov.agentOrderflow": "Order Flow",
+      "ov.agentRegime": "Market Regime",
+      "ov.agentLiquidity": "Liquidity",
+      "ov.legendComplete": "Complete", "ov.legendPartial": "Partial",
+      "ov.legendMiss": "Unavailable / error",
+      "ov.regimeUp": "BTC trending up",
+      "ov.regimeRanging": "BTC ranging",
+      "ov.regimeDown": "BTC trending down",
+      "ov.mature": "{e}/{m} mature",
+      "ov.hypEmpty": "No hypothesis is currently being tested. The bar is strict on purpose: n≥10 on both buckets and a ≥2pp mean-net gap, plus out-of-sample validation. With {n} evaluable outcomes, nothing has cleared it yet.",
+      "ov.dqDecisions": "Decisions values",
+      "ov.dqSignalBar": "Signal bar",
+      "ov.dqMtf1h": "1H context (1m)",
+      "ov.dqOi": "Open Interest",
+      "ov.dqFunding": "Funding rate",
+      "ov.dqBtcRegime": "BTC regime",
+      "ov.dqBreadth": "Market breadth",
+      "ov.dqSpread": "Spread",
+      "ov.dqImpact": "$10k impact",
+      "ov.dqDepth": "Top depth",
+      "ov.dqMissing": "{m}/{n} missing ({p}%)",
+      "bucket.noStats": "n<5 — no statistics",
+      "bucket.none": "No bucket has enough samples yet (n≥5 required).",
+      "bucket.win": "win",
+      "scatter.aria": "Scatter: {x} versus +30m net return",
+      "sig.continued": "Continued", "sig.reversed": "Reversed",
+      "sig.sideways": "Sideways", "sig.pending": "Pending",
+      "sig.noMatch": "No signals match.",
+      "hz.pending": "pending", "hz.unavailable": "unavailable",
+      "hz.backfilled": " · backfilled from official Binance archive",
+      "hz.live": " · recorded live",
+      "det.close": "Close", "det.price": "price",
+      "det.analyzed": "analyzed",
+      "det.agent1": "1 · Breakout Intelligence",
+      "det.agent2": "2 · Reversal Intelligence",
+      "det.agent3": "3 · Order Flow Intelligence",
+      "det.agent4": "4 · Market Regime Intelligence",
+      "det.agent5": "5 · Liquidity Intelligence",
+      "det.agent6": "6 · Performance Learning",
+      "det.rcNote": "1H context is a HISTORICAL RECONSTRUCTION from the official Binance 1m archive ({files}, method v{ver}) — it is NOT the original live snapshot and is used for exploratory research only, never as prospective validation evidence.",
+      "det.bodyRange": "Body / range",
+      "det.pctOfRange": "% of range",
+      "det.upperWick": "Upper wick",
+      "det.breakoutMargin": "Breakout margin",
+      "det.emaRow": "EMA 20 / 50 / 500",
+      "det.emaAligned": "EMA aligned (bullish)",
+      "det.yes": "Yes", "det.no": "No",
+      "det.rsi4h": "RSI 4H",
+      "det.macd": "MACD histogram",
+      "det.rising": " (rising)",
+      "det.atr": "ATR14",
+      "det.resGap": "Resistance gap",
+      "det.consecUp": "Consecutive up bars",
+      "det.h1ctx": "1H context before signal",
+      "det.histRecon": " (HISTORICAL RECONSTRUCTION)",
+      "det.riskLevel": "Risk level (marker count)",
+      "det.markersObs": "Markers observed",
+      "det.histCtx": "Historical context",
+      "det.histCtxVal": "n={n} similar signals, win {w}%",
+      "det.histCtxNone": "insufficient historical context",
+      "det.riskNote": "Risk level counts exhaustion markers — it is NOT a probability of reversal.",
+      "det.takerBuy": "Taker-buy",
+      "det.imbalance": "Imbalance",
+      "det.deltaBar": "Volume delta (signal bar)",
+      "det.deltaCum": "Cumulative delta (5 prior bars)",
+      "det.oi": "Open Interest",
+      "det.oiAsOf": " (as of {t} WIB)",
+      "det.oiChg": "OI change 24h",
+      "det.lsRatio": "Long/short ratio",
+      "det.funding": "Funding rate",
+      "det.btcRegime": "BTC regime",
+      "det.btcChg": "BTC 4H change",
+      "det.btcRsi": "BTC RSI 4H",
+      "det.btcAtr": "BTC ATR14",
+      "det.btcCorr": "BTC correlation (60 bars)",
+      "det.brGreen": "Breadth: green bars",
+      "det.brGreenVal": "% of {n} symbols",
+      "det.brBreakouts": "Breadth: breakouts",
+      "det.brMedian": "Breadth: median 4H change",
+      "det.spread": "Spread",
+      "det.topDepth": "Top depth",
+      "det.impact10k": "$10k impact",
+      "det.slipMethod": "Slippage method",
+      "det.slipRow": "Slippage ($1k / $10k / $50k)",
+      "det.upperBound": " (upper bound)",
+      "det.bookExhausted": " (book exhausted)",
+      "det.barShare": "Bar share of 24h volume",
+      "det.bookSnap": "Book snapshot",
+      "det.bookYes": "recorded at signal time",
+      "det.bookNo": "not recorded (signals before 23 Nov 2026)",
+      "det.perfNote": "+30m comes from the tracker (pre-registered rules). +1H is read from local 1m candles; +4H/+8H from local 4H candles. MFE/MAE are the best/worst moves inside each window.",
+      "ins.meta": "Signals: {n} · evaluable (+30m): {e} · missing feature data: {m} · period: {p}<br>Buckets with n<5 show no statistics. Association only — not evidence of causation.",
+      "ins.rvolT": "RVOL vs outcome",
+      "ins.rvolS": "Does a bigger volume spike mean the pump continues?",
+      "ins.rvolX": "RVOL (log scale)",
+      "ins.markT": "Reversal markers vs outcome",
+      "ins.markS": "Do exhaustion markers predict reversals? So far the markers show no clear pattern — they stay research variables.",
+      "ins.markX": "Exhaustion markers (count)",
+      "ins.emaT": "EMA alignment vs outcome",
+      "ins.emaS": "Signals above EMA20 > EMA50 > EMA500 versus the rest.",
+      "ins.regT": "BTC market regime vs outcome",
+      "ins.regS": "How signals perform when BTC is trending up, ranging, or trending down.",
+      "ins.oiT": "Open Interest change vs outcome",
+      "ins.oiS": "Does rising open interest before the signal relate to momentum continuation?",
+      "ins.oiX": "OI change 24h (%)",
+      "ins.imbT": "Order flow imbalance vs outcome",
+      "ins.imbS": "Taker buy/sell imbalance at the signal bar versus the +30m result.",
+      "ins.imbX": "Imbalance (−1 sell … +1 buy)",
+      "ins.sprT": "Spread vs outcome",
+      "ins.sprS": "Does a wider spread eat the net result after costs?",
+      "ins.sprX": "Spread (bps)",
+      "ins.brkT": "Breakout strength vs outcome",
+      "ins.brkS": "How far the close cleared the 20-bar high, versus the +30m result.",
+      "ins.brkX": "Breakout margin (%)",
+      "lr.hzNet30": "+30m net (after spread + fees)",
+      "lr.hz1h": "+1H (gross)", "lr.hz4h": "+4H (gross)",
+      "lr.hz8h": "+8H (gross)",
+      "lr.thHorizon": "Horizon", "lr.thN": "n",
+      "lr.thMean": "Mean", "lr.thMedian": "Median",
+      "lr.thGte": "≥ +1%", "lr.thLte": "≤ −1%",
+      "lr.hzNote": "“Win rate” is only defined for +30m (tracker classification). Other horizons show descriptive shares — not win rates. Net is simulated only for +30m; longer horizons are gross returns.",
+      "lr.notEnough": "Not enough evaluable outcomes yet (n<5).",
+      "lr.outMean": "Mean net (+30m)",
+      "lr.outMedian": "Median net (+30m)",
+      "lr.outTrimmed": "Trimmed mean (drop top/bottom 10%)",
+      "lr.outExMax": "Mean without the largest outcome",
+      "lr.outLargest": "Largest single outcome",
+      "lr.outLargestOf": " ({p}% of the total sum)",
+      "lr.outRange": "Range (min … max)",
+      "lr.outNote": "With n={n}, one big outcome can dominate the average. Compare the mean with the median and the trimmed mean before reading anything into it.",
+      "lr.mkRsi": "RSI overbought (≥80)",
+      "lr.mkWick": "Upper wick rejection (≥40%)",
+      "lr.mkOver": "Overextended vs ATR (≥2×)",
+      "lr.mkPara": "Parabolic 3-bar (+15%)",
+      "lr.mkAtr": "ATR spike (≥1.5× median)",
+      "lr.mkVol": "Volume divergence",
+      "lr.mkThMarker": "Exhaustion marker",
+      "lr.mkThWith": "With marker",
+      "lr.mkThWithout": "Without marker",
+      "lr.mkStats": "n={n} · win {w}% · mean {m}",
+      "lr.mkNote": "Markers stay research variables. A gap between “with” and “without” at these sample sizes is an observation, not evidence that the marker predicts anything.",
+      "lr.pairedNotEnough": "Not enough signals with all four horizons evaluated yet (n<5).",
+      "lr.pairedIntro": "Paired cohort: <b>{n}</b> of {total} signals, across {closes} distinct 4H closes. Excluded: no +30m {m30}, no +1H {m1}, no +4H {m4}, no +8H {m8} (a signal can miss more than one horizon).",
+      "lr.thMfe": "Mean MFE", "lr.thMae": "Mean MAE",
+      "lr.pairedNote": "MFE/MAE are the average best/worst excursions within each horizon (+4H/+8H from 4H-bar extremes, not ticks). Gross returns throughout — compare with the +30m net table above, not against it.",
+      "lr.trajTitle": "Momentum trajectories",
+      "lr.trajContinued": "Continued",
+      "lr.trajReversed": "Reversed",
+      "lr.trajFull": "— of which: full reversal",
+      "lr.trajLate": "Late bloom",
+      "lr.trajNever": "Never up",
+      "lr.distTitle": "Distribution of +30m net outcomes (n={n})",
+      "lr.mvwTitle": "Mean vs win rate",
+      "lr.mvwWin": "Win rate (+30m)",
+      "lr.mvwMean": "Mean net",
+      "lr.mvwMedian": "Median net",
+      "lr.contribTitle": "Contribution of every signal to the total",
+      "lr.thSignal": "Signal", "lr.thNet": "Net",
+      "lr.thShare": "Share of sum",
+      "lr.contribNote": "Shares above 100% mean one signal outweighs the entire net sum — the rest of the signals cancel each other out.",
+      "lr.verdAssociation": "Association observed",
+      "lr.verdNoClear": "No clear association",
+      "lr.verdConsistent": "Consistent with hypothesis",
+      "lr.verdAgainst": "Against hypothesis",
+      "lr.verdInsuff": "Not enough data",
+      "lr.verdNoData": "No data yet",
+      "lr.verdNotEval": "Not evaluable",
+      "lr.agBreakout": "Breakout Intelligence",
+      "lr.agReversal": "Reversal Intelligence",
+      "lr.agOrderflow": "Order Flow Intelligence",
+      "lr.agRegime": "Market Regime Intelligence",
+      "lr.agLiquidity": "Liquidity Intelligence",
+      "lr.agPerformance": "Performance Learning",
+      "lr.thObservation": "Observation",
+      "lr.thVerdict": "Verdict",
+      "lr.thEvidence": "Evidence",
+      "lr.aeIntro": "Evaluated at n={n} evaluable +30m outcomes. ",
+      "lr.siSentence": "The {ne} evaluable signals come from {ce} distinct 4H closes; the {np} paired signals from {cp}.",
+      "lr.casesEmpty": "No BULLA/IDOL outcomes evaluated yet.",
+      "lr.th30net": "+30m net",
+      "lr.th1h": "+1H", "lr.th4h": "+4H", "lr.th8h": "+8H",
+      "lr.thMfeMae": "MFE / MAE (+30m)",
+      "lr.caseNote": "Same rule set, opposite paths — that is why single examples never justify a strategy change.",
+      "lr.caseNote2": "BULLA's best +8H: {b}; IDOL's worst +8H: {i}. ",
+      "lr.sumTopics": "Monitored topics",
+      "lr.thTopic": "Topic", "lr.thStatus": "Status",
+      "lr.thRead": "Current read",
+      "lr.stObserved": "observed", "lr.stMixed": "mixed",
+      "lr.stInsuff": "insufficient", "lr.stNoData": "no_data",
+      "lr.sumWorked": "What holds up",
+      "lr.sumWorkedEmpty": "Nothing has met the bar yet — no finding is presented as working.",
+      "lr.sumFailed": "What failed to hold",
+      "lr.sumFailedEmpty": "No tested pattern has failed yet.",
+      "lr.sumChanged": "What changed since the previous evaluation",
+      "lr.sumChangedEmpty": "No material change recorded.",
+      "lr.sumInconcl": "Not yet concludable",
+      "lr.sumInconclEmpty": "Everything evaluated has a verdict.",
+      "lr.sumBased": "Based on {e} evaluable +30m outcomes and {p} paired-cohort signals. “What holds up” lists exploratory associations only — nothing here is a predictive claim.",
+      "lr.cpComplete": "Complete outcomes (paired cohort)",
+      "lr.cpCloses": "Distinct 4H closes behind them",
+      "lr.cpNext": "Next checkpoint",
+      "lr.cpAllReached": "all reached",
+      "lr.cpNextVal": "{n} signals ({p}%)",
+      "lr.cpNone": "No checkpoint reached yet — the first is at 40 complete outcomes.",
+      "lr.cpReached": "Checkpoint {n} signals",
+      "lr.regPending": "Exploration/validation split not frozen yet.",
+      "lr.regSplit": "Split frozen {d} — first {n} evaluable signals are the discovery set.",
+      "lr.regEmpty": "No hypothesis has passed the sample bar yet (n≥10 both buckets + ≥2pp gap). When one does, it is recorded here frozen, before any new data tests it.",
+      "lr.thId": "ID",
+      "lr.thHyp": "Hypothesis (frozen at registration)",
+      "lr.thVal": "Validation on newer data",
+      "lr.regAwaiting": "awaiting_validation",
+      "lr.regValidated": "validated",
+      "lr.regRejected": "rejected",
+      "lr.regHolds": "holds",
+      "lr.regNotHolds": "does_not_hold",
+      "lr.regValN": " (n {a} vs {b})",
+      "lr.clEval": "Signals evaluated (+30m net)",
+      "lr.clClosesAll": "Unique 4H closes (all signals)",
+      "lr.clClosesEval": "Unique 4H closes (evaluable)",
+      "lr.clLargest": "Largest single close",
+      "lr.clLargestVal": "{n} signals ({p}%)",
+      "lr.clTop3": "Top 3 closes combined",
+      "lr.clTop3Val": "{p}% of all signals",
+      "lr.clRecon": "1H context reconstructed",
+      "lr.clReconVal": "{n}/{total} signals (HISTORICAL RECONSTRUCTION)",
+      "lr.thCloseWib": "4H close (WIB)",
+      "lr.thSignals": "Signals",
+      "lr.thEvaluable": "Evaluable",
+      "lr.thWins": "Wins",
+      "lr.thMeanNet": "Mean net +30m",
+      "lr.thMeanGross": "Mean gross +30m",
+      "lr.clSplitNote": " The exploration/validation split keeps whole closes together, so no close is ever split between the two sets.",
+      "tl.noArchive": "No archive available.",
+      "tl.thVersion": "Version", "tl.thRecords": "Records",
+      "tl.thOi": "OI", "tl.thFunding": "Funding",
+      "tl.thDepth": "Depth bands",
+      "tl.verNote": "Coverage counts grow as archive files publish — the same analysis record gains OI the next day and funding the next month.",
+      "tl.recoFunding": "<strong>Funding rate arrives in December.</strong> The monthly archive file will fill the funding bucket automatically — no action needed, just patience.",
+      "tl.recoOi": "<strong>Open Interest coverage is still filling in</strong> ({m} signals missing). Daily archive files publish a day late; the pipeline retries automatically.",
+      "tl.recoH1": "<strong>The +1H horizon is still filling in</strong> ({p}% complete). Evaluated horizons are now sticky, and the daily backfill recovers the rest from the official Binance archive as each day's file publishes — backfilled outcomes are labeled as such.",
+      "tl.recoHyp": "<strong>Keep accumulating outcomes.</strong> With n={n} evaluable signals, no hypothesis has passed the bar (n≥10 both buckets + ≥2pp gap). The system is working as designed — it refuses to invent patterns from small samples.",
+      "tl.recoTrend": "<strong>No signal has fired in a BTC uptrend yet.</strong> The regime comparison is one-sided until the market turns — treat the TRENDING_DOWN vs RANGING contrast as provisional.",
+      "tl.recoMarkers": "<strong>Reversal markers stay research variables.</strong> Early results show no clear predictive pattern; changing or dropping markers on {n} outcomes would be overfitting.",
+      "lbl.searchSignals": "Search signals",
+      "lbl.searchExplorer": "Search explorer",
+      "lbl.filterOutcome": "Filter by outcome",
+      "lbl.filterRegime": "Filter by BTC regime"
+    },
+    id: {
+      "rail.overview": "Ikhtisar", "rail.signals": "Sinyal",
+      "rail.insights": "Insight", "rail.learning": "Pembelajaran",
+      "rail.timeline": "Linimasa", "rail.explorer": "Explorer",
+      "rail.home": "Beranda",
+      "rail.homeAria": "Kembali ke Observatorium Sinyal",
+      "loading": "Memuat data riset…",
+      "loadError.title": "Data riset tidak bisa dimuat.",
+      "loadError.sub": "File riset (research.json) tidak ditemukan atau tidak bisa diproses. Dashboard sinyal tidak terpengaruh.",
+      "retry": "Coba lagi",
+      "empty.title": "Belum ada sinyal yang dianalisis.",
+      "empty.sub": "Pipeline riset menganalisis tiap sinyal yang dipublikasikan dalam hitungan menit. Halaman ini terisi otomatis begitu analisis pertama tersedia.",
+      "hero.eyebrow": "INTELIJEN RISET AI · PEMBELAJARAN BERKELANJUTAN",
+      "hero.title": "Apa yang <span>diajarkan sinyal</span>",
+      "hero.sub": "Enam agent riset mengamati setiap sinyal 4J yang dipublikasikan dan belajar dari hasil nyata. Halaman ini tidak pernah memfilter, menyetujui, atau memblokir sinyal — publikasi diputuskan oleh scanner saja.",
+      "hero.disclaimer": "Korelasi bukan kausalitas. Setiap statistik di bawah ini menyertakan ukuran sampelnya; sampel kecil adalah observasi, bukan kesimpulan.",
+      "motion.on": "GERAK ON", "motion.off": "GERAK OFF",
+      "motion.ariaOn": "Nyalakan gerak visual",
+      "motion.ariaOff": "Matikan gerak visual",
+      "motion.reduced": "Gerak minimal diaktifkan di pengaturan perangkat Anda",
+      "sec.overview.kicker": "01 — Ikhtisar riset",
+      "sec.overview.title": "Ikhtisar Riset",
+      "sec.overview.sub": "Seberapa banyak yang sudah dianalisis, seberapa lengkap hasilnya, dan apa yang diketahui pipeline sejauh ini.",
+      "sec.signals.kicker": "02 — Intelijen sinyal",
+      "sec.signals.title": "Intelijen Sinyal per Sinyal",
+      "sec.signals.sub": "Analisis enam agent untuk satu sinyal dalam satu waktu. Pilih sinyal untuk memeriksa struktur, risiko, arus order, konteks pasar, likuiditas, dan hasilnya.",
+      "sec.insights.kicker": "03 — Insight riset",
+      "sec.insights.title": "Insight Riset",
+      "sec.insights.sub": "Fitur versus hasil, di semua sinyal yang bisa dievaluasi. Bucket mengikuti aturan sampel backend (n<5: tanpa statistik). Ini adalah asosiasi — bukan bukti bahwa suatu fitur menyebabkan hasil.",
+      "sec.learning.kicker": "04 — Evaluasi pembelajaran",
+      "sec.learning.title": "Evaluasi Pembelajaran",
+      "sec.learning.sub": "Bagaimana hasil berbeda antar horizon, seberapa besar satu hasil menggerakkan rata-rata, apakah marker exhaustion berkaitan dengan hasil — dan apa yang sebenarnya sudah dipelajari keenam agent sejauh ini. Setiap angka menyertakan ukuran sampelnya, dan setiap panel diperbarui otomatis saat sinyal baru dievaluasi.",
+      "sec.timeline.kicker": "05 — Pembelajaran berkelanjutan",
+      "sec.timeline.title": "Linimasa Pembelajaran Berkelanjutan",
+      "sec.timeline.sub": "Bagaimana sistem riset itu sendiri berevolusi. Perbandingan versi dimulai dari v2.0.0 — arsip v1.0.0 sudah tidak tersedia. Konteks 1J untuk sinyal lama direkonstruksi dari arsip resmi Binance dan selalu dilabeli REKONSTRUKSI HISTORIS — tidak pernah menggantikan snapshot live yang sudah dibekukan.",
+      "sec.explorer.kicker": "06 — Penjelajah data",
+      "sec.explorer.title": "Penjelajah Data Riset",
+      "sec.explorer.sub": "Jelajahi setiap sinyal yang dianalisis. Filter di sini hanya membentuk tabel ini — tidak pernah memengaruhi sinyal mana yang dipublikasikan.",
+      "panel.agents": "Cakupan riset per agent",
+      "panel.agents.sub": "Setiap agent dinilai secara independen — data yang hilang dari satu agent tidak pernah memblokir agent lain.",
+      "panel.regimes": "Rezim pasar saat sinyal",
+      "panel.regimes.sub": "Rezim BTC yang dicatat saat tiap sinyal dipublikasikan.",
+      "panel.outcomes": "Kelengkapan hasil",
+      "panel.outcomes.sub": "Porsi sinyal yang sudah matang dan punya hasil tervalidasi per horizon.",
+      "panel.hypotheses": "Hipotesis",
+      "panel.hypotheses.sub": "Hipotesis butuh n≥10 di kedua bucket dan selisih mean-net ≥2pp — dan tetap butuh validasi out-of-sample.",
+      "panel.quality": "Kualitas data",
+      "panel.quality.sub": "Cakupan snapshot dan profil data hilang per input. Data yang hilang dilaporkan, tidak pernah diinterpolasi.",
+      "panel.horizons": "Hasil per horizon",
+      "panel.horizons.sub": "Semua sinyal yang bisa dievaluasi per horizon — n berbeda karena kelengkapan datanya berbeda. Untuk perbandingan kohort yang sama, lihat Horizon berpasangan di bawah.",
+      "panel.outliers": "Pengaruh outlier terhadap rata-rata",
+      "panel.outliers.sub": "Mean versus median versus trimmed mean — dan kontribusi satu hasil terbesar.",
+      "panel.markers": "Marker reversal, satu per satu",
+      "panel.markers.sub": "Tiap marker exhaustion dibandingkan dengan dan tanpa marker. Bucket dengan n<5 tidak menampilkan statistik.",
+      "panel.paired": "Horizon berpasangan — sinyal yang sama, keempat pembacaan",
+      "panel.paired.sub": "Hanya sinyal yang keempat horizonnya tervalidasi, dalam return gross agar antar horizon bisa dibandingkan. Pembacaan paling bersih tentang bagaimana performa berubah seiring waktu — dengan mengorbankan ukuran sampel.",
+      "panel.distribution": "Distribusi & kontribusi",
+      "panel.distribution.sub": "Di mana letak hasil net +30m, dan seberapa besar kontribusi tiap sinyal terhadap total.",
+      "panel.agentsEval": "Evaluasi pembelajaran agent",
+      "panel.agentsEval.sub": "Observasi tiap agent diuji terhadap hasil sebenarnya. Semuanya di sini bersifat eksploratif — tidak ada klaim akurasi prediktif untuk agent mana pun, dan validasi out-of-sample belum memungkinkan (rencana holdout: begitu n mencapai 40, 20 sinyal pertama menjadi discovery set).",
+      "panel.cases": "Contoh kasus — BULLA & IDOL",
+      "panel.cases.sub": "Ilustrasi riset tentang bagaimana dua sinyal berperilaku di berbagai horizon. Hanya contoh — bukan dasar kesimpulan strategi.",
+      "panel.summary": "Ringkasan pembelajaran — dibuat otomatis",
+      "panel.summary.sub": "Apa yang didukung bukti sejauh ini, apa yang gagal bertahan, apa yang berubah sejak evaluasi sebelumnya, dan apa yang belum bisa disimpulkan. Dibuat ulang dari data terkini di setiap build — tidak ada yang ditulis tangan.",
+      "panel.checkpoints": "Checkpoint riset",
+      "panel.checkpoints.sub": "Progres menuju checkpoint evaluasi berikutnya. “Hasil lengkap” berarti keempat horizon (+30m/+1H/+4H/+8H) tervalidasi untuk sinyal yang sama. Checkpoint hanya menandai progres — bukan klaim signifikansi statistik.",
+      "panel.registry": "Registri hipotesis",
+      "panel.registry.sub": "Hipotesis dicatat beku begitu pertama kali muncul, dan hanya diuji pada sinyal yang dipublikasikan setelah momen itu. Split eksplorasi/validasi membeku begitu 40 sinyal yang bisa dievaluasi tercapai (seluruh penutupan 4J hingga ≥20 sinyal yang bisa dievaluasi = discovery set).",
+      "panel.clusters": "Klaster penutupan — sinyal dikelompokkan per penutupan 4J",
+      "panel.clusters.sub": "Sinyal pada penutupan 4J yang sama berbagi kondisi pasar, jadi hasil dalam satu penutupan tidak independen. Panel ini menunjukkan bagaimana sinyal dan hasil tersebar antar penutupan — dan seberapa terkonsentrasi dataset ini pada beberapa periode pasar.",
+      "panel.milestones": "Milestone",
+      "panel.versions": "Versi analisis",
+      "panel.versions.sub": "Setiap versi riset diarsipkan secara immutable sebelum digantikan, sehingga analisis selalu bisa dibandingkan.",
+      "panel.recos": "Apa yang disarankan data selanjutnya",
+      "panel.recos.sub": "Rekomendasi pengembangan, berdasarkan bukti saat ini — bukan janji.",
+      "search.signals": "Cari simbol…",
+      "search.explorer": "Cari simbol…",
+      "filter.allOutcomes": "Semua hasil",
+      "filter.continued": "Lanjut naik",
+      "filter.reversal": "Berbalik",
+      "filter.sideways": "Sideways",
+      "filter.pending": "Belum dievaluasi",
+      "filter.allRegimes": "Semua rezim",
+      "filter.up": "BTC naik",
+      "filter.ranging": "BTC sideways",
+      "filter.down": "BTC turun",
+      "th.symbol": "Simbol", "th.close": "Tutup (WIB)",
+      "th.price": "Harga", "th.net30": "Net +30m", "th.r4h": "+4H",
+      "th.rvol": "RVOL", "th.markers": "Marker",
+      "th.regime": "Rezim BTC", "th.oi": "OI 24j",
+      "th.spread": "Spread", "th.agents": "Agent",
+      "explorer.empty": "Tidak ada sinyal yang cocok dengan filter ini.",
+      "explorer.count": "{n} dari {total} sinyal",
+      "foot.1": "Data riset dihitung di VM Raptor Trade dari data resmi Binance Futures Mainnet dan tracker proyek sendiri. Tidak ada di sini yang merupakan rekomendasi trading, dan tidak ada skor AI yang menghalangi publikasi.",
+      "foot.2": "← Kembali ke Observatorium Sinyal",
+      "ov.researchV": "riset v", "ov.lastAnalysis": "analisis terakhir",
+      "ov.stat1": "Sinyal dianalisis",
+      "ov.stat1n": "dari {n} sinyal yang dipublikasikan",
+      "ov.stat2": "Hasil (+30m)",
+      "ov.stat2n": "sinyal yang bisa dievaluasi dengan hasil +30m; sisanya masih menunggu atau kekurangan candle 1m",
+      "ov.stat3": "Win rate (+30m)",
+      "ov.stat3n": "Porsi PUMP CONTINUED, n={n}",
+      "ov.stat4": "Rata-rata net (+30m)",
+      "ov.stat4n": "setelah spread + fee 8 bps (simulasi, bukan profit)",
+      "ov.stat5": "Hipotesis",
+      "ov.stat5n": "0 tervalidasi — belum ada yang lolos ambang batas",
+      "ov.stat6": "Cakupan snapshot",
+      "ov.stat6n": "sinyal dengan snapshot analisis yang lengkap",
+      "ov.agentBreakout": "Breakout", "ov.agentReversal": "Reversal",
+      "ov.agentOrderflow": "Arus Order",
+      "ov.agentRegime": "Rezim Pasar",
+      "ov.agentLiquidity": "Likuiditas",
+      "ov.legendComplete": "Lengkap", "ov.legendPartial": "Sebagian",
+      "ov.legendMiss": "Tidak tersedia / error",
+      "ov.regimeUp": "BTC naik",
+      "ov.regimeRanging": "BTC sideways",
+      "ov.regimeDown": "BTC turun",
+      "ov.mature": "{e}/{m} matang",
+      "ov.hypEmpty": "Belum ada hipotesis yang sedang diuji. Ambang batasnya sengaja ketat: n≥10 di kedua bucket dan selisih mean-net ≥2pp, ditambah validasi out-of-sample. Dengan {n} hasil yang bisa dievaluasi, belum ada yang lolos.",
+      "ov.dqDecisions": "Nilai decisions",
+      "ov.dqSignalBar": "Bar sinyal",
+      "ov.dqMtf1h": "Konteks 1J (1m)",
+      "ov.dqOi": "Open Interest",
+      "ov.dqFunding": "Funding rate",
+      "ov.dqBtcRegime": "Rezim BTC",
+      "ov.dqBreadth": "Breadth pasar",
+      "ov.dqSpread": "Spread",
+      "ov.dqImpact": "Impact $10k",
+      "ov.dqDepth": "Depth teratas",
+      "ov.dqMissing": "{m}/{n} hilang ({p}%)",
+      "bucket.noStats": "n<5 — tanpa statistik",
+      "bucket.none": "Belum ada bucket yang punya cukup sampel (butuh n≥5).",
+      "bucket.win": "win",
+      "scatter.aria": "Scatter: {x} versus return net +30m",
+      "sig.continued": "Lanjut naik", "sig.reversed": "Berbalik",
+      "sig.sideways": "Sideways", "sig.pending": "Menunggu",
+      "sig.noMatch": "Tidak ada sinyal yang cocok.",
+      "hz.pending": "menunggu", "hz.unavailable": "tidak tersedia",
+      "hz.backfilled": " · di-backfill dari arsip resmi Binance",
+      "hz.live": " · direkam live",
+      "det.close": "Tutup", "det.price": "harga",
+      "det.analyzed": "dianalisis",
+      "det.agent1": "1 · Intelijen Breakout",
+      "det.agent2": "2 · Intelijen Reversal",
+      "det.agent3": "3 · Intelijen Arus Order",
+      "det.agent4": "4 · Intelijen Rezim Pasar",
+      "det.agent5": "5 · Intelijen Likuiditas",
+      "det.agent6": "6 · Pembelajaran Kinerja",
+      "det.rcNote": "Konteks 1J adalah REKONSTRUKSI HISTORIS dari arsip 1m resmi Binance ({files}, metode v{ver}) — ini BUKAN snapshot live asli dan hanya dipakai untuk riset eksploratif, tidak pernah sebagai bukti validasi prospektif.",
+      "det.bodyRange": "Body / range",
+      "det.pctOfRange": "% dari range",
+      "det.upperWick": "Wick atas",
+      "det.breakoutMargin": "Margin breakout",
+      "det.emaRow": "EMA 20 / 50 / 500",
+      "det.emaAligned": "EMA selaras (bullish)",
+      "det.yes": "Ya", "det.no": "Tidak",
+      "det.rsi4h": "RSI 4J",
+      "det.macd": "Histogram MACD",
+      "det.rising": " (naik)",
+      "det.atr": "ATR14",
+      "det.resGap": "Jarak ke resistance",
+      "det.consecUp": "Bar naik berurutan",
+      "det.h1ctx": "Konteks 1J sebelum sinyal",
+      "det.histRecon": " (REKONSTRUKSI HISTORIS)",
+      "det.riskLevel": "Level risiko (jumlah marker)",
+      "det.markersObs": "Marker teramati",
+      "det.histCtx": "Konteks historis",
+      "det.histCtxVal": "n={n} sinyal serupa, win {w}%",
+      "det.histCtxNone": "konteks historis belum cukup",
+      "det.riskNote": "Level risiko menghitung marker exhaustion — ini BUKAN probabilitas reversal.",
+      "det.takerBuy": "Taker-buy",
+      "det.imbalance": "Imbalance",
+      "det.deltaBar": "Volume delta (bar sinyal)",
+      "det.deltaCum": "Delta kumulatif (5 bar sebelumnya)",
+      "det.oi": "Open Interest",
+      "det.oiAsOf": " (per {t} WIB)",
+      "det.oiChg": "Perubahan OI 24j",
+      "det.lsRatio": "Rasio long/short",
+      "det.funding": "Funding rate",
+      "det.btcRegime": "Rezim BTC",
+      "det.btcChg": "Perubahan BTC 4J",
+      "det.btcRsi": "RSI BTC 4J",
+      "det.btcAtr": "ATR14 BTC",
+      "det.btcCorr": "Korelasi BTC (60 bar)",
+      "det.brGreen": "Breadth: bar hijau",
+      "det.brGreenVal": "% dari {n} simbol",
+      "det.brBreakouts": "Breadth: breakout",
+      "det.brMedian": "Breadth: median perubahan 4J",
+      "det.spread": "Spread",
+      "det.topDepth": "Depth teratas",
+      "det.impact10k": "Impact $10k",
+      "det.slipMethod": "Metode slippage",
+      "det.slipRow": "Slippage ($1k / $10k / $50k)",
+      "det.upperBound": " (batas atas)",
+      "det.bookExhausted": " (book habis)",
+      "det.barShare": "Porsi bar terhadap volume 24j",
+      "det.bookSnap": "Snapshot order book",
+      "det.bookYes": "direkam saat sinyal",
+      "det.bookNo": "tidak direkam (sinyal sebelum 23 Nov 2026)",
+      "det.perfNote": "+30m berasal dari tracker (aturan pra-registrasi). +1H dibaca dari candle 1m lokal; +4H/+8H dari candle 4J lokal. MFE/MAE adalah pergerakan terbaik/terburuk dalam tiap jendela.",
+      "ins.meta": "Sinyal: {n} · bisa dievaluasi (+30m): {e} · data fitur hilang: {m} · periode: {p}<br>Bucket dengan n<5 tidak menampilkan statistik. Hanya asosiasi — bukan bukti kausalitas.",
+      "ins.rvolT": "RVOL vs hasil",
+      "ins.rvolS": "Apakah lonjakan volume yang lebih besar berarti pump berlanjut?",
+      "ins.rvolX": "RVOL (skala log)",
+      "ins.markT": "Marker reversal vs hasil",
+      "ins.markS": "Apakah marker exhaustion memprediksi reversal? Sejauh ini marker tidak menunjukkan pola yang jelas — mereka tetap variabel riset.",
+      "ins.markX": "Marker exhaustion (jumlah)",
+      "ins.emaT": "Keselarasan EMA vs hasil",
+      "ins.emaS": "Sinyal di atas EMA20 > EMA50 > EMA500 versus sisanya.",
+      "ins.regT": "Rezim pasar BTC vs hasil",
+      "ins.regS": "Bagaimana performa sinyal saat BTC naik, sideways, atau turun.",
+      "ins.oiT": "Perubahan Open Interest vs hasil",
+      "ins.oiS": "Apakah kenaikan open interest sebelum sinyal berkaitan dengan kelanjutan momentum?",
+      "ins.oiX": "Perubahan OI 24j (%)",
+      "ins.imbT": "Imbalance arus order vs hasil",
+      "ins.imbS": "Imbalance taker buy/sell pada bar sinyal versus hasil +30m.",
+      "ins.imbX": "Imbalance (−1 jual … +1 beli)",
+      "ins.sprT": "Spread vs hasil",
+      "ins.sprS": "Apakah spread yang lebih lebar menggerus hasil net setelah biaya?",
+      "ins.sprX": "Spread (bps)",
+      "ins.brkT": "Kekuatan breakout vs hasil",
+      "ins.brkS": "Seberapa jauh harga tutup melewati high 20-bar, versus hasil +30m.",
+      "ins.brkX": "Margin breakout (%)",
+      "lr.hzNet30": "Net +30m (setelah spread + fee)",
+      "lr.hz1h": "+1H (gross)", "lr.hz4h": "+4H (gross)",
+      "lr.hz8h": "+8H (gross)",
+      "lr.thHorizon": "Horizon", "lr.thN": "n",
+      "lr.thMean": "Mean", "lr.thMedian": "Median",
+      "lr.thGte": "≥ +1%", "lr.thLte": "≤ −1%",
+      "lr.hzNote": "“Win rate” hanya didefinisikan untuk +30m (klasifikasi tracker). Horizon lain menampilkan porsi deskriptif — bukan win rate. Net hanya disimulasikan untuk +30m; horizon yang lebih panjang adalah return gross.",
+      "lr.notEnough": "Hasil yang bisa dievaluasi belum cukup (n<5).",
+      "lr.outMean": "Mean net (+30m)",
+      "lr.outMedian": "Median net (+30m)",
+      "lr.outTrimmed": "Trimmed mean (buang 10% atas/bawah)",
+      "lr.outExMax": "Mean tanpa hasil terbesar",
+      "lr.outLargest": "Hasil tunggal terbesar",
+      "lr.outLargestOf": " ({p}% dari total)",
+      "lr.outRange": "Rentang (min … max)",
+      "lr.outNote": "Dengan n={n}, satu hasil besar bisa mendominasi rata-rata. Bandingkan mean dengan median dan trimmed mean sebelum menarik kesimpulan apa pun.",
+      "lr.mkRsi": "RSI overbought (≥80)",
+      "lr.mkWick": "Penolakan wick atas (≥40%)",
+      "lr.mkOver": "Terlalu jauh vs ATR (≥2×)",
+      "lr.mkPara": "Parabolik 3-bar (+15%)",
+      "lr.mkAtr": "Lonjakan ATR (≥1,5× median)",
+      "lr.mkVol": "Divergensi volume",
+      "lr.mkThMarker": "Marker exhaustion",
+      "lr.mkThWith": "Dengan marker",
+      "lr.mkThWithout": "Tanpa marker",
+      "lr.mkStats": "n={n} · win {w}% · mean {m}",
+      "lr.mkNote": "Marker tetap variabel riset. Selisih antara “dengan” dan “tanpa” pada ukuran sampel seperti ini adalah observasi, bukan bukti bahwa marker memprediksi apa pun.",
+      "lr.pairedNotEnough": "Sinyal yang keempat horizonnya tervalidasi belum cukup (n<5).",
+      "lr.pairedIntro": "Kohort berpasangan: <b>{n}</b> dari {total} sinyal, di {closes} penutupan 4J yang berbeda. Dikecualikan: tanpa +30m {m30}, tanpa +1H {m1}, tanpa +4H {m4}, tanpa +8H {m8} (satu sinyal bisa kehilangan lebih dari satu horizon).",
+      "lr.thMfe": "Mean MFE", "lr.thMae": "Mean MAE",
+      "lr.pairedNote": "MFE/MAE adalah rata-rata ekskursi terbaik/terburuk dalam tiap horizon (+4H/+8H dari ekstrem bar 4J, bukan tick). Return gross di seluruhnya — bandingkan dengan tabel net +30m di atas, bukan melawannya.",
+      "lr.trajTitle": "Trajektori momentum",
+      "lr.trajContinued": "Berlanjut",
+      "lr.trajReversed": "Berbalik",
+      "lr.trajFull": "— di antaranya: berbalik penuh",
+      "lr.trajLate": "Terlambat naik",
+      "lr.trajNever": "Tidak pernah naik",
+      "lr.distTitle": "Distribusi hasil net +30m (n={n})",
+      "lr.mvwTitle": "Mean vs win rate",
+      "lr.mvwWin": "Win rate (+30m)",
+      "lr.mvwMean": "Mean net",
+      "lr.mvwMedian": "Median net",
+      "lr.contribTitle": "Kontribusi tiap sinyal terhadap total",
+      "lr.thSignal": "Sinyal", "lr.thNet": "Net",
+      "lr.thShare": "Porsi dari total",
+      "lr.contribNote": "Porsi di atas 100% berarti satu sinyal mengalahkan seluruh total net — sinyal-sinyal lainnya saling meniadakan.",
+      "lr.verdAssociation": "Asosiasi teramati",
+      "lr.verdNoClear": "Tidak ada asosiasi jelas",
+      "lr.verdConsistent": "Konsisten dengan hipotesis",
+      "lr.verdAgainst": "Bertentangan dengan hipotesis",
+      "lr.verdInsuff": "Data belum cukup",
+      "lr.verdNoData": "Belum ada data",
+      "lr.verdNotEval": "Tidak bisa dievaluasi",
+      "lr.agBreakout": "Intelijen Breakout",
+      "lr.agReversal": "Intelijen Reversal",
+      "lr.agOrderflow": "Intelijen Arus Order",
+      "lr.agRegime": "Intelijen Rezim Pasar",
+      "lr.agLiquidity": "Intelijen Likuiditas",
+      "lr.agPerformance": "Pembelajaran Kinerja",
+      "lr.thObservation": "Observasi",
+      "lr.thVerdict": "Putusan",
+      "lr.thEvidence": "Bukti",
+      "lr.aeIntro": "Dievaluasi pada n={n} hasil +30m yang bisa dievaluasi. ",
+      "lr.siSentence": "{ne} sinyal yang bisa dievaluasi berasal dari {ce} penutupan 4J yang berbeda; {np} sinyal berpasangan dari {cp}.",
+      "lr.casesEmpty": "Belum ada hasil BULLA/IDOL yang dievaluasi.",
+      "lr.th30net": "Net +30m",
+      "lr.th1h": "+1H", "lr.th4h": "+4H", "lr.th8h": "+8H",
+      "lr.thMfeMae": "MFE / MAE (+30m)",
+      "lr.caseNote": "Aturan yang sama, jalur yang berlawanan — itulah kenapa satu contoh tidak pernah bisa membenarkan perubahan strategi.",
+      "lr.caseNote2": "+8H terbaik BULLA: {b}; +8H terburuk IDOL: {i}. ",
+      "lr.sumTopics": "Topik yang dipantau",
+      "lr.thTopic": "Topik", "lr.thStatus": "Status",
+      "lr.thRead": "Pembacaan saat ini",
+      "lr.stObserved": "teramati", "lr.stMixed": "campuran",
+      "lr.stInsuff": "belum cukup", "lr.stNoData": "belum ada data",
+      "lr.sumWorked": "Apa yang bertahan",
+      "lr.sumWorkedEmpty": "Belum ada yang memenuhi ambang batas — tidak ada temuan yang disajikan sebagai berhasil.",
+      "lr.sumFailed": "Apa yang gagal bertahan",
+      "lr.sumFailedEmpty": "Belum ada pola yang diuji gagal.",
+      "lr.sumChanged": "Apa yang berubah sejak evaluasi sebelumnya",
+      "lr.sumChangedEmpty": "Tidak ada perubahan material yang tercatat.",
+      "lr.sumInconcl": "Belum bisa disimpulkan",
+      "lr.sumInconclEmpty": "Semua yang dievaluasi sudah punya putusan.",
+      "lr.sumBased": "Berdasarkan {e} hasil +30m yang bisa dievaluasi dan {p} sinyal kohort berpasangan. “Apa yang bertahan” hanya berisi asosiasi eksploratif — tidak ada di sini yang merupakan klaim prediktif.",
+      "lr.cpComplete": "Hasil lengkap (kohort berpasangan)",
+      "lr.cpCloses": "Penutupan 4J berbeda di baliknya",
+      "lr.cpNext": "Checkpoint berikutnya",
+      "lr.cpAllReached": "semua tercapai",
+      "lr.cpNextVal": "{n} sinyal ({p}%)",
+      "lr.cpNone": "Belum ada checkpoint tercapai — yang pertama di 40 hasil lengkap.",
+      "lr.cpReached": "Checkpoint {n} sinyal",
+      "lr.regPending": "Split eksplorasi/validasi belum membeku.",
+      "lr.regSplit": "Split membeku {d} — {n} sinyal pertama yang bisa dievaluasi adalah discovery set.",
+      "lr.regEmpty": "Belum ada hipotesis yang lolos ambang sampel (n≥10 di kedua bucket + selisih ≥2pp). Begitu ada, hipotesis itu dicatat beku di sini, sebelum data baru mengujinya.",
+      "lr.thId": "ID",
+      "lr.thHyp": "Hipotesis (dibekukan saat registrasi)",
+      "lr.thVal": "Validasi pada data yang lebih baru",
+      "lr.regAwaiting": "menunggu validasi",
+      "lr.regValidated": "tervalidasi",
+      "lr.regRejected": "ditolak",
+      "lr.regHolds": "berlaku",
+      "lr.regNotHolds": "tidak berlaku",
+      "lr.regValN": " (n {a} vs {b})",
+      "lr.clEval": "Sinyal yang dievaluasi (net +30m)",
+      "lr.clClosesAll": "Penutupan 4J unik (semua sinyal)",
+      "lr.clClosesEval": "Penutupan 4J unik (yang bisa dievaluasi)",
+      "lr.clLargest": "Penutupan tunggal terbesar",
+      "lr.clLargestVal": "{n} sinyal ({p}%)",
+      "lr.clTop3": "3 penutupan teratas digabung",
+      "lr.clTop3Val": "{p}% dari semua sinyal",
+      "lr.clRecon": "Konteks 1J direkonstruksi",
+      "lr.clReconVal": "{n}/{total} sinyal (REKONSTRUKSI HISTORIS)",
+      "lr.thCloseWib": "Penutupan 4J (WIB)",
+      "lr.thSignals": "Sinyal",
+      "lr.thEvaluable": "Bisa dievaluasi",
+      "lr.thWins": "Menang",
+      "lr.thMeanNet": "Mean net +30m",
+      "lr.thMeanGross": "Mean gross +30m",
+      "lr.clSplitNote": " Split eksplorasi/validasi menjaga seluruh penutupan tetap bersama, jadi tidak ada penutupan yang pernah terbelah antara kedua set.",
+      "tl.noArchive": "Arsip tidak tersedia.",
+      "tl.thVersion": "Versi", "tl.thRecords": "Rekaman",
+      "tl.thOi": "OI", "tl.thFunding": "Funding",
+      "tl.thDepth": "Band depth",
+      "tl.verNote": "Jumlah cakupan bertambah seiring file arsip terbit — rekaman analisis yang sama mendapat OI keesokan harinya dan funding bulan berikutnya.",
+      "tl.recoFunding": "<strong>Funding rate tiba di bulan Desember.</strong> File arsip bulanan akan mengisi bucket funding secara otomatis — tidak perlu tindakan, cukup bersabar.",
+      "tl.recoOi": "<strong>Cakupan Open Interest masih terisi</strong> ({m} sinyal hilang). File arsip harian terbit sehari kemudian; pipeline mencoba ulang secara otomatis.",
+      "tl.recoH1": "<strong>Horizon +1H masih terisi</strong> ({p}% lengkap). Horizon yang sudah dievaluasi kini bersifat sticky, dan backfill harian memulihkan sisanya dari arsip resmi Binance saat file tiap harinya terbit — hasil backfill dilabeli.",
+      "tl.recoHyp": "<strong>Terus kumpulkan hasil.</strong> Dengan n={n} sinyal yang bisa dievaluasi, belum ada hipotesis yang lolos ambang batas (n≥10 di kedua bucket + selisih ≥2pp). Sistem bekerja sesuai desain — sistem menolak mengarang pola dari sampel kecil.",
+      "tl.recoTrend": "<strong>Belum ada sinyal yang muncul saat BTC uptrend.</strong> Perbandingan rezim masih satu sisi sampai pasar berbalik — anggap kontras TRENDING_DOWN vs RANGING sebagai sementara.",
+      "tl.recoMarkers": "<strong>Marker reversal tetap variabel riset.</strong> Hasil awal tidak menunjukkan pola prediktif yang jelas; mengubah atau menghapus marker berdasarkan {n} hasil akan menjadi overfitting.",
+      "lbl.searchSignals": "Cari sinyal",
+      "lbl.searchExplorer": "Cari di explorer",
+      "lbl.filterOutcome": "Filter berdasarkan hasil",
+      "lbl.filterRegime": "Filter berdasarkan rezim BTC"
+    }
+  };
+
+  /* Bucket labels: data keys are English/code-like; the ID column gives
+     the translated label. Unknown keys fall back to the key itself. */
+  var BUCKET_LABELS = {
+    "aligned": { en: "aligned", id: "selaras" },
+    "not_aligned": { en: "not_aligned", id: "tidak selaras" },
+    "TRENDING_UP": { en: "TRENDING_UP", id: "BTC naik" },
+    "RANGING": { en: "RANGING", id: "BTC sideways" },
+    "TRENDING_DOWN": { en: "TRENDING_DOWN", id: "BTC turun" },
+    "falling_-10%+": { en: "falling_-10%+", id: "turun 10%+" },
+    "flat": { en: "flat", id: "datar" },
+    "rising_10%+": { en: "rising_10%+", id: "naik 10%+" },
+    "sell ≤ −0.10": { en: "sell ≤ −0.10", id: "jual ≤ −0,10" },
+    "balanced": { en: "balanced", id: "seimbang" },
+    "buy ≥ +0.10": { en: "buy ≥ +0.10", id: "beli ≥ +0,10" },
+    "tight_<2": { en: "tight_<2", id: "ketat <2" },
+    "normal_2-10": { en: "normal_2-10", id: "normal 2–10" },
+    "wide_10+": { en: "wide_10+", id: "lebar 10+" },
+    "<0.5%": { en: "<0.5%", id: "<0,5%" },
+    "0.5–2%": { en: "0.5–2%", id: "0,5–2%" }
+  };
+  function bucketLabel(name) {
+    var m = BUCKET_LABELS[name];
+    if (!m) return name;
+    return lang() === "id" ? m.id : m.en;
+  }
+
+  function lang() {
+    try {
+      var l = localStorage.getItem("raptorLang");
+      if (l === "id" || l === "en") return l;
+    } catch (e) { /* private mode — default */ }
+    return "en";
+  }
+  function t(key, vars) {
+    var dict = T[lang()] || T.en;
+    var s = dict[key];
+    if (s == null) s = T.en[key];
+    if (s == null) return key;
+    return String(s).replace(/\{(\w+)\}/g, function (_, k) {
+      return vars && vars[k] != null ? vars[k] : "";
+    });
+  }
+  /* Bilingual data field: idVal is the Indonesian value, enVal the
+     English twin. Falls back to whichever exists (v2.1.0 records have
+     no twins yet — they render in their original language). */
+  function bi(idVal, enVal) {
+    if (lang() === "id") return idVal == null ? enVal : idVal;
+    return enVal == null ? idVal : enVal;
+  }
+  function updateLangButtons() {
+    var l = lang();
+    Array.prototype.forEach.call(
+      document.querySelectorAll("#lang-switch [data-lang]"), function (btn) {
+        var on = btn.getAttribute("data-lang") === l;
+        btn.classList.toggle("active", on);
+        btn.setAttribute("aria-pressed", String(on));
+      });
+    var lbl = document.querySelector(".lang-switch-label");
+    if (lbl) lbl.textContent = l === "id" ? "Bahasa" : "Language";
+  }
+  function setLang(next) {
+    if (next !== "id" && next !== "en") return;
+    try { localStorage.setItem("raptorLang", next); } catch (e) {}
+    document.documentElement.setAttribute("lang", next);
+    document.documentElement.dataset.lang = next;
+    updateLangButtons();
+    renderAll();
+  }
+  var refreshMotionToggle = function () {}; // replaced by initMotionToggle
+  function renderStatic() {
+    Array.prototype.forEach.call(
+      document.querySelectorAll("[data-i18n]"), function (el) {
+        el.textContent = t(el.getAttribute("data-i18n"));
+      });
+    Array.prototype.forEach.call(
+      document.querySelectorAll("[data-i18n-html]"), function (el) {
+        el.innerHTML = t(el.getAttribute("data-i18n-html"));
+      });
+    Array.prototype.forEach.call(
+      document.querySelectorAll("[data-i18n-ph]"), function (el) {
+        el.setAttribute("placeholder", t(el.getAttribute("data-i18n-ph")));
+      });
+    Array.prototype.forEach.call(
+      document.querySelectorAll(".rail-link[data-section]"), function (a) {
+        var sp = a.querySelector("span");
+        var v = sp ? sp.textContent : t("rail." + a.getAttribute("data-section"));
+        a.setAttribute("aria-label", v);
+        a.title = v;
+      });
+    var home = document.querySelector('.rail-link[href="index.html"]');
+    if (home) {
+      home.setAttribute("aria-label", t("rail.homeAria"));
+      home.title = t("rail.homeAria");
+    }
+    updateLangButtons();
+    refreshMotionToggle();
+  }
+  function renderAll() {
+    renderStatic();
+    if (!DATA) return;
+    renderOverview();
+    renderSignalList($("signal-search") ? $("signal-search").value : "");
+    renderSignalDetail();
+    renderInsights();
+    renderLearning();
+    renderTimeline();
+    renderExplorer();
+    watchReveals();
+  }
 
   /* ---------------------------------------------------------- helpers */
   function $(id) { return document.getElementById(id); }
@@ -49,7 +890,7 @@
   function fmtWib(ts) {
     if (ts == null) return null;
     try {
-      return new Intl.DateTimeFormat("en-GB", {
+      return new Intl.DateTimeFormat(lang() === "id" ? "id-ID" : "en-GB", {
         timeZone: "Asia/Jakarta", day: "2-digit", month: "short",
         hour: "2-digit", minute: "2-digit", hour12: false
       }).format(new Date(ts * 1000));
@@ -59,7 +900,7 @@
   function fmtDate(ts) {
     if (ts == null) return null;
     try {
-      return new Intl.DateTimeFormat("en-GB", {
+      return new Intl.DateTimeFormat(lang() === "id" ? "id-ID" : "en-GB", {
         timeZone: "Asia/Jakarta", day: "2-digit", month: "short",
         year: "numeric"
       }).format(new Date(ts * 1000));
@@ -107,7 +948,7 @@
       var b = buckets ? buckets[name] : null;
       if (!b) {
         html += '<div class="bucket-row"><span class="bucket-name">' +
-          esc(name) + '</span><span class="bucket-empty">n&lt;5 — no statistics</span>' +
+          esc(bucketLabel(name)) + '</span><span class="bucket-empty">' + t("bucket.noStats") + "</span>" +
           '<span class="bucket-val"></span></div>';
         return;
       }
@@ -116,15 +957,15 @@
       var mean = b.mean_net30_pct;
       var neg = mean != null && mean < 0;
       html += '<div class="bucket-row"><span class="bucket-name">' +
-        esc(name) + '</span><span class="bucket-track"><i class="' +
+        esc(bucketLabel(name)) + '</span><span class="bucket-track"><i class="' +
         (neg ? "neg-fill" : "") + '" style="width:' +
         Math.max(2, Math.min(100, win)) + '%"></i></span>' +
-        '<span class="bucket-val">win ' + fmtNum(win, 0) + '% · ' +
+        '<span class="bucket-val">' + t("bucket.win") + " " + fmtNum(win, 0) + '% · ' +
         (mean == null ? "—" : fmtPct(mean, 2)) + " · n=" + b.n +
         "</span></div>";
     });
     if (!any) {
-      html += '<p class="bucket-empty">No bucket has enough samples yet (n≥5 required).</p>';
+      html += '<p class="bucket-empty">' + t("bucket.none") + "</p>";
     }
     return html;
   }
@@ -145,8 +986,7 @@
     var colors = { "PUMP CONTINUED": "#abed77", "REVERSAL": "#ff758a",
                    "SIDEWAYS": "#819495" };
     var out = '<svg class="chart-svg" viewBox="0 0 ' + W + " " + H +
-      '" role="img" aria-label="Scatter: ' + esc(opts.xLabel) +
-      ' versus +30m net return">';
+      '" role="img" aria-label="' + esc(t("scatter.aria", { x: opts.xLabel })) + '">';
     out += '<line class="grid" x1="' + P.l + '" y1="' + sy(0) + '" x2="' +
       (W - P.r) + '" y2="' + sy(0) + '"/>';
     out += '<line class="axis" x1="' + P.l + '" y1="' + P.t + '" x2="' +
@@ -182,23 +1022,23 @@
     var lastAnalysis = DATA.meta.last_analysis_ts;
     $("hero-meta").textContent =
       (signals.length ? fmtDate(first) + " – " + fmtDate(last) + "  ·  " : "") +
-      "research v" + (DATA.meta.research_version || "?") +
-      "  ·  last analysis " + (fmtWib(lastAnalysis) || "N/A") + " WIB";
+      t("ov.researchV") + (DATA.meta.research_version || "?") +
+      "  ·  " + t("ov.lastAnalysis") + " " + (fmtWib(lastAnalysis) || "N/A") + " WIB";
 
     var overall = ov.overall || {};
     var stats = [
-      { label: "Signals analyzed", value: String(ov.n_analyzed == null ? 0 : ov.n_analyzed),
-        note: "of " + (ov.n_signals == null ? "?" : ov.n_signals) + " published signals" },
-      { label: "Outcomes (+30m)", value: String(ov.n_evaluable_30m == null ? 0 : ov.n_evaluable_30m),
-        note: "evaluable signals with a +30m outcome; the rest are pending or lack 1m candles" },
-      { label: "Win rate (+30m)", value: overall.win_rate_pct == null ? "N/A" : fmtNum(overall.win_rate_pct, 1) + "%",
-        note: "PUMP CONTINUED share, n=" + (ov.n_evaluable_30m == null ? 0 : ov.n_evaluable_30m) },
-      { label: "Mean net (+30m)", value: overall.mean_net30_pct == null ? "N/A" : fmtPct(overall.mean_net30_pct, 2),
-        note: "after spread + 8 bps fees (simulation, not profit)" },
-      { label: "Hypotheses", value: String((ov.hypotheses || []).length),
-        note: "0 validated — none has passed the bar yet" },
-      { label: "Snapshot coverage", value: ov.snapshot_coverage_pct == null ? "N/A" : fmtNum(ov.snapshot_coverage_pct, 0) + "%",
-        note: "signals with a complete analysis snapshot" },
+      { label: t("ov.stat1"), value: String(ov.n_analyzed == null ? 0 : ov.n_analyzed),
+        note: t("ov.stat1n", { n: ov.n_signals == null ? "?" : ov.n_signals }) },
+      { label: t("ov.stat2"), value: String(ov.n_evaluable_30m == null ? 0 : ov.n_evaluable_30m),
+        note: t("ov.stat2n") },
+      { label: t("ov.stat3"), value: overall.win_rate_pct == null ? "N/A" : fmtNum(overall.win_rate_pct, 1) + "%",
+        note: t("ov.stat3n", { n: ov.n_evaluable_30m == null ? 0 : ov.n_evaluable_30m }) },
+      { label: t("ov.stat4"), value: overall.mean_net30_pct == null ? "N/A" : fmtPct(overall.mean_net30_pct, 2),
+        note: t("ov.stat4n") },
+      { label: t("ov.stat5"), value: String((ov.hypotheses || []).length),
+        note: t("ov.stat5n") },
+      { label: t("ov.stat6"), value: ov.snapshot_coverage_pct == null ? "N/A" : fmtNum(ov.snapshot_coverage_pct, 0) + "%",
+        note: t("ov.stat6n") },
     ];
     $("overview-stats").innerHTML = stats.map(function (s) {
       return '<div class="stat-card card"><p class="stat-label">' + esc(s.label) +
@@ -208,9 +1048,9 @@
 
     // Per-agent coverage
     var agents = ["breakout", "reversal", "orderflow", "regime", "liquidity"];
-    var names = { breakout: "Breakout", reversal: "Reversal",
-                  orderflow: "Order Flow", regime: "Market Regime",
-                  liquidity: "Liquidity" };
+    var names = { breakout: t("ov.agentBreakout"), reversal: t("ov.agentReversal"),
+                  orderflow: t("ov.agentOrderflow"), regime: t("ov.agentRegime"),
+                  liquidity: t("ov.agentLiquidity") };
     var cov = ov.per_agent_coverage || {};
     var n = ov.n_analyzed || 1;
     $("agent-coverage").innerHTML = agents.map(function (a) {
@@ -224,15 +1064,15 @@
         '%"></i></span><span class="cov-val">' + ok + " / " + part + " / " + miss +
         "</span></div>";
     }).join("") +
-      '<div class="cov-legend"><span><i style="background:var(--pos)"></i>Complete</span>' +
-      '<span><i style="background:var(--warn)"></i>Partial</span>' +
-      '<span><i style="background:var(--neg)"></i>Unavailable / error</span></div>';
+      '<div class="cov-legend"><span><i style="background:var(--pos)"></i>' + t("ov.legendComplete") + '</span>' +
+      '<span><i style="background:var(--warn)"></i>' + t("ov.legendPartial") + '</span>' +
+      '<span><i style="background:var(--neg)"></i>' + t("ov.legendMiss") + '</span></div>';
 
     // Regime distribution
     var regimes = ov.regime_distribution || {};
     var order = ["TRENDING_UP", "RANGING", "TRENDING_DOWN"];
-    var rlabels = { TRENDING_UP: "BTC trending up", RANGING: "BTC ranging",
-                    TRENDING_DOWN: "BTC trending down" };
+    var rlabels = { TRENDING_UP: t("ov.regimeUp"), RANGING: t("ov.regimeRanging"),
+                    TRENDING_DOWN: t("ov.regimeDown") };
     var total = order.reduce(function (s, k) { return s + (regimes[k] || 0); }, 0) || 1;
     $("regime-dist").innerHTML = order.map(function (k) {
       var c = regimes[k] || 0;
@@ -250,17 +1090,16 @@
       var pct = d.completeness_pct == null ? 0 : d.completeness_pct;
       return '<div class="cov-row"><span class="cov-name">' + h[1] +
         '</span><span class="cov-bar"><i class="b-ok" style="width:' + pct +
-        '%"></i></span><span class="cov-val">' + (d.evaluated == null ? 0 : d.evaluated) +
-        "/" + (d.mature == null ? 0 : d.mature) + " mature</span></div>";
+        '%"></i></span><span class="cov-val">' +
+        t("ov.mature", { e: d.evaluated == null ? 0 : d.evaluated,
+                         m: d.mature == null ? 0 : d.mature }) + "</span></div>";
     }).join("");
 
     // Hypotheses
     var hyps = ov.hypotheses || [];
     $("hypotheses").innerHTML = hyps.length === 0
-      ? '<p class="panel-sub" style="margin:0">No hypothesis is currently being tested. ' +
-        'The bar is strict on purpose: n≥10 on both buckets and a ≥2pp mean-net gap, ' +
-        'plus out-of-sample validation. With ' + (ov.n_evaluable_30m || 0) +
-        ' evaluable outcomes, nothing has cleared it yet.</p>'
+      ? '<p class="panel-sub" style="margin:0">' +
+        t("ov.hypEmpty", { n: ov.n_evaluable_30m || 0 }) + "</p>"
       : hyps.map(function (h) {
           return "<p><strong>" + esc(h.feature || "?") + "</strong>: " +
             esc(h.observation || "") + "<br><span class='muted'>" +
@@ -273,27 +1112,27 @@
     var keys = Object.keys(profile).sort(function (a, b) {
       return (profile[b].missing_pct || 0) - (profile[a].missing_pct || 0);
     });
-    var labels = { decisions: "Decisions values", signal_bar: "Signal bar",
-      ema20: "EMA20", atr14: "ATR14", macd: "MACD", mtf_1h: "1H context (1m)",
-      open_interest: "Open Interest", funding_rate: "Funding rate",
-      btc_regime: "BTC regime", breadth: "Market breadth",
-      spread: "Spread", impact_10k: "$10k impact", depth: "Top depth" };
+    var labels = { decisions: t("ov.dqDecisions"), signal_bar: t("ov.dqSignalBar"),
+      ema20: "EMA20", atr14: "ATR14", macd: "MACD", mtf_1h: t("ov.dqMtf1h"),
+      open_interest: t("ov.dqOi"), funding_rate: t("ov.dqFunding"),
+      btc_regime: t("ov.dqBtcRegime"), breadth: t("ov.dqBreadth"),
+      spread: t("ov.dqSpread"), impact_10k: t("ov.dqImpact"), depth: t("ov.dqDepth") };
     $("data-quality").innerHTML =
       '<ul class="missing-list">' + keys.map(function (k) {
         var p = profile[k];
         return "<li><span>" + esc(labels[k] || k) + "</span><span class='num'>" +
-          (p.missing || 0) + "/" + (p.n || 0) + " missing (" +
-          fmtNum(p.missing_pct || 0, 0) + "%)</span></li>";
+          t("ov.dqMissing", { m: p.missing || 0, n: p.n || 0,
+                              p: fmtNum(p.missing_pct || 0, 0) }) + "</span></li>";
       }).join("") + "</ul>";
   }
 
   /* ---------------------------------------------------------- signals */
   function signalRowHtml(sig) {
     var cls = clsOf(sig);
-    var clsLabel = { "PUMP CONTINUED": ["Continued", "cls-continued"],
-      "REVERSAL": ["Reversed", "cls-reversal"],
-      "SIDEWAYS": ["Sideways", "cls-sideways"] }[cls] ||
-      ["Pending", "cls-pending"];
+    var clsLabel = { "PUMP CONTINUED": [t("sig.continued"), "cls-continued"],
+      "REVERSAL": [t("sig.reversed"), "cls-reversal"],
+      "SIDEWAYS": [t("sig.sideways"), "cls-sideways"] }[cls] ||
+      [t("sig.pending"), "cls-pending"];
     return '<button type="button" class="signal-item' +
       (sig.signal_id === SELECTED_ID ? " active" : "") +
       '" data-id="' + esc(sig.signal_id) + '" role="option" aria-selected="' +
@@ -312,7 +1151,7 @@
       });
     }
     $("signal-list").innerHTML = list.length ? list.map(signalRowHtml).join("")
-      : '<p class="muted" style="padding:8px;font-size:13px">No signals match.</p>';
+      : '<p class="muted" style="padding:8px;font-size:13px">' + t("sig.noMatch") + "</p>";
     Array.prototype.forEach.call(
       $("signal-list").querySelectorAll(".signal-item"), function (el) {
         el.addEventListener("click", function () {
@@ -335,16 +1174,17 @@
     if (obs.length) {
       html += '<ul class="obs-list">' + obs.slice(0, 4).map(function (o) {
         return '<li class="' + (o.severity === "notable" ? "notable" : "") +
-          '">' + esc(o.text) + "</li>";
+          '">' + esc(bi(o.text, o.text_en)) + "</li>";
       }).join("") + "</ul>";
     }
     if (section.notes) {
-      html += '<p class="notes">' + esc(section.notes) + "</p>";
+      html += '<p class="notes">' + esc(bi(section.notes, section.notes_en)) + "</p>";
     }
     var miss = section.missing || [];
+    var missEn = section.missing_en || [];
     if (miss.length) {
-      html += '<ul class="missing">' + miss.map(function (m) {
-        return "<li>" + esc(m) + "</li>";
+      html += '<ul class="missing">' + miss.map(function (m, i) {
+        return "<li>" + esc(bi(m, missEn[i])) + "</li>";
       }).join("") + "</ul>";
     }
     return html + "</div>";
@@ -352,8 +1192,8 @@
 
   function horizonCell(label, h) {
     if (!h || h.status !== "evaluated") {
-      var reason = h && h.status === "pending" ? "pending" :
-        (h && h.reason ? h.reason : "unavailable");
+      var reason = h && h.status === "pending" ? t("hz.pending") :
+        (h && h.reason ? bi(h.reason, h.reason_en) : t("hz.unavailable"));
       return '<div class="outcome-cell"><p class="lbl">' + label +
         '</p><p class="val na">N/A</p><p class="sub">' + esc(reason) + "</p></div>";
     }
@@ -362,8 +1202,8 @@
     var color = cls === "PUMP CONTINUED" ? "pos" :
       cls === "REVERSAL" ? "neg" : "";
     var src = h.source === "vision-backfill"
-      ? " · backfilled from official Binance archive"
-      : (h.source === "local_1m" ? " · recorded live" : "");
+      ? t("hz.backfilled")
+      : (h.source === "local_1m" ? t("hz.live") : "");
     return '<div class="outcome-cell"><p class="lbl">' + label +
       '</p><p class="val ' + color + '">' + esc(net || "—") +
       '</p><p class="sub">' + esc(cls || "") +
@@ -390,92 +1230,90 @@
 
     var head = '<div class="detail-head card"><h3><span class="sym">' +
       esc(sig.symbol) + '</span> <span class="muted">· ' + esc(sig.market) +
-      "</span></h3><p class='detail-meta'>Close " +
-      esc(fmtWib(sig.signal_ts) || "") + " WIB · price <span class='num'>" +
+      "</span></h3><p class='detail-meta'>" + t("det.close") + " " +
+      esc(fmtWib(sig.signal_ts) || "") + " WIB · " + t("det.price") + " <span class='num'>" +
       esc(fmtPrice(d.close) || "N/A") + "</span> (" +
       esc(fmtPct(d.chg_4h_pct, 2) || "N/A") + ") · RVOL <span class='num'>" +
-      esc(fmtNum(d.rvol, 2) || "N/A") + "×</span> · analyzed " +
-      esc(fmtWib(sig.analyzed_ts) || "") + " WIB · research v" +
+      esc(fmtNum(d.rvol, 2) || "N/A") + "×</span> · " + t("det.analyzed") + " " +
+      esc(fmtWib(sig.analyzed_ts) || "") + " WIB · " + t("ov.researchV") +
       esc(sig.research_version || "?") + " " + statusBadge(sig.status) +
       "</p></div>";
 
     var cards = "";
     var rc = sig.reconstruction || null;
     var rcNote = rc == null ? "" :
-      '<p class="notes">1H context is a HISTORICAL RECONSTRUCTION from the official Binance ' +
-      "1m archive (" + esc((rc.files || []).join(", ")) + ", method v" +
-      esc(rc.method_version || "?") + ") — it is NOT the original live snapshot and is " +
-      "used for exploratory research only, never as prospective validation evidence.</p>";
-    cards += agentCard("1 · Breakout Intelligence", sig.breakout, [
-      ["Body / range", br.body_pct == null ? null : fmtNum(br.body_pct, 0) + "% of range"],
-      ["Upper wick", br.upper_wick_pct == null ? null : fmtNum(br.upper_wick_pct, 0) + "%"],
-      ["Breakout margin", br.breakout_margin_pct == null ? null : fmtPct(br.breakout_margin_pct, 2)],
-      ["EMA 20 / 50 / 500", [fmtPrice(br.ema20), fmtPrice(br.ema50), fmtPrice(br.ema500)].map(function (v) { return v || "N/A"; }).join(" · ")],
-      ["EMA aligned (bullish)", br.ema_aligned_bullish == null ? null : (br.ema_aligned_bullish ? "Yes" : "No")],
-      ["RSI 4H", br.rsi_4h == null ? null : fmtNum(br.rsi_4h, 1)],
-      ["MACD histogram", br.macd_histogram == null ? null : fmtNum(br.macd_histogram, 4) + (br.macd_rising ? " (rising)" : "")],
-      ["ATR14", br.atr14_pct == null ? null : fmtNum(br.atr14_pct, 1) + "%"],
-      ["Resistance gap", br.resistance_gap_pct == null ? null : fmtPct(br.resistance_gap_pct, 2)],
-      ["Consecutive up bars", br.consecutive_up_bars == null ? null : String(br.consecutive_up_bars)],
-      ["1H context before signal", rc == null || rc.mtf_1h == null ? null :
-        fmtPct(rc.mtf_1h.chg_1h_pct, 2) + " (HISTORICAL RECONSTRUCTION)"],
+      '<p class="notes">' + t("det.rcNote", {
+        files: esc((rc.files || []).join(", ")),
+        ver: esc(rc.method_version || "?") }) + "</p>";
+    cards += agentCard(t("det.agent1"), sig.breakout, [
+      [t("det.bodyRange"), br.body_pct == null ? null : fmtNum(br.body_pct, 0) + t("det.pctOfRange")],
+      [t("det.upperWick"), br.upper_wick_pct == null ? null : fmtNum(br.upper_wick_pct, 0) + "%"],
+      [t("det.breakoutMargin"), br.breakout_margin_pct == null ? null : fmtPct(br.breakout_margin_pct, 2)],
+      [t("det.emaRow"), [fmtPrice(br.ema20), fmtPrice(br.ema50), fmtPrice(br.ema500)].map(function (v) { return v || "N/A"; }).join(" · ")],
+      [t("det.emaAligned"), br.ema_aligned_bullish == null ? null : (br.ema_aligned_bullish ? t("det.yes") : t("det.no"))],
+      [t("det.rsi4h"), br.rsi_4h == null ? null : fmtNum(br.rsi_4h, 1)],
+      [t("det.macd"), br.macd_histogram == null ? null : fmtNum(br.macd_histogram, 4) + (br.macd_rising ? t("det.rising") : "")],
+      [t("det.atr"), br.atr14_pct == null ? null : fmtNum(br.atr14_pct, 1) + "%"],
+      [t("det.resGap"), br.resistance_gap_pct == null ? null : fmtPct(br.resistance_gap_pct, 2)],
+      [t("det.consecUp"), br.consecutive_up_bars == null ? null : String(br.consecutive_up_bars)],
+      [t("det.h1ctx"), rc == null || rc.mtf_1h == null ? null :
+        fmtPct(rc.mtf_1h.chg_1h_pct, 2) + t("det.histRecon")],
     ], rcNote);
     var markersHtml = (rv.markers || []).length
       ? '<ul class="obs-list">' + rv.markers.map(function (m) {
-          return '<li class="notable">' + esc(m.text) + "</li>";
+          return '<li class="notable">' + esc(bi(m.text, m.text_en)) + "</li>";
         }).join("") + "</ul>" : "";
-    cards += agentCard("2 · Reversal Intelligence", sig.reversal, [
-      ["Risk level (marker count)", rv.risk_level || null],
-      ["Markers observed", (rv.markers_observed == null ? null : rv.markers_observed + " / 6")],
-      ["Historical context", rv.historical_context && rv.historical_context.n != null
-        ? ("n=" + rv.historical_context.n + " similar signals, win " + fmtNum(rv.historical_context.win_rate_pct, 0) + "%")
-        : "insufficient historical context"],
+    cards += agentCard(t("det.agent2"), sig.reversal, [
+      [t("det.riskLevel"), rv.risk_level || null],
+      [t("det.markersObs"), (rv.markers_observed == null ? null : rv.markers_observed + " / 6")],
+      [t("det.histCtx"), rv.historical_context && rv.historical_context.n != null
+        ? t("det.histCtxVal", { n: rv.historical_context.n,
+                                w: fmtNum(rv.historical_context.win_rate_pct, 0) })
+        : t("det.histCtxNone")],
     ], markersHtml +
-      '<p class="notes">Risk level counts exhaustion markers — it is NOT a probability of reversal.</p>');
-    cards += agentCard("3 · Order Flow Intelligence", sig.orderflow, [
-      ["Taker-buy", of.taker_buy == null ? null : fmtNum(of.taker_buy, 2)],
-      ["Imbalance", of.imbalance == null ? null : fmtNum(of.imbalance, 2)],
-      ["Volume delta (signal bar)", of.delta_signal_bar_quote == null ? null : fmtUsd(of.delta_signal_bar_quote) + " (" + fmtPct(of.delta_signal_bar_pct, 1) + ")"],
-      ["Cumulative delta (5 prior bars)", of.delta_cum_5bar_before_quote == null ? null : fmtUsd(of.delta_cum_5bar_before_quote)],
-      ["Open Interest", oi ? fmtUsd(oi.open_interest_usd) + " (as of " + (fmtWib(oi.asof_ts) || "?") + " WIB)" : null],
-      ["OI change 24h", of.oi_chg_24h_pct == null ? null : fmtPct(of.oi_chg_24h_pct, 1)],
-      ["Long/short ratio", oi && oi.count_ls_ratio != null ? fmtNum(oi.count_ls_ratio, 2) : null],
-      ["Funding rate", fd ? fmtNum(fd.funding_rate_pct, 4) + "% / 8h" : null],
+      '<p class="notes">' + t("det.riskNote") + "</p>");
+    cards += agentCard(t("det.agent3"), sig.orderflow, [
+      [t("det.takerBuy"), of.taker_buy == null ? null : fmtNum(of.taker_buy, 2)],
+      [t("det.imbalance"), of.imbalance == null ? null : fmtNum(of.imbalance, 2)],
+      [t("det.deltaBar"), of.delta_signal_bar_quote == null ? null : fmtUsd(of.delta_signal_bar_quote) + " (" + fmtPct(of.delta_signal_bar_pct, 1) + ")"],
+      [t("det.deltaCum"), of.delta_cum_5bar_before_quote == null ? null : fmtUsd(of.delta_cum_5bar_before_quote)],
+      [t("det.oi"), oi ? fmtUsd(oi.open_interest_usd) + t("det.oiAsOf", { t: fmtWib(oi.asof_ts) || "?" }) : null],
+      [t("det.oiChg"), of.oi_chg_24h_pct == null ? null : fmtPct(of.oi_chg_24h_pct, 1)],
+      [t("det.lsRatio"), oi && oi.count_ls_ratio != null ? fmtNum(oi.count_ls_ratio, 2) : null],
+      [t("det.funding"), fd ? fmtNum(fd.funding_rate_pct, 4) + "% / 8h" : null],
     ]);
-    cards += agentCard("4 · Market Regime Intelligence", sig.regime, [
-      ["BTC regime", rg.btc_regime || null],
-      ["BTC 4H change", btc.chg_4h_pct == null ? null : fmtPct(btc.chg_4h_pct, 2)],
-      ["BTC RSI 4H", btc.rsi_4h == null ? null : fmtNum(btc.rsi_4h, 1)],
-      ["BTC ATR14", btc.atr14_pct == null ? null : fmtNum(btc.atr14_pct, 1) + "%"],
-      ["BTC correlation (60 bars)", rg.btc_correlation_60bar == null ? null : fmtNum(rg.btc_correlation_60bar, 2)],
-      ["Breadth: green bars", breadth.pct_green == null ? null : fmtNum(breadth.pct_green, 0) + "% of " + (breadth.n_symbols || "?") + " symbols"],
-      ["Breadth: breakouts", breadth.pct_breakout == null ? null : fmtNum(breadth.pct_breakout, 1) + "%"],
-      ["Breadth: median 4H change", breadth.median_chg_pct == null ? null : fmtPct(breadth.median_chg_pct, 2)],
+    cards += agentCard(t("det.agent4"), sig.regime, [
+      [t("det.btcRegime"), rg.btc_regime || null],
+      [t("det.btcChg"), btc.chg_4h_pct == null ? null : fmtPct(btc.chg_4h_pct, 2)],
+      [t("det.btcRsi"), btc.rsi_4h == null ? null : fmtNum(btc.rsi_4h, 1)],
+      [t("det.btcAtr"), btc.atr14_pct == null ? null : fmtNum(btc.atr14_pct, 1) + "%"],
+      [t("det.btcCorr"), rg.btc_correlation_60bar == null ? null : fmtNum(rg.btc_correlation_60bar, 2)],
+      [t("det.brGreen"), breadth.pct_green == null ? null : fmtNum(breadth.pct_green, 0) + t("det.brGreenVal", { n: breadth.n_symbols || "?" })],
+      [t("det.brBreakouts"), breadth.pct_breakout == null ? null : fmtNum(breadth.pct_breakout, 1) + "%"],
+      [t("det.brMedian"), breadth.median_chg_pct == null ? null : fmtPct(breadth.median_chg_pct, 2)],
     ]);
     var slip = lq.slippage_estimate_bps || {};
     var slipRows = Object.keys(slip).map(function (k) {
       var v = slip[k];
       return k + ": " + fmtPct(v.est_total_bps, 0) +
-        (v.bound ? " (upper bound)" : "") + (v.complete === false ? " (book exhausted)" : "");
+        (v.bound ? t("det.upperBound") : "") + (v.complete === false ? t("det.bookExhausted") : "");
     }).join(" · ");
-    cards += agentCard("5 · Liquidity Intelligence", sig.liquidity, [
-      ["Spread", lq.spread_bps == null ? null : fmtNum(lq.spread_bps, 2) + " bps (" + (lq.spread_band || "?") + ")"],
-      ["Top depth", lq.top_depth_usd == null ? null : fmtUsd(lq.top_depth_usd) + " (" + (lq.depth_band || "?") + ")"],
-      ["$10k impact", lq.impact_bps_10k == null ? null : fmtNum(lq.impact_bps_10k, 1) + " bps (" + (lq.impact_band || "?") + ")"],
-      ["Slippage method", lq.slippage_method || null],
-      ["Slippage ($1k / $10k / $50k)", slipRows || null],
-      ["Bar share of 24h volume", lq.bar_share_of_24h_pct == null ? null : fmtNum(lq.bar_share_of_24h_pct, 0) + "%"],
-      ["Book snapshot", (sig.snapshot && sig.snapshot.book_top10 && sig.snapshot.book_top10.present)
-        ? "recorded at signal time" : "not recorded (signals before 23 Nov 2026)"],
+    cards += agentCard(t("det.agent5"), sig.liquidity, [
+      [t("det.spread"), lq.spread_bps == null ? null : fmtNum(lq.spread_bps, 2) + " bps (" + (lq.spread_band || "?") + ")"],
+      [t("det.topDepth"), lq.top_depth_usd == null ? null : fmtUsd(lq.top_depth_usd) + " (" + (lq.depth_band || "?") + ")"],
+      [t("det.impact10k"), lq.impact_bps_10k == null ? null : fmtNum(lq.impact_bps_10k, 1) + " bps (" + (lq.impact_band || "?") + ")"],
+      [t("det.slipMethod"), lq.slippage_method || null],
+      [t("det.slipRow"), slipRows || null],
+      [t("det.barShare"), lq.bar_share_of_24h_pct == null ? null : fmtNum(lq.bar_share_of_24h_pct, 0) + "%"],
+      [t("det.bookSnap"), (sig.snapshot && sig.snapshot.book_top10 && sig.snapshot.book_top10.present)
+        ? t("det.bookYes") : t("det.bookNo")],
     ]);
     var pf = sig.performance || {};
-    cards += '<div class="agent-card card"><h4>6 · Performance Learning</h4>' +
+    cards += '<div class="agent-card card"><h4>' + t("det.agent6") + "</h4>" +
       '<div class="outcome-grid">' +
       horizonCell("+30m", pf.h30m) + horizonCell("+1H", pf.h1) +
       horizonCell("+4H", pf.h4) + horizonCell("+8H", pf.h8) +
-      '</div><p class="notes">+30m comes from the tracker (pre-registered rules). ' +
-      "+1H is read from local 1m candles; +4H/+8H from local 4H candles. " +
-      "MFE/MAE are the best/worst moves inside each window.</p></div>";
+      '</div><p class="notes">' + t("det.perfNote") + "</p></div>";
 
     $("signal-detail").innerHTML = head +
       '<div class="agent-grid">' + cards + "</div>";
@@ -490,11 +1328,8 @@
 
   /* ---------------------------------------------------------- insights */
   function insightMeta(sigCount, evaluable, missingCount, period) {
-    return '<p class="insight-meta">Signals: ' + sigCount +
-      " · evaluable (+30m): " + evaluable +
-      " · missing feature data: " + missingCount +
-      " · period: " + esc(period) + "<br>Buckets with n&lt;5 show no " +
-      "statistics. Association only — not evidence of causation.</p>";
+    return '<p class="insight-meta">' + t("ins.meta", {
+      n: sigCount, e: evaluable, m: missingCount, p: esc(period) }) + "</p>";
   }
 
   function scatterPoints(getX, logX) {
@@ -527,56 +1362,48 @@
     }
 
     var s1 = scatterPoints(function (s) { return dec(s).rvol; }, true);
-    add("RVOL vs outcome",
-      "Does a bigger volume spike mean the pump continues?",
+    add(t("ins.rvolT"), t("ins.rvolS"),
       bucketChart(buckets.rvol, ["<2x", "2-5x", "5-10x", "10x+"]),
-      s1.pts.length > 1 ? scatterChart(s1.pts, { xLabel: "RVOL (log scale)", logX: true }) : "",
+      s1.pts.length > 1 ? scatterChart(s1.pts, { xLabel: t("ins.rvolX"), logX: true }) : "",
       s1.missing);
     var s2 = scatterPoints(function (s) { return s.reversal ? s.reversal.markers_observed : null; }, false);
-    add("Reversal markers vs outcome",
-      "Do exhaustion markers predict reversals? So far the markers show no clear pattern — they stay research variables.",
+    add(t("ins.markT"), t("ins.markS"),
       bucketChart(buckets.exhaustion_markers, ["0", "1-2", "3+"]),
-      s2.pts.length > 1 ? scatterChart(s2.pts, { xLabel: "Exhaustion markers (count)" }) : "",
+      s2.pts.length > 1 ? scatterChart(s2.pts, { xLabel: t("ins.markX") }) : "",
       s2.missing);
-    add("EMA alignment vs outcome",
-      "Signals above EMA20 > EMA50 > EMA500 versus the rest.",
+    add(t("ins.emaT"), t("ins.emaS"),
       bucketChart(buckets.ema_aligned, ["aligned", "not_aligned"]),
       "", 0);
-    add("BTC market regime vs outcome",
-      "How signals perform when BTC is trending up, ranging, or trending down.",
+    add(t("ins.regT"), t("ins.regS"),
       bucketChart(buckets.btc_regime, ["TRENDING_UP", "RANGING", "TRENDING_DOWN"]),
       "", 0);
     var s5 = scatterPoints(function (s) {
       var m = s.orderflow && s.orderflow.metrics;
       return m ? m.oi_chg_24h_pct : null;
     }, false);
-    add("Open Interest change vs outcome",
-      "Does rising open interest before the signal relate to momentum continuation?",
+    add(t("ins.oiT"), t("ins.oiS"),
       bucketChart(buckets.oi_chg_24h_pct, ["falling_-10%+", "flat", "rising_10%+"]),
-      s5.pts.length > 1 ? scatterChart(s5.pts, { xLabel: "OI change 24h (%)" }) : "",
+      s5.pts.length > 1 ? scatterChart(s5.pts, { xLabel: t("ins.oiX") }) : "",
       s5.missing);
     var s6 = scatterPoints(function (s) {
       var m = s.orderflow && s.orderflow.metrics;
       return m ? m.imbalance : null;
     }, false);
-    add("Order flow imbalance vs outcome",
-      "Taker buy/sell imbalance at the signal bar versus the +30m result.",
+    add(t("ins.imbT"), t("ins.imbS"),
       bucketChart(buckets.orderflow_imbalance,
         ["sell ≤ −0.10", "balanced", "buy ≥ +0.10"]),
-      s6.pts.length > 1 ? scatterChart(s6.pts, { xLabel: "Imbalance (−1 sell … +1 buy)" }) : "",
+      s6.pts.length > 1 ? scatterChart(s6.pts, { xLabel: t("ins.imbX") }) : "",
       s6.missing);
     var s7 = scatterPoints(function (s) { return dec(s).spread_bps; }, false);
-    add("Spread vs outcome",
-      "Does a wider spread eat the net result after costs?",
+    add(t("ins.sprT"), t("ins.sprS"),
       bucketChart(buckets.spread_bps, ["tight_<2", "normal_2-10", "wide_10+"]),
-      s7.pts.length > 1 ? scatterChart(s7.pts, { xLabel: "Spread (bps)" }) : "",
+      s7.pts.length > 1 ? scatterChart(s7.pts, { xLabel: t("ins.sprX") }) : "",
       s7.missing);
     var s8 = scatterPoints(function (s) { return dec(s).breakout_margin_pct; }, false);
-    add("Breakout strength vs outcome",
-      "How far the close cleared the 20-bar high, versus the +30m result.",
+    add(t("ins.brkT"), t("ins.brkS"),
       bucketChart(buckets.breakout_strength,
         ["<0.5%", "0.5–2%", "2–5%", "5%+"]),
-      s8.pts.length > 1 ? scatterChart(s8.pts, { xLabel: "Breakout margin (%)" }) : "",
+      s8.pts.length > 1 ? scatterChart(s8.pts, { xLabel: t("ins.brkX") }) : "",
       s8.missing);
 
     $("insight-grid").innerHTML = insights.join("");
@@ -586,9 +1413,9 @@
   function renderLearning() {
     var L = DATA.learnings || {};
     var hz = L.horizons || {};
-    var rows = [["net30", "+30m net (after spread + fees)"],
-                ["r1h", "+1H (gross)"], ["r4h", "+4H (gross)"],
-                ["r8h", "+8H (gross)"]].map(function (r) {
+    var rows = [["net30", t("lr.hzNet30")],
+                ["r1h", t("lr.hz1h")], ["r4h", t("lr.hz4h")],
+                ["r8h", t("lr.hz8h")]].map(function (r) {
       var d = hz[r[0]] || {};
       var n = d.n_evaluated == null ? 0 : d.n_evaluated;
       var cell = function (v, dec) {
@@ -602,54 +1429,51 @@
         "</td></tr>";
     }).join("");
     $("learning-horizons").innerHTML =
-      '<table class="version-table"><thead><tr><th>Horizon</th><th>n</th>' +
-      "<th>Mean</th><th>Median</th><th>≥ +1%</th><th>≤ −1%</th></tr></thead><tbody>" +
+      '<table class="version-table"><thead><tr><th>' + t("lr.thHorizon") + "</th><th>" +
+      t("lr.thN") + "</th><th>" + t("lr.thMean") + "</th><th>" + t("lr.thMedian") +
+      "</th><th>" + t("lr.thGte") + "</th><th>" + t("lr.thLte") +
+      "</th></tr></thead><tbody>" +
       rows + "</tbody></table>" +
-      "<p class='panel-sub' style='margin-top:12px'>“Win rate” is only defined for +30m " +
-      "(tracker classification). Other horizons show descriptive shares — not win rates. " +
-      "Net is simulated only for +30m; longer horizons are gross returns.</p>";
+      "<p class='panel-sub' style='margin-top:12px'>" + t("lr.hzNote") + "</p>";
 
     var out = L.outliers || {};
     var mc = out.max_contributor || {};
     $("learning-outliers").innerHTML = out.mean_pct == null
-      ? '<p class="panel-sub" style="margin:0">Not enough evaluable outcomes yet (n&lt;5).</p>'
+      ? '<p class="panel-sub" style="margin:0">' + t("lr.notEnough") + "</p>"
       : '<ul class="missing-list">' +
-        "<li><span>Mean net (+30m)</span><span class='num'>" + fmtPct(out.mean_pct, 2) + "</span></li>" +
-        "<li><span>Median net (+30m)</span><span class='num'>" + fmtPct(out.median_pct, 2) + "</span></li>" +
-        "<li><span>Trimmed mean (drop top/bottom 10%)</span><span class='num'>" + fmtPct(out.trimmed_mean_10pct_pct, 2) + "</span></li>" +
-        "<li><span>Mean without the largest outcome</span><span class='num'>" + fmtPct(out.mean_excluding_max_pct, 2) + "</span></li>" +
-        "<li><span>Largest single outcome</span><span class='num'>" + esc(mc.symbol || "—") + " " + fmtPct(mc.net_pct, 2) +
-          " (" + fmtNum(mc.share_of_sum_pct, 0) + "% of the total sum)</span></li>" +
-        "<li><span>Range (min … max)</span><span class='num'>" + fmtPct(out.min_pct, 2) + " … " + fmtPct(out.max_pct, 2) + "</span></li>" +
+        "<li><span>" + t("lr.outMean") + "</span><span class='num'>" + fmtPct(out.mean_pct, 2) + "</span></li>" +
+        "<li><span>" + t("lr.outMedian") + "</span><span class='num'>" + fmtPct(out.median_pct, 2) + "</span></li>" +
+        "<li><span>" + t("lr.outTrimmed") + "</span><span class='num'>" + fmtPct(out.trimmed_mean_10pct_pct, 2) + "</span></li>" +
+        "<li><span>" + t("lr.outExMax") + "</span><span class='num'>" + fmtPct(out.mean_excluding_max_pct, 2) + "</span></li>" +
+        "<li><span>" + t("lr.outLargest") + "</span><span class='num'>" + esc(mc.symbol || "—") + " " + fmtPct(mc.net_pct, 2) +
+          t("lr.outLargestOf", { p: fmtNum(mc.share_of_sum_pct, 0) }) + "</span></li>" +
+        "<li><span>" + t("lr.outRange") + "</span><span class='num'>" + fmtPct(out.min_pct, 2) + " … " + fmtPct(out.max_pct, 2) + "</span></li>" +
         "</ul>" +
-        "<p class='panel-sub' style='margin-top:12px'>With n=" + out.n +
-        ", one big outcome can dominate the average. Compare the mean with the median and " +
-        "the trimmed mean before reading anything into it.</p>";
+        "<p class='panel-sub' style='margin-top:12px'>" + t("lr.outNote", { n: out.n }) + "</p>";
 
     var pm = L.per_marker || {};
-    var labels = { rsi_overbought: "RSI overbought (≥80)",
-      wick_rejection: "Upper wick rejection (≥40%)",
-      overextended_atr: "Overextended vs ATR (≥2×)",
-      parabolic_3bar: "Parabolic 3-bar (+15%)",
-      atr_spike: "ATR spike (≥1.5× median)",
-      volume_divergence: "Volume divergence" };
+    var labels = { rsi_overbought: t("lr.mkRsi"),
+      wick_rejection: t("lr.mkWick"),
+      overextended_atr: t("lr.mkOver"),
+      parabolic_3bar: t("lr.mkPara"),
+      atr_spike: t("lr.mkAtr"),
+      volume_divergence: t("lr.mkVol") };
     var mrows = Object.keys(labels).map(function (code) {
       var d = pm[code] || {};
       var fmt = function (s) {
-        return s == null ? "n&lt;5 — no stats"
-          : "n=" + s.n + " · win " + fmtNum(s.win_rate_pct, 0) + "% · mean " +
-            fmtPct(s.mean_net30_pct, 2);
+        return s == null ? t("bucket.noStats")
+          : t("lr.mkStats", { n: s.n, w: fmtNum(s.win_rate_pct, 0),
+                              m: fmtPct(s.mean_net30_pct, 2) });
       };
       return "<tr><td>" + labels[code] + "</td><td>" + fmt(d.with) +
         "</td><td>" + fmt(d.without) + "</td></tr>";
     }).join("");
     $("learning-markers").innerHTML =
-      '<table class="version-table"><thead><tr><th>Exhaustion marker</th>' +
-      "<th>With marker</th><th>Without marker</th></tr></thead><tbody>" +
+      '<table class="version-table"><thead><tr><th>' + t("lr.mkThMarker") +
+      "</th><th>" + t("lr.mkThWith") + "</th><th>" + t("lr.mkThWithout") +
+      "</th></tr></thead><tbody>" +
       mrows + "</tbody></table>" +
-      "<p class='panel-sub' style='margin-top:12px'>Markers stay research variables. " +
-      "A gap between “with” and “without” at these sample sizes is an observation, " +
-      "not evidence that the marker predicts anything.</p>";
+      "<p class='panel-sub' style='margin-top:12px'>" + t("lr.mkNote") + "</p>";
 
     /* --- Phase 4.1: paired horizons (same cohort, gross) --- */
     var ph = L.paired_horizons || {};
@@ -668,37 +1492,37 @@
     }).join("");
     var traj = (ph.trajectories || {}).counts || {};
     var tdefs = (ph.trajectories || {}).definitions || {};
-    var trows = [["continued", "Continued"], ["reversed", "Reversed"],
-                 ["full_reversal", "— of which: full reversal"],
-                 ["late_bloom", "Late bloom"],
-                 ["never_up", "Never up"]].map(function (r) {
+    var tdefsEn = (ph.trajectories || {}).definitions_en || {};
+    var trows = [["continued", t("lr.trajContinued")],
+                 ["reversed", t("lr.trajReversed")],
+                 ["full_reversal", t("lr.trajFull")],
+                 ["late_bloom", t("lr.trajLate")],
+                 ["never_up", t("lr.trajNever")]].map(function (r) {
+      var def = bi(tdefs[r[0]], tdefsEn[r[0]]);
       return "<li><span>" + r[1] +
-        (tdefs[r[0]] ? " <span style='color:var(--text-3)'>(" +
-          esc(tdefs[r[0]]) + ")</span>" : "") +
+        (def ? " <span style='color:var(--text-3)'>(" +
+          esc(def) + ")</span>" : "") +
         "</span><span class='num'>" + (traj[r[0]] == null ? "—" : traj[r[0]]) +
         "</span></li>";
     }).join("");
     var excl = ph.excluded || {};
     $("learning-paired").innerHTML = ph.n_paired == null || ph.n_paired < 5
-      ? '<p class="panel-sub" style="margin:0">Not enough signals with all four horizons evaluated yet (n&lt;5).</p>'
-      : "<p class='panel-sub' style='margin:0 0 12px'>Paired cohort: <b>" +
-        ph.n_paired + "</b> of " + ph.n_total + " signals, across " +
-        (ph.distinct_closes == null ? "?" : ph.distinct_closes) +
-        " distinct 4H closes. Excluded: " +
-        "no +30m " + (excl.missing_h30m || 0) + ", no +1H " +
-        (excl.missing_h1 || 0) + ", no +4H " + (excl.missing_h4 || 0) +
-        ", no +8H " + (excl.missing_h8 || 0) +
-        " (a signal can miss more than one horizon).</p>" +
-        '<table class="version-table"><thead><tr><th>Horizon</th><th>Mean</th>' +
-        "<th>Median</th><th>≥ +1%</th><th>Mean MFE</th><th>Mean MAE</th>" +
-        "</tr></thead><tbody>" + prows + "</tbody></table>" +
-        "<p class='panel-sub' style='margin-top:12px'>MFE/MAE are the average best/worst " +
-        "excursions within each horizon (+4H/+8H from 4H-bar extremes, not ticks). " +
-        "Gross returns throughout — compare with the +30m net table above, not against it.</p>" +
-        "<h4 style='margin:16px 0 4px'>Momentum trajectories</h4>" +
+      ? '<p class="panel-sub" style="margin:0">' + t("lr.pairedNotEnough") + "</p>"
+      : "<p class='panel-sub' style='margin:0 0 12px'>" +
+        t("lr.pairedIntro", { n: ph.n_paired, total: ph.n_total,
+          closes: ph.distinct_closes == null ? "?" : ph.distinct_closes,
+          m30: excl.missing_h30m || 0, m1: excl.missing_h1 || 0,
+          m4: excl.missing_h4 || 0, m8: excl.missing_h8 || 0 }) + "</p>" +
+        '<table class="version-table"><thead><tr><th>' + t("lr.thHorizon") +
+        "</th><th>" + t("lr.thMean") + "</th><th>" + t("lr.thMedian") +
+        "</th><th>" + t("lr.thGte") + "</th><th>" + t("lr.thMfe") +
+        "</th><th>" + t("lr.thMae") + "</th></tr></thead><tbody>" +
+        prows + "</tbody></table>" +
+        "<p class='panel-sub' style='margin-top:12px'>" + t("lr.pairedNote") + "</p>" +
+        "<h4 style='margin:16px 0 4px'>" + t("lr.trajTitle") + "</h4>" +
         '<ul class="missing-list">' + trows + "</ul>" +
         (ph.sample_note ? "<p class='panel-sub' style='margin-top:12px'>" +
-          esc(ph.sample_note) + "</p>" : "");
+          esc(bi(ph.sample_note, ph.sample_note_en)) + "</p>" : "");
 
     /* --- Phase 4.1: distribution, contributions, mean vs win --- */
     var dist = out.distribution_net30 || {};
@@ -725,72 +1549,75 @@
     }).join("");
     var mvw = out.mean_vs_win || {};
     $("learning-distribution").innerHTML = out.n == null || out.n < 5
-      ? '<p class="panel-sub" style="margin:0">Not enough evaluable outcomes yet (n&lt;5).</p>'
-      : "<h4 style='margin:0 0 4px'>Distribution of +30m net outcomes (n=" +
-        out.n + ")</h4>" +
+      ? '<p class="panel-sub" style="margin:0">' + t("lr.notEnough") + "</p>"
+      : "<h4 style='margin:0 0 4px'>" + t("lr.distTitle", { n: out.n }) + "</h4>" +
         '<ul class="missing-list">' + drows + "</ul>" +
-        "<h4 style='margin:16px 0 4px'>Mean vs win rate</h4>" +
+        "<h4 style='margin:16px 0 4px'>" + t("lr.mvwTitle") + "</h4>" +
         '<ul class="missing-list">' +
-        "<li><span>Win rate (+30m)</span><span class='num'>" +
+        "<li><span>" + t("lr.mvwWin") + "</span><span class='num'>" +
         fmtNum(mvw.win_rate_pct, 1) + "%</span></li>" +
-        "<li><span>Mean net</span><span class='num'>" +
+        "<li><span>" + t("lr.mvwMean") + "</span><span class='num'>" +
         fmtPct(mvw.mean_net_pct, 2) + "</span></li>" +
-        "<li><span>Median net</span><span class='num'>" +
+        "<li><span>" + t("lr.mvwMedian") + "</span><span class='num'>" +
         fmtPct(mvw.median_net_pct, 2) + "</span></li></ul>" +
         (mvw.note ? "<p class='panel-sub' style='margin-top:8px'>" +
-          esc(mvw.note) + "</p>" : "") +
-        "<h4 style='margin:16px 0 4px'>Contribution of every signal to the total</h4>" +
-        '<table class="version-table"><thead><tr><th>Signal</th><th></th>' +
-        "<th>Net</th><th>Share of sum</th></tr></thead><tbody>" +
+          esc(bi(mvw.note, mvw.note_en)) + "</p>" : "") +
+        "<h4 style='margin:16px 0 4px'>" + t("lr.contribTitle") + "</h4>" +
+        '<table class="version-table"><thead><tr><th>' + t("lr.thSignal") +
+        "</th><th></th><th>" + t("lr.thNet") + "</th><th>" + t("lr.thShare") +
+        "</th></tr></thead><tbody>" +
         crows + "</tbody></table>" +
-        "<p class='panel-sub' style='margin-top:12px'>Shares above 100% mean one signal " +
-        "outweighs the entire net sum — the rest of the signals cancel each other out.</p>";
+        "<p class='panel-sub' style='margin-top:12px'>" + t("lr.contribNote") + "</p>";
 
     /* --- Phase 4.1: agent learning evaluation --- */
     var ae = L.agent_evaluation || {};
     var ags = ae.agents || {};
     var verdicts = {
-      association: ["Association observed", "var(--pos)"],
-      no_clear_association: ["No clear association", "var(--text-3)"],
-      consistent: ["Consistent with hypothesis", "var(--pos)"],
-      inconsistent: ["Against hypothesis", "var(--neg)"],
-      insufficient_data: ["Not enough data", "var(--warn)"],
-      no_data: ["No data yet", "var(--warn)"],
-      not_evaluable: ["Not evaluable", "var(--text-3)"]
+      association: [t("lr.verdAssociation"), "var(--pos)"],
+      no_clear_association: [t("lr.verdNoClear"), "var(--text-3)"],
+      consistent: [t("lr.verdConsistent"), "var(--pos)"],
+      inconsistent: [t("lr.verdAgainst"), "var(--neg)"],
+      insufficient_data: [t("lr.verdInsuff"), "var(--warn)"],
+      no_data: [t("lr.verdNoData"), "var(--warn)"],
+      not_evaluable: [t("lr.verdNotEval"), "var(--text-3)"]
     };
     var agOrder = ["breakout", "reversal", "orderflow", "regime",
                    "liquidity", "performance"];
+    var agLabels = { breakout: t("lr.agBreakout"),
+      reversal: t("lr.agReversal"), orderflow: t("lr.agOrderflow"),
+      regime: t("lr.agRegime"), liquidity: t("lr.agLiquidity"),
+      performance: t("lr.agPerformance") };
     var agHtml = agOrder.map(function (key) {
       var ag = ags[key];
       if (!ag) return "";
       var frows = (ag.findings || []).map(function (f) {
         var v = verdicts[f.verdict] || [f.verdict, "var(--text-3)"];
-        return "<tr><td>" + esc(f.observation) + "</td><td><span style='color:" +
-          v[1] + "'>" + v[0] + "</span></td><td>" + esc(f.detail || "") +
+        return "<tr><td>" + esc(bi(f.observation, f.observation_en)) + "</td><td><span style='color:" +
+          v[1] + "'>" + v[0] + "</span></td><td>" + esc(bi(f.detail, f.detail_en) || "") +
           "</td></tr>";
       }).join("");
-      return "<h4 style='margin:16px 0 4px'>" + esc(ag.label) + "</h4>" +
-        "<p class='panel-sub' style='margin:0 0 8px'>" + esc(ag.basis || "") +
+      return "<h4 style='margin:16px 0 4px'>" + esc(agLabels[key] || ag.label) + "</h4>" +
+        "<p class='panel-sub' style='margin:0 0 8px'>" + esc(bi(ag.basis, ag.basis_en) || "") +
         "</p>" +
-        '<table class="version-table"><thead><tr><th>Observation</th>' +
-        "<th>Verdict</th><th>Evidence</th></tr></thead><tbody>" +
+        '<table class="version-table"><thead><tr><th>' + t("lr.thObservation") +
+        "</th><th>" + t("lr.thVerdict") + "</th><th>" + t("lr.thEvidence") +
+        "</th></tr></thead><tbody>" +
         frows + "</tbody></table>";
     }).join("");
     var si = ae.sample_independence || {};
     $("learning-agents").innerHTML =
-      "<p class='panel-sub' style='margin:0 0 4px'>Evaluated at n=" +
-      (ae.as_of_n_evaluable_30m == null ? "?" : ae.as_of_n_evaluable_30m) +
-      " evaluable +30m outcomes. " + esc(ae.anti_lookahead || "") + "</p>" +
       "<p class='panel-sub' style='margin:0 0 4px'>" +
-      esc(ae.validation || "") + "</p>" +
+      t("lr.aeIntro", { n: ae.as_of_n_evaluable_30m == null ? "?" : ae.as_of_n_evaluable_30m }) +
+      esc(bi(ae.anti_lookahead, ae.anti_lookahead_en) || "") + "</p>" +
+      "<p class='panel-sub' style='margin:0 0 4px'>" +
+      esc(bi(ae.validation, ae.validation_en) || "") + "</p>" +
       (si.note == null ? "" :
-        "<p class='panel-sub' style='margin:0 0 12px'>" + esc(si.note) +
-        " The " + (si.n_evaluable == null ? "?" : si.n_evaluable) +
-        " evaluable signals come from " +
-        (si.distinct_closes_evaluable == null ? "?" : si.distinct_closes_evaluable) +
-        " distinct 4H closes; the " +
-        (si.n_paired == null ? "?" : si.n_paired) + " paired signals from " +
-        (si.distinct_closes_paired == null ? "?" : si.distinct_closes_paired) + ".</p>") +
+        "<p class='panel-sub' style='margin:0 0 12px'>" + esc(bi(si.note_id, si.note)) +
+        " " + t("lr.siSentence", {
+          ne: si.n_evaluable == null ? "?" : si.n_evaluable,
+          ce: si.distinct_closes_evaluable == null ? "?" : si.distinct_closes_evaluable,
+          np: si.n_paired == null ? "?" : si.n_paired,
+          cp: si.distinct_closes_paired == null ? "?" : si.distinct_closes_paired }) + "</p>") +
       agHtml;
 
     /* --- Phase 4.1: case examples (BULLA / IDOL) --- */
@@ -809,22 +1636,22 @@
       return c.symbol === "BULLAUSDT" && c.r8h_pct != null; });
     var idols = cases.filter(function (c) {
       return c.symbol === "IDOLUSDT" && c.r8h_pct != null; });
-    var caseNote = "Same rule set, opposite paths — that is why single " +
-      "examples never justify a strategy change.";
+    var caseNote = t("lr.caseNote");
     if (bullas.length && idols.length) {
       var bBest = bullas.reduce(function (a, b) {
         return a.r8h_pct > b.r8h_pct ? a : b; });
       var iWorst = idols.reduce(function (a, b) {
         return a.r8h_pct < b.r8h_pct ? a : b; });
-      caseNote = "BULLA's best +8H: " + fmtPct(bBest.r8h_pct, 2) +
-        "; IDOL's worst +8H: " + fmtPct(iWorst.r8h_pct, 2) + ". " + caseNote;
+      caseNote = t("lr.caseNote2", { b: fmtPct(bBest.r8h_pct, 2),
+                                     i: fmtPct(iWorst.r8h_pct, 2) }) + caseNote;
     }
     $("learning-cases").innerHTML = cases.length === 0
-      ? '<p class="panel-sub" style="margin:0">No BULLA/IDOL outcomes evaluated yet.</p>'
+      ? '<p class="panel-sub" style="margin:0">' + t("lr.casesEmpty") + "</p>"
       : '<div style="overflow-x:auto"><table class="version-table">' +
-        "<thead><tr><th>Signal</th><th>+30m net</th>" +
-        "<th>+1H</th><th>+4H</th><th>+8H</th><th>MFE / MAE (+30m)</th>" +
-        "</tr></thead><tbody>" + caseRows + "</tbody></table></div>" +
+        "<thead><tr><th>" + t("lr.thSignal") + "</th><th>" + t("lr.th30net") +
+        "</th><th>" + t("lr.th1h") + "</th><th>" + t("lr.th4h") +
+        "</th><th>" + t("lr.th8h") + "</th><th>" + t("lr.thMfeMae") +
+        "</th></tr></thead><tbody>" + caseRows + "</tbody></table></div>" +
         "<p class='panel-sub' style='margin-top:12px'>" + caseNote + "</p>";
 
     /* --- Phase 4.2: learning summary (auto-generated) --- */
@@ -834,35 +1661,39 @@
         return '<p class="panel-sub" style="margin:0 0 8px">' + empty + "</p>";
       }
       return "<ul class='missing-list'>" + items.map(function (it) {
-        return "<li><span>" + esc(it.text) + "</span></li>";
+        return "<li><span>" + esc(bi(it.text_id, it.text)) + "</span></li>";
       }).join("") + "</ul>";
     };
     var topics = sum.topics || {};
+    var topicStatus = { observed: t("lr.stObserved"),
+      mixed: t("lr.stMixed"), insufficient: t("lr.stInsuff"),
+      no_data: t("lr.stNoData") };
     var topicRows = Object.keys(topics).map(function (k) {
-      var t = topics[k] || {};
-      var badge = t.status === "observed" ? "var(--pos)"
-        : t.status === "mixed" ? "var(--warn)" : "var(--text-3)";
-      return "<tr><td>" + esc(t.label || k) + "</td><td>" +
-        '<span style="color:' + badge + '">' + esc(t.status || "—") +
-        "</span></td><td>" + esc(t.detail || "—") + "</td></tr>";
+      var tpc = topics[k] || {};
+      var badge = tpc.status === "observed" ? "var(--pos)"
+        : tpc.status === "mixed" ? "var(--warn)" : "var(--text-3)";
+      return "<tr><td>" + esc(bi(tpc.label_id, tpc.label) || k) + "</td><td>" +
+        '<span style="color:' + badge + '">' +
+        esc(topicStatus[tpc.status] || tpc.status || "—") +
+        "</span></td><td>" + esc(bi(tpc.detail_id, tpc.detail) || "—") + "</td></tr>";
     }).join("");
     $("learning-summary").innerHTML =
-      "<h4 style='margin:0 0 8px'>Monitored topics</h4>" +
+      "<h4 style='margin:0 0 8px'>" + t("lr.sumTopics") + "</h4>" +
       '<div style="overflow-x:auto"><table class="version-table">' +
-      "<thead><tr><th>Topic</th><th>Status</th><th>Current read</th></tr></thead><tbody>" +
+      "<thead><tr><th>" + t("lr.thTopic") + "</th><th>" + t("lr.thStatus") +
+      "</th><th>" + t("lr.thRead") + "</th></tr></thead><tbody>" +
       topicRows + "</tbody></table></div>" +
-      "<h4 style='margin:16px 0 8px'>What holds up</h4>" +
-      sumList(sum.worked, "Nothing has met the bar yet — no finding is presented as working.") +
-      "<h4 style='margin:16px 0 8px'>What failed to hold</h4>" +
-      sumList(sum.failed, "No tested pattern has failed yet.") +
-      "<h4 style='margin:16px 0 8px'>What changed since the previous evaluation</h4>" +
-      sumList(sum.changed, "No material change recorded.") +
-      "<h4 style='margin:16px 0 8px'>Not yet concludable</h4>" +
-      sumList(sum.inconclusive, "Everything evaluated has a verdict.") +
-      "<p class='panel-sub' style='margin-top:12px'>Based on " +
-      ((sum.based_on || {}).n_evaluable_30m || 0) + " evaluable +30m outcomes and " +
-      ((sum.based_on || {}).n_paired || 0) + " paired-cohort signals. " +
-      "“What holds up” lists exploratory associations only — nothing here is a predictive claim.</p>";
+      "<h4 style='margin:16px 0 8px'>" + t("lr.sumWorked") + "</h4>" +
+      sumList(sum.worked, t("lr.sumWorkedEmpty")) +
+      "<h4 style='margin:16px 0 8px'>" + t("lr.sumFailed") + "</h4>" +
+      sumList(sum.failed, t("lr.sumFailedEmpty")) +
+      "<h4 style='margin:16px 0 8px'>" + t("lr.sumChanged") + "</h4>" +
+      sumList(sum.changed, t("lr.sumChangedEmpty")) +
+      "<h4 style='margin:16px 0 8px'>" + t("lr.sumInconcl") + "</h4>" +
+      sumList(sum.inconclusive, t("lr.sumInconclEmpty")) +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+      t("lr.sumBased", { e: (sum.based_on || {}).n_evaluable_30m || 0,
+                         p: (sum.based_on || {}).n_paired || 0 }) + "</p>";
 
     /* --- Phase 4.2: research checkpoints --- */
     var cps = L.checkpoints || {};
@@ -870,47 +1701,54 @@
     var nxt = cps.next_threshold;
     var pct = nxt == null ? 100 : Math.min(100, Math.round(cur / nxt * 100));
     var reachedRows = (cps.reached || []).map(function (r) {
-      return "<li><span>Checkpoint " + r.threshold + " signals</span><span class='num'>" +
+      return "<li><span>" + t("lr.cpReached", { n: r.threshold }) + "</span><span class='num'>" +
         fmtDate(r.reached_ts) + "</span></li>";
     }).join("");
     var pairedCloses = (L.clusters || {}).n_paired_closes;
     $("learning-checkpoints").innerHTML =
       "<ul class='missing-list'>" +
-      "<li><span>Complete outcomes (paired cohort)</span><span class='num'>" + cur + "</span></li>" +
-      "<li><span>Distinct 4H closes behind them</span><span class='num'>" +
+      "<li><span>" + t("lr.cpComplete") + "</span><span class='num'>" + cur + "</span></li>" +
+      "<li><span>" + t("lr.cpCloses") + "</span><span class='num'>" +
         (pairedCloses == null ? "—" : pairedCloses) + "</span></li>" +
-      "<li><span>Next checkpoint</span><span class='num'>" +
-        (nxt == null ? "all reached" : nxt + " signals (" + pct + "%)") + "</span></li>" +
+      "<li><span>" + t("lr.cpNext") + "</span><span class='num'>" +
+        (nxt == null ? t("lr.cpAllReached") : t("lr.cpNextVal", { n: nxt, p: pct })) + "</span></li>" +
       "</ul>" +
       '<div class="cov-bar" style="margin:12px 0"><i style="width:' + pct + '%"></i></div>' +
       (reachedRows === ""
-        ? '<p class="panel-sub" style="margin:0">No checkpoint reached yet — the first is at 40 complete outcomes.</p>'
+        ? '<p class="panel-sub" style="margin:0">' + t("lr.cpNone") + "</p>"
         : "<ul class='missing-list'>" + reachedRows + "</ul>");
 
     /* --- Phase 4.2: hypothesis registry --- */
     var reg = L.hypothesis_registry || {};
     var entries = reg.entries || [];
     var split = reg.split;
+    var regStatus = { awaiting_validation: t("lr.regAwaiting"),
+      validated: t("lr.regValidated"), rejected: t("lr.regRejected") };
+    var regVerdict = { holds: t("lr.regHolds"),
+      does_not_hold: t("lr.regNotHolds") };
     var regRows = entries.map(function (e) {
       var v = e.validation || {};
       var st = e.status === "validated" ? "var(--pos)"
         : e.status === "rejected" ? "var(--neg)" : "var(--warn)";
-      return "<tr><td>" + esc(e.id) + "</td><td>" + esc(e.text || "") +
-        "</td><td><span style='color:" + st + "'>" + esc(e.status) +
-        "</span></td><td>" + (v.verdict == null ? "—" : esc(v.verdict) +
-        " (n " + v.n_best + " vs " + v.n_worst + ")") + "</td></tr>";
+      return "<tr><td>" + esc(e.id) + "</td><td>" + esc(bi(e.text, e.text_en) || "") +
+        "</td><td><span style='color:" + st + "'>" + esc(regStatus[e.status] || e.status) +
+        "</span></td><td>" + (v.verdict == null ? "—" : esc(regVerdict[v.verdict] || v.verdict) +
+        t("lr.regValN", { a: v.n_best, b: v.n_worst })) + "</td></tr>";
     }).join("");
     $("learning-registry").innerHTML =
       (split == null
         ? '<p class="panel-sub" style="margin:0 0 12px">' +
-          esc(reg.split_pending_note || "Exploration/validation split not frozen yet.") + "</p>"
-        : '<p class="panel-sub" style="margin:0 0 12px">Split frozen ' + fmtDate(split.frozen_ts) +
-          " — first " + split.discovery_n + " evaluable signals are the discovery set.</p>") +
+          esc(bi(reg.split_pending_note_id, reg.split_pending_note) ||
+              t("lr.regPending")) + "</p>"
+        : '<p class="panel-sub" style="margin:0 0 12px">' +
+          t("lr.regSplit", { d: fmtDate(split.frozen_ts),
+                             n: split.discovery_n }) + "</p>") +
       (entries.length === 0
-        ? '<p class="panel-sub" style="margin:0">No hypothesis has passed the sample bar yet (n≥10 both buckets + ≥2pp gap). When one does, it is recorded here frozen, before any new data tests it.</p>'
+        ? '<p class="panel-sub" style="margin:0">' + t("lr.regEmpty") + "</p>"
         : '<div style="overflow-x:auto"><table class="version-table">' +
-          "<thead><tr><th>ID</th><th>Hypothesis (frozen at registration)</th>" +
-          "<th>Status</th><th>Validation on newer data</th></tr></thead><tbody>" +
+          "<thead><tr><th>" + t("lr.thId") + "</th><th>" + t("lr.thHyp") +
+          "</th><th>" + t("lr.thStatus") + "</th><th>" + t("lr.thVal") +
+          "</th></tr></thead><tbody>" +
           regRows + "</tbody></table></div>");
 
     /* --- OLV: close clusters (signals grouped by 4H close) --- */
@@ -927,42 +1765,45 @@
     }).join("");
     $("learning-clusters").innerHTML =
       "<ul class='missing-list'>" +
-      "<li><span>Signals evaluated (+30m net)</span><span class='num'>" +
+      "<li><span>" + t("lr.clEval") + "</span><span class='num'>" +
         (cl.n_evaluable == null ? "—" : cl.n_evaluable) + "</span></li>" +
-      "<li><span>Unique 4H closes (all signals)</span><span class='num'>" +
+      "<li><span>" + t("lr.clClosesAll") + "</span><span class='num'>" +
         (cl.n_unique_closes == null ? "—" : cl.n_unique_closes) + "</span></li>" +
-      "<li><span>Unique 4H closes (evaluable)</span><span class='num'>" +
+      "<li><span>" + t("lr.clClosesEval") + "</span><span class='num'>" +
         (cl.n_evaluable_closes == null ? "—" : cl.n_evaluable_closes) + "</span></li>" +
-      "<li><span>Largest single close</span><span class='num'>" +
-        (conc.largest_close_n == null ? "—" : conc.largest_close_n + " signals (" +
-          fmtNum(conc.largest_close_share_pct, 1) + "%)") + "</span></li>" +
-      "<li><span>Top 3 closes combined</span><span class='num'>" +
-        (conc.top3_close_share_pct == null ? "—" : fmtNum(conc.top3_close_share_pct, 1) + "% of all signals") + "</span></li>" +
-      "<li><span>1H context reconstructed</span><span class='num'>" +
-        nRecon + "/" + DATA.signals.length +
-        " signals (HISTORICAL RECONSTRUCTION)</span></li>" +
+      "<li><span>" + t("lr.clLargest") + "</span><span class='num'>" +
+        (conc.largest_close_n == null ? "—" : t("lr.clLargestVal", {
+          n: conc.largest_close_n,
+          p: fmtNum(conc.largest_close_share_pct, 1) })) + "</span></li>" +
+      "<li><span>" + t("lr.clTop3") + "</span><span class='num'>" +
+        (conc.top3_close_share_pct == null ? "—" : t("lr.clTop3Val", {
+          p: fmtNum(conc.top3_close_share_pct, 1) })) + "</span></li>" +
+      "<li><span>" + t("lr.clRecon") + "</span><span class='num'>" +
+        t("lr.clReconVal", { n: nRecon, total: DATA.signals.length }) +
+        "</span></li>" +
       "</ul>" +
       '<div style="overflow-x:auto;margin-top:12px"><table class="version-table">' +
-      "<thead><tr><th>4H close (WIB)</th><th>Signals</th><th>Evaluable</th>" +
-      "<th>Wins</th><th>Mean net +30m</th><th>Mean gross +30m</th></tr></thead><tbody>" +
+      "<thead><tr><th>" + t("lr.thCloseWib") + "</th><th>" + t("lr.thSignals") +
+      "</th><th>" + t("lr.thEvaluable") + "</th><th>" + t("lr.thWins") +
+      "</th><th>" + t("lr.thMeanNet") + "</th><th>" + t("lr.thMeanGross") +
+      "</th></tr></thead><tbody>" +
       clRows + "</tbody></table></div>" +
-      "<p class='panel-sub' style='margin-top:12px'>" + esc(cl.note || "") +
-      " The exploration/validation split keeps whole closes together, so no close " +
-      "is ever split between the two sets.</p>";
+      "<p class='panel-sub' style='margin-top:12px'>" + esc(bi(cl.note_id, cl.note) || "") +
+      t("lr.clSplitNote") + "</p>";
   }
 
   /* ---------------------------------------------------------- timeline */
   function renderTimeline() {
     $("milestones").innerHTML = (DATA.timeline || []).map(function (m) {
       return "<li><span class='t-date'>" + esc(m.date) + "</span><h4>" +
-        esc(m.title) + "</h4><p>" + esc(m.text) + "</p></li>";
+        esc(bi(m.title_id, m.title)) + "</h4><p>" + esc(bi(m.text_id, m.text)) + "</p></li>";
     }).join("");
 
     var versions = DATA.versions || [];
     var rows = versions.map(function (v) {
       if (v.n_records == null) {
         return "<tr><td>" + esc(v.version) + "</td><td colspan='4' style='font-family:var(--font-sans)'>" +
-          esc(v.note || "No archive available.") + "</td></tr>";
+          esc(v.note || t("tl.noArchive")) + "</td></tr>";
       }
       return "<tr><td>v" + esc(v.version) + "</td><td>" + v.n_records +
         "</td><td>" + v.oi_coverage + "/" + v.n_records +
@@ -970,46 +1811,35 @@
         "</td><td>" + v.bands_coverage + "/" + v.n_records + "</td></tr>";
     }).join("");
     $("version-compare").innerHTML =
-      '<table class="version-table"><thead><tr><th>Version</th><th>Records</th>' +
-      "<th>OI</th><th>Funding</th><th>Depth bands</th></tr></thead><tbody>" +
+      '<table class="version-table"><thead><tr><th>' + t("tl.thVersion") +
+      "</th><th>" + t("tl.thRecords") + "</th><th>" + t("tl.thOi") +
+      "</th><th>" + t("tl.thFunding") + "</th><th>" + t("tl.thDepth") +
+      "</th></tr></thead><tbody>" +
       rows + "</tbody></table>" +
-      "<p class='panel-sub' style='margin-top:12px'>Coverage counts grow as archive files publish — " +
-      "the same analysis record gains OI the next day and funding the next month.</p>";
+      "<p class='panel-sub' style='margin-top:12px'>" + t("tl.verNote") + "</p>";
 
     var recos = [];
     var dq = DATA.data_quality || {};
     var prof = dq.missing_data_profile || {};
     var nEval = DATA.overview.n_evaluable_30m || 0;
     if ((prof.funding_rate || {}).missing === (prof.funding_rate || {}).n) {
-      recos.push("<strong>Funding rate arrives in December.</strong> The monthly archive file " +
-        "will fill the funding bucket automatically — no action needed, just patience.");
+      recos.push(t("tl.recoFunding"));
     }
     if ((prof.open_interest || {}).missing > 0) {
-      recos.push("<strong>Open Interest coverage is still filling in</strong> (" +
-        ((prof.open_interest || {}).missing || 0) + " signals missing). Daily archive files " +
-        "publish a day late; the pipeline retries automatically.");
+      recos.push(t("tl.recoOi", { m: (prof.open_interest || {}).missing || 0 }));
     }
     var oc = DATA.overview.outcome_completeness || {};
     if ((oc.h1 || {}).completeness_pct != null && oc.h1.completeness_pct < 100) {
-      recos.push("<strong>The +1H horizon is still filling in</strong> (" +
-        fmtNum(oc.h1.completeness_pct, 0) + "% complete). Evaluated horizons are now sticky, " +
-        "and the daily backfill recovers the rest from the official Binance archive as each " +
-        "day's file publishes — backfilled outcomes are labeled as such.");
+      recos.push(t("tl.recoH1", { p: fmtNum(oc.h1.completeness_pct, 0) }));
     }
     if ((DATA.overview.hypotheses || []).length === 0) {
-      recos.push("<strong>Keep accumulating outcomes.</strong> With n=" + nEval +
-        " evaluable signals, no hypothesis has passed the bar (n≥10 both buckets + ≥2pp gap). " +
-        "The system is working as designed — it refuses to invent patterns from small samples.");
+      recos.push(t("tl.recoHyp", { n: nEval }));
     }
     var regimes = DATA.overview.regime_distribution || {};
     if (!regimes.TRENDING_UP) {
-      recos.push("<strong>No signal has fired in a BTC uptrend yet.</strong> The regime " +
-        "comparison is one-sided until the market turns — treat the TRENDING_DOWN vs RANGING " +
-        "contrast as provisional.");
+      recos.push(t("tl.recoTrend"));
     }
-    recos.push("<strong>Reversal markers stay research variables.</strong> Early results show " +
-      "no clear predictive pattern; changing or dropping markers on " + nEval +
-      " outcomes would be overfitting.");
+    recos.push(t("tl.recoMarkers", { n: nEval }));
     $("recommendations").innerHTML = recos.map(function (r) {
       return "<li>" + r + "</li>";
     }).join("");
@@ -1061,7 +1891,7 @@
       var cmp = typeof va === "string" ? va.localeCompare(vb) : va - vb;
       return cmp * EXPLORER_SORT.dir;
     });
-    $("explorer-count").textContent = rows.length + " of " + DATA.signals.length + " signals";
+    $("explorer-count").textContent = t("explorer.count", { n: rows.length, total: DATA.signals.length });
     $("explorer-empty").hidden = rows.length > 0;
     $("explorer-body").innerHTML = rows.map(function (s) {
       var d = (s.snapshot && s.snapshot.decisions) || {};
@@ -1160,15 +1990,15 @@
     function refresh() {
       var off = reduced || root.classList.contains("motion-off");
       btn.querySelector(".motion-text").textContent =
-        off ? "MOTION OFF" : "MOTION ON";
+        off ? t("motion.off") : t("motion.on");
       btn.querySelector(".motion-icon").textContent = off ? "⏸" : "✳";
       btn.setAttribute("aria-pressed", String(off));
       btn.setAttribute("aria-label",
-        off ? "Turn visual motion on" : "Turn visual motion off");
-      btn.title = reduced
-        ? "Reduced motion enabled in your device settings" : "";
+        off ? t("motion.ariaOn") : t("motion.ariaOff"));
+      btn.title = reduced ? t("motion.reduced") : "";
       btn.disabled = reduced;
     }
+    refreshMotionToggle = refresh;
     btn.addEventListener("click", function () {
       var off = !root.classList.contains("motion-off");
       root.classList.toggle("motion-off", off);
@@ -1205,17 +2035,10 @@
       return;
     }
     SELECTED_ID = data.signals[data.signals.length - 1].signal_id;
-    renderOverview();
-    renderSignalList("");
-    renderSignalDetail();
-    renderInsights();
-    renderLearning();
-    renderTimeline();
-    renderExplorer();
+    renderAll();
     $("loading").hidden = true;
     $("app").hidden = false;
     initRailSpy();
-    watchReveals();
   }
 
   function load() {
@@ -1232,6 +2055,14 @@
 
   document.addEventListener("DOMContentLoaded", function () {
     initMotionToggle();
+    renderStatic();
+    var langBox = document.getElementById("lang-switch");
+    if (langBox) {
+      langBox.addEventListener("click", function (e) {
+        var btn = e.target.closest("[data-lang]");
+        if (btn) setLang(btn.getAttribute("data-lang"));
+      });
+    }
     $("retry-load").addEventListener("click", load);
     $("signal-search").addEventListener("input", function () {
       renderSignalList(this.value);
