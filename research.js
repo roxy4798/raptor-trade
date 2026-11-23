@@ -673,7 +673,9 @@
     $("learning-paired").innerHTML = ph.n_paired == null || ph.n_paired < 5
       ? '<p class="panel-sub" style="margin:0">Not enough signals with all four horizons evaluated yet (n&lt;5).</p>'
       : "<p class='panel-sub' style='margin:0 0 12px'>Paired cohort: <b>" +
-        ph.n_paired + "</b> of " + ph.n_total + " signals. Excluded: " +
+        ph.n_paired + "</b> of " + ph.n_total + " signals, across " +
+        (ph.distinct_closes == null ? "?" : ph.distinct_closes) +
+        " distinct 4H closes. Excluded: " +
         "no +30m " + (excl.missing_h30m || 0) + ", no +1H " +
         (excl.missing_h1 || 0) + ", no +4H " + (excl.missing_h4 || 0) +
         ", no +8H " + (excl.missing_h8 || 0) +
@@ -765,12 +767,22 @@
         "<th>Verdict</th><th>Evidence</th></tr></thead><tbody>" +
         frows + "</tbody></table>";
     }).join("");
+    var si = ae.sample_independence || {};
     $("learning-agents").innerHTML =
       "<p class='panel-sub' style='margin:0 0 4px'>Evaluated at n=" +
       (ae.as_of_n_evaluable_30m == null ? "?" : ae.as_of_n_evaluable_30m) +
       " evaluable +30m outcomes. " + esc(ae.anti_lookahead || "") + "</p>" +
       "<p class='panel-sub' style='margin:0 0 4px'>" +
-      esc(ae.validation || "") + "</p>" + agHtml;
+      esc(ae.validation || "") + "</p>" +
+      (si.note == null ? "" :
+        "<p class='panel-sub' style='margin:0 0 12px'>" + esc(si.note) +
+        " The " + (si.n_evaluable == null ? "?" : si.n_evaluable) +
+        " evaluable signals come from " +
+        (si.distinct_closes_evaluable == null ? "?" : si.distinct_closes_evaluable) +
+        " distinct 4H closes; the " +
+        (si.n_paired == null ? "?" : si.n_paired) + " paired signals from " +
+        (si.distinct_closes_paired == null ? "?" : si.distinct_closes_paired) + ".</p>") +
+      agHtml;
 
     /* --- Phase 4.1: case examples (BULLA / IDOL) --- */
     var cases = out.case_examples || [];
