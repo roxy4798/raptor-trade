@@ -19,6 +19,7 @@
     <a href="#overview">Overview</a>
     <a href="#signals">Signals</a>
     <a href="#insights">Insights</a>
+    <a href="#learning">Learning</a>
     <a href="#timeline">Timeline</a>
     <a href="#explorer">Explorer</a>
     <a href="index.html" class="back-link">← Signals</a>
@@ -44,7 +45,7 @@
 
   <div id="app" hidden>
     <section class="hero">
-      <p class="eyebrow">AI RESEARCH INTELLIGENCE · PHASE 3</p>
+      <p class="eyebrow">AI RESEARCH INTELLIGENCE · PHASE 4</p>
       <h1>What the signals <span>teach us</span></h1>
       <p class="hero-sub">Six research agents observe every published 4H signal and learn from real outcomes. This page never filters, approves, or blocks a signal — publication is decided by the scanner alone.</p>
       <p class="hero-meta" id="hero-meta"></p>
@@ -107,6 +108,30 @@
         <p class="section-sub">Feature versus outcome, across every evaluable signal. Buckets follow the backend's sample rules (n&lt;5: no statistics). These are associations — never proof that a feature causes an outcome.</p>
       </div>
       <div class="insight-grid" id="insight-grid"></div>
+    </section>
+
+    <section id="learning" class="section">
+      <div class="section-head">
+        <h2>Learning Evaluations</h2>
+        <p class="section-sub">How results differ across horizons, how much single outcomes move the averages, and whether exhaustion markers relate to outcomes at all. Every number carries its sample size.</p>
+      </div>
+      <div class="panel-grid">
+        <div class="panel">
+          <h3>Outcome by horizon</h3>
+          <p class="panel-sub">The same signals, read at +30m, +1H, +4H, and +8H. Momentum that fades shows up here first.</p>
+          <div id="learning-horizons"></div>
+        </div>
+        <div class="panel">
+          <h3>Outlier influence on the average</h3>
+          <p class="panel-sub">Mean versus median versus trimmed mean — and what the single largest outcome contributes.</p>
+          <div id="learning-outliers"></div>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Reversal markers, one by one</h3>
+        <p class="panel-sub">Each exhaustion marker compared with and without it. Buckets with n&lt;5 show no statistics.</p>
+        <div id="learning-markers"></div>
+      </div>
     </section>
 
     <section id="timeline" class="section">

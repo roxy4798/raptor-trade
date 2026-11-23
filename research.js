@@ -361,11 +361,14 @@
     var cls = h.classification || "";
     var color = cls === "PUMP CONTINUED" ? "pos" :
       cls === "REVERSAL" ? "neg" : "";
+    var src = h.source === "vision-backfill"
+      ? " · backfilled from official Binance archive"
+      : (h.source === "local_1m" ? " · recorded live" : "");
     return '<div class="outcome-cell"><p class="lbl">' + label +
       '</p><p class="val ' + color + '">' + esc(net || "—") +
       '</p><p class="sub">' + esc(cls || "") +
       (h.mfe_pct != null ? " · MFE " + fmtPct(h.mfe_pct, 2) : "") +
-      (h.mae_pct != null ? " · MAE " + fmtPct(h.mae_pct, 2) : "") + "</p></div>";
+      (h.mae_pct != null ? " · MAE " + fmtPct(h.mae_pct, 2) : "") + esc(src) + "</p></div>";
   }
 
   function renderSignalDetail() {
@@ -549,7 +552,7 @@
     }, false);
     add("Order flow imbalance vs outcome",
       "Taker buy/sell imbalance at the signal bar versus the +30m result.",
-      bucketChart(DATA.dashboard_buckets && DATA.dashboard_buckets.orderflow_imbalance,
+      bucketChart(buckets.orderflow_imbalance,
         ["sell ≤ −0.10", "balanced", "buy ≥ +0.10"]),
       s6.pts.length > 1 ? scatterChart(s6.pts, { xLabel: "Imbalance (−1 sell … +1 buy)" }) : "",
       s6.missing);
@@ -562,12 +565,82 @@
     var s8 = scatterPoints(function (s) { return dec(s).breakout_margin_pct; }, false);
     add("Breakout strength vs outcome",
       "How far the close cleared the 20-bar high, versus the +30m result.",
-      bucketChart(DATA.dashboard_buckets && DATA.dashboard_buckets.breakout_strength,
+      bucketChart(buckets.breakout_strength,
         ["<0.5%", "0.5–2%", "2–5%", "5%+"]),
       s8.pts.length > 1 ? scatterChart(s8.pts, { xLabel: "Breakout margin (%)" }) : "",
       s8.missing);
 
     $("insight-grid").innerHTML = insights.join("");
+  }
+
+  /* ------------------------------------------------- learning (Phase 4) */
+  function renderLearning() {
+    var L = DATA.learnings || {};
+    var hz = L.horizons || {};
+    var rows = [["net30", "+30m net (after spread + fees)"],
+                ["r1h", "+1H (gross)"], ["r4h", "+4H (gross)"],
+                ["r8h", "+8H (gross)"]].map(function (r) {
+      var d = hz[r[0]] || {};
+      var n = d.n_evaluated == null ? 0 : d.n_evaluated;
+      var cell = function (v, dec) {
+        return v == null ? "—" : fmtPct(v, dec == null ? 2 : dec);
+      };
+      return "<tr><td>" + r[1] + "</td><td>" + n + "</td><td>" +
+        cell(d.mean_pct) + "</td><td>" + cell(d.median_pct) + "</td><td>" +
+        (d.pct_gte_1pct == null ? "—" : fmtNum(d.pct_gte_1pct, 0) + "%") +
+        "</td><td>" +
+        (d.pct_lte_neg_1pct == null ? "—" : fmtNum(d.pct_lte_neg_1pct, 0) + "%") +
+        "</td></tr>";
+    }).join("");
+    $("learning-horizons").innerHTML =
+      '<table class="version-table"><thead><tr><th>Horizon</th><th>n</th>' +
+      "<th>Mean</th><th>Median</th><th>≥ +1%</th><th>≤ −1%</th></tr></thead><tbody>" +
+      rows + "</tbody></table>" +
+      "<p class='panel-sub' style='margin-top:12px'>“Win rate” is only defined for +30m " +
+      "(tracker classification). Other horizons show descriptive shares — not win rates. " +
+      "Net is simulated only for +30m; longer horizons are gross returns.</p>";
+
+    var out = L.outliers || {};
+    var mc = out.max_contributor || {};
+    $("learning-outliers").innerHTML = out.mean_pct == null
+      ? '<p class="panel-sub" style="margin:0">Not enough evaluable outcomes yet (n&lt;5).</p>'
+      : '<ul class="missing-list">' +
+        "<li><span>Mean net (+30m)</span><span class='num'>" + fmtPct(out.mean_pct, 2) + "</span></li>" +
+        "<li><span>Median net (+30m)</span><span class='num'>" + fmtPct(out.median_pct, 2) + "</span></li>" +
+        "<li><span>Trimmed mean (drop top/bottom 10%)</span><span class='num'>" + fmtPct(out.trimmed_mean_10pct_pct, 2) + "</span></li>" +
+        "<li><span>Mean without the largest outcome</span><span class='num'>" + fmtPct(out.mean_excluding_max_pct, 2) + "</span></li>" +
+        "<li><span>Largest single outcome</span><span class='num'>" + esc(mc.symbol || "—") + " " + fmtPct(mc.net_pct, 2) +
+          " (" + fmtNum(mc.share_of_sum_pct, 0) + "% of the total sum)</span></li>" +
+        "<li><span>Range (min … max)</span><span class='num'>" + fmtPct(out.min_pct, 2) + " … " + fmtPct(out.max_pct, 2) + "</span></li>" +
+        "</ul>" +
+        "<p class='panel-sub' style='margin-top:12px'>With n=" + out.n +
+        ", one big outcome can dominate the average. Compare the mean with the median and " +
+        "the trimmed mean before reading anything into it.</p>";
+
+    var pm = L.per_marker || {};
+    var labels = { rsi_overbought: "RSI overbought (≥80)",
+      wick_rejection: "Upper wick rejection (≥40%)",
+      overextended_atr: "Overextended vs ATR (≥2×)",
+      parabolic_3bar: "Parabolic 3-bar (+15%)",
+      atr_spike: "ATR spike (≥1.5× median)",
+      volume_divergence: "Volume divergence" };
+    var mrows = Object.keys(labels).map(function (code) {
+      var d = pm[code] || {};
+      var fmt = function (s) {
+        return s == null ? "n&lt;5 — no stats"
+          : "n=" + s.n + " · win " + fmtNum(s.win_rate_pct, 0) + "% · mean " +
+            fmtPct(s.mean_net30_pct, 2);
+      };
+      return "<tr><td>" + labels[code] + "</td><td>" + fmt(d.with) +
+        "</td><td>" + fmt(d.without) + "</td></tr>";
+    }).join("");
+    $("learning-markers").innerHTML =
+      '<table class="version-table"><thead><tr><th>Exhaustion marker</th>' +
+      "<th>With marker</th><th>Without marker</th></tr></thead><tbody>" +
+      mrows + "</tbody></table>" +
+      "<p class='panel-sub' style='margin-top:12px'>Markers stay research variables. " +
+      "A gap between “with” and “without” at these sample sizes is an observation, " +
+      "not evidence that the marker predicts anything.</p>";
   }
 
   /* ---------------------------------------------------------- timeline */
@@ -609,10 +682,11 @@
         "publish a day late; the pipeline retries automatically.");
     }
     var oc = DATA.overview.outcome_completeness || {};
-    if ((oc.h1 || {}).completeness_pct != null && oc.h1.completeness_pct < 50) {
-      recos.push("<strong>The +1H horizon is mostly unavailable</strong> (" +
-        fmtNum(oc.h1.completeness_pct, 0) + "% complete) because 1m candles only keep 120 bars. " +
-        "Increasing 1m retention would fix this and the 15m/1h RSI gaps.");
+    if ((oc.h1 || {}).completeness_pct != null && oc.h1.completeness_pct < 100) {
+      recos.push("<strong>The +1H horizon is still filling in</strong> (" +
+        fmtNum(oc.h1.completeness_pct, 0) + "% complete). Evaluated horizons are now sticky, " +
+        "and the daily backfill recovers the rest from the official Binance archive as each " +
+        "day's file publishes — backfilled outcomes are labeled as such.");
     }
     if ((DATA.overview.hypotheses || []).length === 0) {
       recos.push("<strong>Keep accumulating outcomes.</strong> With n=" + nEval +
@@ -742,6 +816,7 @@
     renderSignalList("");
     renderSignalDetail();
     renderInsights();
+    renderLearning();
     renderTimeline();
     renderExplorer();
     $("loading").hidden = true;
