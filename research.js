@@ -400,6 +400,12 @@
       "</p></div>";
 
     var cards = "";
+    var rc = sig.reconstruction || null;
+    var rcNote = rc == null ? "" :
+      '<p class="notes">1H context is a HISTORICAL RECONSTRUCTION from the official Binance ' +
+      "1m archive (" + esc((rc.files || []).join(", ")) + ", method v" +
+      esc(rc.method_version || "?") + ") — it is NOT the original live snapshot and is " +
+      "used for exploratory research only, never as prospective validation evidence.</p>";
     cards += agentCard("1 · Breakout Intelligence", sig.breakout, [
       ["Body / range", br.body_pct == null ? null : fmtNum(br.body_pct, 0) + "% of range"],
       ["Upper wick", br.upper_wick_pct == null ? null : fmtNum(br.upper_wick_pct, 0) + "%"],
@@ -411,7 +417,9 @@
       ["ATR14", br.atr14_pct == null ? null : fmtNum(br.atr14_pct, 1) + "%"],
       ["Resistance gap", br.resistance_gap_pct == null ? null : fmtPct(br.resistance_gap_pct, 2)],
       ["Consecutive up bars", br.consecutive_up_bars == null ? null : String(br.consecutive_up_bars)],
-    ]);
+      ["1H context before signal", rc == null || rc.mtf_1h == null ? null :
+        fmtPct(rc.mtf_1h.chg_1h_pct, 2) + " (HISTORICAL RECONSTRUCTION)"],
+    ], rcNote);
     var markersHtml = (rv.markers || []).length
       ? '<ul class="obs-list">' + rv.markers.map(function (m) {
           return '<li class="notable">' + esc(m.text) + "</li>";
@@ -864,9 +872,12 @@
       return "<li><span>Checkpoint " + r.threshold + " signals</span><span class='num'>" +
         fmtDate(r.reached_ts) + "</span></li>";
     }).join("");
+    var pairedCloses = (L.clusters || {}).n_paired_closes;
     $("learning-checkpoints").innerHTML =
       "<ul class='missing-list'>" +
       "<li><span>Complete outcomes (paired cohort)</span><span class='num'>" + cur + "</span></li>" +
+      "<li><span>Distinct 4H closes behind them</span><span class='num'>" +
+        (pairedCloses == null ? "—" : pairedCloses) + "</span></li>" +
       "<li><span>Next checkpoint</span><span class='num'>" +
         (nxt == null ? "all reached" : nxt + " signals (" + pct + "%)") + "</span></li>" +
       "</ul>" +
@@ -900,6 +911,43 @@
           "<thead><tr><th>ID</th><th>Hypothesis (frozen at registration)</th>" +
           "<th>Status</th><th>Validation on newer data</th></tr></thead><tbody>" +
           regRows + "</tbody></table></div>");
+
+    /* --- OLV: close clusters (signals grouped by 4H close) --- */
+    var cl = L.clusters || {};
+    var conc = cl.concentration || {};
+    var nRecon = DATA.signals.filter(function (s) {
+      return s.reconstruction != null;
+    }).length;
+    var clRows = (cl.outcome_by_close || []).map(function (c) {
+      return "<tr><td>" + esc(fmtWib(c.close_ts) || "?") + " WIB</td><td>" +
+        c.n_signals + "</td><td>" + c.n_evaluable + "</td><td>" +
+        c.wins + "</td><td>" + fmtPct(c.mean_net30_pct, 2) + "</td><td>" +
+        fmtPct(c.mean_r30_pct, 2) + "</td></tr>";
+    }).join("");
+    $("learning-clusters").innerHTML =
+      "<ul class='missing-list'>" +
+      "<li><span>Signals evaluated (+30m net)</span><span class='num'>" +
+        (cl.n_evaluable == null ? "—" : cl.n_evaluable) + "</span></li>" +
+      "<li><span>Unique 4H closes (all signals)</span><span class='num'>" +
+        (cl.n_unique_closes == null ? "—" : cl.n_unique_closes) + "</span></li>" +
+      "<li><span>Unique 4H closes (evaluable)</span><span class='num'>" +
+        (cl.n_evaluable_closes == null ? "—" : cl.n_evaluable_closes) + "</span></li>" +
+      "<li><span>Largest single close</span><span class='num'>" +
+        (conc.largest_close_n == null ? "—" : conc.largest_close_n + " signals (" +
+          fmtNum(conc.largest_close_share_pct, 1) + "%)") + "</span></li>" +
+      "<li><span>Top 3 closes combined</span><span class='num'>" +
+        (conc.top3_close_share_pct == null ? "—" : fmtNum(conc.top3_close_share_pct, 1) + "% of all signals") + "</span></li>" +
+      "<li><span>1H context reconstructed</span><span class='num'>" +
+        nRecon + "/" + DATA.signals.length +
+        " signals (HISTORICAL RECONSTRUCTION)</span></li>" +
+      "</ul>" +
+      '<div style="overflow-x:auto;margin-top:12px"><table class="version-table">' +
+      "<thead><tr><th>4H close (WIB)</th><th>Signals</th><th>Evaluable</th>" +
+      "<th>Wins</th><th>Mean net +30m</th><th>Mean gross +30m</th></tr></thead><tbody>" +
+      clRows + "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" + esc(cl.note || "") +
+      " The exploration/validation split keeps whole closes together, so no close " +
+      "is ever split between the two sets.</p>";
   }
 
   /* ---------------------------------------------------------- timeline */

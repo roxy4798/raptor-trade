@@ -167,16 +167,21 @@
         </div>
         <div class="panel">
           <h3>Hypothesis registry</h3>
-          <p class="panel-sub">Hypotheses are recorded frozen the moment they first appear, and tested only on signals published after that moment. The exploration/validation split freezes once 40 evaluable signals exist (first 20 = discovery set).</p>
+          <p class="panel-sub">Hypotheses are recorded frozen the moment they first appear, and tested only on signals published after that moment. The exploration/validation split freezes once 40 evaluable signals exist (whole 4H closes until ≥20 evaluable signals = discovery set).</p>
           <div id="learning-registry"></div>
         </div>
+      </div>
+      <div class="panel">
+        <h3>Close clusters — signals grouped by 4H close</h3>
+        <p class="panel-sub">Signals on the same 4H close share market conditions, so outcomes within a close are not independent. This panel shows how signals and outcomes distribute across closes — and how concentrated the dataset is in a few market periods.</p>
+        <div id="learning-clusters"></div>
       </div>
     </section>
 
     <section id="timeline" class="section">
       <div class="section-head">
         <h2>Continuous Learning Timeline</h2>
-        <p class="section-sub">How the research system itself has evolved. Version comparison starts at v2.0.0 — the v1.0.0 archive is no longer available, and no historical data is reconstructed.</p>
+        <p class="section-sub">How the research system itself has evolved. Version comparison starts at v2.0.0 — the v1.0.0 archive is no longer available. 1H context for older signals is reconstructed from the official Binance archive and always labeled HISTORICAL RECONSTRUCTION — it never replaces the frozen live snapshot.</p>
       </div>
       <div class="panel-grid">
         <div class="panel">
