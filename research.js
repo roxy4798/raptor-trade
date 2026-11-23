@@ -223,6 +223,9 @@
       "det.topDepth": "Top depth",
       "det.impact10k": "$10k impact",
       "det.slipMethod": "Slippage method",
+      "det.slipReal": "Real order-book levels",
+      "det.slipBands": "Depth-band bound",
+      "det.slipLinear": "Linear estimate",
       "det.slipRow": "Slippage ($1k / $10k / $50k)",
       "det.upperBound": " (upper bound)",
       "det.bookExhausted": " (book exhausted)",
@@ -588,6 +591,9 @@
       "det.topDepth": "Depth teratas",
       "det.impact10k": "Impact $10k",
       "det.slipMethod": "Metode slippage",
+      "det.slipReal": "Level order book asli",
+      "det.slipBands": "Batas band kedalaman",
+      "det.slipLinear": "Estimasi linear",
       "det.slipRow": "Slippage ($1k / $10k / $50k)",
       "det.upperBound": " (batas atas)",
       "det.bookExhausted": " (book habis)",
@@ -854,6 +860,27 @@
       if (lbl) return m[1] + " — " + lbl + (m[3] || "");
     }
     return localizeVerdictCodes(txt);
+  }
+  /* The momentum topic detail embeds raw trajectory names mid-sentence
+     ("n_paired=29: continued 3, reversed 5 (full reversal 5),
+     late_bloom 12, never_up 9"). Map them in ID mode; EN keeps the
+     English names. "full reversal" is replaced first — it contains
+     "reversal", not "reversed", but order keeps the mapping safe. */
+  function localizeTrajectories(txt) {
+    if (lang() !== "id" || !txt) return txt;
+    return txt
+      .replace(/\bfull reversal\b/g, "berbalik penuh")
+      .replace(/\blate_bloom\b/g, "naik terlambat")
+      .replace(/\bnever_up\b/g, "tidak pernah naik")
+      .replace(/\bcontinued\b/g, "lanjut naik")
+      .replace(/\breversed\b/g, "berbalik");
+  }
+  /* Slippage method codes are stored raw (real_levels / bands_bound /
+     linear_estimate); render a friendly label in both languages. */
+  function slipMethodLabel(code) {
+    var map = { real_levels: "det.slipReal", bands_bound: "det.slipBands",
+      linear_estimate: "det.slipLinear" };
+    return map[code] ? t(map[code]) : code;
   }
   function updateLangButtons() {
     var l = lang();
@@ -1476,7 +1503,7 @@
       [t("det.spread"), lq.spread_bps == null ? null : fmtNum(lq.spread_bps, 2) + " bps (" + (lq.spread_band || "?") + ")"],
       [t("det.topDepth"), lq.top_depth_usd == null ? null : fmtUsd(lq.top_depth_usd) + " (" + (lq.depth_band || "?") + ")"],
       [t("det.impact10k"), lq.impact_bps_10k == null ? null : fmtNum(lq.impact_bps_10k, 1) + " bps (" + (lq.impact_band || "?") + ")"],
-      [t("det.slipMethod"), lq.slippage_method || null],
+      [t("det.slipMethod"), lq.slippage_method ? slipMethodLabel(lq.slippage_method) : null],
       [t("det.slipRow"), slipRows || null],
       [t("det.barShare"), lq.bar_share_of_24h_pct == null ? null : fmtNum(lq.bar_share_of_24h_pct, 0) + "%"],
       [t("det.bookSnap"), (sig.snapshot && sig.snapshot.book_top10 && sig.snapshot.book_top10.present)
@@ -1849,7 +1876,7 @@
       return "<tr><td>" + esc(bi(tpc.label_id, tpc.label) || k) + "</td><td>" +
         '<span style="color:' + badge + '">' +
         esc(topicStatus[tpc.status] || tpc.status || "—") +
-        "</span></td><td>" + esc(localizeVerdictCodes(bi(tpc.detail_id, tpc.detail)) || "—") + "</td></tr>";
+        "</span></td><td>" + esc(localizeTrajectories(localizeVerdictCodes(bi(tpc.detail_id, tpc.detail))) || "—") + "</td></tr>";
     }).join("");
     $("learning-summary").innerHTML =
       "<h4 style='margin:0 0 8px'>" + t("lr.sumTopics") + "</h4>" +

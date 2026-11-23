@@ -12,9 +12,17 @@
    cell showed "live unavailable" in the 24 Nov audit — while the
    short COIN-M URL and the single-stream kline WS worked. SUBSCRIBE
    carries the stream list in the message body, not the URL.
+   24 Nov audit, round 2: a single 331-stream SUBSCRIBE was ALSO
+   silently ignored on fstream (WS OPEN, zero events, no error
+   surfaced) — so SUBSCRIBE is now chunked (100 streams/request)
+   and errors are surfaced. The deeper flaw was the REST gate: it
+   skipped polling whenever the WS was OPEN, so a silent-but-open
+   WS left every cell "unavailable" forever. REST now polls
+   whenever a market has gone 20s without a WS tick, whatever the
+   WS state.
    Fallback: REST ticker/price batch poll every 5s while a market's
-   WebSocket is down, chunked at 100 symbols per request for the
-   same URL-length reason. */
+   WebSocket is down OR silent, chunked at 100 symbols per request
+   for the same URL-length reason. */
 (function(){
 'use strict';
 var DATA = window.RAPTOR_DATA || {signals: []};
@@ -23,14 +31,16 @@ var STALE_MS = 15000;
 var WS_CONNECT_TIMEOUT_MS = 8000;
 var REST_POLL_MS = 5000;
 var UNAVAILABLE_AFTER_MS = 30000;
+var WS_SILENT_MS = 20000; /* no WS tick for this long => REST backstop polls */
+var SUBSCRIBE_CHUNK = 100; /* streams per SUBSCRIBE request */
 var STARTED_AT = Date.now();
 
 /* ---- symbol universe: unique symbols per market ---- */
-var MARKETS = {}; /* market -> {symbols:[], ws:null, wsFailed:false, restFailed:false, transportUpAt:0, reconnectAt:0, attempts:0} */
+var MARKETS = {}; /* market -> {symbols:[], ws:null, wsFailed:false, restFailed:false, transportUpAt:0, reconnectAt:0, attempts:0, lastWsTickAt:0} */
 (DATA.signals || []).forEach(function(s){
   if(!s || !s.symbol) return;
   var m = s.market || 'USD-M';
-  if(!MARKETS[m]) MARKETS[m] = {symbols: [], ws: null, wsFailed: false, restFailed: false, transportUpAt: 0, reconnectTimer: null, attempts: 0, restTimer: null};
+  if(!MARKETS[m]) MARKETS[m] = {symbols: [], ws: null, wsFailed: false, restFailed: false, transportUpAt: 0, reconnectTimer: null, attempts: 0, restTimer: null, lastWsTickAt: 0};
   if(MARKETS[m].symbols.indexOf(s.symbol) === -1) MARKETS[m].symbols.push(s.symbol);
 });
 var MARKET_NAMES = Object.keys(MARKETS);
@@ -155,7 +165,7 @@ function onPrice(symbol, market, price, via){
   lastUpdateAt = Date.now();
   var st = MARKETS[market];
   if(st){
-    if(via === 'ws') st.wsFailed = false;
+    if(via === 'ws'){ st.wsFailed = false; st.lastWsTickAt = Date.now(); }
     if(via === 'rest') st.restFailed = false;
     if(!st.transportUpAt) st.transportUpAt = Date.now();
   }
@@ -179,17 +189,34 @@ function connectWs(market){
     st.attempts = 0; st.wsFailed = false;
     if(!st.transportUpAt) st.transportUpAt = Date.now();
     /* Subscribe after connect — the stream list goes in the message
-       body, not the URL (see header note). */
+       body, not the URL (see header note). Chunked: a single
+       331-stream SUBSCRIBE was silently ignored on fstream (24 Nov
+       audit round 2: WS OPEN, zero events). Smaller requests stay
+       under any per-request stream limit. */
     try{
-      ws.send(JSON.stringify({method: 'SUBSCRIBE',
-        params: st.symbols.map(function(s){ return s.toLowerCase() + '@miniTicker'; }),
-        id: 1}));
+      var syms = st.symbols;
+      for(var i = 0; i < syms.length; i += SUBSCRIBE_CHUNK){
+        var chunk = syms.slice(i, i + SUBSCRIBE_CHUNK);
+        ws.send(JSON.stringify({method: 'SUBSCRIBE',
+          params: chunk.map(function(s){ return s.toLowerCase() + '@miniTicker'; }),
+          id: 1 + (i / SUBSCRIBE_CHUNK)}));
+      }
     }catch(e){ /* send failed: onclose/onerror will drive the retry */ }
     renderAll();
   };
   ws.onmessage = function(ev){
     var msg;
     try{ msg = JSON.parse(ev.data); }catch(e){ return; }
+    /* A SUBSCRIBE error arrives as {error:{...}, id}. Surface it and
+       mark the WS failed so the REST fallback engages — without this,
+       a rejected SUBSCRIBE left the WS OPEN-but-silent and every cell
+       "unavailable" forever (24 Nov audit round 2). */
+    if(msg && msg.error){
+      try{ console.warn('[raptor-live] WS subscribe error (' + market + '):', JSON.stringify(msg.error)); }catch(e){}
+      st.wsFailed = true;
+      renderAll();
+      return;
+    }
     /* /stream wraps events in msg.data; /ws sends the event directly.
        The SUBSCRIBE ack {result:null,id:1} has no .s and is ignored. */
     var d = (msg && msg.data) || msg;
@@ -214,13 +241,19 @@ function onWsDown(market){
   renderAll();
 }
 
-/* ---- REST fallback (only while a market's WS is not open) ----
+/* ---- REST fallback (while a market's WS is down OR silent) ----
    Chunked at 100 symbols per request: one 331-symbol ?symbols=
-   array is ~8KB of URL, the same length problem as the old WS URL. */
+   array is ~8KB of URL, the same length problem as the old WS URL.
+   The gate is tick-based, NOT state-based: the old gate skipped
+   polling whenever the WS was OPEN, so a silent-but-open WS left
+   every cell "unavailable" forever (24 Nov audit round 2). REST
+   now polls whenever a market has gone WS_SILENT_MS without a WS
+   tick, whatever the WS state — and stops again once ticks resume. */
 function restPoll(market){
   var st = MARKETS[market];
   if(!st || typeof fetch === 'undefined') return;
-  if(st.ws && st.ws.readyState === WebSocket.OPEN) return; /* WS healthy: no polling */
+  if(st.ws && st.ws.readyState === WebSocket.OPEN
+     && st.lastWsTickAt && (Date.now() - st.lastWsTickAt) < WS_SILENT_MS) return; /* WS delivering: no polling */
   var base = REST_URL[market] || REST_URL['USD-M'];
   var chunks = [];
   for(var i = 0; i < st.symbols.length; i += 100) chunks.push(st.symbols.slice(i, i + 100));
@@ -272,7 +305,7 @@ window.RaptorLive = {getState: function(){
   var out = {markets: {}, lastUpdateAt: lastUpdateAt};
   MARKET_NAMES.forEach(function(m){
     var st = MARKETS[m];
-    out.markets[m] = {symbols: st.symbols.length, wsOpen: !!(st.ws && st.ws.readyState === WebSocket.OPEN), wsFailed: st.wsFailed, restFailed: st.restFailed};
+    out.markets[m] = {symbols: st.symbols.length, wsOpen: !!(st.ws && st.ws.readyState === WebSocket.OPEN), wsFailed: st.wsFailed, restFailed: st.restFailed, wsSilentMs: st.lastWsTickAt ? (Date.now() - st.lastWsTickAt) : null};
   });
   return out;
 }};

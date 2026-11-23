@@ -220,9 +220,12 @@ function createChart(c){
  const LW=window.LightweightCharts;
  const mount=$('#v24-live-chart');if(!mount)throw new Error('Chart mount missing');
  if(!LW?.createChart || !LW.CandlestickSeries || !LW.LineSeries || !LW.HistogramSeries){if(window.RaptorNativeChart)return window.RaptorNativeChart(mount); throw new Error('Chart renderer unavailable');}
+ /* JENNI 24 Nov 2026 (audit round 2): attributionLogo OFF — the TV logo
+    glyph sat at the bottom-left overlapping the volume bars. Attribution
+    is preserved by the "Charts by TradingView" footer below the chart. */
  const chart=LW.createChart(mount,{
   width:Math.max(250,mount.clientWidth),height:Math.max(260,mount.clientHeight),
-  layout:{background:{type:'solid',color:'#050c14'},textColor:'#91adb9',fontFamily:'JetBrains Mono, ui-monospace, monospace',fontSize:11,attributionLogo:true},
+  layout:{background:{type:'solid',color:'#050c14'},textColor:'#91adb9',fontFamily:'JetBrains Mono, ui-monospace, monospace',fontSize:11,attributionLogo:false},
   grid:{vertLines:{color:'rgba(79,134,151,.10)'},horzLines:{color:'rgba(79,134,151,.12)'}},
   crosshair:{mode:LW.CrosshairMode?.Normal??0,vertLine:{color:'rgba(66,216,231,.32)',labelBackgroundColor:'#133646'},horzLine:{color:'rgba(66,216,231,.32)',labelBackgroundColor:'#133646'}},
   rightPriceScale:{borderColor:'rgba(105,146,166,.24)',scaleMargins:{top:.07,bottom:.23}},
