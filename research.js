@@ -481,7 +481,7 @@
       "ov.stat1n": "dari {n} sinyal yang dipublikasikan",
       "ov.stat2": "Hasil (+30m)",
       "ov.stat2n": "sinyal yang bisa dievaluasi dengan hasil +30m; sisanya masih menunggu atau kekurangan candle 1m",
-      "ov.stat3": "Win rate (+30m)",
+      "ov.stat3": "Tingkat menang (+30m)",
       "ov.stat3n": "Porsi PUMP CONTINUED, n={n}",
       "ov.stat4": "Rata-rata net (+30m)",
       "ov.stat4n": "setelah spread + fee 8 bps (simulasi, bukan profit)",
