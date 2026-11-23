@@ -1128,6 +1128,7 @@
   var revealIO = null;
   function watchReveals() {
     if (!("IntersectionObserver" in window)) return;
+    if (document.documentElement.classList.contains("motion-off")) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     if (!revealIO) {
       revealIO = new IntersectionObserver(function (entries) {
@@ -1136,7 +1137,7 @@
           en.target.classList.add("is-in-view");
           revealIO.unobserve(en.target);
         });
-      }, { threshold: 0.08, rootMargin: "0px 0px -4% 0px" });
+      }, { threshold: 0.08, rootMargin: "0px 0px 15% 0px" });
     }
     var els = document.querySelectorAll(
       ".section, .panel, .stat-card, .insight-card, .agent-card, .detail-head");
@@ -1145,6 +1146,47 @@
       el.classList.add("reveal");
       revealIO.observe(el);
     });
+  }
+
+  /* Motion toggle — mirrors the main page (experience.js):
+     html.motion-off + localStorage raptorMotionOff, shared key. */
+  function initMotionToggle() {
+    var root = document.documentElement;
+    var btn = document.getElementById("motion-toggle");
+    if (!btn) return;
+    var reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)").matches;
+    if (reduced) root.classList.add("motion-off");
+    function refresh() {
+      var off = reduced || root.classList.contains("motion-off");
+      btn.querySelector(".motion-text").textContent =
+        off ? "MOTION OFF" : "MOTION ON";
+      btn.querySelector(".motion-icon").textContent = off ? "⏸" : "✳";
+      btn.setAttribute("aria-pressed", String(off));
+      btn.setAttribute("aria-label",
+        off ? "Turn visual motion on" : "Turn visual motion off");
+      btn.title = reduced
+        ? "Reduced motion enabled in your device settings" : "";
+      btn.disabled = reduced;
+    }
+    btn.addEventListener("click", function () {
+      var off = !root.classList.contains("motion-off");
+      root.classList.toggle("motion-off", off);
+      try {
+        localStorage.setItem("raptorMotionOff", off ? "1" : "0");
+      } catch (e) { /* private mode — session only */ }
+      if (off) {
+        // reveal everything immediately — nothing stays invisible
+        Array.prototype.forEach.call(
+          document.querySelectorAll(".reveal"), function (el) {
+            el.classList.add("is-in-view");
+          });
+      } else {
+        watchReveals();
+      }
+      refresh();
+    });
+    refresh();
   }
 
   /* ---------------------------------------------------------- boot */
@@ -1189,6 +1231,7 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
+    initMotionToggle();
     $("retry-load").addEventListener("click", load);
     $("signal-search").addEventListener("input", function () {
       renderSignalList(this.value);

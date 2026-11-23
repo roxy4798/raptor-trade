@@ -200,14 +200,27 @@ main{max-width:1240px;margin:0 auto;padding:28px 28px 64px;position:relative;z-i
 .section-kicker{margin:0 0 6px;font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:.22em;color:var(--accent);text-transform:uppercase}
 .hero{position:relative}
 .hero h1{filter:drop-shadow(0 0 28px rgba(185,243,138,.12))}
-.hero h1 span{background:linear-gradient(100deg,var(--accent),var(--accent-2),#8b7bff,var(--accent));background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:hero-flow 8s linear infinite}
+.hero h1 span{background:linear-gradient(100deg,var(--accent),var(--accent-2),#8b7bff,var(--accent));background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:hero-flow 12s linear infinite}
 @keyframes hero-flow{to{background-position:300% 0}}
 /* reveal on scroll (class added by JS only — no-JS stays fully visible) */
-.reveal{opacity:0;transform:translateY(14px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.reveal{opacity:0;transform:translateY(8px);transition:opacity .45s var(--ease),transform .45s var(--ease)}
 .reveal.is-in-view{opacity:1;transform:none}
 /* bars grow in instead of appearing instantly */
 .cov-bar i,.bucket-track i{transform-origin:left;animation:bar-in .9s var(--ease) both}
 @keyframes bar-in{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+/* calm the fx animated borders: 40 cards rotating at 6s each is busy —
+   24s keeps them alive without noise; hover still speeds up (fx.css) */
+.card::after{animation-duration:24s;opacity:.4}
+/* motion toggle (same behaviour as the main page: html.motion-off +
+   localStorage raptorMotionOff, shared across both pages) */
+.motion-toggle{display:inline-flex;align-items:center;gap:6px;margin-top:14px;background:transparent;border:1px solid var(--line-strong);color:var(--text-2);border-radius:99px;padding:7px 13px;font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:.1em}
+.motion-toggle:hover{color:var(--text-1);border-color:var(--accent)}
+.motion-toggle:disabled{opacity:.5;cursor:default}
+.motion-toggle .motion-icon{font-size:12px}
+/* motion-off: freeze every research-owned animation (fx.css covers its own) */
+html.motion-off .hero h1 span{animation:none}
+html.motion-off .cov-bar i,html.motion-off .bucket-track i{animation:none}
+html.motion-off .reveal{opacity:1;transform:none;transition:none}
 /* card hover: brighter border + deeper shadow (no transform — keeps .reveal conflict-free) */
 .panel,.stat-card,.insight-card,.agent-card{transition:border-color .3s,box-shadow .3s}
 .panel:hover,.stat-card:hover,.insight-card:hover,.agent-card:hover{border-color:var(--line-strong);box-shadow:0 1px 0 rgba(255,255,255,.035) inset,0 26px 50px -28px rgba(0,0,0,.9),0 0 0 1px rgba(185,243,138,.06)}
