@@ -5,9 +5,16 @@
    layer only fills the "Live" table column, the modal "Live Price"
    row, and the LIVE badge. It NEVER fabricates a price: no tick means
    connecting / stale / unavailable, shown honestly.
-   Primary: combined miniTicker WebSocket per market (USD-M fstream,
-   COIN-M dstream). Fallback: REST ticker/price batch poll every 5s
-   while a market's WebSocket is down. */
+   Primary: miniTicker WebSocket per market (USD-M fstream, COIN-M
+   dstream), connected to the bare /ws endpoint with a JSON SUBSCRIBE
+   after open. The combined /stream?streams= URL carried all 331
+   USD-M symbols (~10KB) and was rejected in practice — every USD-M
+   cell showed "live unavailable" in the 24 Nov audit — while the
+   short COIN-M URL and the single-stream kline WS worked. SUBSCRIBE
+   carries the stream list in the message body, not the URL.
+   Fallback: REST ticker/price batch poll every 5s while a market's
+   WebSocket is down, chunked at 100 symbols per request for the
+   same URL-length reason. */
 (function(){
 'use strict';
 var DATA = window.RAPTOR_DATA || {signals: []};
@@ -29,7 +36,7 @@ var MARKETS = {}; /* market -> {symbols:[], ws:null, wsFailed:false, restFailed:
 var MARKET_NAMES = Object.keys(MARKETS);
 if(!MARKET_NAMES.length) return; /* no signals, nothing to stream */
 
-var WS_URL = {'USD-M': 'wss://fstream.binance.com/stream?streams=', 'COIN-M': 'wss://dstream.binance.com/stream?streams='};
+var WS_URL = {'USD-M': 'wss://fstream.binance.com/ws', 'COIN-M': 'wss://dstream.binance.com/ws'};
 var REST_URL = {'USD-M': 'https://fapi.binance.com/fapi/v1/ticker/price', 'COIN-M': 'https://dapi.binance.com/dapi/v1/ticker/price'};
 
 /* ---- price store: key "SYMBOL|MARKET" -> {price, lastTick} ---- */
@@ -155,17 +162,13 @@ function onPrice(symbol, market, price, via){
   renderSymbol(symbol, market);
 }
 
-/* ---- WebSocket (primary) ---- */
-function wsUrlFor(market){
-  var base = WS_URL[market] || WS_URL['USD-M'];
-  return base + MARKETS[market].symbols.map(function(s){ return s.toLowerCase() + '@miniTicker'; }).join('/');
-}
+/* ---- WebSocket (primary): bare /ws + SUBSCRIBE ---- */
 function connectWs(market){
   var st = MARKETS[market];
   if(!st || typeof WebSocket === 'undefined') return;
   try{ if(st.ws){ st.ws.close(); } }catch(e){}
   var ws;
-  try{ ws = new WebSocket(wsUrlFor(market)); }catch(e){ onWsDown(market); return; }
+  try{ ws = new WebSocket(WS_URL[market] || WS_URL['USD-M']); }catch(e){ onWsDown(market); return; }
   st.ws = ws;
   var opened = false;
   var timer = setTimeout(function(){
@@ -175,12 +178,21 @@ function connectWs(market){
     opened = true; clearTimeout(timer);
     st.attempts = 0; st.wsFailed = false;
     if(!st.transportUpAt) st.transportUpAt = Date.now();
+    /* Subscribe after connect — the stream list goes in the message
+       body, not the URL (see header note). */
+    try{
+      ws.send(JSON.stringify({method: 'SUBSCRIBE',
+        params: st.symbols.map(function(s){ return s.toLowerCase() + '@miniTicker'; }),
+        id: 1}));
+    }catch(e){ /* send failed: onclose/onerror will drive the retry */ }
     renderAll();
   };
   ws.onmessage = function(ev){
     var msg;
     try{ msg = JSON.parse(ev.data); }catch(e){ return; }
-    var d = msg && msg.data;
+    /* /stream wraps events in msg.data; /ws sends the event directly.
+       The SUBSCRIBE ack {result:null,id:1} has no .s and is ignored. */
+    var d = (msg && msg.data) || msg;
     if(d && d.s && d.c !== undefined) onPrice(String(d.s), market, d.c, 'ws');
   };
   var down = function(){ clearTimeout(timer); onWsDown(market); };
@@ -202,26 +214,37 @@ function onWsDown(market){
   renderAll();
 }
 
-/* ---- REST fallback (only while a market's WS is not open) ---- */
+/* ---- REST fallback (only while a market's WS is not open) ----
+   Chunked at 100 symbols per request: one 331-symbol ?symbols=
+   array is ~8KB of URL, the same length problem as the old WS URL. */
 function restPoll(market){
   var st = MARKETS[market];
   if(!st || typeof fetch === 'undefined') return;
   if(st.ws && st.ws.readyState === WebSocket.OPEN) return; /* WS healthy: no polling */
-  var url = (REST_URL[market] || REST_URL['USD-M']) + '?symbols=' + encodeURIComponent(JSON.stringify(st.symbols));
-  fetch(url).then(function(res){
-    if(!res.ok) throw new Error('HTTP ' + res.status);
-    return res.json();
-  }).then(function(rows){
-    if(!Array.isArray(rows)) throw new Error('unexpected payload');
-    st.restFailed = false;
-    if(!st.transportUpAt) st.transportUpAt = Date.now();
-    rows.forEach(function(r){
-      if(r && r.symbol && r.price !== undefined) onPrice(String(r.symbol), market, r.price, 'rest');
-    });
-    renderAll();
-  }).catch(function(){
-    st.restFailed = true;
-    renderAll();
+  var base = REST_URL[market] || REST_URL['USD-M'];
+  var chunks = [];
+  for(var i = 0; i < st.symbols.length; i += 100) chunks.push(st.symbols.slice(i, i + 100));
+  var pending = chunks.length, anyOk = false;
+  function finish(){
+    pending--;
+    if(pending === 0 && !anyOk){ st.restFailed = true; renderAll(); }
+  }
+  chunks.forEach(function(syms){
+    var url = base + '?symbols=' + encodeURIComponent(JSON.stringify(syms));
+    fetch(url).then(function(res){
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    }).then(function(rows){
+      if(!Array.isArray(rows)) throw new Error('unexpected payload');
+      anyOk = true;
+      st.restFailed = false;
+      if(!st.transportUpAt) st.transportUpAt = Date.now();
+      rows.forEach(function(r){
+        if(r && r.symbol && r.price !== undefined) onPrice(String(r.symbol), market, r.price, 'rest');
+      });
+      renderAll();
+      finish();
+    }).catch(function(){ finish(); });
   });
 }
 

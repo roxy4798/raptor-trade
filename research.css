@@ -93,7 +93,7 @@ main{max-width:1240px;margin:0 auto;padding:28px 28px 64px;position:relative;z-i
 
 /* Signal layout */
 .signal-layout{display:grid;grid-template-columns:280px 1fr;gap:12px;margin-top:20px;align-items:start}
-.signal-list-wrap{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--radius);padding:12px;position:sticky;top:16px;z-index:3}
+.signal-list-wrap{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--radius);padding:12px;position:sticky;top:16px;z-index:3;min-width:0}
 .signal-list-wrap input,.explorer-controls input,.explorer-controls select{background:var(--bg-0);border:1px solid var(--line-strong);color:var(--text-1);border-radius:8px;padding:9px 12px;font-size:13px;font-family:inherit;width:100%}
 .signal-list-wrap input:focus,.explorer-controls input:focus,.explorer-controls select:focus{outline:2px solid var(--accent);outline-offset:0}
 .signal-list{margin-top:10px;max-height:560px;overflow:auto}
@@ -244,7 +244,7 @@ html.motion-off .reveal{opacity:1;transform:none;transition:none}
   .rail-link{width:47px}
 }
 @media (max-width: 900px){
-  .signal-layout{grid-template-columns:1fr}
+  .signal-layout{grid-template-columns:minmax(0,1fr)}
   .signal-list-wrap{position:static}
   .signal-list{max-height:220px}
 }

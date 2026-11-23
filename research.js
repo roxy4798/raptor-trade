@@ -497,7 +497,7 @@
       "ov.stat2": "Hasil (+30m)",
       "ov.stat2n": "sinyal yang bisa dievaluasi dengan hasil +30m; sisanya masih menunggu atau kekurangan candle 1m",
       "ov.stat3": "Tingkat menang (+30m)",
-      "ov.stat3n": "Porsi PUMP CONTINUED, n={n}",
+      "ov.stat3n": "Porsi Lanjut Naik, n={n}",
       "ov.stat4": "Rata-rata net (+30m)",
       "ov.stat4n": "setelah spread + fee 8 bps (simulasi, bukan profit)",
       "ov.stat5": "Hipotesis",
@@ -811,6 +811,49 @@
   function bi(idVal, enVal) {
     if (lang() === "id") return idVal == null ? enVal : idVal;
     return enVal == null ? idVal : enVal;
+  }
+  /* The backend stores "DATA UNAVAILABLE" as a language-neutral status
+     token inside otherwise-translated prose ("orderflow: funding rate
+     DATA UNAVAILABLE (arsip bulanan...)"). Map it when rendering
+     Indonesian so the sentence reads fully in ID; EN mode keeps the
+     token as-is (audit 24 Nov 2026). */
+  function localizeTokens(txt) {
+    if (lang() !== "id" || !txt) return txt;
+    return txt.split("DATA UNAVAILABLE").join("DATA TIDAK TERSEDIA");
+  }
+  /* Verdict codes are stored raw in the data; the agent-evaluation table
+     maps them to labels, and so does the learning summary below. */
+  function verdictLabel(code) {
+    var map = { association: "lr.verdAssociation",
+      no_clear_association: "lr.verdNoClear",
+      consistent: "lr.verdConsistent", inconsistent: "lr.verdAgainst",
+      insufficient_data: "lr.verdInsuff", no_data: "lr.verdNoData",
+      not_evaluable: "lr.verdNotEval" };
+    return map[code] ? t(map[code]) : null;
+  }
+  /* Free-form backend prose (e.g. topic details "BTC TRENDING_DOWN vs
+     RANGING: no_clear_association; BTC TRENDING_UP: no_data") embeds raw
+     verdict codes mid-sentence. Replace any known code with its
+     translated label; unknown text passes through untouched. */
+  function localizeVerdictCodes(txt) {
+    if (!txt) return txt;
+    return txt.replace(/\b(no_clear_association|insufficient_data|not_evaluable|association|consistent|inconsistent|no_data)\b/g, function (code) {
+      return verdictLabel(code) || code;
+    });
+  }
+  /* Learning-summary findings arrive as one pre-formatted string,
+     "Observation — verdict_code (n A vs B)", identical in text/text_id.
+     Split the verdict code out and render the translated label instead
+     of the raw snake_case code. Non-finding items (e.g. the "changed"
+     baseline sentence) fall back to the free-form replacer, which
+     leaves plain sentences untouched. */
+  function localizeSummaryItem(txt) {
+    var m = /^(.*) — ([a-z_]+)( \(n \d+ vs \d+\))?$/.exec(txt || "");
+    if (m) {
+      var lbl = verdictLabel(m[2]);
+      if (lbl) return m[1] + " — " + lbl + (m[3] || "");
+    }
+    return localizeVerdictCodes(txt);
   }
   function updateLangButtons() {
     var l = lang();
@@ -1309,13 +1352,13 @@
       }).join("") + "</ul>";
     }
     if (section.notes) {
-      html += '<p class="notes">' + esc(bi(section.notes, section.notes_en)) + "</p>";
+      html += '<p class="notes">' + esc(localizeTokens(bi(section.notes, section.notes_en))) + "</p>";
     }
     var miss = section.missing || [];
     var missEn = section.missing_en || [];
     if (miss.length) {
       html += '<ul class="missing">' + miss.map(function (m, i) {
-        return "<li>" + esc(bi(m, missEn[i])) + "</li>";
+        return "<li>" + esc(localizeTokens(bi(m, missEn[i]))) + "</li>";
       }).join("") + "</ul>";
     }
     return html + "</div>";
@@ -1792,7 +1835,7 @@
         return '<p class="panel-sub" style="margin:0 0 8px">' + empty + "</p>";
       }
       return "<ul class='missing-list'>" + items.map(function (it) {
-        return "<li><span>" + esc(bi(it.text_id, it.text)) + "</span></li>";
+        return "<li><span>" + esc(localizeSummaryItem(bi(it.text_id, it.text))) + "</span></li>";
       }).join("") + "</ul>";
     };
     var topics = sum.topics || {};
@@ -1806,7 +1849,7 @@
       return "<tr><td>" + esc(bi(tpc.label_id, tpc.label) || k) + "</td><td>" +
         '<span style="color:' + badge + '">' +
         esc(topicStatus[tpc.status] || tpc.status || "—") +
-        "</span></td><td>" + esc(bi(tpc.detail_id, tpc.detail) || "—") + "</td></tr>";
+        "</span></td><td>" + esc(localizeVerdictCodes(bi(tpc.detail_id, tpc.detail)) || "—") + "</td></tr>";
     }).join("");
     $("learning-summary").innerHTML =
       "<h4 style='margin:0 0 8px'>" + t("lr.sumTopics") + "</h4>" +
@@ -2143,10 +2186,19 @@
           en.target.classList.add("is-in-view");
           revealIO.unobserve(en.target);
         });
-      }, { threshold: 0.08, rootMargin: "0px 0px 15% 0px" });
+      // Threshold 0 (not 0.08): the Learning section is ~16,500px tall
+      // and its Distribution panel ~11,300px — with a ratio threshold
+      // the visible fraction can never reach it, so the whole section
+      // stayed opacity:0 forever (audit 24 Nov 2026). Any visibility
+      // now triggers the reveal; the 15% rootMargin still pre-reveals.
+      }, { threshold: 0, rootMargin: "0px 0px 15% 0px" });
     }
+    // NOTE: .section is deliberately NOT observed — a section is a
+    // container, never a reveal unit; its panels/cards reveal
+    // individually. Observing sections stuck the whole Learning
+    // section invisible (see threshold note above).
     var els = document.querySelectorAll(
-      ".section, .panel, .stat-card, .insight-card, .agent-card, .detail-head");
+      ".panel, .stat-card, .insight-card, .agent-card, .detail-head");
     Array.prototype.forEach.call(els, function (el) {
       if (el.classList.contains("reveal")) return;
       el.classList.add("reveal");

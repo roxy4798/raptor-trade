@@ -53,7 +53,12 @@ window.RaptorNativeChart=function(mount){
     ctx.fillStyle='rgba(2,13,24,.90)';ctx.fillRect(L+3,T+3,Math.min(R-L-6,580),27);
     ctx.fillStyle='#b8d9e4';ctx.textAlign='left';ctx.font='10px ui-monospace,monospace';ctx.fillText(txt.slice(0,Math.floor((R-L)/5.8)),L+9,T+19);
   }
-  ctx.textAlign='left';ctx.font='700 10px ui-monospace,monospace';ctx.fillStyle='#829dae';ctx.fillText(window.RaptorLang?.get?.()==='id'?'BINANCE 4J · OHLCV ASLI':'BINANCE 4H · REAL OHLCV',L+3,H-8);
+  /* Attribution sits in the plot's top-left headroom (the 9% price padding keeps
+     it clear of candles). It used to sit at the bottom-left (H-8), on the SAME
+     row as the time-axis labels (B+18 = H-9) and at the SAME x as the first
+     label — so the two texts collided into a garbled "17 BINANCE 4H · REAL
+     OHLCV" blob (audit 24 Nov 2026). The hover tooltip may briefly cover it. */
+  ctx.textAlign='left';ctx.font='700 10px ui-monospace,monospace';ctx.fillStyle='#829dae';ctx.fillText(window.RaptorLang?.get?.()==='id'?'BINANCE 4J · OHLCV ASLI':'BINANCE 4H · REAL OHLCV',L+3,T+12);
  }
  function series(key){return {
    setData(arr){data[key]=Array.isArray(arr)?arr.slice():[];if(key==='candle'&&!to){from=Math.max(0,arr.length-65);to=arr.length+3}drawLater()},

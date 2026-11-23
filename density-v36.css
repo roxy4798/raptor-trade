@@ -68,20 +68,31 @@
 }
 
 /* ---------- sticky table header (desktop) ----------
-   The th rule in style.css is already position:sticky, but
-   #signals .table-wrap carries overflow-x:auto + overflow-y:hidden,
-   which makes it a scroll container and kills vertical sticking.
-   On desktop widths the table fits without horizontal scroll, so the
-   wrapper can go overflow:visible and the header sticks just under the
-   sticky .topline bar (~32px). */
+   The th rule in style.css is already position:sticky, but the
+   #signals section is a .card (fx.css: overflow:hidden), which makes
+   the section the sticky constraint box — the header can never stick
+   to the viewport while the page scrolls. Removing the card's
+   overflow would break Raka's animated border effect, so instead the
+   table scrolls in its own bounded box (same pattern as the research
+   explorer) and the header sticks to the top of that box. */
 @media (min-width: 1080px) {
   #signals .table-wrap {
-    overflow: visible;
+    max-height: 640px;
+    overflow: auto;
   }
   #signals .table-wrap th {
-    top: 32px;
+    top: 0;
     z-index: 30;
   }
+}
+
+/* ---------- anchor-scroll offset ----------
+   Rail-nav jumps (#performance, #signals, ...) land with the section
+   top under the fixed 67px .topline bar, clipping headings and the
+   first row of content (audit 24 Nov 2026). Reserve space so the
+   target stays fully visible. */
+section[id] {
+  scroll-margin-top: 80px;
 }
 
 /* ---------- close-group headers: DDT signal list ---------- */
