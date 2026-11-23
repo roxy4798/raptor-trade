@@ -193,7 +193,7 @@
         note: "signals with a +30m outcome; the rest are pending or lack 1m candles" },
       { label: "Win rate (+30m)", value: overall.win_rate_pct == null ? "N/A" : fmtNum(overall.win_rate_pct, 1) + "%",
         note: "PUMP CONTINUED share, n=" + (ov.n_evaluable_30m == null ? 0 : ov.n_evaluable_30m) },
-      { label: "Mean net (+30m)", value: overall.mean_net_pct == null ? "N/A" : fmtPct(overall.mean_net_pct, 2),
+      { label: "Mean net (+30m)", value: overall.mean_net30_pct == null ? "N/A" : fmtPct(overall.mean_net30_pct, 2),
         note: "after spread + 8 bps fees (simulation, not profit)" },
       { label: "Hypotheses", value: String((ov.hypotheses || []).length),
         note: "0 validated — none has passed the bar yet" },
