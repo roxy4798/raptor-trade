@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_ts": 1795466207.3963168,
-  "generated_wib": "24 Nov 2026, 03:36 WIB",
+  "generated_ts": 1795466508.6390862,
+  "generated_wib": "24 Nov 2026, 03:41 WIB",
   "rules_version": "v2.1.2",
   "next_close_ts": 1795478400.0,
   "source": "Binance Futures Mainnet (local)"
@@ -9,18 +9,17 @@
  "kpis": {
   "total": 350,
   "last24": 325,
-  "win_rate": 11.76470588235294,
-  "wins": 40,
-  "n_eval": 340,
-  "mean_net": 0.0169426367295224,
-  "median_net": 0.0015122791499455395,
+  "win_rate": 11.9533527696793,
+  "wins": 41,
+  "n_eval": 343,
+  "mean_net": 0.0230632412366718,
+  "median_net": 0.0021204759178698566,
   "eligible": 840,
   "gap_blocked": 0,
   "universe_total": 849,
   "classes": {
-   "BELUM DINILAI": 3,
-   "SIDEWAYS": 273,
-   "PUMP CONTINUED": 40,
+   "PUMP CONTINUED": 41,
+   "SIDEWAYS": 275,
    "REVERSAL": 27,
    "INSUFFICIENT DATA": 7
   },
@@ -35,8 +34,8 @@
   "gap_blocked": 0,
   "universe_total": 849,
   "signals_total": 383,
-  "heartbeat_age_s": 2.0,
-  "uptime_s": 3883.3,
+  "heartbeat_age_s": 3.0,
+  "uptime_s": 4183.3,
   "backfill_missing": 50,
   "backfill_pending": 0,
   "backfill_filled": 3360
@@ -2322,9 +2321,30 @@
     "close_wib": "23 Nov 23:00",
     "net_pct": 0.07248855374948888,
     "cum_net_pct": 2.259222512881154
+   },
+   {
+    "symbol": "CYSUSDT",
+    "close_ts": 1795464000.0,
+    "close_wib": "24 Nov 03:00",
+    "net_pct": 1.802840142410782,
+    "cum_net_pct": 4.102792825660551
+   },
+   {
+    "symbol": "CAPUSDT",
+    "close_ts": 1795464000.0,
+    "close_wib": "24 Nov 03:00",
+    "net_pct": 0.4577818097897168,
+    "cum_net_pct": 4.579356474699514
+   },
+   {
+    "symbol": "STBLUSDT",
+    "close_ts": 1795464000.0,
+    "close_wib": "24 Nov 03:00",
+    "net_pct": -0.28180362225987166,
+    "cum_net_pct": 4.284648060017759
    }
   ],
-  "n_eval": 312,
+  "n_eval": 315,
   "n_total": 350
  },
  "signals": [
@@ -2359,7 +2379,21 @@
    "quote_volume": 21122916.6254,
    "qv24h": 35690029.67853,
    "chart": "charts/CYSUSDT_1795464000.png",
-   "tracker": null
+   "tracker": {
+    "classification": "PUMP CONTINUED",
+    "reason": "return +30m +1.92% >= +1,00%",
+    "r1": 0.013854351687389022,
+    "r5": 0.01829484902309053,
+    "r15": 0.0188277087033748,
+    "r30": 0.019182948490230833,
+    "mfe": 0.04422735346358797,
+    "mae": -0.000710479573712397,
+    "net": 0.01802840142410782,
+    "evaluated_ts": 1795466208.9491103,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:CAPUSDT:LONG SIGNAL:1795464000.0",
@@ -2392,7 +2426,21 @@
    "quote_volume": 4433119.08206,
    "qv24h": 11768810.27483,
    "chart": "charts/CAPUSDT_1795464000.png",
-   "tracker": null
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m +0.58%, MFE +1.66%",
+    "r1": -0.003616133518776099,
+    "r5": -0.0005563282336579212,
+    "r15": 0.008715808993973173,
+    "r30": 0.00584144645340734,
+    "mfe": 0.01659712563745952,
+    "mae": -0.010199350950394148,
+    "net": 0.004577818097897168,
+    "evaluated_ts": 1795466208.9491103,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:STBLUSDT:LONG SIGNAL:1795464000.0",
@@ -2425,7 +2473,21 @@
    "quote_volume": 1683102.69255,
    "qv24h": 7709314.65354,
    "chart": "charts/STBLUSDT_1795464000.png",
-   "tracker": null
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.15%, MFE +0.40%",
+    "r1": 0.0020181634712410634,
+    "r5": -0.004036326942482349,
+    "r15": -0.005045408678102881,
+    "r30": -0.0015136226034310196,
+    "mfe": 0.004036326942482349,
+    "mae": -0.01059535822401625,
+    "net": -0.0028180362225987167,
+    "evaluated_ts": 1795466208.9491103,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:GIGADEVUSDT:LONG SIGNAL:1795449600.0",
