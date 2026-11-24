@@ -274,10 +274,23 @@ section[id] {
   height: 2px;
   background: rgba(255, 255, 255, 0.9);
   transform: skewY(-18deg);
+  /* Audit round 3: experience-v15.css gives EVERY .cl i::after a
+     moving "bar glint" (width:47% + v15-bar-glint animation). The
+     animation overrides this rule's transform and the 47% width
+     shrinks the slash to a tiny sweeping sliver — so the broken bar
+     showed only ONE slash (the ::before). Cancel both here; the
+     glint keeps running on all other bars. */
+  animation: none;
+  width: auto;
 }
 .ins-grid .cl div.broken i::before {
-  top: 12px;
+  top: 8px;
 }
 .ins-grid .cl div.broken i::after {
-  top: 18px;
+  top: 22px;
 }
+/* Audit round 3: the slashes were 6px apart (12px/18px) but each
+   slash spans ~7px vertically once skewed -18deg across the ~16px
+   bar width, so the two merged into ONE visible band (confirmed by
+   the live browser check at 3x enlargement). 14px apart they read
+   as two distinct slashes with a clear gap. */
