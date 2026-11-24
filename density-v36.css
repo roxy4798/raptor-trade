@@ -154,15 +154,29 @@ section[id] {
   #signals tbody tr[data-sid] td:nth-child(4) { grid-column: 1; }
   #signals tbody tr[data-sid] td:nth-child(5) { grid-column: 2; }
   #signals tbody tr[data-sid] td:nth-child(8) { grid-column: 3; }
-  #signals tbody tr[data-sid] td:nth-child(9) {
+  #signals tbody tr[data-sid] td:nth-child(16) {
     grid-column: 4;
     text-align: right;
   }
+  /* v40: the six TF columns hide on cards; the strip (child 15) carries
+     the same values on one line below (see .tf-strip rule). */
   #signals tbody tr[data-sid] td:nth-child(3),
   #signals tbody tr[data-sid] td:nth-child(6),
   #signals tbody tr[data-sid] td:nth-child(7),
+  #signals tbody tr[data-sid] td.tf-cell,
   #signals tbody tr[data-sid] td.live-cell {
     display: none;
+  }
+  #signals tbody tr[data-sid] td.tf-strip {
+    display: block;
+    grid-column: 1 / 5;
+    font-size: 10px;
+    line-height: 1.7;
+    padding-top: 4px;
+    margin-top: 2px;
+    border-top: 1px dashed rgba(197, 226, 220, 0.10);
+    color: #8fa89e;
+    white-space: normal;
   }
   #signals tbody tr[data-sid] td:nth-child(4)::before {
     content: "4H ";
@@ -306,3 +320,144 @@ section[id] {
 .bars .bar-live{display:block;font-size:10px;font-weight:500;color:var(--text-2);white-space:nowrap}
 .bars .bar-live.is-stale{opacity:.55}
 .bars .bar-live .live-chg{font-size:10px}
+
+/* ---- v40 (25 Nov 2026): TF performance columns — placement per
+   professional references (Raka's order: valid, professional, tested):
+   CoinMarketCap / CoinGecko multi-interval change columns (1h/24h/7d —
+   chronological, adjacent, right-aligned, colour-coded, sortable) and
+   TradingView screener Perf columns (Perf.5D/W/1M/3M, same return
+   formula), plus the data-table rules (IBM Carbon / Material Design /
+   Nielsen Norman via Tabulator): numbers right + tabular figures, one
+   format per column, short headers, frozen identifying column, sticky
+   header. Grouping is by adjacency + faint tint + edge rules — the way
+   CMC / TradingView group performance columns (no spanning header). */
+
+/* TF group tint. The th layer keeps an opaque base (the sticky header
+   must not let scrolled rows show through); the td tint is translucent
+   over the card background. */
+#signals .table-wrap th.tf-col {
+  background:
+    linear-gradient(rgba(53, 240, 255, 0.05), rgba(53, 240, 255, 0.05)),
+    var(--bg-1);
+}
+#signals tbody td.tf-cell {
+  background: rgba(53, 240, 255, 0.03);
+}
+#signals tbody tr:hover td.tf-cell {
+  background:
+    linear-gradient(90deg, rgba(107, 155, 255, 0.10), rgba(107, 155, 255, 0.03)),
+    rgba(53, 240, 255, 0.03);
+}
+#signals .table-wrap th[data-sort="tf_h4"],
+#signals tbody td.tf-first {
+  border-left: 1px solid rgba(53, 240, 255, 0.16);
+}
+#signals .table-wrap th[data-sort="tf_h1w"],
+#signals tbody td.tf-last {
+  border-right: 1px solid rgba(53, 240, 255, 0.16);
+}
+
+/* Live TF value: green pulsing dot before the number (the "live" word
+   is omitted in compact mode so the column stays narrow). Colour is
+   never the only signal — the glyph (▲/▼) carries direction too. */
+.tf-cell.tf-live .live-chg::before,
+.tf-val.tf-live .live-chg::before,
+.tf-value.tf-live .live-chg::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--pos, #2ebd85);
+  box-shadow: 0 0 6px rgba(46, 189, 133, 0.7);
+  margin-right: 5px;
+  vertical-align: 1px;
+  animation: live-pulse 1.6s ease-in-out infinite;
+}
+
+/* Frozen identifying column (desktop): the symbol stays visible while
+   the 16-column table scrolls sideways — the TradingView / Bloomberg
+   pattern. The corner cell sits above the sticky header row. */
+@media (min-width: 781px) {
+  #signals .table-wrap th:first-child,
+  #signals tbody tr[data-sid] td.sym {
+    position: sticky;
+    left: 0;
+    z-index: 20;
+    background: var(--bg-1);
+    box-shadow: 1px 0 0 var(--line-strong);
+  }
+  #signals .table-wrap th:first-child {
+    z-index: 32;
+  }
+  #signals tbody tr[data-sid]:hover td.sym {
+    background:
+      linear-gradient(90deg, rgba(107, 155, 255, 0.10), rgba(107, 155, 255, 0.03)),
+      var(--bg-1);
+  }
+}
+
+/* Mobile TF strip: hidden on desktop (the six columns show there). */
+#signals td.tf-strip {
+  display: none;
+}
+.tf-val {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.tf-val.up {
+  color: #7ff4bf;
+}
+.tf-val.down {
+  color: #ff9ba8;
+}
+.tf-val.na {
+  color: #7e968a;
+}
+
+/* Signal detail modal: TF performance box (mirrors .tracker-box). */
+.tf-box {
+  margin-top: 16px;
+  background: var(--bg-0);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+}
+.tf-box h4 {
+  margin: 0 0 12px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.tf-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+.tf-metric .tf-label {
+  display: block;
+  font-size: 10px;
+  color: var(--text-2);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
+}
+.tf-metric .tf-value {
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.tf-metric .tf-value.up {
+  color: #7ff4bf;
+}
+.tf-metric .tf-value.down {
+  color: #ff9ba8;
+}
+.tf-metric .tf-value.na {
+  color: var(--text-3);
+}
+@media (max-width: 480px) {
+  .tf-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

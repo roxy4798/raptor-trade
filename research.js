@@ -169,6 +169,7 @@
       "sig.sideways": "Sideways", "sig.pending": "Pending",
       "sig.noMatch": "No signals match.",
       "hz.pending": "pending", "hz.unavailable": "unavailable",
+      "hz.liveNow": "live return right now — horizon still in progress",
       "hz.backfilled": " · backfilled from official Binance archive",
       "hz.live": " · recorded live",
       "det.close": "Close", "det.price": "price",
@@ -543,6 +544,7 @@
       "sig.sideways": "Sideways", "sig.pending": "Menunggu",
       "sig.noMatch": "Tidak ada sinyal yang cocok.",
       "hz.pending": "menunggu", "hz.unavailable": "tidak tersedia",
+      "hz.liveNow": "return live saat ini — horizon masih berjalan",
       "hz.backfilled": " · di-backfill dari arsip resmi Binance",
       "hz.live": " · direkam live",
       "det.close": "Tutup", "det.price": "harga",
@@ -1427,7 +1429,18 @@
     return html + "</div>";
   }
 
-  function horizonCell(label, h) {
+  /* v40: the nearest pending horizon shows the LIVE return (same rule
+     as the main table: first pending horizon in time order). liveCtx
+     is {symbol, market, close} for that horizon, null otherwise. */
+  function horizonCell(label, h, liveCtx) {
+    if ((!h || h.status !== "evaluated") && liveCtx) {
+      return '<div class="outcome-cell live"><p class="lbl">' + label +
+        '</p><p class="val"><span data-live-symbol="' + esc(liveCtx.symbol) +
+        '" data-live-market="' + esc(liveCtx.market) +
+        '" data-live-close="' + (liveCtx.close == null ? "" : liveCtx.close) +
+        '" data-live-mode="pct">\u2026</span></p><p class="sub">' +
+        esc(t("hz.liveNow")) + "</p></div>";
+    }
     if (!h || h.status !== "evaluated") {
       var reason = h && h.status === "pending" ? t("hz.pending") :
         (h && h.reason ? bi(h.reason, h.reason_en) : t("hz.unavailable"));
@@ -1545,11 +1558,23 @@
       [t("det.bookSnap"), bookDelayText(sig)],
     ]);
     var pf = sig.performance || {};
+    /* v40: nearest pending horizon (first pending in time order) gets
+       the live return; further pending horizons stay "pending". Same
+       rule as the main signal table, same close reference. */
+    var hzKeys = ["h4", "h12", "h1d", "h2d", "h3d", "h1w"];
+    var hzLabels = ["+4H", "+12H", "+1D", "+2D", "+3D", "+1W"];
+    var liveKey = null;
+    for (var hi = 0; hi < hzKeys.length; hi++) {
+      var hh = pf[hzKeys[hi]];
+      if (hh && hh.status === "pending") { liveKey = hzKeys[hi]; break; }
+    }
+    var liveCtx = liveKey ? { symbol: sig.symbol, market: sig.market,
+      close: pf.reference_price } : null;
     cards += '<div class="agent-card card"><h4>' + t("det.agent6") + "</h4>" +
       '<div class="outcome-grid">' +
-      horizonCell("+4H", pf.h4) + horizonCell("+12H", pf.h12) +
-      horizonCell("+1D", pf.h1d) + horizonCell("+2D", pf.h2d) +
-      horizonCell("+3D", pf.h3d) + horizonCell("+1W", pf.h1w) +
+      hzKeys.map(function (k, i) {
+        return horizonCell(hzLabels[i], pf[k], k === liveKey ? liveCtx : null);
+      }).join("") +
       '</div><p class="notes">' + t("det.perfNote") + "</p></div>";
 
     $("signal-detail").innerHTML = head +
@@ -2328,9 +2353,31 @@
     }
     SELECTED_ID = data.signals[data.signals.length - 1].signal_id;
     renderAll();
+    initLivePrices(data);
     $("loading").hidden = true;
     $("app").hidden = false;
     initRailSpy();
+  }
+
+  /* v40: live returns for the nearest pending horizon. live-prices.js
+     reads window.RAPTOR_DATA at load, so shim it from the research
+     signals (all symbols, so any selected signal is already
+     subscribed) and inject the script once the research data is ready. */
+  var LIVE_STARTED = false;
+  function initLivePrices(data) {
+    if (LIVE_STARTED) return;
+    LIVE_STARTED = true;
+    if (!window.RAPTOR_DATA) {
+      window.RAPTOR_DATA = {
+        signals: (data.signals || []).map(function (s) {
+          return { symbol: s.symbol, market: s.market };
+        })
+      };
+    }
+    var scr = document.createElement("script");
+    scr.src = "live-prices.js";
+    scr.defer = true;
+    document.body.appendChild(scr);
   }
 
   function load() {

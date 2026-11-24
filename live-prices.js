@@ -128,7 +128,7 @@ function cellHtml(symbol, market, closeRef){
    (data-live-mode="pct"). Same live return vs the signal close as the
    history table's Live column, without the price — the row only has
    room for one small line under the frozen +30m value. */
-function pctHtml(symbol, market, closeRef){
+function pctHtml(symbol, market, closeRef, compact){
   var state = symbolState(symbol, market);
   if(state === 'connecting') return '\u2026';
   if(state === 'unavailable') return '\u2014';
@@ -136,6 +136,9 @@ function pctHtml(symbol, market, closeRef){
   if(!p) return '\u2026';
   var chg = fmtChg(p.price, closeRef);
   if(!chg) return '\u2014';
+  /* v40 compact mode (TF table/strip/modal cells): no "live" word — the
+     green dot from CSS marks the cell live, so the column stays narrow. */
+  if(compact) return '<span class="live-chg ' + chg.cls + '">' + chg.text + '</span>';
   return 'live <span class="live-chg ' + chg.cls + '">' + chg.text + '</span>';
 }
 function renderEl(el){
@@ -144,7 +147,7 @@ function renderEl(el){
   var closeRaw = el.getAttribute('data-live-close');
   var closeRef = (closeRaw === null || closeRaw === '') ? null : parseFloat(closeRaw);
   var html = (el.getAttribute('data-live-mode') === 'pct')
-    ? pctHtml(symbol, market, closeRef)
+    ? pctHtml(symbol, market, closeRef, el.getAttribute('data-live-compact') === '1')
     : cellHtml(symbol, market, closeRef);
   if(el._liveHtml !== html){ el.innerHTML = html; el._liveHtml = html; }
   /* pct rows show no stale tag (no room) — dim the line instead. */

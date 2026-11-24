@@ -325,3 +325,26 @@ tr.close-group-more button.close-group-more{width:auto;display:inline-block;marg
   .explorer-table tbody tr.close-group-more{display:block;text-align:center;margin:0 0 10px;padding:0;border:0;background:transparent}
   .explorer-table tbody tr.close-group-more td{display:block;padding:0;border:0}
 }
+
+/* ---- v40 (25 Nov 2026): live horizon cell in the Agent 6 outcome
+   grid — the nearest pending horizon ticks live. A green pulsing dot
+   on the label marks it (colour is never the only signal: the sub
+   line says "live return right now" in both languages). */
+.outcome-cell.live {
+  border-color: rgba(46, 189, 133, 0.45);
+}
+.outcome-cell.live .lbl::after {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--pos, #2ebd85);
+  box-shadow: 0 0 6px rgba(46, 189, 133, 0.7);
+  margin-left: 6px;
+  vertical-align: 1px;
+  animation: live-pulse 1.6s ease-in-out infinite;
+}
+.outcome-cell.live .val .live-chg {
+  font-size: 17px;
+}

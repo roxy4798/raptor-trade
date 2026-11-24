@@ -66,9 +66,15 @@ function groupStats(list){
 function groupHeadHtml(ts, st, collapsed, closeStr){
   var stats = "";
   if(st.mean!==null) stats = ' &middot; <span class="gh-stat">'+st.cont+' '+groupT("continued")+'</span> &middot; <span class="gh-stat">'+st.rev+' '+groupT("reversed")+'</span> &middot; <span class="gh-stat">'+groupT("mean")+' '+(st.mean>=0?"+":"")+st.mean.toFixed(2)+'%</span>';
-  return '<tr class="close-group-head" data-close-ts="'+ts+'"><td colspan="10"><button type="button" class="close-group-toggle" aria-expanded="'+(!collapsed)+'" data-close-ts="'+ts+'"><span class="gh-chev">'+(collapsed?"▸":"▾")+'</span><span class="gh-close">'+closeStr+'</span><span class="gh-count">'+st.n+' '+groupT("signals")+'</span>'+stats+'</button></td></tr>';
+  return '<tr class="close-group-head" data-close-ts="'+ts+'"><td colspan="17"><button type="button" class="close-group-toggle" aria-expanded="'+(!collapsed)+'" data-close-ts="'+ts+'"><span class="gh-chev">'+(collapsed?"▸":"▾")+'</span><span class="gh-close">'+closeStr+'</span><span class="gh-count">'+st.n+' '+groupT("signals")+'</span>'+stats+'</button></td></tr>';
 }
-var SORT_KEYS = { "symbol": function(s){ return s.symbol; }, "close_ts": function(s){ return s.close_ts; }, "price": function(s){ return s.price; }, "chg_4h": function(s){ return s.chg_4h; }, "rvol": function(s){ return s.rvol; }, "breakout_margin": function(s){ return s.breakout_margin; }, "rsi_4h": function(s){ return s.rsi_4h; }, "r30": function(s){ return s.tracker ? s.tracker.r30 : null; } };
+var SORT_KEYS = { "symbol": function(s){ return s.symbol; }, "close_ts": function(s){ return s.close_ts; }, "price": function(s){ return s.price; }, "chg_4h": function(s){ return s.chg_4h; }, "rvol": function(s){ return s.rvol; }, "breakout_margin": function(s){ return s.breakout_margin; }, "rsi_4h": function(s){ return s.rsi_4h; }, "r30": function(s){ return s.tracker ? s.tracker.r30 : null; },
+  "tf_h4": function(s){ var h=s.tf&&s.tf.h4; return h&&h.status==="evaluated"?h.return_pct:null; },
+  "tf_h12": function(s){ var h=s.tf&&s.tf.h12; return h&&h.status==="evaluated"?h.return_pct:null; },
+  "tf_h1d": function(s){ var h=s.tf&&s.tf.h1d; return h&&h.status==="evaluated"?h.return_pct:null; },
+  "tf_h2d": function(s){ var h=s.tf&&s.tf.h2d; return h&&h.status==="evaluated"?h.return_pct:null; },
+  "tf_h3d": function(s){ var h=s.tf&&s.tf.h3d; return h&&h.status==="evaluated"?h.return_pct:null; },
+  "tf_h1w": function(s){ var h=s.tf&&s.tf.h1w; return h&&h.status==="evaluated"?h.return_pct:null; } };
 function glyph(v){ if(v===null||v===undefined) return ""; if(v>0) return "▲ "; if(v<0) return "▼ "; return "— "; }
 function fmtPct(v){ if(v===null||v===undefined) return I18N.t('na'); return (v>=0?"+":"")+v.toFixed(2)+"%"; }
 function fmtPctG(v){ if(v===null||v===undefined) return I18N.t('na'); if(v===0) return "— 0.00%"; return glyph(v)+fmtPct(v); }
@@ -93,11 +99,69 @@ function rowHtml(s){
       +'<td class="num '+clsOf(s.breakout_margin)+'" data-sort="'+(s.breakout_margin??'')+'">'+fmtPctG(s.breakout_margin)+'</td>'
       +'<td class="num" data-sort="'+(s.rsi_4h??'')+'">'+(s.rsi_4h===null||s.rsi_4h===undefined?I18N.t('na'):s.rsi_4h.toFixed(1))+'</td>'
       +'<td class="num '+r30c+'" data-sort="'+(t&&t.r30!=null?t.r30*100:'')+'">'+r30+'</td>'
+      + tfCellsHtml(s)
+      + tfStripHtml(s)
       +'<td>'+badgeOf(t ? t.classification : null)+'</td>'
       +'<td class="live-cell num" data-live-symbol="'+s.symbol+'" data-live-market="'+s.market+'" data-live-close="'+(s.price??'')+'"><span class="live-dot connecting"></span><span class="live-price">\u2026</span></td></tr>';
 }
+/* v40: TF performance cells — JS mirror of build.py tf_cells_html /
+   tf_strip_html. Same nearest-pending rule (first pending horizon in
+   time order shows the live return; further pending show "—"). */
+var TF_HORIZONS = [["h4","+4H"],["h12","+12H"],["h1d","+1D"],["h2d","+2D"],["h3d","+3D"],["h1w","+1W"]];
+function nearestPendingTf(tf){ for(var i=0;i<TF_HORIZONS.length;i++){ var h=(tf||{})[TF_HORIZONS[i][0]]; if(h && h.status==="pending") return TF_HORIZONS[i][0]; } return null; }
+function tfLiveSpan(s){ return '<span data-live-symbol="'+s.symbol+'" data-live-market="'+s.market+'" data-live-close="'+(s.price??'')+'" data-live-mode="pct" data-live-compact="1">\u2026</span>'; }
+function tfCellsHtml(s){
+  var tf=s.tf||{}, live=nearestPendingTf(tf), out="";
+  TF_HORIZONS.forEach(function(hz, idx){
+    var h=tf[hz[0]]||{};
+    var edge = idx===0 ? " tf-first" : (idx===TF_HORIZONS.length-1 ? " tf-last" : "");
+    if(h.status==="evaluated" && h.return_pct!==null && h.return_pct!==undefined){
+      out+='<td class="num tf-cell'+edge+' '+clsOf(h.return_pct*100)+'" data-sort="'+(h.return_pct*100)+'">'+fmtPctFracG(h.return_pct)+'</td>';
+    } else if(hz[0]===live){
+      out+='<td class="num tf-cell'+edge+' tf-live" data-sort="">'+tfLiveSpan(s)+'</td>';
+    } else if(h.status==="pending"){
+      out+='<td class="num tf-cell'+edge+' na" data-sort="">—</td>';
+    } else {
+      out+='<td class="num tf-cell'+edge+' na" data-sort="">'+I18N.t('na')+'</td>';
+    }
+  });
+  return out;
+}
+function tfStripHtml(s){
+  var tf=s.tf||{}, live=nearestPendingTf(tf), parts=[];
+  TF_HORIZONS.forEach(function(hz){
+    var h=tf[hz[0]]||{};
+    if(h.status==="evaluated" && h.return_pct!==null && h.return_pct!==undefined){
+      parts.push('<span class="tf-val '+(h.return_pct>=0?"up":"down")+'">'+hz[1]+' '+fmtPctFracG(h.return_pct)+'</span>');
+    } else if(hz[0]===live){
+      parts.push('<span class="tf-val tf-live">'+hz[1]+' '+tfLiveSpan(s)+'</span>');
+    } else if(h.status==="pending"){
+      parts.push('<span class="tf-val na">'+hz[1]+' —</span>');
+    } else {
+      parts.push('<span class="tf-val na">'+hz[1]+' '+I18N.t('na')+'</span>');
+    }
+  });
+  return '<td class="tf-strip">'+parts.join(' · ')+'</td>';
+}
+function tfBoxHtml(s){
+  var tf=s.tf||{}, live=nearestPendingTf(tf), cells="";
+  TF_HORIZONS.forEach(function(hz){
+    var h=tf[hz[0]]||{}, val, cls="";
+    if(h.status==="evaluated" && h.return_pct!==null && h.return_pct!==undefined){
+      val=fmtPctFracG(h.return_pct); cls=clsOf(h.return_pct*100);
+    } else if(hz[0]===live){
+      val=tfLiveSpan(s); cls="tf-live";
+    } else if(h.status==="pending"){
+      val="—"; cls="na";
+    } else {
+      val=I18N.t('na'); cls="na";
+    }
+    cells+='<div class="tf-metric"><span class="tf-label">'+hz[1]+'</span><span class="tf-value '+cls+'">'+val+'</span></div>';
+  });
+  return '<div class="tf-box"><h4>'+I18N.t('metricTF')+'</h4><div class="tf-grid">'+cells+'</div></div>';
+}
 function renderRows(list){
-  if(!list.length){ tbody.innerHTML = '<tr class="empty-state"><td class="no-results" colspan="10">'+(I18N.get()==='id'?'Tidak ada sinyal yang cocok. Coba simbol atau filter lain.':'No signals match this search. Try another symbol or filter.')+'</td></tr>'; return; }
+  if(!list.length){ tbody.innerHTML = '<tr class="empty-state"><td class="no-results" colspan="17">'+(I18N.get()==='id'?'Tidak ada sinyal yang cocok. Coba simbol atau filter lain.':'No signals match this search. Try another symbol or filter.')+'</td></tr>'; return; }
   if(sortState.key !== "close_ts"){ tbody.innerHTML = list.map(rowHtml).join(""); return; }
   /* Grouped by close (default sort only). The list is already close_ts
      desc, so groups are contiguous. */
@@ -117,7 +181,7 @@ function renderRows(list){
     var shown = showAll ? g.rows : g.rows.slice(0, GROUP_PAGE);
     html += shown.map(rowHtml).join("");
     if(g.rows.length > GROUP_PAGE){
-      html += '<tr class="close-group-more" data-close-ts="'+g.ts+'"><td colspan="10"><button type="button" class="close-group-more-btn" data-close-ts="'+g.ts+'">'
+      html += '<tr class="close-group-more" data-close-ts="'+g.ts+'"><td colspan="17"><button type="button" class="close-group-more-btn" data-close-ts="'+g.ts+'">'
         + (showAll ? groupT("showLess") : groupT("showAll")+" "+g.rows.length+" ("+shown.length+" "+groupT("of")+" "+g.rows.length+")")
         + '</button></td></tr>';
     }
@@ -205,7 +269,7 @@ function openModal(sid){
     + metric(I18N.t('metricLiq'), liq)
     + metric(I18N.t('metricVol4H'), fmtUsdC(s.quote_volume))
     + metric(I18N.t('metricVol24H'), fmtUsdC(s.qv24h))
-    + '</div>' + '<div class="tracker-box"><h4>'+I18N.t('modalTracker')+'</h4>' + trkHtml + '</div>';
+    + '</div>' + tfBoxHtml(s) + '<div class="tracker-box"><h4>'+I18N.t('modalTracker')+'</h4>' + trkHtml + '</div>';
   backdrop.classList.add("open"); document.body.style.overflow = "hidden"; try { history.replaceState(null, "", "#sig="+s.symbol+"_"+Math.round(s.close_ts)); } catch(e){}
   var zoomBtn=document.getElementById('chart-zoom'); if(zoomBtn)zoomBtn.addEventListener('click',function(){ var wrap=document.getElementById('chart-viewer'); var isZoomed=wrap.classList.toggle('zoomed'); zoomBtn.setAttribute('aria-pressed',String(isZoomed)); zoomBtn.textContent=isZoomed?I18N.t('modalFit'):I18N.t('modalZoom'); var frame=document.getElementById('chart-viewport');if(frame){frame.scrollTop=0;frame.scrollLeft=0;} });
   backdrop.scrollTop=0; document.getElementById("modal-close").addEventListener("click", closeModal); document.getElementById("modal-close").focus({preventScroll:true});
