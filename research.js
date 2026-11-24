@@ -236,7 +236,7 @@
       "det.bookMin": "min",
       "det.bookSec": "s",
       "det.bookNo": "not recorded (signals before 23 Nov 2026)",
-      "det.perfNote": "+30m comes from the tracker (pre-registered rules). +1H is read from local 1m candles; +4H/+8H from local 4H candles. MFE/MAE are the best/worst moves inside each window.",
+      "det.perfNote": "All six horizons are read from local 4H candles (target bar close). MFE/MAE are the best/worst moves inside the target 4H bar. The +30m classification still comes from the tracker (pre-registered rules) and shows in the signal list.",
       "ins.meta": "Signals: {n} · evaluable (+30m): {e} · missing feature data: {m} · period: {p}<br>Buckets with n<5 show no statistics. Association only — not evidence of causation.",
       "ins.rvolT": "RVOL vs outcome",
       "ins.rvolS": "Does a bigger volume spike mean the pump continues?",
@@ -263,6 +263,9 @@
       "lr.hzNet30": "+30m net (after spread + fees)",
       "lr.hz1h": "+1H (gross)", "lr.hz4h": "+4H (gross)",
       "lr.hz8h": "+8H (gross)",
+      "lr.hz12h": "+12H (gross)", "lr.hz1d": "+1D (gross)",
+      "lr.hz2d": "+2D (gross)", "lr.hz3d": "+3D (gross)",
+      "lr.hz1w": "+1W (gross)",
       "lr.thHorizon": "Horizon", "lr.thN": "n",
       "lr.thMean": "Mean", "lr.thMedian": "Median",
       "lr.thGte": "≥ +1%", "lr.thLte": "≤ −1%",
@@ -607,7 +610,7 @@
       "det.bookMin": "mnt",
       "det.bookSec": "dtk",
       "det.bookNo": "tidak direkam (sinyal sebelum 23 Nov 2026)",
-      "det.perfNote": "+30m berasal dari tracker (aturan pra-registrasi). +1H dibaca dari candle 1m lokal; +4H/+8H dari candle 4J lokal. MFE/MAE adalah pergerakan terbaik/terburuk dalam tiap jendela.",
+      "det.perfNote": "Keenam horizon dibaca dari candle 4J lokal (close bar target). MFE/MAE adalah pergerakan terbaik/terburuk di dalam bar 4J target. Klasifikasi +30m tetap berasal dari tracker (aturan pra-registrasi) dan tampil di daftar sinyal.",
       "ins.meta": "Sinyal: {n} · bisa dievaluasi (+30m): {e} · data fitur hilang: {m} · periode: {p}<br>Bucket dengan n<5 tidak menampilkan statistik. Hanya asosiasi — bukan bukti kausalitas.",
       "ins.rvolT": "RVOL vs hasil",
       "ins.rvolS": "Apakah lonjakan volume yang lebih besar berarti pump berlanjut?",
@@ -634,6 +637,9 @@
       "lr.hzNet30": "Net +30m (setelah spread + fee)",
       "lr.hz1h": "+1H (gross)", "lr.hz4h": "+4H (gross)",
       "lr.hz8h": "+8H (gross)",
+      "lr.hz12h": "+12H (gross)", "lr.hz1d": "+1D (gross)",
+      "lr.hz2d": "+2D (gross)", "lr.hz3d": "+3D (gross)",
+      "lr.hz1w": "+1W (gross)",
       "lr.thHorizon": "Horizon", "lr.thN": "n",
       "lr.thMean": "Mean", "lr.thMedian": "Median",
       "lr.thGte": "≥ +1%", "lr.thLte": "≤ −1%",
@@ -1202,7 +1208,11 @@
 
     // Outcome completeness
     var oc = ov.outcome_completeness || {};
-    var horizons = [["h30m", "+30m"], ["h1", "+1H"], ["h4", "+4H"], ["h8", "+8H"]];
+    // Outcome completeness — horizon yang dipantau (Raka 24 Nov 2026):
+    // 4H, 12H, 1D, 2D, 3D, 1W. +30m/+1H/+8H tetap dievaluasi
+    // (klasifikasi tracker + kohort paired) tapi tidak di panel ini.
+    var horizons = [["h4", "+4H"], ["h12", "+12H"], ["h1d", "+1D"],
+                    ["h2d", "+2D"], ["h3d", "+3D"], ["h1w", "+1W"]];
     $("outcome-completeness").innerHTML = horizons.map(function (h) {
       var d = oc[h[0]] || {};
       var pct = d.completeness_pct == null ? 0 : d.completeness_pct;
@@ -1537,8 +1547,9 @@
     var pf = sig.performance || {};
     cards += '<div class="agent-card card"><h4>' + t("det.agent6") + "</h4>" +
       '<div class="outcome-grid">' +
-      horizonCell("+30m", pf.h30m) + horizonCell("+1H", pf.h1) +
-      horizonCell("+4H", pf.h4) + horizonCell("+8H", pf.h8) +
+      horizonCell("+4H", pf.h4) + horizonCell("+12H", pf.h12) +
+      horizonCell("+1D", pf.h1d) + horizonCell("+2D", pf.h2d) +
+      horizonCell("+3D", pf.h3d) + horizonCell("+1W", pf.h1w) +
       '</div><p class="notes">' + t("det.perfNote") + "</p></div>";
 
     $("signal-detail").innerHTML = head +
@@ -1640,8 +1651,9 @@
     var L = DATA.learnings || {};
     var hz = L.horizons || {};
     var rows = [["net30", t("lr.hzNet30")],
-                ["r1h", t("lr.hz1h")], ["r4h", t("lr.hz4h")],
-                ["r8h", t("lr.hz8h")]].map(function (r) {
+                ["r4h", t("lr.hz4h")], ["r12h", t("lr.hz12h")],
+                ["r1d", t("lr.hz1d")], ["r2d", t("lr.hz2d")],
+                ["r3d", t("lr.hz3d")], ["r1w", t("lr.hz1w")]].map(function (r) {
       var d = hz[r[0]] || {};
       var n = d.n_evaluated == null ? 0 : d.n_evaluated;
       var cell = function (v, dec) {
