@@ -83,7 +83,11 @@ if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es
    All six TF columns (7–12) share the TF tooltip; deco()'s t[7] meter
    now colours the +4H cell (same scale, same colours). */
 var tips={4:'Relative volume vs 60-bar median (rule: ≥ 1.3x)',3:'4H candle change, open to close',5:'Close above previous 20-bar high',6:'RSI on 4H. ≥ 80 is very stretched',7:'Return 4 hours after the signal (research horizon)',8:'Return 12 hours after the signal',9:'Return 1 day after the signal',10:'Return 2 days after the signal',11:'Return 3 days after the signal',12:'Return 1 week after the signal'};
-document.querySelectorAll('thead th').forEach(function(th,i){if(tips[i])th.title=tips[i]});
+/* v41b: scope to the signals table — the TF summary table added a
+   second thead (7 th's) BEFORE it, so the unscoped selector shifted
+   every tooltip by 7 (SYMBOL showed the +4H tip). Caught by the live
+   browser check 01:47–01:50 WIB 25 Nov. */
+document.querySelectorAll('#signals thead th').forEach(function(th,i){if(tips[i])th.title=tips[i]});
 function m(td,v,max,col){if(td.dataset.fx||v===''||isNaN(v))return;td.dataset.fx=1;td.classList.add('fx-m');td.style.setProperty('--p',Math.max(3,Math.min(100,Math.abs(v)/max*100)));td.style.setProperty('--c',col)}
 function deco(){document.querySelectorAll('#signal-rows tr').forEach(function(tr){var t=tr.children;if(t.length<8)return; m(t[3],parseFloat(t[3].dataset.sort),30,'#c6ff4d');m(t[4],parseFloat(t[4].dataset.sort),20,'#35f0ff'); var r=parseFloat(t[6].dataset.sort);m(t[6],r,100,r>=80?'#ffb02e':r>=70?'#c6ff4d':'#35f0ff'); var x=parseFloat(t[7].dataset.sort);m(t[7],x,10,x>=0?'#c6ff4d':'#ff5d73')})}
 render(); deco(); var tb=document.getElementById('signal-rows'); if(tb)new MutationObserver(deco).observe(tb,{childList:true}); var tw=document.querySelector('.table-wrap'); if(tw && !document.querySelector('.fx-leg'))tw.insertAdjacentHTML('afterend','<div class="fx-leg"><span style="--c:#35f0ff">normal</span><span style="--c:#c6ff4d">strong</span><span style="--c:#ffb02e">RSI ≥ 80 stretched</span><span style="--c:#ff5d73">negative</span><em style="font-style:normal">· meter length is scaled per column, for quick scanning</em></div>');
