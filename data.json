@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_ts": 1795538210.447956,
-  "generated_wib": "24 Nov 2026, 23:36 WIB",
+  "generated_ts": 1795538509.6704388,
+  "generated_wib": "24 Nov 2026, 23:41 WIB",
   "rules_version": "v2.1.2",
   "next_close_ts": 1795550400.0,
   "source": "Binance Futures Mainnet (local)"
@@ -9,19 +9,18 @@
  "kpis": {
   "total": 384,
   "last24": 37,
-  "win_rate": 12.534059945504087,
+  "win_rate": 12.010443864229766,
   "wins": 46,
-  "n_eval": 367,
-  "mean_net": 0.036248845461971824,
-  "median_net": -0.015213843108870901,
+  "n_eval": 383,
+  "mean_net": 0.027321078808454056,
+  "median_net": -0.015255236460042974,
   "eligible": 840,
   "gap_blocked": 0,
   "universe_total": 849,
   "classes": {
-   "BELUM DINILAI": 16,
+   "SIDEWAYS": 304,
+   "REVERSAL": 33,
    "PUMP CONTINUED": 46,
-   "REVERSAL": 32,
-   "SIDEWAYS": 289,
    "INSUFFICIENT DATA": 1
   },
   "first_signal_date": "21 Nov 2026"
@@ -35,8 +34,8 @@
   "gap_blocked": 0,
   "universe_total": 849,
   "signals_total": 424,
-  "heartbeat_age_s": 25.0,
-  "uptime_s": 3833.1,
+  "heartbeat_age_s": 24.0,
+  "uptime_s": 4133.2,
   "backfill_missing": 50,
   "backfill_pending": 0,
   "backfill_filled": 3360
@@ -2522,9 +2521,93 @@
     "close_wib": "24 Nov 19:00",
     "net_pct": -0.17520070845262792,
     "cum_net_pct": 8.951077275351182
+   },
+   {
+    "symbol": "MCDUSDT",
+    "close_ts": 1795536000.0,
+    "close_wib": "24 Nov 23:00",
+    "net_pct": 0.25298337088812595,
+    "cum_net_pct": 9.22670538326129
+   },
+   {
+    "symbol": "GUAUSDT",
+    "close_ts": 1795536000.0,
+    "close_wib": "24 Nov 23:00",
+    "net_pct": -2.1516025198181925,
+    "cum_net_pct": 6.876580837920643
+   },
+   {
+    "symbol": "BWETUSDT",
+    "close_ts": 1795536000.0,
+    "close_wib": "24 Nov 23:00",
+    "net_pct": 0.19135502531613224,
+    "cum_net_pct": 7.081094546240063
+   },
+   {
+    "symbol": "KOUSDT",
+    "close_ts": 1795536000.0,
+    "close_wib": "24 Nov 23:00",
+    "net_pct": 0.2368093570222775,
+    "cum_net_pct": 7.334672597727443
+   },
+   {
+    "symbol": "NFLXUSDT",
+    "close_ts": 1795536000.0,
+    "close_wib": "24 Nov 23:00",
+    "net_pct": -0.1813399706876088,
+    "cum_net_pct": 7.140031933901092
+   },
+   {
+    "symbol": "CUSDT",
+    "close_ts": 1795536000.0,
+    "close_wib": "24 Nov 23:00",
+    "net_pct": -0.01655973512693107,
+    "cum_net_pct": 7.122289828397932
+   },
+   {
+    "symbol": "MRNAUSDT",
+    "close_ts": 1795536000.0,
+    "close_wib": "24 Nov 23:00",
+    "net_pct": 0.6241187460815991,
+    "cum_net_pct": 7.790860120448828
+   },
+   {
+    "symbol": "TTWOUSDT",
+    "close_ts": 1795536000.0,
+    "close_wib": "24 Nov 23:00",
+    "net_pct": 0.40000057335513706,
+    "cum_net_pct": 8.222024178955056
+   },
+   {
+    "symbol": "EWZUSDT",
+    "close_ts": 1795536000.0,
+    "close_wib": "24 Nov 23:00",
+    "net_pct": -0.5854135472224933,
+    "cum_net_pct": 7.588477788333048
+   },
+   {
+    "symbol": "TEAMUSDT",
+    "close_ts": 1795536000.0,
+    "close_wib": "24 Nov 23:00",
+    "net_pct": -0.7152858057657046,
+    "cum_net_pct": 6.8189126780737075
+   },
+   {
+    "symbol": "NKEUSDT",
+    "close_ts": 1795536000.0,
+    "close_wib": "24 Nov 23:00",
+    "net_pct": -0.5570276156706869,
+    "cum_net_pct": 6.223901835697676
+   },
+   {
+    "symbol": "ADBEUSDT",
+    "close_ts": 1795536000.0,
+    "close_wib": "24 Nov 23:00",
+    "net_pct": -0.17884229490569475,
+    "cum_net_pct": 6.033928571916336
    }
   ],
-  "n_eval": 337,
+  "n_eval": 349,
   "n_total": 384
  },
  "signals": [
@@ -2560,7 +2643,21 @@
    "quote_volume": 207640.7892,
    "qv24h": 708617.5876,
    "chart": "charts/MCDUSDT_1795536000.png",
-   "tracker": null
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m +0.35%, MFE +0.45%",
+    "r1": -0.0003938558487593946,
+    "r5": 0.0012889827777577967,
+    "r15": 0.0023989401697159796,
+    "r30": 0.0035447026388339964,
+    "mfe": 0.0045114397221526215,
+    "mae": -0.0006444913888790094,
+    "net": 0.0025298337088812597,
+    "evaluated_ts": 1795538211.0625432,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:GUAUSDT:LONG SIGNAL:1795536000.0",
@@ -2594,7 +2691,21 @@
    "quote_volume": 3397731.46718,
    "qv24h": 4291232.7994800005,
    "chart": "charts/GUAUSDT_1795536000.png",
-   "tracker": null
+   "tracker": {
+    "classification": "REVERSAL",
+    "reason": "return +30m -2.01% <= -1,00%",
+    "r1": -0.015065913370998163,
+    "r5": -0.016635279347143817,
+    "r15": -0.026365348399246757,
+    "r30": -0.020087884494664143,
+    "mfe": 0.0012554927809165228,
+    "mae": -0.06967984934086624,
+    "net": -0.021516025198181923,
+    "evaluated_ts": 1795538211.0625432,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:PAYPUSDT:LONG SIGNAL:1795536000.0",
@@ -2628,7 +2739,21 @@
    "quote_volume": 161587.2677,
    "qv24h": 490442.54339999997,
    "chart": "charts/PAYPUSDT_1795536000.png",
-   "tracker": null
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.86%, MFE -0.16%",
+    "r1": -0.007800312012480437,
+    "r5": -0.006240249609984372,
+    "r15": -0.010140405616224757,
+    "r30": -0.00858034321372847,
+    "mfe": -0.0015600624024960652,
+    "mae": -0.011700468018720822,
+    "net": null,
+    "evaluated_ts": 1795538211.0625432,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:BWETUSDT:LONG SIGNAL:1795536000.0",
@@ -2662,7 +2787,21 @@
    "quote_volume": 308719.2513,
    "qv24h": 568807.5787,
    "chart": "charts/BWETUSDT_1795536000.png",
-   "tracker": null
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m +0.33%, MFE +0.73%",
+    "r1": -0.0006444257175431956,
+    "r5": 0.00014871362712542968,
+    "r15": 0.0014251722599514238,
+    "r30": 0.0032593069944975017,
+    "mfe": 0.007336538938184756,
+    "mae": -0.005490011401378059,
+    "net": 0.0019135502531613224,
+    "evaluated_ts": 1795538211.0625432,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:KOUSDT:LONG SIGNAL:1795536000.0",
@@ -2696,7 +2835,21 @@
    "quote_volume": 445578.8776,
    "qv24h": 1190262.7873,
    "chart": "charts/KOUSDT_1795536000.png",
-   "tracker": null
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m +0.34%, MFE +0.61%",
+    "r1": -0.00020439448134901284,
+    "r5": 0.0016351558507921027,
+    "r15": 0.005825242718446644,
+    "r30": 0.003372508942258712,
+    "mfe": 0.006131834440470163,
+    "mae": -0.00030659172202351925,
+    "net": 0.002368093570222775,
+    "evaluated_ts": 1795538211.0625432,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:NFLXUSDT:LONG SIGNAL:1795536000.0",
@@ -2730,7 +2883,21 @@
    "quote_volume": 1513275.6144,
    "qv24h": 4914565.0385,
    "chart": "charts/NFLXUSDT_1795536000.png",
-   "tracker": null
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.07%, MFE +0.17%",
+    "r1": -0.0018571669761945353,
+    "r5": -0.004727334121222282,
+    "r15": -0.0040520006753334,
+    "r30": -0.0006753334458888816,
+    "mfe": 0.0016883336147222039,
+    "mae": -0.004727334121222282,
+    "net": -0.0018133997068760879,
+    "evaluated_ts": 1795538211.0625432,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:CUSDT:LONG SIGNAL:1795536000.0",
@@ -2764,7 +2931,21 @@
    "quote_volume": 269903.36118,
    "qv24h": 887607.8514800001,
    "chart": "charts/CUSDT_1795536000.png",
-   "tracker": null
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m +0.14%, MFE +0.78%",
+    "r1": -0.003652532952199361,
+    "r5": 0.0012704462442432174,
+    "r15": -0.006034619660155505,
+    "r30": 0.0014292520247738416,
+    "mfe": 0.007781483245990151,
+    "mae": -0.006828648562807738,
+    "net": -0.0001655973512693107,
+    "evaluated_ts": 1795538211.0625432,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:MRNAUSDT:LONG SIGNAL:1795536000.0",
@@ -2798,7 +2979,21 @@
    "quote_volume": 4711939.4394,
    "qv24h": 10617808.8346,
    "chart": "charts/MRNAUSDT_1795536000.png",
-   "tracker": null
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m +0.74%, MFE +1.14%",
+    "r1": 0.0006726759047490649,
+    "r5": 0.003811830126911442,
+    "r15": 0.0007623660253821551,
+    "r30": 0.007354589891923391,
+    "mfe": 0.011390645320418002,
+    "mae": -0.0005829857841158637,
+    "net": 0.006241187460815992,
+    "evaluated_ts": 1795538211.0625432,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:TTWOUSDT:LONG SIGNAL:1795536000.0",
@@ -2832,7 +3027,21 @@
    "quote_volume": 4764438.8694,
    "qv24h": 9172710.7122,
    "chart": "charts/TTWOUSDT_1795536000.png",
-   "tracker": null
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m +0.51%, MFE +0.64%",
+    "r1": -0.003214997283100929,
+    "r5": -0.004573446839340689,
+    "r15": -0.008965767071182684,
+    "r30": 0.00511682666183666,
+    "mfe": 0.006384712914327073,
+    "mae": -0.009418583589929419,
+    "net": 0.004000005733551371,
+    "evaluated_ts": 1795538211.0625432,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:EWZUSDT:LONG SIGNAL:1795536000.0",
@@ -2866,7 +3075,21 @@
    "quote_volume": 665697.6633,
    "qv24h": 1590540.281,
    "chart": "charts/EWZUSDT_1795536000.png",
-   "tracker": null
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.44%, MFE +0.07%",
+    "r1": -0.0006738544474393926,
+    "r5": -0.002358490566037763,
+    "r15": -0.005390835579514808,
+    "r30": -0.004380053908355719,
+    "mfe": 0.0006738544474393926,
+    "mae": -0.005727762803234393,
+    "net": -0.005854135472224933,
+    "evaluated_ts": 1795538211.0625432,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:ACNUSDT:LONG SIGNAL:1795536000.0",
@@ -2900,7 +3123,21 @@
    "quote_volume": 231324.3951,
    "qv24h": 445901.2813,
    "chart": "charts/ACNUSDT_1795536000.png",
-   "tracker": null
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.26%, MFE +0.00%",
+    "r1": -0.0014105578114981254,
+    "r5": -0.0050010686044026365,
+    "r15": -0.004958324428296579,
+    "r30": -0.002564650566360349,
+    "mfe": 4.274417610616865e-05,
+    "mae": -0.006069673007052745,
+    "net": null,
+    "evaluated_ts": 1795538211.0625432,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:TEAMUSDT:LONG SIGNAL:1795536000.0",
@@ -2934,7 +3171,21 @@
    "quote_volume": 301539.2758,
    "qv24h": 880647.3745,
    "chart": "charts/TEAMUSDT_1795536000.png",
-   "tracker": null
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.41%, MFE -0.09%",
+    "r1": -0.0016041288882688853,
+    "r5": -0.00760217603570934,
+    "r15": -0.013739712651694824,
+    "r30": -0.004114939322081179,
+    "mfe": -0.0009066815455432975,
+    "mae": -0.013739712651694824,
+    "net": -0.007152858057657046,
+    "evaluated_ts": 1795538211.0625432,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:NKEUSDT:LONG SIGNAL:1795536000.0",
@@ -2968,7 +3219,21 @@
    "quote_volume": 697881.0741,
    "qv24h": 1069368.4232,
    "chart": "charts/NKEUSDT_1795536000.png",
-   "tracker": null
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.45%, MFE +0.06%",
+    "r1": -0.0030864197530864335,
+    "r5": -0.004489337822671247,
+    "r15": -0.005050505050505083,
+    "r30": -0.004489337822671247,
+    "mfe": 0.0005611672278338364,
+    "mae": -0.006734006734006814,
+    "net": -0.00557027615670687,
+    "evaluated_ts": 1795538211.0625432,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:ADBEUSDT:LONG SIGNAL:1795536000.0",
@@ -3002,7 +3267,21 @@
    "quote_volume": 438942.875,
    "qv24h": 961594.2490000001,
    "chart": "charts/ADBEUSDT_1795536000.png",
-   "tracker": null
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.06%, MFE +0.16%",
+    "r1": -0.0009023719491234594,
+    "r5": -0.003093846682708845,
+    "r15": -0.0031368167755242427,
+    "r30": -0.000558611206600168,
+    "mfe": 0.0016328635269851066,
+    "mae": -0.00459779993124787,
+    "net": -0.0017884229490569476,
+    "evaluated_ts": 1795538211.0625432,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:PFEUSDT:LONG SIGNAL:1795536000.0",
@@ -3036,7 +3315,21 @@
    "quote_volume": 92411.2676,
    "qv24h": 386850.7206,
    "chart": "charts/PFEUSDT_1795536000.png",
-   "tracker": null
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m +0.50%, MFE +0.81%",
+    "r1": -0.0007072135785006761,
+    "r5": 0.0007072135785006761,
+    "r15": 0.0014144271570013522,
+    "r30": 0.004950495049504955,
+    "mfe": 0.008132956152758108,
+    "mae": -0.0010608203677511252,
+    "net": null,
+    "evaluated_ts": 1795538211.0625432,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:CRMUSDT:LONG SIGNAL:1795536000.0",
@@ -3070,7 +3363,21 @@
    "quote_volume": 532230.2425,
    "qv24h": 1068251.7675,
    "chart": "charts/CRMUSDT_1795536000.png",
-   "tracker": null
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.29%, MFE +0.16%",
+    "r1": -0.0021125309150866745,
+    "r5": -0.0034006595218467606,
+    "r15": -0.004843363561418124,
+    "r30": -0.002885408079142615,
+    "mfe": 0.0016488046166529546,
+    "mae": -0.005461665292662787,
+    "net": null,
+    "evaluated_ts": 1795538211.0625432,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:PHAROSUSDT:LONG SIGNAL:1795521600.0",
