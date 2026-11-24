@@ -76,7 +76,7 @@
       "panel.outcomes": "Outcome completeness",
       "panel.outcomes.sub": "Share of mature signals with an evaluated outcome per horizon.",
       "panel.hypotheses": "Hypotheses",
-      "panel.hypotheses.sub": "A hypothesis needs n≥10 on both buckets and a ≥2pp mean-net gap — and still requires out-of-sample validation.",
+      "panel.hypotheses.sub": "A hypothesis needs n≥10 on both buckets — and still requires out-of-sample validation.",
       "panel.quality": "Data quality",
       "panel.quality.sub": "Snapshot coverage and the per-input missing-data profile. Missing data is reported, never interpolated.",
       "panel.horizons": "Outcome by horizon",
@@ -141,7 +141,7 @@
       "ov.regimeRanging": "BTC ranging",
       "ov.regimeDown": "BTC trending down",
       "ov.mature": "{e}/{m} mature",
-      "ov.hypEmpty": "No hypothesis is currently being tested. The bar is strict on purpose: n≥10 on both buckets and a ≥2pp mean-net gap, plus out-of-sample validation. With {n} evaluable outcomes, nothing has cleared it yet.",
+      "ov.hypEmpty": "No hypothesis is currently being tested. The bar is strict on purpose: n≥10 on both buckets, plus out-of-sample validation. With {n} evaluable outcomes, nothing has cleared it yet.",
       "ov.dqDecisions": "Decisions values",
       "ov.dqSignalBar": "Signal bar",
       "ov.dqMtf1h": "1H context (1m)",
@@ -188,9 +188,6 @@
       "det.histRecon": " (HISTORICAL RECONSTRUCTION)",
       "det.riskLevel": "Risk level (marker count)",
       "det.markersObs": "Markers observed",
-      "det.histCtx": "Historical context",
-      "det.histCtxVal": "n={n} similar signals, win {w}%",
-      "det.histCtxNone": "insufficient historical context",
       "det.riskNote": "Risk level counts exhaustion markers — it is NOT a probability of reversal.",
       "det.takerBuy": "Taker-buy",
       "det.imbalance": "Imbalance",
@@ -266,7 +263,6 @@
       "lr.outTrimmed": "Trimmed mean (drop top/bottom 10%)",
       "lr.outExMax": "Mean without the largest outcome",
       "lr.outLargest": "Largest single outcome",
-      "lr.outLargestOf": " ({p}% of the total sum)",
       "lr.outRange": "Range (min … max)",
       "lr.outNote": "With n={n}, one big outcome can dominate the average. Compare the mean with the median and the trimmed mean before reading anything into it.",
       "lr.mkRsi": "RSI overbought (≥80)",
@@ -405,7 +401,7 @@
       "panel.outcomes": "Kelengkapan hasil",
       "panel.outcomes.sub": "Porsi sinyal yang sudah matang dan punya hasil tervalidasi per horizon.",
       "panel.hypotheses": "Hipotesis",
-      "panel.hypotheses.sub": "Hipotesis butuh n≥10 di kedua bucket dan selisih mean-net ≥2pp — dan tetap butuh validasi out-of-sample.",
+      "panel.hypotheses.sub": "Hipotesis butuh n≥10 di kedua bucket — dan tetap butuh validasi out-of-sample.",
       "panel.quality": "Kualitas data",
       "panel.quality.sub": "Cakupan snapshot dan profil data hilang per input. Data yang hilang dilaporkan, tidak pernah diinterpolasi.",
       "panel.horizons": "Hasil per horizon",
@@ -470,7 +466,7 @@
       "ov.regimeRanging": "BTC sideways",
       "ov.regimeDown": "BTC turun",
       "ov.mature": "{e}/{m} matang",
-      "ov.hypEmpty": "Belum ada hipotesis yang sedang diuji. Ambang batasnya sengaja ketat: n≥10 di kedua bucket dan selisih mean-net ≥2pp, ditambah validasi out-of-sample. Dengan {n} hasil yang bisa dievaluasi, belum ada yang lolos.",
+      "ov.hypEmpty": "Belum ada hipotesis yang sedang diuji. Ambang batasnya sengaja ketat: n≥10 di kedua bucket, ditambah validasi out-of-sample. Dengan {n} hasil yang bisa dievaluasi, belum ada yang lolos.",
       "ov.dqDecisions": "Nilai decisions",
       "ov.dqSignalBar": "Bar sinyal",
       "ov.dqMtf1h": "Konteks 1J (1m)",
@@ -517,9 +513,6 @@
       "det.histRecon": " (REKONSTRUKSI HISTORIS)",
       "det.riskLevel": "Level risiko (jumlah marker)",
       "det.markersObs": "Marker teramati",
-      "det.histCtx": "Konteks historis",
-      "det.histCtxVal": "n={n} sinyal serupa, win {w}%",
-      "det.histCtxNone": "konteks historis belum cukup",
       "det.riskNote": "Level risiko menghitung marker exhaustion — ini BUKAN probabilitas reversal.",
       "det.takerBuy": "Taker-buy",
       "det.imbalance": "Imbalance",
@@ -595,7 +588,6 @@
       "lr.outTrimmed": "Trimmed mean (buang 10% atas/bawah)",
       "lr.outExMax": "Mean tanpa hasil terbesar",
       "lr.outLargest": "Hasil tunggal terbesar",
-      "lr.outLargestOf": " ({p}% dari total)",
       "lr.outRange": "Rentang (min … max)",
       "lr.outNote": "Dengan n={n}, satu hasil besar bisa mendominasi rata-rata. Bandingkan mean dengan median dan trimmed mean sebelum menarik kesimpulan apa pun.",
       "lr.mkRsi": "RSI overbought (≥80)",
@@ -1492,10 +1484,8 @@
     cards += agentCard(t("det.agent2"), sig.reversal, [
       [t("det.riskLevel"), rv.risk_level || null],
       [t("det.markersObs"), (rv.markers_observed == null ? null : rv.markers_observed + " / 6")],
-      [t("det.histCtx"), rv.historical_context && rv.historical_context.n != null
-        ? t("det.histCtxVal", { n: rv.historical_context.n,
-                                w: fmtNum(rv.historical_context.win_rate_pct, 0) })
-        : t("det.histCtxNone")],
+      /* v43: the historical-context row is gone — its win rate was a
+         +30m-derived number with no +4H equivalent in the data. */
     ], markersHtml +
       '<p class="notes">' + t("det.riskNote") + "</p>");
     cards += agentCard(t("det.agent3"), sig.orderflow, [
@@ -1687,8 +1677,9 @@
         "<li><span>" + t("lr.outMedian") + "</span><span class='num'>" + fmtPct(st.median, 2) + "</span></li>" +
         "<li><span>" + t("lr.outTrimmed") + "</span><span class='num'>" + fmtPct(st.trimmedMean, 2) + "</span></li>" +
         "<li><span>" + t("lr.outExMax") + "</span><span class='num'>" + fmtPct(st.exMax, 2) + "</span></li>" +
-        "<li><span>" + t("lr.outLargest") + "</span><span class='num'>" + esc(st.maxSym || "—") + " " + fmtPct(st.maxVal, 2) +
-          t("lr.outLargestOf", { p: st.maxShare == null ? "—" : fmtNum(st.maxShare, 0) }) + "</span></li>" +
+        "<li><span>" + t("lr.outLargest") + "</span><span class='num'>" + esc(st.maxSym || "—") + " " + fmtPct(st.maxVal, 2) + "</span></li>" +
+        /* v43: the "share of total sum" suffix is gone — with a negative
+           +4H total sum the share reads as a confusing negative %. */
         "<li><span>" + t("lr.outRange") + "</span><span class='num'>" + fmtPct(st.min, 2) + " … " + fmtPct(st.max, 2) + "</span></li>" +
         "</ul>" +
         "<p class='panel-sub' style='margin-top:12px'>" + t("lr.outNote", { n: st.n }) + "</p>";
