@@ -17,12 +17,26 @@
    elements). The shell is moved to <body> while expanded so no
    ancestor transform/backdrop-filter can clip it; the existing
    ResizeObserver resizes both renderers automatically.
+   r5 (24 Nov 2026): dstream fallback for the USD-M kline stream.
+   From US-blocked egress the fstream WebSocket OPENS but never
+   delivers a tick (verified: connected, 0 ticks in 12s — the chart
+   sat at "WS CONNECTED · AWAITING MARKET TICK" for 5+ min in the
+   live audit while the miniTicker fallback streamed fine), while
+   dstream serves the same USD-M kline_4h ticks (first tick in 2s).
+   Same rule as live-prices.js: the fallback engages ONLY on failure
+   — no tick within 15s of connect (silent-open case) or any
+   disconnect/error after the first attempt — and healthy networks
+   never carry it. COIN-M needs no fallback (already dstream).
  */
 (()=>{'use strict';
 const D=window.RAPTOR_DATA||{};
 const L=window.RaptorLang||{get:()=>"en",useWIB:()=>false};
 const $=(s,r=document)=>r.querySelector(s);
 const streamHosts={'USD-M':'wss://fstream.binance.com/ws/','COIN-M':'wss://dstream.binance.com/ws/'};
+// r5: dstream serves USD-M streams too (CM-UM merge) — the fallback
+// host when fstream opens silent or drops (US-blocked egress).
+const FALLBACK_HOST='wss://dstream.binance.com/ws/';
+const FB_NO_TICK_MS=15000;
 const REST_HOSTS={'USD-M':'https://fapi.binance.com/fapi/v1/klines','COIN-M':'https://dapi.binance.com/dapi/v1/klines'};
 const INTERVAL=14400;
 let current=null;
@@ -133,6 +147,7 @@ function cleanup(){
  clearTimeout(current.reconnect);
  clearTimeout(current.refresh);
  clearTimeout(current.emaTimer);
+ clearTimeout(current.fbTimer);
  clearInterval(current.wsStaleTimer);
  current.abort?.abort();
  try{current.socket?.close(1000,'Changed selection')}catch{}
@@ -282,11 +297,19 @@ function updateFromWS(c,raw,s){
 }
 function startWebsocket(c,s){
  if(current!==c||c.dead||document.hidden)return;
- const url=streamHosts[signalMarket(s)]+s.symbol.toLowerCase()+'@kline_4h';
+ const market=signalMarket(s);
+ const base=(market==='USD-M'&&c.fbEngaged)?FALLBACK_HOST:streamHosts[market];
+ const url=base+s.symbol.toLowerCase()+'@kline_4h';
  let socket;
  try{socket=new WebSocket(url)}catch(e){status('offline',str('WS UNAVAILABLE · snapshot candles loaded','WS TIDAK TERSEDIA · candle historis termuat'));return}
  c.socket=socket;
  status('connecting',str('CANDLES READY · connecting live stream…','CANDLE SIAP · menghubungkan stream live…'));
+ // r5 no-tick watchdog (silent-open case): fstream can connect yet
+ // never deliver a tick from US-blocked egress. If this socket is
+ // still tick-less after 15s, switch this chart instance to dstream.
+ // Bound to this socket: a replaced socket's timer is a no-op.
+ clearTimeout(c.fbTimer);
+ c.fbTimer=setTimeout(()=>{if(current!==c||c.dead||c.socket!==socket||c.lastTick)return;if(market!=='USD-M'||c.fbEngaged)return;c.fbEngaged=true;try{socket.close(1000,'No tick, switching transport')}catch{};c.socket=null;startWebsocket(c,s);},FB_NO_TICK_MS);
  socket.onopen=()=>{if(current!==c||c.dead)return; c.attempt=0;status('connecting',str('WS CONNECTED · awaiting market tick','WS TERHUBUNG · menanti data pasar'));};
  socket.onmessage=e=>{
   if(current!==c||c.dead)return;
@@ -297,6 +320,7 @@ function startWebsocket(c,s){
   if(result==='gap'){onRender(s,'live');return;}
   if(result===true){
    c.lastTick=Date.now();
+   clearTimeout(c.fbTimer);
    status('live',str('LIVE · Binance Futures 4H candle','LIVE · candle 4J Binance Futures'));
   }
  };
@@ -304,6 +328,11 @@ function startWebsocket(c,s){
    if(current!==c||c.dead||document.hidden)return;
    if(c.socket!==socket)return;
    c.socket=null;
+   // r5: no tick ever arrived on this chart instance — the primary
+   // is a dead transport, not a transient blip, so the reconnect
+   // goes via dstream for USD-M. (After ticks flowed, a drop retries
+   // the primary first: lastTick is set.)
+   if(market==='USD-M'&&!c.fbEngaged&&!c.lastTick)c.fbEngaged=true;
    status('offline',str('RECONNECTING · last confirmed candle preserved','MENGHUBUNGKAN ULANG · candle terakhir dipertahankan'));
    const delay=Math.min(30000,1500*Math.pow(2,Math.min(c.attempt++,5)));
    c.reconnect=setTimeout(()=>startWebsocket(c,s),delay);
@@ -340,7 +369,7 @@ function onRender(s,mode){
  // Defer to allow DOM to reflow after the previous chart was removed.
  requestAnimationFrame(()=>{if(version!==serial||!$('#v24-live-shell'))return;load(s,version);});
 }
-window.RaptorLiveChart={onRender,openSignal:(sid)=>{const result=window.RaptorTerminal?.openSignal(sid,'live');if(result){$('#deep-terminal')?.scrollIntoView({behavior:'smooth',block:'start'})}return result;},_parseRow:parseRow,_calcEMA:calcEMA,_marketCandle:marketCandle};
+window.RaptorLiveChart={onRender,openSignal:(sid)=>{const result=window.RaptorTerminal?.openSignal(sid,'live');if(result){$('#deep-terminal')?.scrollIntoView({behavior:'smooth',block:'start'})}return result;},_parseRow:parseRow,_calcEMA:calcEMA,_marketCandle:marketCandle,getState:()=>({fbEngaged:!!(current&&current.fbEngaged),live:!!(current&&current.lastTick)})};
 // The original v23 script loads before this script; restore its initial live tab.
 const initial=window.RaptorTerminal?.getSelected?.();
 if(initial && window.RaptorTerminal?.getMode?.()==='live')onRender(initial,'live');
