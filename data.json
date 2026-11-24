@@ -1,14 +1,14 @@
 {
  "meta": {
-  "generated_ts": 1795468007.9363163,
-  "generated_wib": "24 Nov 2026, 04:06 WIB",
+  "generated_ts": 1795478518.1002417,
+  "generated_wib": "24 Nov 2026, 07:01 WIB",
   "rules_version": "v2.1.2",
-  "next_close_ts": 1795478400.0,
+  "next_close_ts": 1795492800.0,
   "source": "Binance Futures Mainnet (local)"
  },
  "kpis": {
-  "total": 350,
-  "last24": 325,
+  "total": 351,
+  "last24": 324,
   "win_rate": 11.9533527696793,
   "wins": 41,
   "n_eval": 343,
@@ -18,6 +18,7 @@
   "gap_blocked": 0,
   "universe_total": 849,
   "classes": {
+   "BELUM DINILAI": 1,
    "PUMP CONTINUED": 41,
    "SIDEWAYS": 275,
    "REVERSAL": 27,
@@ -29,13 +30,13 @@
   "healthy": true,
   "telegram_paused": true,
   "ws_connected": true,
-  "ws_reconnects": 1,
+  "ws_reconnects": 0,
   "eligible": 840,
   "gap_blocked": 0,
   "universe_total": 849,
-  "signals_total": 383,
-  "heartbeat_age_s": 2.0,
-  "uptime_s": 5683.6,
+  "signals_total": 389,
+  "heartbeat_age_s": 7.0,
+  "uptime_s": 1482.8,
   "backfill_missing": 50,
   "backfill_pending": 0,
   "backfill_filled": 3360
@@ -131,6 +132,11 @@
     "close_ts": 1795464000.0,
     "close_wib": "24 Nov 03:00",
     "count": 3
+   },
+   {
+    "close_ts": 1795478400.0,
+    "close_wib": "24 Nov 07:00",
+    "count": 1
    }
   ],
   "cum_net_curve": [
@@ -2345,9 +2351,42 @@
    }
   ],
   "n_eval": 315,
-  "n_total": 350
+  "n_total": 351
  },
  "signals": [
+  {
+   "signal_id": "PROD WS:USD-M:SOLVUSDT:LONG SIGNAL:1795478400.0",
+   "symbol": "SOLVUSDT",
+   "market": "USD-M",
+   "close_ts": 1795478400.0,
+   "close_wib": "24 Nov 07:00",
+   "close_utc": "24 Nov 00:00",
+   "price": 0.004143,
+   "open": 0.004021,
+   "chg_4h": 3.0340711265854194,
+   "ema20": 0.003980563492966153,
+   "ema50": 0.004083222092041371,
+   "ema500": 0.004023198021123406,
+   "rvol": 1.342399263848027,
+   "taker_buy": 0.5549339069931681,
+   "breakout_level": 0.004098,
+   "breakout_margin": 1.0980966325036579,
+   "hh": 2,
+   "hl": 2,
+   "atr14_pct": 2.7357645353750994,
+   "rsi_5m": null,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 60.23451776123632,
+   "spread": 7.240255822373352,
+   "impact": null,
+   "depth": 219.569911,
+   "liq_validated": false,
+   "quote_volume": 304876.408956,
+   "qv24h": 1218931.427963,
+   "chart": "charts/SOLVUSDT_1795478400.png",
+   "tracker": null
+  },
   {
    "signal_id": "PROD WS:USD-M:CYSUSDT:LONG SIGNAL:1795464000.0",
    "symbol": "CYSUSDT",
