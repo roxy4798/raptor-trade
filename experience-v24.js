@@ -54,11 +54,15 @@ function injectExpandStyles(){
  const st=document.createElement('style');
  st.id='v24-expand-style';
  st.textContent=[
-  '.v24-expand-btn{position:absolute;top:8px;right:8px;z-index:5;display:inline-flex;align-items:center;gap:5px;background:rgba(3,12,20,.78);border:1px solid rgba(103,209,163,.38);border-radius:8px;padding:6px 9px;color:#baffe1;font:700 10px/1 var(--font-mono);letter-spacing:.04em;cursor:pointer;backdrop-filter:blur(2px)}',
+  /* v42: the button used to float top-right OVER the chart, covering the
+     top price-line axis label (the signal close usually sits at the top).
+     It now lives in the banner next to the quote — same control, zero
+     overlap in both normal and expanded mode. */
+  '.v24-expand-btn{position:static;flex-shrink:0;display:inline-flex;align-items:center;gap:5px;background:rgba(3,12,20,.78);border:1px solid rgba(103,209,163,.38);border-radius:8px;padding:6px 9px;color:#baffe1;font:700 10px/1 var(--font-mono);letter-spacing:.04em;cursor:pointer;backdrop-filter:blur(2px)}',
   '.v24-expand-btn:hover{background:rgba(38,132,109,.55);color:#e3fff7}',
+  '.v24-live-banner .v24-live-quote{margin-left:auto}',
   '.v24-live-shell.v24-expanded{position:fixed;inset:0;z-index:10000;height:100vh;height:100dvh;width:100vw;max-width:none;background:#04090f;padding:0;border-radius:0;box-sizing:border-box}',
   '.v24-live-shell.v24-expanded .v24-live-banner{min-height:46px}',
-  '.v24-live-shell.v24-expanded .v24-expand-btn{top:10px;right:10px;padding:8px 12px;font-size:11px}',
  ].join('\n');
  document.head.appendChild(st);
 }
@@ -90,13 +94,13 @@ function exitExpand(){
  updateExpandBtn();
 }
 function ensureExpandButton(){
- const mount=$('#v24-live-chart');if(!mount)return;
- if(mount.querySelector('#v24-expand-btn'))return;
+ const bar=$('#v24-live-shell .v24-live-banner');if(!bar)return;
+ if(bar.querySelector('#v24-expand-btn'))return;
  injectExpandStyles();
  const b=document.createElement('button');
  b.type='button';b.id='v24-expand-btn';b.className='v24-expand-btn';
  b.addEventListener('click',()=>{expandState?exitExpand():enterExpand();});
- mount.appendChild(b);
+ bar.appendChild(b);
  updateExpandBtn();
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&expandState)exitExpand();});
@@ -107,6 +111,19 @@ const str=(en,id)=>isID()?id:en;
    >=10000 -> 0dp (was up to 2dp), <100 -> 6 significant digits (was up
    to 6dp, which truncated tiny prices like 0.000012345 to 0.000012). */
 const money=n=>{ if(!Number.isFinite(n)) return '—'; const a=Math.abs(n); if(a>=10000) return new Intl.NumberFormat('en-US',{maximumFractionDigits:0}).format(n); if(a>=100) return new Intl.NumberFormat('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n); return String(Number(n.toPrecision(6))); };
+/* v42 (25 Nov 2026): magnitude-aware price format for the chart's price
+   scale. Bands mirror money(): >=10000 -> whole units, >=100 -> 2dp,
+   below -> 6 significant digits. minMove is the smallest step the scale
+   may use; the custom formatter reuses money() so axis labels, price-line
+   labels, last-value and crosshair all show the exact values the table
+   and DDT show (a 0.03186 coin no longer reads "0.03"). */
+function priceFormatFor(p){
+ const a=Math.abs(p);
+ if(!Number.isFinite(a)||a<=0)return {type:'custom',formatter:v=>money(v),minMove:0.01};
+ if(a>=10000)return {type:'custom',formatter:v=>money(v),minMove:1};
+ if(a>=100)return {type:'custom',formatter:v=>money(v),minMove:0.01};
+ return {type:'custom',formatter:v=>money(v),minMove:Math.pow(10,Math.floor(Math.log10(a))-5)};
+}
 function safeSet(id,text){const e=$('#'+id);if(e)e.textContent=text;}
 function signalMarket(s){return s.market==='COIN-M'?'COIN-M':'USD-M';}
 function parseRow(row){
@@ -256,9 +273,14 @@ function createChart(c){
   handleScroll:{mouseWheel:true,pressedMouseMove:true,horzTouchDrag:true,vertTouchDrag:false},
   handleScale:{mouseWheel:true,pinch:true,axisPressedMouseMove:true},
  });
- const candle=chart.addSeries(LW.CandlestickSeries,{upColor:'#35d5bd',downColor:'#f16273',borderUpColor:'#35d5bd',borderDownColor:'#f16273',wickUpColor:'#35d5bd',wickDownColor:'#f16273',lastValueVisible:true,priceLineVisible:true});
- const ema20=chart.addSeries(LW.LineSeries,{color:'#33d9d0',lineWidth:2,lastValueVisible:false,priceLineVisible:false,crosshairMarkerVisible:false});
- const ema50=chart.addSeries(LW.LineSeries,{color:'#ffa93c',lineWidth:2,lastValueVisible:false,priceLineVisible:false,crosshairMarkerVisible:false});
+ /* v42: exact price format on the shared scale (see priceFormatFor) — the
+    default 2 decimals made signal close 0.03186 and breakout 0.0287 both
+    read "0.03". Applied to all three series on the right scale so axis,
+    price lines and crosshair agree. */
+ const pf=priceFormatFor(c.signal?c.signal.price:NaN);
+ const candle=chart.addSeries(LW.CandlestickSeries,{upColor:'#35d5bd',downColor:'#f16273',borderUpColor:'#35d5bd',borderDownColor:'#f16273',wickUpColor:'#35d5bd',wickDownColor:'#f16273',lastValueVisible:true,priceLineVisible:true,priceFormat:pf});
+ const ema20=chart.addSeries(LW.LineSeries,{color:'#33d9d0',lineWidth:2,lastValueVisible:false,priceLineVisible:false,crosshairMarkerVisible:false,priceFormat:pf});
+ const ema50=chart.addSeries(LW.LineSeries,{color:'#ffa93c',lineWidth:2,lastValueVisible:false,priceLineVisible:false,crosshairMarkerVisible:false,priceFormat:pf});
  const volume=chart.addSeries(LW.HistogramSeries,{priceFormat:{type:'volume'},priceScaleId:'volume',priceLineVisible:false,lastValueVisible:false});
  volume.priceScale().applyOptions({scaleMargins:{top:.80,bottom:0},visible:false});
  return {chart,candle,ema20,ema50,volume,LW};

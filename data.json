@@ -1,13 +1,13 @@
 {
  "meta": {
-  "generated_ts": 1795546276.917137,
-  "generated_wib": "25 Nov 2026, 01:51 WIB",
+  "generated_ts": 1795550510.764142,
+  "generated_wib": "25 Nov 2026, 03:01 WIB",
   "rules_version": "v2.1.2",
-  "next_close_ts": 1795550400.0,
+  "next_close_ts": 1795564800.0,
   "source": "Binance Futures Mainnet (local)"
  },
  "kpis": {
-  "total": 384,
+  "total": 387,
   "last24": 37,
   "win_rate": 12.010443864229766,
   "wins": 46,
@@ -18,6 +18,7 @@
   "gap_blocked": 0,
   "universe_total": 849,
   "classes": {
+   "BELUM DINILAI": 3,
    "SIDEWAYS": 304,
    "REVERSAL": 33,
    "PUMP CONTINUED": 46,
@@ -29,13 +30,13 @@
   "healthy": true,
   "telegram_paused": true,
   "ws_connected": true,
-  "ws_reconnects": 1,
+  "ws_reconnects": 0,
   "eligible": 840,
   "gap_blocked": 0,
   "universe_total": 849,
-  "signals_total": 424,
-  "heartbeat_age_s": 4.0,
-  "uptime_s": 4441.0,
+  "signals_total": 431,
+  "heartbeat_age_s": 22.0,
+  "uptime_s": 1452.3,
   "backfill_missing": 50,
   "backfill_pending": 0,
   "backfill_filled": 3360
@@ -156,6 +157,11 @@
     "close_ts": 1795536000.0,
     "close_wib": "24 Nov 23:00",
     "count": 16
+   },
+   {
+    "close_ts": 1795550400.0,
+    "close_wib": "25 Nov 03:00",
+    "count": 3
    }
   ],
   "cum_net_curve": [
@@ -2608,7 +2614,7 @@
    }
   ],
   "n_eval": 349,
-  "n_total": 384
+  "n_total": 387
  },
  "tf_summary": {
   "horizons": {
@@ -4887,6 +4893,186 @@
   ]
  },
  "signals": [
+  {
+   "signal_id": "PROD WS:USD-M:OPGUSDT:LONG SIGNAL:1795550400.0",
+   "symbol": "OPGUSDT",
+   "market": "USD-M",
+   "close_ts": 1795550400.0,
+   "close_wib": "25 Nov 03:00",
+   "close_utc": "24 Nov 20:00",
+   "price": 0.1534,
+   "open": 0.1378,
+   "chg_4h": 11.320754716981133,
+   "ema20": 0.13838451653507824,
+   "ema50": 0.13632774477277856,
+   "ema500": 0.124398971589268,
+   "rvol": 5.1630539574335,
+   "taker_buy": 0.5286399774252217,
+   "breakout_level": 0.1436,
+   "breakout_margin": 6.824512534818944,
+   "hh": 2,
+   "hl": 2,
+   "atr14_pct": 3.4507632212677555,
+   "rsi_5m": null,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 70.98003678558472,
+   "spread": 6.521030322792094,
+   "impact": 25.201458975380692,
+   "depth": 1194.586,
+   "book_delay_s": 9.1,
+   "liq_validated": false,
+   "quote_volume": 2699828.5963,
+   "qv24h": 4920076.5483,
+   "chart": "charts/OPGUSDT_1795550400.png",
+   "tracker": null,
+   "tf": {
+    "h4": {
+     "status": null,
+     "return_pct": null
+    },
+    "h12": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h2d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h3d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1w": {
+     "status": null,
+     "return_pct": null
+    }
+   }
+  },
+  {
+   "signal_id": "PROD WS:USD-M:MELIUSDT:LONG SIGNAL:1795550400.0",
+   "symbol": "MELIUSDT",
+   "market": "USD-M",
+   "close_ts": 1795550400.0,
+   "close_wib": "25 Nov 03:00",
+   "close_utc": "24 Nov 20:00",
+   "price": 1446.14,
+   "open": 1432.0,
+   "chg_4h": 0.826895724684171,
+   "ema20": 1410.5184550130496,
+   "ema50": 1418.3796921909263,
+   "ema500": null,
+   "rvol": 1.3107195550649458,
+   "taker_buy": 0.6191872022023462,
+   "breakout_level": 1444.07,
+   "breakout_margin": 0.14334485170387612,
+   "hh": 4,
+   "hl": 2,
+   "atr14_pct": 1.1744609114583118,
+   "rsi_5m": null,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 68.56878872366227,
+   "spread": null,
+   "impact": null,
+   "depth": null,
+   "book_delay_s": 30.4,
+   "liq_validated": false,
+   "quote_volume": 31878.1474,
+   "qv24h": 264953.23829999997,
+   "chart": "charts/MELIUSDT_1795550400.png",
+   "tracker": null,
+   "tf": {
+    "h4": {
+     "status": null,
+     "return_pct": null
+    },
+    "h12": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h2d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h3d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1w": {
+     "status": null,
+     "return_pct": null
+    }
+   }
+  },
+  {
+   "signal_id": "PROD WS:USD-M:UNHUSDT:LONG SIGNAL:1795550400.0",
+   "symbol": "UNHUSDT",
+   "market": "USD-M",
+   "close_ts": 1795550400.0,
+   "close_wib": "25 Nov 03:00",
+   "close_utc": "24 Nov 20:00",
+   "price": 345.11,
+   "open": 340.37,
+   "chg_4h": 1.3926021682286949,
+   "ema20": 338.21508501125476,
+   "ema50": 351.47914165747784,
+   "ema500": null,
+   "rvol": 2.3761186915966515,
+   "taker_buy": 0.506527612530458,
+   "breakout_level": 341.7,
+   "breakout_margin": 0.9979514193737269,
+   "hh": 3,
+   "hl": 2,
+   "atr14_pct": 1.611872053401424,
+   "rsi_5m": null,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 56.08871085476296,
+   "spread": null,
+   "impact": null,
+   "depth": null,
+   "book_delay_s": 59.1,
+   "liq_validated": false,
+   "quote_volume": 61441.1545,
+   "qv24h": 433976.044,
+   "chart": "charts/UNHUSDT_1795550400.png",
+   "tracker": null,
+   "tf": {
+    "h4": {
+     "status": null,
+     "return_pct": null
+    },
+    "h12": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h2d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h3d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1w": {
+     "status": null,
+     "return_pct": null
+    }
+   }
+  },
   {
    "signal_id": "PROD WS:USD-M:MCDUSDT:LONG SIGNAL:1795536000.0",
    "symbol": "MCDUSDT",

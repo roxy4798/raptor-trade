@@ -121,6 +121,38 @@ section[id] {
   color: var(--accent, #b9f38a);
 }
 
+/* ---- v42 (25 Nov 2026): DDT list rows squashed ("tulisan tumpang tindih")
+   Root cause, measured in the browser: #ddt-list is a column flex container
+   capped at max-height:690px, and its children default to flex-shrink:1.
+   With 16 visible items + 20 group headers (~2300px of content) flexbox
+   squeezed every .ddt-item from its natural ~83px down to 24px; v22.css
+   overflow:hidden then clipped the setup/foot lines and half the head
+   line, leaving cramped single-line rows with text cut at the pill edge
+   (Raka's laptop screenshot: 36px pitch, one visible line per row).
+   flex-shrink:0 keeps every child at natural height; the list scrolls
+   exactly as its overflow-y:auto intended. Same flex-default family as
+   the v37b min-width:0 chart fix. */
+#ddt-list > * {
+  flex-shrink: 0;
+}
+
+/* ---- v42 (25 Nov 2026): Signal Levels tab — distance + sync note ----
+   Chips carry the level's distance from the signal close (small, muted:
+   a level below close is normal for breakout/EMAs, not good or bad), and
+   a line under the chips states the levels match the LIVE 4H tab. */
+.v23-level-chip small {
+  font: 500 10px var(--font-mono, ui-monospace, monospace);
+  color: #7e968a;
+  letter-spacing: 0;
+}
+.v23-levels-sync {
+  margin: 2px 0 0;
+  text-align: center;
+  font: 500 10.5px var(--font-mono, ui-monospace, monospace);
+  letter-spacing: 0.02em;
+  color: #6f8a96;
+}
+
 /* ---------- mobile signal cards (main table, <=780px) ----------
    The thead goes away; each row becomes a 2-line card:
    line 1 — symbol + close; line 2 — 4H change, RVOL, +30m, outcome.
