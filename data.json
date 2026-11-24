@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_ts": 1795495008.5166564,
-  "generated_wib": "24 Nov 2026, 11:36 WIB",
+  "generated_ts": 1795495308.6611176,
+  "generated_wib": "24 Nov 2026, 11:41 WIB",
   "rules_version": "v2.1.2",
   "next_close_ts": 1795507200.0,
   "source": "Binance Futures Mainnet (local)"
@@ -9,20 +9,19 @@
  "kpis": {
   "total": 356,
   "last24": 322,
-  "win_rate": 11.9533527696793,
-  "wins": 41,
-  "n_eval": 343,
-  "mean_net": 0.0230632412366718,
-  "median_net": 0.0021204759178698566,
+  "win_rate": 12.068965517241379,
+  "wins": 42,
+  "n_eval": 348,
+  "mean_net": 0.010589952282505059,
+  "median_net": 0.0015122791499455395,
   "eligible": 840,
   "gap_blocked": 0,
   "universe_total": 849,
   "classes": {
-   "BELUM DINILAI": 5,
-   "INSUFFICIENT DATA": 8,
-   "PUMP CONTINUED": 41,
-   "SIDEWAYS": 275,
-   "REVERSAL": 27
+   "REVERSAL": 28,
+   "PUMP CONTINUED": 42,
+   "SIDEWAYS": 278,
+   "INSUFFICIENT DATA": 8
   },
   "first_signal_date": "21 Nov 2026"
  },
@@ -35,8 +34,8 @@
   "gap_blocked": 0,
   "universe_total": 849,
   "signals_total": 393,
-  "heartbeat_age_s": 5.0,
-  "uptime_s": 3883.0,
+  "heartbeat_age_s": 6.0,
+  "uptime_s": 4183.0,
   "backfill_missing": 50,
   "backfill_pending": 0,
   "backfill_filled": 3360
@@ -2353,9 +2352,44 @@
     "close_wib": "24 Nov 03:00",
     "net_pct": -0.28180362225987166,
     "cum_net_pct": 4.284648060017759
+   },
+   {
+    "symbol": "ONUSDT",
+    "close_ts": 1795492800.0,
+    "close_wib": "24 Nov 11:00",
+    "net_pct": -5.059807519403039,
+    "cum_net_pct": -0.9919544041060102
+   },
+   {
+    "symbol": "SAHARAUSDT",
+    "close_ts": 1795492800.0,
+    "close_wib": "24 Nov 11:00",
+    "net_pct": 1.650104652656461,
+    "cum_net_pct": 0.6417819627760668
+   },
+   {
+    "symbol": "LISTAUSDT",
+    "close_ts": 1795492800.0,
+    "close_wib": "24 Nov 11:00",
+    "net_pct": 0.08627950832344866,
+    "cum_net_pct": 0.7286151974215116
+   },
+   {
+    "symbol": "TMFUSDT",
+    "close_ts": 1795492800.0,
+    "close_wib": "24 Nov 11:00",
+    "net_pct": -0.34675558519505917,
+    "cum_net_pct": 0.379333098334822
+   },
+   {
+    "symbol": "MRNAUSDT",
+    "close_ts": 1795492800.0,
+    "close_wib": "24 Nov 11:00",
+    "net_pct": -0.20595731553180885,
+    "cum_net_pct": 0.17259451853675056
    }
   ],
-  "n_eval": 315,
+  "n_eval": 320,
   "n_total": 356
  },
  "signals": [
@@ -2391,7 +2425,21 @@
    "quote_volume": 34380123.8248,
    "qv24h": 38447503.4079,
    "chart": "charts/ONUSDT_1795492800.png",
-   "tracker": null
+   "tracker": {
+    "classification": "REVERSAL",
+    "reason": "return +30m -4.91% <= -1,00%",
+    "r1": -0.010373443983402453,
+    "r5": -0.006915629322268302,
+    "r15": -0.025587828492392828,
+    "r30": -0.049100968188105054,
+    "mfe": 0.004149377593360981,
+    "mae": -0.06500691562932237,
+    "net": -0.05059807519403039,
+    "evaluated_ts": 1795495008.9503348,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:SAHARAUSDT:LONG SIGNAL:1795492800.0",
@@ -2425,7 +2473,21 @@
    "quote_volume": 13437802.902466,
    "qv24h": 15641429.013347998,
    "chart": "charts/SAHARAUSDT_1795492800.png",
-   "tracker": null
+   "tracker": {
+    "classification": "PUMP CONTINUED",
+    "reason": "return +30m +1.78% >= +1,00%",
+    "r1": -0.0003495281370149428,
+    "r5": -0.006641034603285578,
+    "r15": 0.0013981125480602152,
+    "r30": 0.017825934987766523,
+    "mfe": 0.04246766864732621,
+    "mae": -0.015204473960153675,
+    "net": 0.01650104652656461,
+    "evaluated_ts": 1795495008.9503348,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:LISTAUSDT:LONG SIGNAL:1795492800.0",
@@ -2459,7 +2521,21 @@
    "quote_volume": 31031675.77617,
    "qv24h": 75820911.96837,
    "chart": "charts/LISTAUSDT_1795492800.png",
-   "tracker": null
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m +0.24%, MFE +1.83%",
+    "r1": -0.0005858230814292931,
+    "r5": -0.0016598320640500708,
+    "r15": -0.005565319273579394,
+    "r30": 0.00244092950595598,
+    "mfe": 0.01825815270454978,
+    "mae": -0.015231400117164506,
+    "net": 0.0008627950832344865,
+    "evaluated_ts": 1795495008.9503348,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:TMFUSDT:LONG SIGNAL:1795492800.0",
@@ -2493,7 +2569,21 @@
    "quote_volume": 204216.2311,
    "qv24h": 1975948.1617,
    "chart": "charts/TMFUSDT_1795492800.png",
-   "tracker": null
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.20%, MFE +0.00%",
+    "r1": -0.00033344448149374983,
+    "r5": -0.0010003334444813605,
+    "r15": -0.002334111370456693,
+    "r30": -0.002000666888962943,
+    "mfe": 0.0,
+    "mae": -0.0026675558519505538,
+    "net": -0.0034675558519505914,
+    "evaluated_ts": 1795495008.9503348,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:MRNAUSDT:LONG SIGNAL:1795492800.0",
@@ -2527,7 +2617,21 @@
    "quote_volume": 1533743.4398,
    "qv24h": 11223992.7902,
    "chart": "charts/MRNAUSDT_1795492800.png",
-   "tracker": null
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.09%, MFE +0.05%",
+    "r1": -0.0006064281382656134,
+    "r5": -0.0014460978681718473,
+    "r15": -0.0007930214115782208,
+    "r30": -0.0009329663665625931,
+    "mfe": 0.0005131315016093652,
+    "mae": -0.0024723608713905776,
+    "net": -0.0020595731553180886,
+    "evaluated_ts": 1795495008.9503348,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:SOLVUSDT:LONG SIGNAL:1795478400.0",
