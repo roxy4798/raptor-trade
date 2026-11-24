@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_ts": 1795509408.1837356,
-  "generated_wib": "24 Nov 2026, 15:36 WIB",
+  "generated_ts": 1795509708.1489594,
+  "generated_wib": "24 Nov 2026, 15:41 WIB",
   "rules_version": "v2.1.2",
   "next_close_ts": 1795521600.0,
   "source": "Binance Futures Mainnet (local)"
@@ -9,19 +9,18 @@
  "kpis": {
   "total": 360,
   "last24": 314,
-  "win_rate": 12.394366197183098,
+  "win_rate": 12.256267409470752,
   "wins": 44,
-  "n_eval": 355,
-  "mean_net": 0.04379800176582196,
-  "median_net": 0.0021204759178698566,
+  "n_eval": 359,
+  "mean_net": 0.04013143635924954,
+  "median_net": 0.0002563294611210396,
   "eligible": 840,
   "gap_blocked": 0,
   "universe_total": 849,
   "classes": {
-   "BELUM DINILAI": 4,
+   "SIDEWAYS": 286,
    "REVERSAL": 29,
    "PUMP CONTINUED": 44,
-   "SIDEWAYS": 282,
    "INSUFFICIENT DATA": 1
   },
   "first_signal_date": "21 Nov 2026"
@@ -36,7 +35,7 @@
   "universe_total": 849,
   "signals_total": 397,
   "heartbeat_age_s": 7.0,
-  "uptime_s": 3582.6,
+  "uptime_s": 3882.7,
   "backfill_missing": 50,
   "backfill_pending": 0,
   "backfill_filled": 3360
@@ -2442,9 +2441,30 @@
     "close_wib": "24 Nov 11:00",
     "net_pct": -0.20595731553180885,
     "cum_net_pct": 11.351959828100044
+   },
+   {
+    "symbol": "ZILUSDT",
+    "close_ts": 1795507200.0,
+    "close_wib": "24 Nov 15:00",
+    "net_pct": -0.3120858913054317,
+    "cum_net_pct": 11.004446071784457
+   },
+   {
+    "symbol": "BABYUSDT",
+    "close_ts": 1795507200.0,
+    "close_wib": "24 Nov 15:00",
+    "net_pct": -0.024843495420546667,
+    "cum_net_pct": 10.976868687308006
+   },
+   {
+    "symbol": "ARXUSDT",
+    "close_ts": 1795507200.0,
+    "close_wib": "24 Nov 15:00",
+    "net_pct": -0.7416431921454542,
+    "cum_net_pct": 10.153816295832385
    }
   ],
-  "n_eval": 327,
+  "n_eval": 330,
   "n_total": 360
  },
  "signals": [
@@ -2480,7 +2500,21 @@
    "quote_volume": 2773620.969493,
    "qv24h": 8119135.067601,
    "chart": "charts/ZILUSDT_1795507200.png",
-   "tracker": null
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.12%, MFE +0.93%",
+    "r1": 0.0058004640371229765,
+    "r5": 0.0034802784222738303,
+    "r15": 0.0011600928074246841,
+    "r30": -0.001160092807424573,
+    "mfe": 0.009280742459396807,
+    "mae": -0.006960556844547661,
+    "net": -0.003120858913054317,
+    "evaluated_ts": 1795509408.3823516,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:BABYUSDT:LONG SIGNAL:1795507200.0",
@@ -2514,7 +2548,21 @@
    "quote_volume": 4355381.773614,
    "qv24h": 11926297.629406,
    "chart": "charts/BABYUSDT_1795507200.png",
-   "tracker": null
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m +0.09%, MFE +1.34%",
+    "r1": 0.0024250440917106264,
+    "r5": -0.0015432098765432167,
+    "r15": -0.0024250440917107374,
+    "r30": 0.0008818342151675207,
+    "mfe": 0.01344797178130519,
+    "mae": -0.013117283950617398,
+    "net": -0.00024843495420546666,
+    "evaluated_ts": 1795509408.3823516,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:ARXUSDT:LONG SIGNAL:1795507200.0",
@@ -2548,7 +2596,21 @@
    "quote_volume": 513994.2659,
    "qv24h": 2234813.8586,
    "chart": "charts/ARXUSDT_1795507200.png",
-   "tracker": null
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.55%, MFE +0.33%",
+    "r1": 0.0,
+    "r5": 0.0011025358324145973,
+    "r15": -0.004961411245865577,
+    "r30": -0.005512679162072764,
+    "mfe": 0.00330760749724357,
+    "mae": -0.008820286659316556,
+    "net": -0.007416431921454541,
+    "evaluated_ts": 1795509408.3823516,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:ASRUSDT:LONG SIGNAL:1795507200.0",
@@ -2582,7 +2644,21 @@
    "quote_volume": 126404.32108,
    "qv24h": 774636.57096,
    "chart": "charts/ASRUSDT_1795507200.png",
-   "tracker": null
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m +0.39%, MFE +1.18%",
+    "r1": 0.00376732971669691,
+    "r5": 0.004972875226039841,
+    "r15": 0.00376732971669691,
+    "r30": 0.003918022905364804,
+    "mfe": 0.011754068716093968,
+    "mae": 0.0007534659433394708,
+    "net": null,
+    "evaluated_ts": 1795509408.3823516,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:ONUSDT:LONG SIGNAL:1795492800.0",
