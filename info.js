@@ -15,11 +15,18 @@ var maxC=Math.max.apply(null,S.signals_per_close.map(function(c){return c.count}
    columns now sharing the cell (min-width:0), adjacent "HH:MM" labels
    overlap (the max bar at i=16 sat next to the every-3rd label at 15,
    and the last bar at 19 next to the one at 18). Keep last + max
-   first, then every 3rd unless adjacent to a kept label. */
+   first, then every 3rd unless adjacent to a kept label.
+   r5 (24 Nov 2026): distance-2 is NOT enough — a "HH:MM" label is
+   ~31px but at 320px two columns are only ~24px, so the max label
+   at 16 overlapped the 3rd-label at 18 by 5px once closes reached
+   22. Minimum gap is now 3 columns, and the sweep step grows with
+   the close count (one close every 4h) so the label count stays
+   bounded as closes accrue. */
 var lastIdx=S.signals_per_close.length-1, maxIdx=S.signals_per_close.indexOf(busy);
+var step=Math.max(3,Math.ceil(S.signals_per_close.length/7));
 var labelIdx={}; labelIdx[lastIdx]=1;
-if(maxIdx!==lastIdx&&Math.abs(maxIdx-lastIdx)>1)labelIdx[maxIdx]=1;
-for(var li=0;li<=lastIdx;li+=3){ if(labelIdx[li])continue; var adj=false; for(var k in labelIdx){ if(Math.abs(+k-li)<=1){adj=true;break} } if(!adj)labelIdx[li]=1; }
+if(maxIdx!==lastIdx&&Math.abs(maxIdx-lastIdx)>=step)labelIdx[maxIdx]=1;
+for(var li=0;li<=lastIdx;li+=step){ if(labelIdx[li])continue; var adj=false; for(var k in labelIdx){ if(Math.abs(+k-li)<step){adj=true;break} } if(!adj)labelIdx[li]=1; }
 /* v37c: the 294 flood bar is a 24x outlier — scaling to it crushes the
    other 19 closes into 3–14px crumbs and leaves the chart 90% empty
    ("tidak rapih dan tidak enak dilihat"). Scale to capC, the highest
