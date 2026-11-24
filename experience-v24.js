@@ -102,7 +102,11 @@ function ensureExpandButton(){
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&expandState)exitExpand();});
 const isID=()=>L.get()==='id';
 const str=(en,id)=>isID()?id:en;
-const money=n=>Number.isFinite(n)?new Intl.NumberFormat('en-US',{maximumFractionDigits:n>=100?2:n>=1?4:6}).format(n):'—';
+/* v40b (25 Nov 2026): same fmtPrice mirror as v22/v23 (see v23 money()).
+   The live quote keeps its no-'$' style; only the decimal logic changes:
+   >=10000 -> 0dp (was up to 2dp), <100 -> 6 significant digits (was up
+   to 6dp, which truncated tiny prices like 0.000012345 to 0.000012). */
+const money=n=>{ if(!Number.isFinite(n)) return '—'; const a=Math.abs(n); if(a>=10000) return new Intl.NumberFormat('en-US',{maximumFractionDigits:0}).format(n); if(a>=100) return new Intl.NumberFormat('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n); return String(Number(n.toPrecision(6))); };
 function safeSet(id,text){const e=$('#'+id);if(e)e.textContent=text;}
 function signalMarket(s){return s.market==='COIN-M'?'COIN-M':'USD-M';}
 function parseRow(row){

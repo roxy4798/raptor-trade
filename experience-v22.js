@@ -60,7 +60,13 @@ var TXT = {
 function t(k){ var m=TXT[LANG.get()]||TXT.en; return m[k] || TXT.en[k] || k; }
 function num(n,d){ if(n===null||n===undefined||Number.isNaN(Number(n))) return LANG.get()==='id'?'N/A':'N/A'; return Number(n).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d}); }
 function pct(n,d){ if(n===null||n===undefined||Number.isNaN(Number(n))) return 'N/A'; var sign=Number(n)>0?'+':''; return sign+num(n,d)+'%'; }
-function money(n){ if(n===null||n===undefined||Number.isNaN(Number(n))) return 'N/A'; var abs=Math.abs(Number(n)); var digits=abs>=100?2:abs>=1?4:6; return '$'+num(n,digits); }
+/* v40b (25 Nov 2026): money() used to force fixed decimals by magnitude
+   band (>=100 -> 2dp, >=1 -> 4dp, <1 -> 6dp), padding tick-aligned
+   closes with trailing zeros ($97.8500, $0.062970). It now mirrors the
+   main table's fmtPrice (app.js) / fmt_price (build.py) exactly — one
+   price format across the product: >=10000 -> 0dp, >=100 -> 2dp,
+   below 100 -> 6 significant digits with trailing zeros stripped. */
+function money(n){ if(n===null||n===undefined||Number.isNaN(Number(n))) return 'N/A'; var v=Number(n), abs=Math.abs(v); if(abs>=10000) return '$'+v.toLocaleString("en-US",{maximumFractionDigits:0}); if(abs>=100) return '$'+v.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}); return '$'+String(Number(v.toPrecision(6))); }
 function formatClose(s){ return LANG.useWIB&&LANG.useWIB() ? (s.close_wib+' WIB') : (s.close_utc+' UTC'); }
 function qualityOf(s){ return (s.rvol||0)>=3 || (s.breakout_margin||0)>=3 || (s.chg_4h||0)>=5 ? 'strong' : 'standard'; }
 function hasNoData(s){ return !s.tracker || s.tracker.r30===null || s.tracker.r30===undefined; }

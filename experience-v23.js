@@ -19,7 +19,12 @@ const t=k=>(T[lang()]||T.en)[k]||T.en[k]||k;
 const esc=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 const fin=n=>typeof n==='number'&&Number.isFinite(n);
 const num=(n,d=2)=>fin(n)?n.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d}):'—';
-const money=n=>!fin(n)?'—':'$'+num(n,n>=100?2:n>=1?4:6);
+/* v40b (25 Nov 2026): money() used to force fixed decimals by magnitude
+   band (>=100 -> 2dp, >=1 -> 4dp, <1 -> 6dp), padding tick-aligned closes
+   with trailing zeros ($97.8500, $0.062970). It now mirrors the main
+   table's fmtPrice (app.js) / fmt_price (build.py) — one price format
+   across the product. The '—' fallback for non-finite values is kept. */
+const money=n=>{ if(!fin(n)) return '—'; const a=Math.abs(n); if(a>=10000) return '$'+n.toLocaleString('en-US',{maximumFractionDigits:0}); if(a>=100) return '$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); return '$'+String(Number(n.toPrecision(6))); };
 const pct=n=>fin(n)?(n>0?'+':'')+num(n,2)+'%':'—';
 const dir=s=>{const v=String(s.direction||s.side||s.signal_id||'').toUpperCase();return v.includes('SHORT')?'SHORT':'LONG'};
 const time=s=>id()?`${s.close_wib} WIB`:`${s.close_utc} UTC`;
