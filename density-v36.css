@@ -153,15 +153,17 @@ section[id] {
   }
   #signals tbody tr[data-sid] td:nth-child(4) { grid-column: 1; }
   #signals tbody tr[data-sid] td:nth-child(5) { grid-column: 2; }
-  #signals tbody tr[data-sid] td:nth-child(8) { grid-column: 3; }
-  #signals tbody tr[data-sid] td:nth-child(16) {
+  /* v41: the +30m cell (old child 8) is gone — the card's third value
+     is now the breakout margin (child 6), and the badge moved from
+     child 16 to child 15. */
+  #signals tbody tr[data-sid] td:nth-child(6) { grid-column: 3; }
+  #signals tbody tr[data-sid] td:nth-child(15) {
     grid-column: 4;
     text-align: right;
   }
-  /* v40: the six TF columns hide on cards; the strip (child 15) carries
+  /* v40: the six TF columns hide on cards; the strip (child 14) carries
      the same values on one line below (see .tf-strip rule). */
   #signals tbody tr[data-sid] td:nth-child(3),
-  #signals tbody tr[data-sid] td:nth-child(6),
   #signals tbody tr[data-sid] td:nth-child(7),
   #signals tbody tr[data-sid] td.tf-cell,
   #signals tbody tr[data-sid] td.live-cell {
@@ -461,3 +463,43 @@ section[id] {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+/* ---- v41 (25 Nov 2026): TF performance replaces the +30m displays
+   (Raka: "semuanya diganti jadi performa TF"). Placement per
+   professional references: the horizon summary table follows the
+   fund-factsheet pattern (standardised periods as columns, one
+   metric per row, one format per column, right-aligned numbers —
+   Morningstar / SEC factsheet layout); the per-signal list keeps the
+   v40 TF cell rules (frozen / live green dot / "—") so the same
+   value never looks different in two places. */
+/* Horizon summary table: full width above the perf grid; horizontal
+   scroll on narrow screens with the metric column frozen (same
+   sticky pattern as the v40 symbol column). */
+.tf-summary-wrap{overflow-x:auto;margin:2px 0 18px}
+.tf-summary{width:100%;border-collapse:collapse;font-size:13px;min-width:520px}
+.tf-summary th,.tf-summary td{padding:7px 10px;text-align:right;border-bottom:1px solid rgba(148,163,184,.14);white-space:nowrap}
+.tf-summary thead th{color:var(--text-2);font-weight:600;font-size:11px;letter-spacing:.04em}
+.tf-summary thead th:first-child,.tf-summary tbody th{text-align:left}
+.tf-summary tbody th{font-weight:600;color:var(--text-2);font-size:12px}
+.tf-summary td small{display:block;font-size:10px;color:var(--text-2);font-weight:400}
+.tf-summary .num{font-variant-numeric:tabular-nums}
+@media (max-width:780px){
+  .tf-summary thead th:first-child,.tf-summary tbody th{position:sticky;left:0;z-index:2;background:var(--bg-1)}
+}
+/* Per-signal TF list: each row gains a second line carrying the full
+   6-horizon strip (same values as the table's TF columns). The strip
+   spans the whole row grid so it never collides with the bar. */
+.bars .bar-row{grid-template-rows:auto auto}
+.bars .bar-tf-strip{grid-column:1/-1;font-size:10px;line-height:1.5;color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bars .bar-tf-strip .tf-val{font-variant-numeric:tabular-nums}
+.bars .bar-tf-strip .tf-val.up{color:var(--pos,#2ebd85)}
+.bars .bar-tf-strip .tf-val.down{color:var(--neg,#e5485a)}
+.bars .bar-tf-strip .tf-val.na{color:var(--text-2)}
+/* Divider between the evaluated rows and the recent signals whose +4H
+   is still live. It is a .bar-row so the collapse nth-child count
+   stays correct (it sits at position n_eval+1, hidden when collapsed). */
+.bars .bar-row.bars-divider{grid-template-columns:1fr;justify-items:center;padding:10px 0 6px}
+.bars .bar-row.bars-divider span{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2);border-bottom:1px solid rgba(148,163,184,.25);padding-bottom:4px}
+/* Pending rows: the +4H value is live (unknown at build), so the bar
+   is a minimal muted fill — an empty track would look broken. */
+.bars .bar-fill.live{background:var(--text-2);opacity:.45}

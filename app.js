@@ -66,9 +66,9 @@ function groupStats(list){
 function groupHeadHtml(ts, st, collapsed, closeStr){
   var stats = "";
   if(st.mean!==null) stats = ' &middot; <span class="gh-stat">'+st.cont+' '+groupT("continued")+'</span> &middot; <span class="gh-stat">'+st.rev+' '+groupT("reversed")+'</span> &middot; <span class="gh-stat">'+groupT("mean")+' '+(st.mean>=0?"+":"")+st.mean.toFixed(2)+'%</span>';
-  return '<tr class="close-group-head" data-close-ts="'+ts+'"><td colspan="17"><button type="button" class="close-group-toggle" aria-expanded="'+(!collapsed)+'" data-close-ts="'+ts+'"><span class="gh-chev">'+(collapsed?"▸":"▾")+'</span><span class="gh-close">'+closeStr+'</span><span class="gh-count">'+st.n+' '+groupT("signals")+'</span>'+stats+'</button></td></tr>';
+  return '<tr class="close-group-head" data-close-ts="'+ts+'"><td colspan="16"><button type="button" class="close-group-toggle" aria-expanded="'+(!collapsed)+'" data-close-ts="'+ts+'"><span class="gh-chev">'+(collapsed?"▸":"▾")+'</span><span class="gh-close">'+closeStr+'</span><span class="gh-count">'+st.n+' '+groupT("signals")+'</span>'+stats+'</button></td></tr>';
 }
-var SORT_KEYS = { "symbol": function(s){ return s.symbol; }, "close_ts": function(s){ return s.close_ts; }, "price": function(s){ return s.price; }, "chg_4h": function(s){ return s.chg_4h; }, "rvol": function(s){ return s.rvol; }, "breakout_margin": function(s){ return s.breakout_margin; }, "rsi_4h": function(s){ return s.rsi_4h; }, "r30": function(s){ return s.tracker ? s.tracker.r30 : null; },
+var SORT_KEYS = { "symbol": function(s){ return s.symbol; }, "close_ts": function(s){ return s.close_ts; }, "price": function(s){ return s.price; }, "chg_4h": function(s){ return s.chg_4h; }, "rvol": function(s){ return s.rvol; }, "breakout_margin": function(s){ return s.breakout_margin; }, "rsi_4h": function(s){ return s.rsi_4h; },
   "tf_h4": function(s){ var h=s.tf&&s.tf.h4; return h&&h.status==="evaluated"?h.return_pct:null; },
   "tf_h12": function(s){ var h=s.tf&&s.tf.h12; return h&&h.status==="evaluated"?h.return_pct:null; },
   "tf_h1d": function(s){ var h=s.tf&&s.tf.h1d; return h&&h.status==="evaluated"?h.return_pct:null; },
@@ -87,8 +87,6 @@ function closeCellHtml(s){ return I18N.useWIB() ? '<span class="close-wib">'+s.c
 function closeText(s){ return I18N.useWIB() ? (s.close_wib+' WIB') : (s.close_utc+' UTC'); }
 function rowHtml(s){
     var t = s.tracker;
-    var r30 = (t && t.r30!==null && t.r30!==undefined) ? fmtPctFracG(t.r30) : I18N.t('na');
-    var r30c = (t && t.r30!==null && t.r30!==undefined) ? clsOf(t.r30*100) : "na";
     var latest = (s.close_ts === LATEST_TS) ? ' class="latest"' : "";
     return '<tr data-sid="'+s.signal_id+'" tabindex="0" role="button" aria-label="Details '+s.symbol+'"'+latest+'>'
       +'<td class="sym"><span class="sym-name">'+s.symbol+'</span><span class="sym-mkt">'+s.market+'</span></td>'
@@ -98,7 +96,8 @@ function rowHtml(s){
       +'<td class="num" data-sort="'+(s.rvol??'')+'">'+(s.rvol===null||s.rvol===undefined?I18N.t('na'):s.rvol.toFixed(2)+"x")+'</td>'
       +'<td class="num '+clsOf(s.breakout_margin)+'" data-sort="'+(s.breakout_margin??'')+'">'+fmtPctG(s.breakout_margin)+'</td>'
       +'<td class="num" data-sort="'+(s.rsi_4h??'')+'">'+(s.rsi_4h===null||s.rsi_4h===undefined?I18N.t('na'):s.rsi_4h.toFixed(1))+'</td>'
-      +'<td class="num '+r30c+'" data-sort="'+(t&&t.r30!=null?t.r30*100:'')+'">'+r30+'</td>'
+      /* v41: the +30m cell is gone (Raka: all +30m displays become TF
+         performance) — the TF cells carry the returns now. */
       + tfCellsHtml(s)
       + tfStripHtml(s)
       +'<td>'+badgeOf(t ? t.classification : null)+'</td>'
@@ -161,7 +160,7 @@ function tfBoxHtml(s){
   return '<div class="tf-box"><h4>'+I18N.t('metricTF')+'</h4><div class="tf-grid">'+cells+'</div></div>';
 }
 function renderRows(list){
-  if(!list.length){ tbody.innerHTML = '<tr class="empty-state"><td class="no-results" colspan="17">'+(I18N.get()==='id'?'Tidak ada sinyal yang cocok. Coba simbol atau filter lain.':'No signals match this search. Try another symbol or filter.')+'</td></tr>'; return; }
+  if(!list.length){ tbody.innerHTML = '<tr class="empty-state"><td class="no-results" colspan="16">'+(I18N.get()==='id'?'Tidak ada sinyal yang cocok. Coba simbol atau filter lain.':'No signals match this search. Try another symbol or filter.')+'</td></tr>'; return; }
   if(sortState.key !== "close_ts"){ tbody.innerHTML = list.map(rowHtml).join(""); return; }
   /* Grouped by close (default sort only). The list is already close_ts
      desc, so groups are contiguous. */
@@ -181,7 +180,7 @@ function renderRows(list){
     var shown = showAll ? g.rows : g.rows.slice(0, GROUP_PAGE);
     html += shown.map(rowHtml).join("");
     if(g.rows.length > GROUP_PAGE){
-      html += '<tr class="close-group-more" data-close-ts="'+g.ts+'"><td colspan="17"><button type="button" class="close-group-more-btn" data-close-ts="'+g.ts+'">'
+      html += '<tr class="close-group-more" data-close-ts="'+g.ts+'"><td colspan="16"><button type="button" class="close-group-more-btn" data-close-ts="'+g.ts+'">'
         + (showAll ? groupT("showLess") : groupT("showAll")+" "+g.rows.length+" ("+shown.length+" "+groupT("of")+" "+g.rows.length+")")
         + '</button></td></tr>';
     }
@@ -229,16 +228,13 @@ function openModal(sid){
   var trkHtml;
   if(!t){ trkHtml = '<p class="muted">'+I18N.t('modalNoTracker')+'</p>'; }
   else if(t.r30===null || t.r30===undefined){ var reason = I18N.get()==='id' ? (t.insufficient_reason||'data 1m tidak lengkap') : (t.insufficient_reason_en||'incomplete 1m data'); trkHtml = '<p class="muted">'+I18N.t('modalInsuff',{reason:reason})+'</p>'; }
-  else { trkHtml = '<div class="tracker-grid">'
-      + metric("+1m", fmtPctFracG(t.r1), clsOf(t.r1!==null&&t.r1!==undefined ? t.r1*100 : null))
-      + metric("+5m", fmtPctFracG(t.r5), clsOf(t.r5!==null&&t.r5!==undefined ? t.r5*100 : null))
-      + metric("+15m", fmtPctFracG(t.r15), clsOf(t.r15!==null&&t.r15!==undefined ? t.r15*100 : null))
-      + metric("+30m", fmtPctFracG(t.r30), clsOf(t.r30*100))
-      + metric("Net +30m", fmtPctFracG(t.net), clsOf(t.net!==null&&t.net!==undefined ? t.net*100 : null))
-      + metric("MFE", fmtPctFracG(t.mfe), clsOf(t.mfe!==null&&t.mfe!==undefined ? t.mfe*100 : null))
-      + metric("MAE", fmtPctFracG(t.mae), clsOf(t.mae!==null&&t.mae!==undefined ? t.mae*100 : null))
+  else { /* v41: the +1m/+5m/+15m/+30m/net/MFE/MAE numbers are gone
+      (Raka: all +30m displays become TF performance — the TF box above
+      carries the returns now). Only the classification badge stays,
+      with a note on its basis (frozen RULES v1.0.0). */
+      trkHtml = '<div class="tracker-grid">'
       + metric("Classification", badgeOf(t.classification), "")
-      + '</div>'; }
+      + '</div><p class="muted">'+I18N.t('modalTrackerNote')+'</p>'; }
   var hh = (s.hh!==null&&s.hh!==undefined) ? s.hh+"/4" : I18N.t('na'); var hl = (s.hl!==null&&s.hl!==undefined) ? s.hl+"/4" : I18N.t('na');
   var liq = s.liq_validated===true ? I18N.t('yes') : (s.liq_validated===false ? I18N.t('noInfo') : I18N.t('na'));
   modalBody.innerHTML = '<div class="modal-head"><div><h3 id="modal-title">'+s.symbol+' <span class="muted" style="font-weight:400;font-size:14px">'+s.market+'</span></h3>'
