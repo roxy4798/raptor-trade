@@ -91,7 +91,7 @@ if(exportButton)exportButton.addEventListener('click',function(){
   var keys=['symbol','market','close_wib','close_utc','close_ts','price','open','chg_4h','rvol','breakout_margin','rsi_4h','taker_buy','atr14_pct','quote_volume','tracker_classification','tracker_r30','tracker_net','tf_h4','tf_h12','tf_h1d','tf_h2d','tf_h3d','tf_h1w'];
   function cell(v){ if(v===null||v===undefined)return '""'; var str=String(v); if(/^[=+@\-]/.test(str) && isNaN(Number(str)))str="'"+str; return '"'+str.replace(/"/g,'""')+'"'; }
   var rows=[keys.join(',')];
-  (DATA.signals||[]).forEach(function(s){ var tr=s.tracker||{}; rows.push(keys.map(function(k){ if(k==='tracker_classification')return cell(tr.classification); if(k==='tracker_r30')return cell(tr.r30); if(k==='tracker_net')return cell(tr.net); if(k.indexOf('tf_')===0){ var h=(s.tf||{})[k.slice(3)]; return cell(h&&h.status==='evaluated'?h.return_pct:null); } return cell(s[k]); }).join(',')); });
+  (DATA.signals||[]).forEach(function(s){ var tr=s.tracker||{}; rows.push(keys.map(function(k){ if(k==='tracker_classification')return cell(tr.classification); if(k==='tracker_r30')return cell(tr.r30); if(k==='tracker_net')return cell(tr.net); if(k.indexOf('tf_')===0){ var h=(s.tf||{})[k.slice(3)]; return cell(h&&h.status==='evaluated'?h.return_pct/100:null); } return cell(s[k]); }).join(',')); });
   var file=new Blob(['\ufeff',rows.join('\r\n')],{type:'text/csv;charset=utf-8'});
   var url=URL.createObjectURL(file),anchor=d.createElement('a');
   anchor.href=url;anchor.download='raptor-trade-signals-'+new Date((DATA.meta.generated_ts||Date.now()/1000)*1000).toISOString().slice(0,10)+'.csv';

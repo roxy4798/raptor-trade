@@ -116,7 +116,7 @@ function tfCellsHtml(s){
     var h=tf[hz[0]]||{};
     var edge = idx===0 ? " tf-first" : (idx===TF_HORIZONS.length-1 ? " tf-last" : "");
     if(h.status==="evaluated" && h.return_pct!==null && h.return_pct!==undefined){
-      out+='<td class="num tf-cell'+edge+' '+clsOf(h.return_pct*100)+'" data-sort="'+(h.return_pct*100)+'">'+fmtPctFracG(h.return_pct)+'</td>';
+      out+='<td class="num tf-cell'+edge+' '+clsOf(h.return_pct)+'" data-sort="'+(h.return_pct)+'">'+fmtPctG(h.return_pct)+'</td>';
     } else if(hz[0]===live){
       out+='<td class="num tf-cell'+edge+' tf-live" data-sort="">'+tfLiveSpan(s)+'</td>';
     } else if(h.status==="pending"){
@@ -132,7 +132,7 @@ function tfStripHtml(s){
   TF_HORIZONS.forEach(function(hz){
     var h=tf[hz[0]]||{};
     if(h.status==="evaluated" && h.return_pct!==null && h.return_pct!==undefined){
-      parts.push('<span class="tf-val '+(h.return_pct>=0?"up":"down")+'">'+hz[1]+' '+fmtPctFracG(h.return_pct)+'</span>');
+      parts.push('<span class="tf-val '+(h.return_pct>=0?"up":"down")+'">'+hz[1]+' '+fmtPctG(h.return_pct)+'</span>');
     } else if(hz[0]===live){
       parts.push('<span class="tf-val tf-live">'+hz[1]+' '+tfLiveSpan(s)+'</span>');
     } else if(h.status==="pending"){
@@ -148,7 +148,7 @@ function tfBoxHtml(s){
   TF_HORIZONS.forEach(function(hz){
     var h=tf[hz[0]]||{}, val, cls="";
     if(h.status==="evaluated" && h.return_pct!==null && h.return_pct!==undefined){
-      val=fmtPctFracG(h.return_pct); cls=clsOf(h.return_pct*100);
+      val=fmtPctG(h.return_pct); cls=clsOf(h.return_pct);
     } else if(hz[0]===live){
       val=tfLiveSpan(s); cls="tf-live";
     } else if(h.status==="pending"){
