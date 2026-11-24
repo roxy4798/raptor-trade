@@ -232,6 +232,9 @@
       "det.barShare": "Bar share of 24h volume",
       "det.bookSnap": "Book snapshot",
       "det.bookYes": "recorded at signal time",
+      "det.bookDelay": "recorded {d} after close",
+      "det.bookMin": "min",
+      "det.bookSec": "s",
       "det.bookNo": "not recorded (signals before 23 Nov 2026)",
       "det.perfNote": "+30m comes from the tracker (pre-registered rules). +1H is read from local 1m candles; +4H/+8H from local 4H candles. MFE/MAE are the best/worst moves inside each window.",
       "ins.meta": "Signals: {n} · evaluable (+30m): {e} · missing feature data: {m} · period: {p}<br>Buckets with n<5 show no statistics. Association only — not evidence of causation.",
@@ -600,6 +603,9 @@
       "det.barShare": "Porsi bar terhadap volume 24j",
       "det.bookSnap": "Snapshot order book",
       "det.bookYes": "direkam saat sinyal",
+      "det.bookDelay": "direkam {d} setelah close",
+      "det.bookMin": "mnt",
+      "det.bookSec": "dtk",
       "det.bookNo": "tidak direkam (sinyal sebelum 23 Nov 2026)",
       "det.perfNote": "+30m berasal dari tracker (aturan pra-registrasi). +1H dibaca dari candle 1m lokal; +4H/+8H dari candle 4J lokal. MFE/MAE adalah pergerakan terbaik/terburuk dalam tiap jendela.",
       "ins.meta": "Sinyal: {n} · bisa dievaluasi (+30m): {e} · data fitur hilang: {m} · periode: {p}<br>Bucket dengan n<5 tidak menampilkan statistik. Hanya asosiasi — bukan bukti kausalitas.",
@@ -881,6 +887,26 @@
     var map = { real_levels: "det.slipReal", bands_bound: "det.slipBands",
       linear_estimate: "det.slipLinear" };
     return map[code] ? t(map[code]) : code;
+  }
+  /* Book snapshot delay (24 Nov 2026, Raka approved): asof_ms is when the
+     live book_top10 was captured; the close is sig.signal_ts. Median
+     ~5 min under flood. ID mode uses a decimal comma + "mnt"/"dtk". */
+  function fmtBookDelay(sec) {
+    if (sec == null) return null;
+    var isId = lang() === "id";
+    if (sec < 60) return Math.round(sec) + " " + t("det.bookSec");
+    var m = (sec / 60).toFixed(1);
+    if (isId) m = m.replace(".", ",");
+    return m + " " + t("det.bookMin");
+  }
+  function bookDelayText(sig) {
+    var b = sig.snapshot && sig.snapshot.book_top10;
+    if (!b || !b.present) return t("det.bookNo");
+    if (b.asof_ms && sig.signal_ts) {
+      var sec = Math.max(0, b.asof_ms / 1000 - sig.signal_ts);
+      return t("det.bookDelay", { d: fmtBookDelay(sec) });
+    }
+    return t("det.bookYes");
   }
   function updateLangButtons() {
     var l = lang();
@@ -1506,8 +1532,7 @@
       [t("det.slipMethod"), lq.slippage_method ? slipMethodLabel(lq.slippage_method) : null],
       [t("det.slipRow"), slipRows || null],
       [t("det.barShare"), lq.bar_share_of_24h_pct == null ? null : fmtNum(lq.bar_share_of_24h_pct, 0) + "%"],
-      [t("det.bookSnap"), (sig.snapshot && sig.snapshot.book_top10 && sig.snapshot.book_top10.present)
-        ? t("det.bookYes") : t("det.bookNo")],
+      [t("det.bookSnap"), bookDelayText(sig)],
     ]);
     var pf = sig.performance || {};
     cards += '<div class="agent-card card"><h4>' + t("det.agent6") + "</h4>" +

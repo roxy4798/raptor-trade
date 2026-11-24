@@ -146,6 +146,17 @@ function metric(label, value, cls){ return '<div class="metric"><div class="ml">
 function fmtBps(v){ return (v===null||v===undefined) ? I18N.t('na') : v.toFixed(1)+" bps"; }
 function fmtUsd(v){ if(v===null||v===undefined) return I18N.t('na'); return "$"+Math.round(v).toLocaleString("en-US"); }
 function fmtUsdC(v){ if(v===null||v===undefined) return I18N.t('na'); if(v>=1e9) return "$"+(v/1e9).toFixed(2)+"B"; if(v>=1e6) return "$"+(v/1e6).toFixed(2)+"M"; if(v>=1e3) return "$"+(v/1e3).toFixed(1)+"k"; return "$"+Math.round(v).toLocaleString("en-US"); }
+/* Book snapshot delay (24 Nov 2026, Raka approved): the live book_top10
+   behind spread/impact/depth was captured after the close (median ~5 min
+   under flood); book_delay_s comes from decisions validation asof_ms.
+   ID mode uses a decimal comma + "mnt"/"dtk". */
+function fmtBookDelay(sec){
+  if(sec===null||sec===undefined) return I18N.t('metricBookNone');
+  var isId = I18N.get()==="id"; var d;
+  if(sec < 60) d = Math.round(sec)+" "+I18N.t('bookSec');
+  else { var m = (sec/60).toFixed(1); if(isId) m = m.replace(".", ","); d = m+" "+I18N.t('bookMin'); }
+  return I18N.t('metricBookDelayVal', {d: d});
+}
 function openModal(sid){
   var s = SIGNALS[sid]; if(!s) return; currentModalSid=sid;
   if(!backdrop.classList.contains("open")) previousFocus = document.activeElement;
@@ -190,6 +201,7 @@ function openModal(sid){
     + metric(I18N.t('metricSpread'), fmtBps(s.spread))
     + metric(I18N.t('metricImpact'), fmtBps(s.impact))
     + metric(I18N.t('metricDepth'), fmtUsd(s.depth))
+    + metric(I18N.t('metricBookDelay'), fmtBookDelay(s.book_delay_s))
     + metric(I18N.t('metricLiq'), liq)
     + metric(I18N.t('metricVol4H'), fmtUsdC(s.quote_volume))
     + metric(I18N.t('metricVol24H'), fmtUsdC(s.qv24h))
