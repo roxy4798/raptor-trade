@@ -6,7 +6,12 @@
  const still=()=>root.classList.contains('motion-off')||window.matchMedia('(prefers-reduced-motion:reduce)').matches;
  const isID=()=>(window.RaptorLang?.get?.()||'en')==='id';
  let activeTab=0;
- const grp=[[0,6],[6,12],[12,16],[16,22]];
+ /* JENNI 24 Nov 2026 (book-delay): the modal gained one metric (Book
+    snapshot, after Depth), so the LIQUIDITY slice extends to 23 — the
+    tab keeps RSI 4h / Spread / Impact / Depth / Book / Liquidity /
+    4H Volume, and 24H Volume stays the sole orphan below the tabs,
+    exactly as before. */
+ const grp=[[0,6],[6,12],[12,16],[16,23]];
  const tabs=()=>isID()?['HARGA','MOMENTUM','RSI','LIKUIDITAS']:['PRICE','MOMENTUM','RSI','LIQUIDITY'];
  function decorate(){
    if(!modal.querySelector('.chart-viewer') || modal.querySelector('.v19-detail-layout'))return;
