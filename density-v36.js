@@ -23,9 +23,9 @@
     return window.RaptorLang && window.RaptorLang.get() === "id" ? "id" : "en";
   }
   var T = {
-    en: { signals: "signals", continued: "continued", reversed: "reversed",
+    en: { signals: "signals", continued: "positive", reversed: "negative",
           mean: "mean", showAll: "Show all", showLess: "Show less", of: "of" },
-    id: { signals: "sinyal", continued: "lanjut", reversed: "berbalik",
+    id: { signals: "sinyal", continued: "positif", reversed: "negatif",
           mean: "rata-rata", showAll: "Tampilkan semua",
           showLess: "Tampilkan lebih sedikit", of: "dari" }
   };
@@ -38,16 +38,20 @@
   function closeStr(s) {
     return lang() === "id" ? (s.close_wib + " WIB") : (s.close_utc + " UTC");
   }
+  /* v43 (25 Nov 2026, Raka: no +30m anywhere): DDT group stats are
+     +4H-based — counts of evaluated +4H returns above/below zero +
+     their mean (PERCENT, not the old tracker net fraction). */
   function groupStats(rows) {
-    var cont = 0, rev = 0, nets = [];
+    var cont = 0, rev = 0, rets = [];
     rows.forEach(function (s) {
-      var c = s.tracker && s.tracker.classification;
-      if (c === "PUMP CONTINUED") cont++;
-      else if (c === "REVERSAL") rev++;
-      if (s.tracker && s.tracker.net != null) nets.push(s.tracker.net * 100);
+      var h = (s.tf || {}).h4 || {};
+      if (h.status === "evaluated" && h.return_pct !== null && h.return_pct !== undefined) {
+        if (h.return_pct > 0) cont++; else rev++;
+        rets.push(h.return_pct);
+      }
     });
-    var mean = nets.length
-      ? nets.reduce(function (a, b) { return a + b; }, 0) / nets.length : null;
+    var mean = rets.length
+      ? rets.reduce(function (a, b) { return a + b; }, 0) / rets.length : null;
     return { n: rows.length, cont: cont, rev: rev, mean: mean };
   }
   function filtering() {

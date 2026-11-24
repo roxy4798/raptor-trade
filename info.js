@@ -10,7 +10,11 @@ var ev=G.filter(function(s){return s.tf&&s.tf.h4&&s.tf.h4.status==='evaluated'&&
 var bestR=ev.reduce(function(a,b){return !a||b.tf.h4.return_pct>a.tf.h4.return_pct?b:a},null);
 var TFS=(D.tf_summary&&D.tf_summary.horizons)||{}; var H4=TFS.h4||{};
 var mv=top('chg_4h'),rv=top('rvol'),lat=G[0];
-var nIns=K.classes['INSUFFICIENT DATA']||0,nUp=K.classes['PUMP CONTINUED']||0,nSw=K.classes['SIDEWAYS']||0,nRev=K.classes['REVERSAL']||0,tot=K.total||G.length;
+/* v43 (25 Nov 2026, Raka: no +30m anywhere): the outcome mix is +4H-based —
+   evaluated +4H returns above/below zero + signals whose +4H is still
+   pending. The tracker classes (K.classes) are no longer displayed. */
+var nPos=0,nNeg=0; G.forEach(function(s){ var h=(s.tf||{}).h4||{}; if(h.status==='evaluated'&&h.return_pct!==null&&h.return_pct!==undefined){ if(h.return_pct>0)nPos++; else nNeg++; } });
+var tot=K.total||G.length, nPend=Math.max(0,tot-nPos-nNeg);
 var maxC=Math.max.apply(null,S.signals_per_close.map(function(c){return c.count})); var busy=S.signals_per_close.filter(function(c){return c.count===maxC})[0];
 /* v37b: time labels must never sit on adjacent columns — with the
    columns now sharing the cell (min-width:0), adjacent "HH:MM" labels
@@ -40,7 +44,7 @@ var capC=0; S.signals_per_close.forEach(function(c){ if(c.count<maxC&&c.count>ca
 var sec=el('section','card insight'); sec.id='insight';
 function render(){
   sec.innerHTML='<div class="ins-head"><div><div class="section-kicker">'+I18N.t('insightKicker')+'</div><h2>'+I18N.t('insightTitle')+' <span class="h2-note">'+I18N.t('insightNote')+'</span></h2></div></div>'+
-  '<p class="ins-sum">'+I18N.t('insightSummary',{tot:tot,last24:K.last24,eval:K.n_eval,wins:K.wins,n4h:H4.n||0,mean4h:(H4.mean==null?'N/A':(H4.mean>=0?'+':'')+f(H4.mean,2)),median4h:(H4.median==null?'N/A':f(H4.median,2)),nIns:nIns})+'</p>'+
+  '<p class="ins-sum">'+I18N.t('insightSummary',{tot:tot,last24:K.last24,n4h:H4.n||0,mean4h:(H4.mean==null?'N/A':(H4.mean>=0?'+':'')+f(H4.mean,2)),median4h:(H4.median==null?'N/A':f(H4.median,2)),npos:nPos})+'</p>'+
   '<div class="ins-hl">'+
   (mv?'<div class="hl"><small>'+I18N.t('biggestMove')+'</small><strong class="up">▲ +'+f(mv.chg_4h,2)+'%</strong><span>'+mv.symbol+' · '+closeText(mv)+'</span></div>':'')+
   (rv?'<div class="hl"><small>'+I18N.t('highestRVOL')+'</small><strong>'+f(rv.rvol,2)+'x</strong><span>'+rv.symbol+' · volume vs 60-bar median</span></div>':'')+
@@ -49,12 +53,12 @@ function render(){
   (lat?'<div class="hl"><small>'+I18N.t('latestSignal')+'</small><strong>'+lat.symbol.replace('USDT','')+'</strong><span>'+closeText(lat)+' · RSI 4h '+f(lat.rsi_4h,1)+'</span></div>':'')+
   '</div><div class="ins-grid">'+
   '<div><h3>'+I18N.t('outcomeMix')+'</h3><div class="mix" role="img" aria-label="Outcome mix">'+
-  /* v37: REVERSAL was missing from the bar + legend (the 3-category list
-     predates it) — the bar summed to ~92%. Segments use flex-grow so the
+  /* v43: three +4H segments (positive / negative / pending) replace the
+     four tracker-classification segments. Segments use flex-grow so the
      2px gaps never clip the smallest segment. */
-  [[nUp,'#c6ff4d'],[nSw,'#35f0ff'],[nRev,'#ff5d73'],[nIns,'#ffb02e']].map(function(a,i){return '<i style="--i:'+i+';flex:'+a[0]+' 1 0%;background:'+a[1]+'"></i>'}).join('')+'</div>'+
-  '<ul class="mix-leg"><li><em style="background:#c6ff4d"></em>'+I18N.t('continuedUp')+'<b>'+nUp+' · '+f(nUp/tot*100,0)+'%</b></li><li><em style="background:#35f0ff"></em>'+I18N.t('sideways')+'<b>'+nSw+' · '+f(nSw/tot*100,0)+'%</b></li><li><em style="background:#ff5d73"></em>'+I18N.t('reversed')+'<b>'+nRev+' · '+f(nRev/tot*100,0)+'%</b></li><li><em style="background:#ffb02e"></em>'+I18N.t('noData')+'<b>'+nIns+' · '+f(nIns/tot*100,0)+'%</b></li></ul>'+
-  '<p class="ins-note">'+I18N.t('noDataDesc')+'</p></div>'+
+  [[nPos,'#c6ff4d'],[nNeg,'#ff5d73'],[nPend,'#ffb02e']].map(function(a,i){return '<i style="--i:'+i+';flex:'+a[0]+' 1 0%;background:'+a[1]+'"></i>'}).join('')+'</div>'+
+  '<ul class="mix-leg"><li><em style="background:#c6ff4d"></em>'+I18N.t('mixPos')+'<b>'+nPos+' · '+f(nPos/tot*100,0)+'%</b></li><li><em style="background:#ff5d73"></em>'+I18N.t('mixNeg')+'<b>'+nNeg+' · '+f(nNeg/tot*100,0)+'%</b></li><li><em style="background:#ffb02e"></em>'+I18N.t('mixPend')+'<b>'+nPend+' · '+f(nPend/tot*100,0)+'%</b></li></ul>'+
+  '<p class="ins-note">'+I18N.t('mixPendNote')+'</p></div>'+
   '<div><h3>'+I18N.t('signalsPerClose')+'</h3><div class="cl">'+
   /* v37: the 294 flood bar overflowed the 130px chart and its label bled
      into the guide column ("tumpang tindih"). Bar heights now use a

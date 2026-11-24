@@ -155,8 +155,8 @@ section[id] {
 
 /* ---------- mobile signal cards (main table, <=780px) ----------
    The thead goes away; each row becomes a 2-line card:
-   line 1 — symbol + close; line 2 — 4H change, RVOL, +30m, outcome.
-   Price / breakout / RSI / live stay available in the modal on tap. */
+   line 1 — symbol + close; line 2 — 4H change, RVOL, breakout margin.
+   Price / RSI / live stay available in the modal on tap. */
 @media (max-width: 780px) {
   #signals table {
     min-width: 0;
@@ -185,12 +185,10 @@ section[id] {
   }
   #signals tbody tr[data-sid] td:nth-child(4) { grid-column: 1; }
   #signals tbody tr[data-sid] td:nth-child(5) { grid-column: 2; }
-  /* v41: the +30m cell (old child 8) is gone — the card's third value
-     is now the breakout margin (child 6), and the badge moved from
-     child 16 to child 15. */
-  #signals tbody tr[data-sid] td:nth-child(6) { grid-column: 3; }
-  #signals tbody tr[data-sid] td:nth-child(15) {
-    grid-column: 4;
+  /* v43: the tracker badge (old child 15) is gone — the breakout margin
+     (child 6) spans the rest of line 2, right-aligned. */
+  #signals tbody tr[data-sid] td:nth-child(6) {
+    grid-column: 3 / 5;
     text-align: right;
   }
   /* v40: the six TF columns hide on cards; the strip (child 14) carries
@@ -219,11 +217,6 @@ section[id] {
   }
   #signals tbody tr[data-sid] td:nth-child(5)::before {
     content: "RVOL ";
-    font-size: 9px;
-    color: #7e968a;
-  }
-  #signals tbody tr[data-sid] td:nth-child(8)::before {
-    content: "+30m ";
     font-size: 9px;
     color: #7e968a;
   }

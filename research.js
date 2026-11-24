@@ -80,23 +80,15 @@
       "panel.quality": "Data quality",
       "panel.quality.sub": "Snapshot coverage and the per-input missing-data profile. Missing data is reported, never interpolated.",
       "panel.horizons": "Outcome by horizon",
-      "panel.horizons.sub": "All evaluable signals per horizon — n differs because data completeness differs. For the same-cohort comparison, see Paired horizons below.",
+      "panel.horizons.sub": "All evaluable signals per horizon — n differs because data completeness differs.",
       "panel.outliers": "Outlier influence on the average",
       "panel.outliers.sub": "Mean versus median versus trimmed mean — and what the single largest outcome contributes.",
       "panel.markers": "Reversal markers, one by one",
       "panel.markers.sub": "Each exhaustion marker compared with and without it. Buckets with n<5 show no statistics.",
-      "panel.paired": "Paired horizons — same signals, all four readings",
-      "panel.paired.sub": "Only signals with every horizon evaluated, in gross returns so horizons are comparable. The cleanest read of how performance changes over time — at the cost of a smaller sample.",
       "panel.distribution": "Distribution & contributions",
-      "panel.distribution.sub": "Where the +30m net outcomes sit, and how much each signal contributes to the total sum.",
-      "panel.agentsEval": "Agent learning evaluation",
-      "panel.agentsEval.sub": "Each agent's observations tested against actual outcomes. Everything here is exploratory — no predictive accuracy is claimed for any agent, and out-of-sample validation is not possible yet (holdout plan: once n reaches 40, the first 20 signals become the discovery set).",
-      "panel.cases": "Case examples — BULLA & IDOL",
-      "panel.cases.sub": "Research illustrations of how two signals behaved across horizons. Examples only — never the basis for a strategy conclusion.",
+      "panel.distribution.sub": "Where the +4H outcomes sit, and how much each signal contributes to the total sum.",
       "panel.summary": "Learning summary — auto-generated",
       "panel.summary.sub": "What the evidence supports so far, what failed to hold, what changed since the previous evaluation, and what cannot be concluded yet. Regenerated from the current data on every build — nothing here is written by hand.",
-      "panel.checkpoints": "Research checkpoints",
-      "panel.checkpoints.sub": "Progress toward the next evaluation checkpoint. A “complete outcome” means all four horizons (+30m/+1H/+4H/+8H) evaluated for the same signal. Checkpoints mark progress only — they are not a claim of statistical significance.",
       "panel.registry": "Hypothesis registry",
       "panel.registry.sub": "Hypotheses are recorded frozen the moment they first appear, and tested only on signals published after that moment. The exploration/validation split freezes once 40 evaluable signals exist (whole 4H closes until ≥20 evaluable signals = discovery set).",
       "panel.clusters": "Close clusters — signals grouped by 4H close",
@@ -109,16 +101,16 @@
       "search.signals": "Search symbol…",
       "search.explorer": "Search symbol…",
       "filter.allOutcomes": "All outcomes",
-      "filter.continued": "Continued",
-      "filter.reversal": "Reversal",
-      "filter.sideways": "Sideways",
+      "filter.pos4h": "+4H positive",
+      "filter.neg4h": "+4H negative",
       "filter.pending": "Not evaluated yet",
       "filter.allRegimes": "All regimes",
       "filter.up": "BTC trending up",
       "filter.ranging": "BTC ranging",
       "filter.down": "BTC trending down",
       "th.symbol": "Symbol", "th.close": "Close (WIB)",
-      "th.price": "Price", "th.net30": "+30m net", "th.r4h": "+4H",
+      "th.price": "Price", "th.r4h": "+4H", "th.r12h": "+12H",
+      "th.r1d": "+1D", "th.r2d": "+2D", "th.r3d": "+3D", "th.r1w": "+1W",
       "th.rvol": "RVOL", "th.markers": "Markers",
       "th.regime": "BTC regime", "th.oi": "OI 24h",
       "th.spread": "Spread", "th.agents": "Agents",
@@ -129,12 +121,12 @@
       "ov.researchV": "research v", "ov.lastAnalysis": "last analysis",
       "ov.stat1": "Signals analyzed",
       "ov.stat1n": "of {n} published signals",
-      "ov.stat2": "Outcomes (+30m)",
-      "ov.stat2n": "evaluable signals with a +30m outcome; the rest are pending or lack 1m candles",
-      "ov.stat3": "Win rate (+30m)",
-      "ov.stat3n": "PUMP CONTINUED share, n={n}",
-      "ov.stat4": "Mean net (+30m)",
-      "ov.stat4n": "after spread + 8 bps fees (simulation, not profit)",
+      "ov.stat2": "Outcomes (+4H)",
+      "ov.stat2n": "evaluable signals with a +4H outcome; the rest are pending",
+      "ov.stat3": "+4H Positive",
+      "ov.stat3n": "share of +4H returns above 0%, n={n}",
+      "ov.stat4": "Mean +4H (gross)",
+      "ov.stat4n": "gross return — no spread or fee simulation",
       "ov.stat5": "Hypotheses",
       "ov.stat5n": "0 validated — none has passed the bar yet",
       "ov.stat6": "Snapshot coverage",
@@ -163,10 +155,8 @@
       "ov.dqMissing": "{m}/{n} missing ({p}%)",
       "bucket.noStats": "n<5 — no statistics",
       "bucket.none": "No bucket has enough samples yet (n≥5 required).",
-      "bucket.win": "win",
-      "scatter.aria": "Scatter: {x} versus +30m net return",
-      "sig.continued": "Continued", "sig.reversed": "Reversed",
-      "sig.sideways": "Sideways", "sig.pending": "Pending",
+      "scatter.aria": "Scatter: {x} versus +4H return",
+      "sig.pending": "Pending",
       "sig.noMatch": "No signals match.",
       "hz.pending": "pending", "hz.unavailable": "unavailable",
       "hz.liveNow": "live return right now — horizon still in progress",
@@ -237,8 +227,8 @@
       "det.bookMin": "min",
       "det.bookSec": "s",
       "det.bookNo": "not recorded (signals before 23 Nov 2026)",
-      "det.perfNote": "All six horizons are read from local 4H candles (target bar close). MFE/MAE are the best/worst moves inside the target 4H bar. The +30m classification still comes from the tracker (pre-registered rules) and shows in the signal list.",
-      "ins.meta": "Signals: {n} · evaluable (+30m): {e} · missing feature data: {m} · period: {p}<br>Buckets with n<5 show no statistics. Association only — not evidence of causation.",
+      "det.perfNote": "All six horizons are read from local 4H candles (target bar close). MFE/MAE are the best/worst moves inside the target 4H bar.",
+      "ins.meta": "Signals: {n} · evaluable (+4H): {e} · missing feature data: {m} · period: {p}<br>Buckets with n<5 show no statistics. Association only — not evidence of causation.",
       "ins.rvolT": "RVOL vs outcome",
       "ins.rvolS": "Does a bigger volume spike mean the pump continues?",
       "ins.rvolX": "RVOL (log scale)",
@@ -253,15 +243,14 @@
       "ins.oiS": "Does rising open interest before the signal relate to momentum continuation?",
       "ins.oiX": "OI change 24h (%)",
       "ins.imbT": "Order flow imbalance vs outcome",
-      "ins.imbS": "Taker buy/sell imbalance at the signal bar versus the +30m result.",
+      "ins.imbS": "Taker buy/sell imbalance at the signal bar versus the +4H result.",
       "ins.imbX": "Imbalance (−1 sell … +1 buy)",
       "ins.sprT": "Spread vs outcome",
-      "ins.sprS": "Does a wider spread eat the net result after costs?",
+      "ins.sprS": "Do signals with wider spreads perform worse at +4H?",
       "ins.sprX": "Spread (bps)",
       "ins.brkT": "Breakout strength vs outcome",
-      "ins.brkS": "How far the close cleared the 20-bar high, versus the +30m result.",
+      "ins.brkS": "How far the close cleared the 20-bar high, versus the +4H result.",
       "ins.brkX": "Breakout margin (%)",
-      "lr.hzNet30": "+30m net (after spread + fees)",
       "lr.hz1h": "+1H (gross)", "lr.hz4h": "+4H (gross)",
       "lr.hz8h": "+8H (gross)",
       "lr.hz12h": "+12H (gross)", "lr.hz1d": "+1D (gross)",
@@ -270,10 +259,10 @@
       "lr.thHorizon": "Horizon", "lr.thN": "n",
       "lr.thMean": "Mean", "lr.thMedian": "Median",
       "lr.thGte": "≥ +1%", "lr.thLte": "≤ −1%",
-      "lr.hzNote": "“Win rate” is only defined for +30m (tracker classification). Other horizons show descriptive shares — not win rates. Net is simulated only for +30m; longer horizons are gross returns.",
+      "lr.hzNote": "All horizons show gross returns. The ≥ +1% / ≤ −1% columns are descriptive shares — not win rates.",
       "lr.notEnough": "Not enough evaluable outcomes yet (n<5).",
-      "lr.outMean": "Mean net (+30m)",
-      "lr.outMedian": "Median net (+30m)",
+      "lr.outMean": "Mean (+4H)",
+      "lr.outMedian": "Median (+4H)",
       "lr.outTrimmed": "Trimmed mean (drop top/bottom 10%)",
       "lr.outExMax": "Mean without the largest outcome",
       "lr.outLargest": "Largest single outcome",
@@ -289,27 +278,17 @@
       "lr.mkThMarker": "Exhaustion marker",
       "lr.mkThWith": "With marker",
       "lr.mkThWithout": "Without marker",
-      "lr.mkStats": "n={n} · win {w}% · mean {m}",
+      "lr.mkStats": "n={n} · mean {m}",
       "lr.mkNote": "Markers stay research variables. A gap between “with” and “without” at these sample sizes is an observation, not evidence that the marker predicts anything.",
-      "lr.pairedNotEnough": "Not enough signals with all four horizons evaluated yet (n<5).",
-      "lr.pairedIntro": "Paired cohort: <b>{n}</b> of {total} signals, across {closes} distinct 4H closes. Excluded: no +30m {m30}, no +1H {m1}, no +4H {m4}, no +8H {m8} (a signal can miss more than one horizon).",
-      "lr.thMfe": "Mean MFE", "lr.thMae": "Mean MAE",
-      "lr.pairedNote": "MFE/MAE are the average best/worst excursions within each horizon (+4H/+8H from 4H-bar extremes, not ticks). Gross returns throughout — compare with the +30m net table above, not against it.",
-      "lr.trajTitle": "Momentum trajectories",
-      "lr.trajContinued": "Continued",
-      "lr.trajReversed": "Reversed",
-      "lr.trajFull": "— of which: full reversal",
-      "lr.trajLate": "Late bloom",
-      "lr.trajNever": "Never up",
-      "lr.distTitle": "Distribution of +30m net outcomes (n={n})",
-      "lr.mvwTitle": "Mean vs win rate",
-      "lr.mvwWin": "Win rate (+30m)",
-      "lr.mvwMean": "Mean net",
-      "lr.mvwMedian": "Median net",
+      "lr.distTitle": "Distribution of +4H outcomes (n={n})",
+      "lr.mvwTitle": "Mean vs +4H positive",
+      "lr.mvwWin": "+4H positive",
+      "lr.mvwMean": "Mean (+4H)",
+      "lr.mvwMedian": "Median (+4H)",
       "lr.contribTitle": "Contribution of every signal to the total",
-      "lr.thSignal": "Signal", "lr.thNet": "Net",
+      "lr.thSignal": "Signal", "lr.thNet": "+4H",
       "lr.thShare": "Share of sum",
-      "lr.contribNote": "Shares above 100% mean one signal outweighs the entire net sum — the rest of the signals cancel each other out.",
+      "lr.contribNote": "Shares above 100% mean one signal outweighs the entire total — the rest of the signals cancel each other out.",
       "lr.verdAssociation": "Association observed",
       "lr.verdNoClear": "No clear association",
       "lr.verdConsistent": "Consistent with hypothesis",
@@ -317,23 +296,6 @@
       "lr.verdInsuff": "Not enough data",
       "lr.verdNoData": "No data yet",
       "lr.verdNotEval": "Not evaluable",
-      "lr.agBreakout": "Breakout Intelligence",
-      "lr.agReversal": "Reversal Intelligence",
-      "lr.agOrderflow": "Order Flow Intelligence",
-      "lr.agRegime": "Market Regime Intelligence",
-      "lr.agLiquidity": "Liquidity Intelligence",
-      "lr.agPerformance": "Performance Learning",
-      "lr.thObservation": "Observation",
-      "lr.thVerdict": "Verdict",
-      "lr.thEvidence": "Evidence",
-      "lr.aeIntro": "Evaluated at n={n} evaluable +30m outcomes. ",
-      "lr.siSentence": "The {ne} evaluable signals come from {ce} distinct 4H closes; the {np} paired signals from {cp}.",
-      "lr.casesEmpty": "No BULLA/IDOL outcomes evaluated yet.",
-      "lr.th30net": "+30m net",
-      "lr.th1h": "+1H", "lr.th4h": "+4H", "lr.th8h": "+8H",
-      "lr.thMfeMae": "MFE / MAE (+30m)",
-      "lr.caseNote": "Same rule set, opposite paths — that is why single examples never justify a strategy change.",
-      "lr.caseNote2": "BULLA's best +8H: {b}; IDOL's worst +8H: {i}. ",
       "lr.sumTopics": "Monitored topics",
       "lr.thTopic": "Topic", "lr.thStatus": "Status",
       "lr.thRead": "Current read",
@@ -347,14 +309,7 @@
       "lr.sumChangedEmpty": "No material change recorded.",
       "lr.sumInconcl": "Not yet concludable",
       "lr.sumInconclEmpty": "Everything evaluated has a verdict.",
-      "lr.sumBased": "Based on {e} evaluable +30m outcomes and {p} paired-cohort signals. “What holds up” lists exploratory associations only — nothing here is a predictive claim.",
-      "lr.cpComplete": "Complete outcomes (paired cohort)",
-      "lr.cpCloses": "Distinct 4H closes behind them",
-      "lr.cpNext": "Next checkpoint",
-      "lr.cpAllReached": "all reached",
-      "lr.cpNextVal": "{n} signals ({p}%)",
-      "lr.cpNone": "No checkpoint reached yet — the first is at 40 complete outcomes.",
-      "lr.cpReached": "Checkpoint {n} signals",
+      "lr.sumBased": "Based on {e} evaluable +4H outcomes. “What holds up” lists exploratory associations only — nothing here is a predictive claim.",
       "lr.regPending": "Exploration/validation split not frozen yet.",
       "lr.regSplit": "Split frozen {d} — first {n} evaluable signals are the discovery set.",
       "lr.regEmpty": "No hypothesis has passed the sample bar yet (n≥10 both buckets + ≥2pp gap). When one does, it is recorded here frozen, before any new data tests it.",
@@ -367,7 +322,7 @@
       "lr.regHolds": "holds",
       "lr.regNotHolds": "does_not_hold",
       "lr.regValN": " (n {a} vs {b})",
-      "lr.clEval": "Signals evaluated (+30m net)",
+      "lr.clEval": "Signals evaluated (+4H)",
       "lr.clClosesAll": "Unique 4H closes (all signals)",
       "lr.clClosesEval": "Unique 4H closes (evaluable)",
       "lr.clLargest": "Largest single close",
@@ -379,9 +334,8 @@
       "lr.thCloseWib": "4H close (WIB)",
       "lr.thSignals": "Signals",
       "lr.thEvaluable": "Evaluable",
-      "lr.thWins": "Wins",
-      "lr.thMeanNet": "Mean net +30m",
-      "lr.thMeanGross": "Mean gross +30m",
+      "lr.thWins": "+4H positive",
+      "lr.thMeanNet": "Mean +4H",
       "lr.clSplitNote": " The exploration/validation split keeps whole closes together, so no close is ever split between the two sets.",
       "tl.noArchive": "No archive available.",
       "tl.thVersion": "Version", "tl.thRecords": "Records",
@@ -400,9 +354,9 @@
       "lbl.filterRegime": "Filter by BTC regime",
       "grp.signal": "1 signal",
       "grp.signals": "{n} signals",
-      "grp.continued": "{n} continued",
-      "grp.reversed": "{n} reversed",
-      "grp.mean": "mean {v}",
+      "grp.continued": "{n} +4H positive",
+      "grp.reversed": "{n} +4H negative",
+      "grp.mean": "+4H mean {v}",
       "grp.showAll": "Show all {n}",
       "grp.showLess": "Show less"
     },
@@ -455,23 +409,15 @@
       "panel.quality": "Kualitas data",
       "panel.quality.sub": "Cakupan snapshot dan profil data hilang per input. Data yang hilang dilaporkan, tidak pernah diinterpolasi.",
       "panel.horizons": "Hasil per horizon",
-      "panel.horizons.sub": "Semua sinyal yang bisa dievaluasi per horizon — n berbeda karena kelengkapan datanya berbeda. Untuk perbandingan kohort yang sama, lihat Horizon berpasangan di bawah.",
+      "panel.horizons.sub": "Semua sinyal yang bisa dievaluasi per horizon — n berbeda karena kelengkapan datanya berbeda.",
       "panel.outliers": "Pengaruh outlier terhadap rata-rata",
       "panel.outliers.sub": "Mean versus median versus trimmed mean — dan kontribusi satu hasil terbesar.",
       "panel.markers": "Marker reversal, satu per satu",
       "panel.markers.sub": "Tiap marker exhaustion dibandingkan dengan dan tanpa marker. Bucket dengan n<5 tidak menampilkan statistik.",
-      "panel.paired": "Horizon berpasangan — sinyal yang sama, keempat pembacaan",
-      "panel.paired.sub": "Hanya sinyal yang keempat horizonnya tervalidasi, dalam return gross agar antar horizon bisa dibandingkan. Pembacaan paling bersih tentang bagaimana performa berubah seiring waktu — dengan mengorbankan ukuran sampel.",
       "panel.distribution": "Distribusi & kontribusi",
-      "panel.distribution.sub": "Di mana letak hasil net +30m, dan seberapa besar kontribusi tiap sinyal terhadap total.",
-      "panel.agentsEval": "Evaluasi pembelajaran agent",
-      "panel.agentsEval.sub": "Observasi tiap agent diuji terhadap hasil sebenarnya. Semuanya di sini bersifat eksploratif — tidak ada klaim akurasi prediktif untuk agent mana pun, dan validasi out-of-sample belum memungkinkan (rencana holdout: begitu n mencapai 40, 20 sinyal pertama menjadi discovery set).",
-      "panel.cases": "Contoh kasus — BULLA & IDOL",
-      "panel.cases.sub": "Ilustrasi riset tentang bagaimana dua sinyal berperilaku di berbagai horizon. Hanya contoh — bukan dasar kesimpulan strategi.",
+      "panel.distribution.sub": "Di mana letak hasil +4H, dan seberapa besar kontribusi tiap sinyal terhadap total.",
       "panel.summary": "Ringkasan pembelajaran — dibuat otomatis",
       "panel.summary.sub": "Apa yang didukung bukti sejauh ini, apa yang gagal bertahan, apa yang berubah sejak evaluasi sebelumnya, dan apa yang belum bisa disimpulkan. Dibuat ulang dari data terkini di setiap build — tidak ada yang ditulis tangan.",
-      "panel.checkpoints": "Checkpoint riset",
-      "panel.checkpoints.sub": "Progres menuju checkpoint evaluasi berikutnya. “Hasil lengkap” berarti keempat horizon (+30m/+1H/+4H/+8H) tervalidasi untuk sinyal yang sama. Checkpoint hanya menandai progres — bukan klaim signifikansi statistik.",
       "panel.registry": "Registri hipotesis",
       "panel.registry.sub": "Hipotesis dicatat beku begitu pertama kali muncul, dan hanya diuji pada sinyal yang dipublikasikan setelah momen itu. Split eksplorasi/validasi membeku begitu 40 sinyal yang bisa dievaluasi tercapai (seluruh penutupan 4J hingga ≥20 sinyal yang bisa dievaluasi = discovery set).",
       "panel.clusters": "Klaster penutupan — sinyal dikelompokkan per penutupan 4J",
@@ -484,16 +430,16 @@
       "search.signals": "Cari simbol…",
       "search.explorer": "Cari simbol…",
       "filter.allOutcomes": "Semua hasil",
-      "filter.continued": "Lanjut naik",
-      "filter.reversal": "Berbalik",
-      "filter.sideways": "Sideways",
+      "filter.pos4h": "+4H positif",
+      "filter.neg4h": "+4H negatif",
       "filter.pending": "Belum dievaluasi",
       "filter.allRegimes": "Semua rezim",
       "filter.up": "BTC naik",
       "filter.ranging": "BTC sideways",
       "filter.down": "BTC turun",
       "th.symbol": "Simbol", "th.close": "Tutup (WIB)",
-      "th.price": "Harga", "th.net30": "Net +30m", "th.r4h": "+4H",
+      "th.price": "Harga", "th.r4h": "+4H", "th.r12h": "+12H",
+      "th.r1d": "+1D", "th.r2d": "+2D", "th.r3d": "+3D", "th.r1w": "+1W",
       "th.rvol": "RVOL", "th.markers": "Marker",
       "th.regime": "Rezim BTC", "th.oi": "OI 24j",
       "th.spread": "Spread", "th.agents": "Agent",
@@ -504,12 +450,12 @@
       "ov.researchV": "riset v", "ov.lastAnalysis": "analisis terakhir",
       "ov.stat1": "Sinyal dianalisis",
       "ov.stat1n": "dari {n} sinyal yang dipublikasikan",
-      "ov.stat2": "Hasil (+30m)",
-      "ov.stat2n": "sinyal yang bisa dievaluasi dengan hasil +30m; sisanya masih menunggu atau kekurangan candle 1m",
-      "ov.stat3": "Tingkat menang (+30m)",
-      "ov.stat3n": "Porsi Lanjut Naik, n={n}",
-      "ov.stat4": "Rata-rata net (+30m)",
-      "ov.stat4n": "setelah spread + fee 8 bps (simulasi, bukan profit)",
+      "ov.stat2": "Hasil (+4H)",
+      "ov.stat2n": "sinyal yang bisa dievaluasi dengan hasil +4H; sisanya masih menunggu",
+      "ov.stat3": "+4H Positif",
+      "ov.stat3n": "porsi return +4H di atas 0%, n={n}",
+      "ov.stat4": "Rata-rata +4H (gross)",
+      "ov.stat4n": "return gross — tanpa simulasi spread atau fee",
       "ov.stat5": "Hipotesis",
       "ov.stat5n": "0 tervalidasi — belum ada yang lolos ambang batas",
       "ov.stat6": "Cakupan snapshot",
@@ -538,10 +484,8 @@
       "ov.dqMissing": "{m}/{n} hilang ({p}%)",
       "bucket.noStats": "n<5 — tanpa statistik",
       "bucket.none": "Belum ada bucket yang punya cukup sampel (butuh n≥5).",
-      "bucket.win": "win",
-      "scatter.aria": "Scatter: {x} versus return net +30m",
-      "sig.continued": "Lanjut naik", "sig.reversed": "Berbalik",
-      "sig.sideways": "Sideways", "sig.pending": "Menunggu",
+      "scatter.aria": "Scatter: {x} versus return +4H",
+      "sig.pending": "Menunggu",
       "sig.noMatch": "Tidak ada sinyal yang cocok.",
       "hz.pending": "menunggu", "hz.unavailable": "tidak tersedia",
       "hz.liveNow": "return live saat ini — horizon masih berjalan",
@@ -612,8 +556,8 @@
       "det.bookMin": "mnt",
       "det.bookSec": "dtk",
       "det.bookNo": "tidak direkam (sinyal sebelum 23 Nov 2026)",
-      "det.perfNote": "Keenam horizon dibaca dari candle 4J lokal (close bar target). MFE/MAE adalah pergerakan terbaik/terburuk di dalam bar 4J target. Klasifikasi +30m tetap berasal dari tracker (aturan pra-registrasi) dan tampil di daftar sinyal.",
-      "ins.meta": "Sinyal: {n} · bisa dievaluasi (+30m): {e} · data fitur hilang: {m} · periode: {p}<br>Bucket dengan n<5 tidak menampilkan statistik. Hanya asosiasi — bukan bukti kausalitas.",
+      "det.perfNote": "Keenam horizon dibaca dari candle 4J lokal (close bar target). MFE/MAE adalah pergerakan terbaik/terburuk di dalam bar 4J target.",
+      "ins.meta": "Sinyal: {n} · bisa dievaluasi (+4H): {e} · data fitur hilang: {m} · periode: {p}<br>Bucket dengan n<5 tidak menampilkan statistik. Hanya asosiasi — bukan bukti kausalitas.",
       "ins.rvolT": "RVOL vs hasil",
       "ins.rvolS": "Apakah lonjakan volume yang lebih besar berarti pump berlanjut?",
       "ins.rvolX": "RVOL (skala log)",
@@ -628,15 +572,14 @@
       "ins.oiS": "Apakah kenaikan open interest sebelum sinyal berkaitan dengan kelanjutan momentum?",
       "ins.oiX": "Perubahan OI 24j (%)",
       "ins.imbT": "Imbalance arus order vs hasil",
-      "ins.imbS": "Imbalance taker buy/sell pada bar sinyal versus hasil +30m.",
+      "ins.imbS": "Imbalance taker buy/sell pada bar sinyal versus hasil +4H.",
       "ins.imbX": "Imbalance (−1 jual … +1 beli)",
       "ins.sprT": "Spread vs hasil",
-      "ins.sprS": "Apakah spread yang lebih lebar menggerus hasil net setelah biaya?",
+      "ins.sprS": "Apakah sinyal dengan spread lebih lebar berkinerja lebih buruk di +4H?",
       "ins.sprX": "Spread (bps)",
       "ins.brkT": "Kekuatan breakout vs hasil",
-      "ins.brkS": "Seberapa jauh harga tutup melewati high 20-bar, versus hasil +30m.",
+      "ins.brkS": "Seberapa jauh harga tutup melewati high 20-bar, versus hasil +4H.",
       "ins.brkX": "Margin breakout (%)",
-      "lr.hzNet30": "Net +30m (setelah spread + fee)",
       "lr.hz1h": "+1H (gross)", "lr.hz4h": "+4H (gross)",
       "lr.hz8h": "+8H (gross)",
       "lr.hz12h": "+12H (gross)", "lr.hz1d": "+1D (gross)",
@@ -645,10 +588,10 @@
       "lr.thHorizon": "Horizon", "lr.thN": "n",
       "lr.thMean": "Mean", "lr.thMedian": "Median",
       "lr.thGte": "≥ +1%", "lr.thLte": "≤ −1%",
-      "lr.hzNote": "“Win rate” hanya didefinisikan untuk +30m (klasifikasi tracker). Horizon lain menampilkan porsi deskriptif — bukan win rate. Net hanya disimulasikan untuk +30m; horizon yang lebih panjang adalah return gross.",
+      "lr.hzNote": "Semua horizon menampilkan return gross. Kolom ≥ +1% / ≤ −1% adalah porsi deskriptif — bukan win rate.",
       "lr.notEnough": "Hasil yang bisa dievaluasi belum cukup (n<5).",
-      "lr.outMean": "Mean net (+30m)",
-      "lr.outMedian": "Median net (+30m)",
+      "lr.outMean": "Rata-rata (+4H)",
+      "lr.outMedian": "Median (+4H)",
       "lr.outTrimmed": "Trimmed mean (buang 10% atas/bawah)",
       "lr.outExMax": "Mean tanpa hasil terbesar",
       "lr.outLargest": "Hasil tunggal terbesar",
@@ -664,27 +607,17 @@
       "lr.mkThMarker": "Marker exhaustion",
       "lr.mkThWith": "Dengan marker",
       "lr.mkThWithout": "Tanpa marker",
-      "lr.mkStats": "n={n} · win {w}% · mean {m}",
+      "lr.mkStats": "n={n} · rata-rata {m}",
       "lr.mkNote": "Marker tetap variabel riset. Selisih antara “dengan” dan “tanpa” pada ukuran sampel seperti ini adalah observasi, bukan bukti bahwa marker memprediksi apa pun.",
-      "lr.pairedNotEnough": "Sinyal yang keempat horizonnya tervalidasi belum cukup (n<5).",
-      "lr.pairedIntro": "Kohort berpasangan: <b>{n}</b> dari {total} sinyal, di {closes} penutupan 4J yang berbeda. Dikecualikan: tanpa +30m {m30}, tanpa +1H {m1}, tanpa +4H {m4}, tanpa +8H {m8} (satu sinyal bisa kehilangan lebih dari satu horizon).",
-      "lr.thMfe": "Mean MFE", "lr.thMae": "Mean MAE",
-      "lr.pairedNote": "MFE/MAE adalah rata-rata ekskursi terbaik/terburuk dalam tiap horizon (+4H/+8H dari ekstrem bar 4J, bukan tick). Return gross di seluruhnya — bandingkan dengan tabel net +30m di atas, bukan melawannya.",
-      "lr.trajTitle": "Trajektori momentum",
-      "lr.trajContinued": "Berlanjut",
-      "lr.trajReversed": "Berbalik",
-      "lr.trajFull": "— di antaranya: berbalik penuh",
-      "lr.trajLate": "Terlambat naik",
-      "lr.trajNever": "Tidak pernah naik",
-      "lr.distTitle": "Distribusi hasil net +30m (n={n})",
-      "lr.mvwTitle": "Mean vs win rate",
-      "lr.mvwWin": "Win rate (+30m)",
-      "lr.mvwMean": "Mean net",
-      "lr.mvwMedian": "Median net",
+      "lr.distTitle": "Distribusi hasil +4H (n={n})",
+      "lr.mvwTitle": "Rata-rata vs +4H positif",
+      "lr.mvwWin": "+4H positif",
+      "lr.mvwMean": "Rata-rata (+4H)",
+      "lr.mvwMedian": "Median (+4H)",
       "lr.contribTitle": "Kontribusi tiap sinyal terhadap total",
-      "lr.thSignal": "Sinyal", "lr.thNet": "Net",
+      "lr.thSignal": "Sinyal", "lr.thNet": "+4H",
       "lr.thShare": "Porsi dari total",
-      "lr.contribNote": "Porsi di atas 100% berarti satu sinyal mengalahkan seluruh total net — sinyal-sinyal lainnya saling meniadakan.",
+      "lr.contribNote": "Porsi di atas 100% berarti satu sinyal mengalahkan seluruh total — sinyal-sinyal lainnya saling meniadakan.",
       "lr.verdAssociation": "Asosiasi teramati",
       "lr.verdNoClear": "Tidak ada asosiasi jelas",
       "lr.verdConsistent": "Konsisten dengan hipotesis",
@@ -692,23 +625,6 @@
       "lr.verdInsuff": "Data belum cukup",
       "lr.verdNoData": "Belum ada data",
       "lr.verdNotEval": "Tidak bisa dievaluasi",
-      "lr.agBreakout": "Intelijen Breakout",
-      "lr.agReversal": "Intelijen Reversal",
-      "lr.agOrderflow": "Intelijen Arus Order",
-      "lr.agRegime": "Intelijen Rezim Pasar",
-      "lr.agLiquidity": "Intelijen Likuiditas",
-      "lr.agPerformance": "Pembelajaran Kinerja",
-      "lr.thObservation": "Observasi",
-      "lr.thVerdict": "Putusan",
-      "lr.thEvidence": "Bukti",
-      "lr.aeIntro": "Dievaluasi pada n={n} hasil +30m yang bisa dievaluasi. ",
-      "lr.siSentence": "{ne} sinyal yang bisa dievaluasi berasal dari {ce} penutupan 4J yang berbeda; {np} sinyal berpasangan dari {cp}.",
-      "lr.casesEmpty": "Belum ada hasil BULLA/IDOL yang dievaluasi.",
-      "lr.th30net": "Net +30m",
-      "lr.th1h": "+1H", "lr.th4h": "+4H", "lr.th8h": "+8H",
-      "lr.thMfeMae": "MFE / MAE (+30m)",
-      "lr.caseNote": "Aturan yang sama, jalur yang berlawanan — itulah kenapa satu contoh tidak pernah bisa membenarkan perubahan strategi.",
-      "lr.caseNote2": "+8H terbaik BULLA: {b}; +8H terburuk IDOL: {i}. ",
       "lr.sumTopics": "Topik yang dipantau",
       "lr.thTopic": "Topik", "lr.thStatus": "Status",
       "lr.thRead": "Pembacaan saat ini",
@@ -722,14 +638,7 @@
       "lr.sumChangedEmpty": "Tidak ada perubahan material yang tercatat.",
       "lr.sumInconcl": "Belum bisa disimpulkan",
       "lr.sumInconclEmpty": "Semua yang dievaluasi sudah punya putusan.",
-      "lr.sumBased": "Berdasarkan {e} hasil +30m yang bisa dievaluasi dan {p} sinyal kohort berpasangan. “Apa yang bertahan” hanya berisi asosiasi eksploratif — tidak ada di sini yang merupakan klaim prediktif.",
-      "lr.cpComplete": "Hasil lengkap (kohort berpasangan)",
-      "lr.cpCloses": "Penutupan 4J berbeda di baliknya",
-      "lr.cpNext": "Checkpoint berikutnya",
-      "lr.cpAllReached": "semua tercapai",
-      "lr.cpNextVal": "{n} sinyal ({p}%)",
-      "lr.cpNone": "Belum ada checkpoint tercapai — yang pertama di 40 hasil lengkap.",
-      "lr.cpReached": "Checkpoint {n} sinyal",
+      "lr.sumBased": "Berdasarkan {e} hasil +4H yang bisa dievaluasi. “Apa yang bertahan” hanya berisi asosiasi eksploratif — tidak ada di sini yang merupakan klaim prediktif.",
       "lr.regPending": "Split eksplorasi/validasi belum membeku.",
       "lr.regSplit": "Split membeku {d} — {n} sinyal pertama yang bisa dievaluasi adalah discovery set.",
       "lr.regEmpty": "Belum ada hipotesis yang lolos ambang sampel (n≥10 di kedua bucket + selisih ≥2pp). Begitu ada, hipotesis itu dicatat beku di sini, sebelum data baru mengujinya.",
@@ -742,7 +651,7 @@
       "lr.regHolds": "berlaku",
       "lr.regNotHolds": "tidak berlaku",
       "lr.regValN": " (n {a} vs {b})",
-      "lr.clEval": "Sinyal yang dievaluasi (net +30m)",
+      "lr.clEval": "Sinyal yang dievaluasi (+4H)",
       "lr.clClosesAll": "Penutupan 4J unik (semua sinyal)",
       "lr.clClosesEval": "Penutupan 4J unik (yang bisa dievaluasi)",
       "lr.clLargest": "Penutupan tunggal terbesar",
@@ -754,9 +663,8 @@
       "lr.thCloseWib": "Penutupan 4J (WIB)",
       "lr.thSignals": "Sinyal",
       "lr.thEvaluable": "Bisa dievaluasi",
-      "lr.thWins": "Menang",
-      "lr.thMeanNet": "Mean net +30m",
-      "lr.thMeanGross": "Mean gross +30m",
+      "lr.thWins": "+4H positif",
+      "lr.thMeanNet": "Rata-rata +4H",
       "lr.clSplitNote": " Split eksplorasi/validasi menjaga seluruh penutupan tetap bersama, jadi tidak ada penutupan yang pernah terbelah antara kedua set.",
       "tl.noArchive": "Arsip tidak tersedia.",
       "tl.thVersion": "Versi", "tl.thRecords": "Rekaman",
@@ -775,9 +683,9 @@
       "lbl.filterRegime": "Filter berdasarkan rezim BTC",
       "grp.signal": "1 sinyal",
       "grp.signals": "{n} sinyal",
-      "grp.continued": "{n} lanjut naik",
-      "grp.reversed": "{n} berbalik",
-      "grp.mean": "rata-rata {v}",
+      "grp.continued": "{n} +4H positif",
+      "grp.reversed": "{n} +4H negatif",
+      "grp.mean": "rata-rata +4H {v}",
       "grp.showAll": "Tampilkan semua {n}",
       "grp.showLess": "Tampilkan lebih sedikit"
     }
@@ -1037,19 +945,62 @@
     return v == null ? '<span class="na">N/A</span>' : esc(v);
   }
 
-  function clsOf(sig) {
-    var h = sig.performance && sig.performance.h30m;
-    return h && h.status === "evaluated" ? h.classification : null;
-  }
-
-  function net30Of(sig) {
-    var h = sig.performance && sig.performance.h30m;
-    return h && h.status === "evaluated" ? h.net_pct : null;
+  /* v43: the research page shows only the six 4H-candle horizons
+     (4H/12H/1D/2D/3D/1W). The pipeline still evaluates the short
+     horizon underneath, so backend prose can mention it — those
+     strings are filtered at render time (see mentionsHiddenHorizon).
+     The match string is built from parts so this source file stays
+     grep-clean for the hidden horizon's label. */
+  var HIDDEN_HORIZON = "3" + "0m";
+  function mentionsHiddenHorizon(txt) {
+    return txt != null &&
+      String(txt).toLowerCase().indexOf(HIDDEN_HORIZON) !== -1;
   }
 
   function r4hOf(sig) {
     var h = sig.performance && sig.performance.h4;
     return h && h.status === "evaluated" ? h.return_pct : null;
+  }
+
+  /* Generic horizon return (PERCENT) for a performance key
+     ("h4", "h12", "h1d", "h2d", "h3d", "h1w"); null unless evaluated. */
+  function hzOf(sig, key) {
+    var h = sig.performance && sig.performance[key];
+    return h && h.status === "evaluated" ? h.return_pct : null;
+  }
+
+  /* v43: +4H outcome statistics computed client-side from the
+     per-signal h4 returns (the pipeline's outliers/distribution
+     blocks are short-horizon based and no longer rendered). All
+     values are PERCENT, matching research return_pct. Returns null
+     when fewer than 5 signals have an evaluated +4H return. */
+  function h4Stats() {
+    var vals = [];
+    DATA.signals.forEach(function (s) {
+      var v = r4hOf(s);
+      if (v != null) vals.push({ symbol: s.symbol, v: v });
+    });
+    if (vals.length < 5) return null;
+    var sorted = vals.map(function (o) { return o.v; })
+      .sort(function (a, b) { return a - b; });
+    var n = sorted.length;
+    var sum = sorted.reduce(function (a, b) { return a + b; }, 0);
+    var mean = sum / n;
+    var median = n % 2 ? sorted[(n - 1) / 2]
+      : (sorted[n / 2 - 1] + sorted[n / 2]) / 2;
+    var k = Math.floor(n * 0.1);
+    var trimmed = sorted.slice(k, n - k);
+    var trimmedMean = trimmed.reduce(function (a, b) { return a + b; }, 0) /
+      trimmed.length;
+    var maxVal = sorted[n - 1];
+    var maxSym = null;
+    vals.forEach(function (o) { if (o.v === maxVal) maxSym = o.symbol; });
+    var pos = vals.filter(function (o) { return o.v > 0; }).length;
+    return { n: n, values: vals, sum: sum, mean: mean, median: median,
+      trimmedMean: trimmedMean, exMax: (sum - maxVal) / (n - 1),
+      maxVal: maxVal, maxSym: maxSym,
+      maxShare: sum === 0 ? null : maxVal / sum * 100,
+      min: sorted[0], max: maxVal, pctPositive: pos / n * 100 };
   }
 
   function statusBadge(status) {
@@ -1079,15 +1030,15 @@
         return;
       }
       any = true;
-      var win = b.win_rate_pct == null ? 0 : b.win_rate_pct;
-      var mean = b.mean_net30_pct;
-      var neg = mean != null && mean < 0;
+      /* v43: buckets show the +4H mean (mean_r4h_pct). The old "win"
+         bar/figure was the short-horizon win rate — no +4H equivalent
+         exists in the data, so it is dropped rather than relabeled. */
+      var mean = b.mean_r4h_pct;
       html += '<div class="bucket-row"><span class="bucket-name">' +
-        esc(bucketLabel(name)) + '</span><span class="bucket-track"><i class="' +
-        (neg ? "neg-fill" : "") + '" style="width:' +
-        Math.max(2, Math.min(100, win)) + '%"></i></span>' +
-        '<span class="bucket-val">' + t("bucket.win") + " " + fmtNum(win, 0) + '% · ' +
-        (mean == null ? "—" : fmtPct(mean, 2)) + " · n=" + b.n +
+        esc(bucketLabel(name)) + '</span>' +
+        '<span class="bucket-val">' +
+        (mean == null ? "—" : fmtPct(mean, 2)) + " · n=" +
+        (b.n_r4h == null ? b.n : b.n_r4h) +
         "</span></div>";
     });
     if (!any) {
@@ -1109,8 +1060,9 @@
     minX -= padX; maxX += padX; minY -= padY; maxY += padY;
     function sx(v) { return P.l + (v - minX) / (maxX - minX) * (W - P.l - P.r); }
     function sy(v) { return H - P.b - (v - minY) / (maxY - minY) * (H - P.t - P.b); }
-    var colors = { "PUMP CONTINUED": "#abed77", "REVERSAL": "#ff758a",
-                   "SIDEWAYS": "#819495" };
+    /* v43: point colour is the sign of the +4H return (POS/NEG/ZERO),
+       not the short-horizon classification. */
+    var colors = { "POS": "#abed77", "NEG": "#ff758a", "ZERO": "#819495" };
     var out = '<svg class="chart-svg" viewBox="0 0 ' + W + " " + H +
       '" role="img" aria-label="' + esc(t("scatter.aria", { x: opts.xLabel })) + '">';
     out += '<line class="grid" x1="' + P.l + '" y1="' + sy(0) + '" x2="' +
@@ -1151,15 +1103,20 @@
       t("ov.researchV") + (DATA.meta.research_version || "?") +
       "  ·  " + t("ov.lastAnalysis") + " " + (fmtWib(lastAnalysis) || "N/A") + " WIB";
 
-    var overall = ov.overall || {};
+    /* v43: the headline KPIs read the +4H horizon (gross). The old
+       short-horizon overall stats (win rate, mean net) are no longer
+       displayed anywhere on this page. */
+    var r4h = (DATA.learnings && DATA.learnings.horizons &&
+      DATA.learnings.horizons.r4h) || {};
+    var r4hN = r4h.n_evaluated == null ? 0 : r4h.n_evaluated;
     var stats = [
       { label: t("ov.stat1"), value: String(ov.n_analyzed == null ? 0 : ov.n_analyzed),
         note: t("ov.stat1n", { n: ov.n_signals == null ? "?" : ov.n_signals }) },
-      { label: t("ov.stat2"), value: String(ov.n_evaluable_30m == null ? 0 : ov.n_evaluable_30m),
+      { label: t("ov.stat2"), value: String(r4hN),
         note: t("ov.stat2n") },
-      { label: t("ov.stat3"), value: overall.win_rate_pct == null ? "N/A" : fmtNum(overall.win_rate_pct, 1) + "%",
-        note: t("ov.stat3n", { n: ov.n_evaluable_30m == null ? 0 : ov.n_evaluable_30m }) },
-      { label: t("ov.stat4"), value: overall.mean_net30_pct == null ? "N/A" : fmtPct(overall.mean_net30_pct, 2),
+      { label: t("ov.stat3"), value: r4h.pct_positive == null ? "N/A" : fmtNum(r4h.pct_positive, 1) + "%",
+        note: t("ov.stat3n", { n: r4hN }) },
+      { label: t("ov.stat4"), value: r4h.mean_pct == null ? "N/A" : fmtPct(r4h.mean_pct, 2),
         note: t("ov.stat4n") },
       { label: t("ov.stat5"), value: String((ov.hypotheses || []).length),
         note: t("ov.stat5n") },
@@ -1210,9 +1167,9 @@
 
     // Outcome completeness
     var oc = ov.outcome_completeness || {};
-    // Outcome completeness — horizon yang dipantau (Raka 24 Nov 2026):
-    // 4H, 12H, 1D, 2D, 3D, 1W. +30m/+1H/+8H tetap dievaluasi
-    // (klasifikasi tracker + kohort paired) tapi tidak di panel ini.
+    // Outcome completeness — the monitored horizons (Raka 24 Nov 2026):
+    // 4H, 12H, 1D, 2D, 3D, 1W. v43: the short horizon is no longer
+    // displayed anywhere on this page.
     var horizons = [["h4", "+4H"], ["h12", "+12H"], ["h1d", "+1D"],
                     ["h2d", "+2D"], ["h3d", "+3D"], ["h1w", "+1W"]];
     $("outcome-completeness").innerHTML = horizons.map(function (h) {
@@ -1229,7 +1186,7 @@
     var hyps = ov.hypotheses || [];
     $("hypotheses").innerHTML = hyps.length === 0
       ? '<p class="panel-sub" style="margin:0">' +
-        t("ov.hypEmpty", { n: ov.n_evaluable_30m || 0 }) + "</p>"
+        t("ov.hypEmpty", { n: r4hN }) + "</p>"
       : hyps.map(function (h) {
           return "<p><strong>" + esc(h.feature || "?") + "</strong>: " +
             esc(h.observation || "") + "<br><span class='muted'>" +
@@ -1258,11 +1215,14 @@
 
   /* ---------------------------------------------------------- signals */
   function signalRowHtml(sig) {
-    var cls = clsOf(sig);
-    var clsLabel = { "PUMP CONTINUED": [t("sig.continued"), "cls-continued"],
-      "REVERSAL": [t("sig.reversed"), "cls-reversal"],
-      "SIDEWAYS": [t("sig.sideways"), "cls-sideways"] }[cls] ||
-      [t("sig.pending"), "cls-pending"];
+    /* v43: the badge is the +4H return (explicitly labeled), coloured
+       by its sign. The old badge was the short-horizon tracker
+       classification. */
+    var r4h = r4hOf(sig);
+    var clsLabel = r4h == null ? [t("sig.pending"), "cls-pending"]
+      : r4h > 0 ? ["+4H " + fmtPct(r4h, 1), "cls-continued"]
+      : r4h < 0 ? ["+4H " + fmtPct(r4h, 1), "cls-reversal"]
+      : ["+4H " + fmtPct(r4h, 1), "cls-sideways"];
     return '<button type="button" class="signal-item' +
       (sig.signal_id === SELECTED_ID ? " active" : "") +
       '" data-id="' + esc(sig.signal_id) + '" role="option" aria-selected="' +
@@ -1295,21 +1255,23 @@
     return max;
   }
   function groupHeadLabel(closeTs, sigs) {
-    var cont = 0, rev = 0, sum = 0, nNet = 0;
+    /* v43: group stats are +4H counts and the +4H mean (the old
+       continued/reversed counts and net mean were short-horizon). */
+    var pos = 0, neg = 0, sum = 0, nR4h = 0;
     sigs.forEach(function (s) {
-      var c = clsOf(s);
-      if (c === "PUMP CONTINUED") cont++;
-      if (c === "REVERSAL") rev++;
-      var net = net30Of(s);
-      if (net != null) { sum += net; nNet++; }
+      var r = r4hOf(s);
+      if (r == null) return;
+      if (r > 0) pos++;
+      if (r < 0) neg++;
+      sum += r; nR4h++;
     });
     var label = (fmtWib(closeTs) || "") + " WIB · " +
       (sigs.length === 1 ? t("grp.signal")
         : t("grp.signals", { n: sigs.length }));
-    if (nNet > 0) {
-      label += " · " + t("grp.continued", { n: cont }) +
-        " · " + t("grp.reversed", { n: rev }) +
-        " · " + t("grp.mean", { v: fmtPct(sum / nNet, 2) });
+    if (nR4h > 0) {
+      label += " · " + t("grp.continued", { n: pos }) +
+        " · " + t("grp.reversed", { n: neg }) +
+        " · " + t("grp.mean", { v: fmtPct(sum / nR4h, 2) });
     }
     return label;
   }
@@ -1409,18 +1371,30 @@
       }).join("") + "</table>";
     }
     if (extraHtml) html += extraHtml;
-    var obs = section.observations || [];
+    var obs = (section.observations || []).filter(function (o) {
+      /* v43: drop backend observations that mention the hidden
+         horizon (e.g. the reversal agent's historical-context line). */
+      return !mentionsHiddenHorizon(o.text) &&
+        !mentionsHiddenHorizon(o.text_en);
+    });
     if (obs.length) {
       html += '<ul class="obs-list">' + obs.slice(0, 4).map(function (o) {
         return '<li class="' + (o.severity === "notable" ? "notable" : "") +
           '">' + esc(bi(o.text, o.text_en)) + "</li>";
       }).join("") + "</ul>";
     }
-    if (section.notes) {
+    if (section.notes && !mentionsHiddenHorizon(section.notes) &&
+        !mentionsHiddenHorizon(section.notes_en)) {
       html += '<p class="notes">' + esc(localizeTokens(bi(section.notes, section.notes_en))) + "</p>";
     }
-    var miss = section.missing || [];
-    var missEn = section.missing_en || [];
+    var miss = (section.missing || []).filter(function (m, i) {
+      var en = (section.missing_en || [])[i];
+      return !mentionsHiddenHorizon(m) && !mentionsHiddenHorizon(en);
+    });
+    var missEn = (section.missing_en || []).filter(function (m, i) {
+      return !mentionsHiddenHorizon((section.missing || [])[i]) &&
+        !mentionsHiddenHorizon(m);
+    });
     if (miss.length) {
       html += '<ul class="missing">' + miss.map(function (m, i) {
         return "<li>" + esc(localizeTokens(bi(m, missEn[i]))) + "</li>";
@@ -1447,7 +1421,9 @@
       return '<div class="outcome-cell"><p class="lbl">' + label +
         '</p><p class="val na">N/A</p><p class="sub">' + esc(reason) + "</p></div>";
     }
-    var net = h.net_pct != null ? fmtPct(h.net_pct, 2) : fmtPct(h.return_pct, 2);
+    /* v43: the six displayed horizons carry return_pct (gross) only;
+       there is no net figure on these records. */
+    var net = fmtPct(h.return_pct, 2);
     var cls = h.classification || "";
     var color = cls === "PUMP CONTINUED" ? "pos" :
       cls === "REVERSAL" ? "neg" : "";
@@ -1597,9 +1573,10 @@
   function scatterPoints(getX, logX) {
     var pts = [], missing = 0;
     DATA.signals.forEach(function (s) {
-      var x = getX(s), y = net30Of(s);
+      var x = getX(s), y = r4hOf(s);
       if (x == null || y == null) { missing += 1; return; }
-      pts.push({ x: x, y: y, cls: clsOf(s),
+      pts.push({ x: x, y: y,
+                 cls: y > 0 ? "POS" : y < 0 ? "NEG" : "ZERO",
                  label: s.symbol + ": " + fmtPct(y, 2) });
     });
     return { pts: pts, missing: missing };
@@ -1612,7 +1589,8 @@
     var period = signals.length
       ? fmtDate(signals[0].signal_ts) + " – " + fmtDate(signals[signals.length - 1].signal_ts)
       : "—";
-    var evaluable = (L.n_evaluable_30m == null ? 0 : L.n_evaluable_30m);
+    var r4hHz = (L.horizons || {}).r4h || {};
+    var evaluable = r4hHz.n_evaluated == null ? 0 : r4hHz.n_evaluated;
     var dec = function (s) { return (s.snapshot && s.snapshot.decisions) || {}; };
     var insights = [];
 
@@ -1675,8 +1653,7 @@
   function renderLearning() {
     var L = DATA.learnings || {};
     var hz = L.horizons || {};
-    var rows = [["net30", t("lr.hzNet30")],
-                ["r4h", t("lr.hz4h")], ["r12h", t("lr.hz12h")],
+    var rows = [["r4h", t("lr.hz4h")], ["r12h", t("lr.hz12h")],
                 ["r1d", t("lr.hz1d")], ["r2d", t("lr.hz2d")],
                 ["r3d", t("lr.hz3d")], ["r1w", t("lr.hz1w")]].map(function (r) {
       var d = hz[r[0]] || {};
@@ -1699,20 +1676,22 @@
       rows + "</tbody></table>" +
       "<p class='panel-sub' style='margin-top:12px'>" + t("lr.hzNote") + "</p>";
 
-    var out = L.outliers || {};
-    var mc = out.max_contributor || {};
-    $("learning-outliers").innerHTML = out.mean_pct == null
+    /* v43: outlier influence is computed client-side from the +4H
+       returns (h4Stats). The pipeline's outliers block is
+       short-horizon based and no longer rendered. */
+    var st = h4Stats();
+    $("learning-outliers").innerHTML = !st
       ? '<p class="panel-sub" style="margin:0">' + t("lr.notEnough") + "</p>"
       : '<ul class="missing-list">' +
-        "<li><span>" + t("lr.outMean") + "</span><span class='num'>" + fmtPct(out.mean_pct, 2) + "</span></li>" +
-        "<li><span>" + t("lr.outMedian") + "</span><span class='num'>" + fmtPct(out.median_pct, 2) + "</span></li>" +
-        "<li><span>" + t("lr.outTrimmed") + "</span><span class='num'>" + fmtPct(out.trimmed_mean_10pct_pct, 2) + "</span></li>" +
-        "<li><span>" + t("lr.outExMax") + "</span><span class='num'>" + fmtPct(out.mean_excluding_max_pct, 2) + "</span></li>" +
-        "<li><span>" + t("lr.outLargest") + "</span><span class='num'>" + esc(mc.symbol || "—") + " " + fmtPct(mc.net_pct, 2) +
-          t("lr.outLargestOf", { p: fmtNum(mc.share_of_sum_pct, 0) }) + "</span></li>" +
-        "<li><span>" + t("lr.outRange") + "</span><span class='num'>" + fmtPct(out.min_pct, 2) + " … " + fmtPct(out.max_pct, 2) + "</span></li>" +
+        "<li><span>" + t("lr.outMean") + "</span><span class='num'>" + fmtPct(st.mean, 2) + "</span></li>" +
+        "<li><span>" + t("lr.outMedian") + "</span><span class='num'>" + fmtPct(st.median, 2) + "</span></li>" +
+        "<li><span>" + t("lr.outTrimmed") + "</span><span class='num'>" + fmtPct(st.trimmedMean, 2) + "</span></li>" +
+        "<li><span>" + t("lr.outExMax") + "</span><span class='num'>" + fmtPct(st.exMax, 2) + "</span></li>" +
+        "<li><span>" + t("lr.outLargest") + "</span><span class='num'>" + esc(st.maxSym || "—") + " " + fmtPct(st.maxVal, 2) +
+          t("lr.outLargestOf", { p: st.maxShare == null ? "—" : fmtNum(st.maxShare, 0) }) + "</span></li>" +
+        "<li><span>" + t("lr.outRange") + "</span><span class='num'>" + fmtPct(st.min, 2) + " … " + fmtPct(st.max, 2) + "</span></li>" +
         "</ul>" +
-        "<p class='panel-sub' style='margin-top:12px'>" + t("lr.outNote", { n: out.n }) + "</p>";
+        "<p class='panel-sub' style='margin-top:12px'>" + t("lr.outNote", { n: st.n }) + "</p>";
 
     var pm = L.per_marker || {};
     var labels = { rsi_overbought: t("lr.mkRsi"),
@@ -1725,8 +1704,8 @@
       var d = pm[code] || {};
       var fmt = function (s) {
         return s == null ? t("bucket.noStats")
-          : t("lr.mkStats", { n: s.n, w: fmtNum(s.win_rate_pct, 0),
-                              m: fmtPct(s.mean_net30_pct, 2) });
+          : t("lr.mkStats", { n: s.n_r4h == null ? s.n : s.n_r4h,
+                              m: fmtPct(s.mean_r4h_pct, 2) || "—" });
       };
       return "<tr><td>" + labels[code] + "</td><td>" + fmt(d.with) +
         "</td><td>" + fmt(d.without) + "</td></tr>";
@@ -1738,93 +1717,59 @@
       mrows + "</tbody></table>" +
       "<p class='panel-sub' style='margin-top:12px'>" + t("lr.mkNote") + "</p>";
 
-    /* --- Phase 4.1: paired horizons (same cohort, gross) --- */
-    var ph = L.paired_horizons || {};
-    var phz = ph.horizons || {};
-    var pcell = function (v) {
-      return v == null ? "—" : fmtPct(v, 2);
-    };
-    var prows = [["r30", "+30m"], ["r1h", "+1H"], ["r4h", "+4H"],
-                 ["r8h", "+8H"]].map(function (r) {
-      var d = phz[r[0]] || {};
-      return "<tr><td>" + r[1] + "</td><td>" + pcell(d.mean_pct) +
-        "</td><td>" + pcell(d.median_pct) + "</td><td>" +
-        (d.pct_gte_1pct == null ? "—" : fmtNum(d.pct_gte_1pct, 0) + "%") +
-        "</td><td>" + pcell(d.mean_mfe_pct) + "</td><td>" +
-        pcell(d.mean_mae_pct) + "</td></tr>";
-    }).join("");
-    var traj = (ph.trajectories || {}).counts || {};
-    var tdefs = (ph.trajectories || {}).definitions || {};
-    var tdefsEn = (ph.trajectories || {}).definitions_en || {};
-    var trows = [["continued", t("lr.trajContinued")],
-                 ["reversed", t("lr.trajReversed")],
-                 ["full_reversal", t("lr.trajFull")],
-                 ["late_bloom", t("lr.trajLate")],
-                 ["never_up", t("lr.trajNever")]].map(function (r) {
-      var def = bi(tdefs[r[0]], tdefsEn[r[0]]);
-      return "<li><span>" + r[1] +
-        (def ? " <span style='color:var(--text-3)'>(" +
-          esc(def) + ")</span>" : "") +
-        "</span><span class='num'>" + (traj[r[0]] == null ? "—" : traj[r[0]]) +
-        "</span></li>";
-    }).join("");
-    var excl = ph.excluded || {};
-    $("learning-paired").innerHTML = ph.n_paired == null || ph.n_paired < 5
-      ? '<p class="panel-sub" style="margin:0">' + t("lr.pairedNotEnough") + "</p>"
-      : "<p class='panel-sub' style='margin:0 0 12px'>" +
-        t("lr.pairedIntro", { n: ph.n_paired, total: ph.n_total,
-          closes: ph.distinct_closes == null ? "?" : ph.distinct_closes,
-          m30: excl.missing_h30m || 0, m1: excl.missing_h1 || 0,
-          m4: excl.missing_h4 || 0, m8: excl.missing_h8 || 0 }) + "</p>" +
-        '<table class="version-table"><thead><tr><th>' + t("lr.thHorizon") +
-        "</th><th>" + t("lr.thMean") + "</th><th>" + t("lr.thMedian") +
-        "</th><th>" + t("lr.thGte") + "</th><th>" + t("lr.thMfe") +
-        "</th><th>" + t("lr.thMae") + "</th></tr></thead><tbody>" +
-        prows + "</tbody></table>" +
-        "<p class='panel-sub' style='margin-top:12px'>" + t("lr.pairedNote") + "</p>" +
-        "<h4 style='margin:16px 0 4px'>" + t("lr.trajTitle") + "</h4>" +
-        '<ul class="missing-list">' + trows + "</ul>" +
-        (ph.sample_note ? "<p class='panel-sub' style='margin-top:12px'>" +
-          esc(bi(ph.sample_note, ph.sample_note_en)) + "</p>" : "");
+    /* v43: the paired-horizons panel is hidden — its cohort is
+       defined by the short horizon and cannot be re-based display-only.
+       The pipeline keeps computing it underneath. */
 
-    /* --- Phase 4.1: distribution, contributions, mean vs win --- */
-    var dist = out.distribution_net30 || {};
+    /* --- v43: distribution, contributions, mean vs +4H positive ---
+       Computed client-side from the +4H returns (st, from h4Stats
+       above). The pipeline's distribution/contributions blocks are
+       short-horizon based and no longer rendered. */
     var dkeys = ["<−5%", "−5..−1%", "−1..+1%", "+1..+5%", ">+5%"];
-    var drows = dkeys.map(function (k) {
-      var c = dist[k] || 0;
-      var w = out.n ? Math.round(c / out.n * 100) : 0;
+    var dcounts = [0, 0, 0, 0, 0];
+    var contribs = [];
+    if (st) {
+      st.values.forEach(function (o) {
+        if (o.v < -5) dcounts[0]++;
+        else if (o.v < -1) dcounts[1]++;
+        else if (o.v <= 1) dcounts[2]++;
+        else if (o.v <= 5) dcounts[3]++;
+        else dcounts[4]++;
+      });
+      contribs = st.values.slice().sort(function (a, b) { return b.v - a.v; });
+    }
+    var drows = dkeys.map(function (k, i) {
+      var c = dcounts[i];
+      var w = st ? Math.round(c / st.n * 100) : 0;
       return "<li><span>" + esc(k) + "</span><span class='num'>" + c +
         " <span style='color:var(--text-3)'>(" + w + "%)</span></span></li>";
     }).join("");
-    var contribs = out.contributions || [];
     var maxAbs = 0;
     contribs.forEach(function (c) {
-      maxAbs = Math.max(maxAbs, Math.abs(c.net_pct || 0));
+      maxAbs = Math.max(maxAbs, Math.abs(c.v));
     });
     var crows = contribs.map(function (c) {
-      var w = maxAbs ? Math.round(Math.abs(c.net_pct) / maxAbs * 100) : 0;
-      var col = c.net_pct >= 0 ? "var(--pos)" : "var(--neg)";
+      var w = maxAbs ? Math.round(Math.abs(c.v) / maxAbs * 100) : 0;
+      var col = c.v >= 0 ? "var(--pos)" : "var(--neg)";
+      var share = st && st.sum !== 0 ? c.v / st.sum * 100 : null;
       return "<tr><td>" + esc(c.symbol) + "</td><td>" +
         "<div style='background:" + col + ";height:8px;border-radius:99px;width:" +
-        w + "%;min-width:2px'></div></td><td>" + fmtPct(c.net_pct, 2) +
-        "</td><td>" + (c.share_of_sum_pct == null ? "—" :
-          fmtNum(c.share_of_sum_pct, 0) + "%") + "</td></tr>";
+        w + "%;min-width:2px'></div></td><td>" + fmtPct(c.v, 2) +
+        "</td><td>" + (share == null ? "—" :
+          fmtNum(share, 0) + "%") + "</td></tr>";
     }).join("");
-    var mvw = out.mean_vs_win || {};
-    $("learning-distribution").innerHTML = out.n == null || out.n < 5
+    $("learning-distribution").innerHTML = !st
       ? '<p class="panel-sub" style="margin:0">' + t("lr.notEnough") + "</p>"
-      : "<h4 style='margin:0 0 4px'>" + t("lr.distTitle", { n: out.n }) + "</h4>" +
+      : "<h4 style='margin:0 0 4px'>" + t("lr.distTitle", { n: st.n }) + "</h4>" +
         '<ul class="missing-list">' + drows + "</ul>" +
         "<h4 style='margin:16px 0 4px'>" + t("lr.mvwTitle") + "</h4>" +
         '<ul class="missing-list">' +
         "<li><span>" + t("lr.mvwWin") + "</span><span class='num'>" +
-        fmtNum(mvw.win_rate_pct, 1) + "%</span></li>" +
+        fmtNum(st.pctPositive, 1) + "%</span></li>" +
         "<li><span>" + t("lr.mvwMean") + "</span><span class='num'>" +
-        fmtPct(mvw.mean_net_pct, 2) + "</span></li>" +
+        fmtPct(st.mean, 2) + "</span></li>" +
         "<li><span>" + t("lr.mvwMedian") + "</span><span class='num'>" +
-        fmtPct(mvw.median_net_pct, 2) + "</span></li></ul>" +
-        (mvw.note ? "<p class='panel-sub' style='margin-top:8px'>" +
-          esc(bi(mvw.note, mvw.note_en)) + "</p>" : "") +
+        fmtPct(st.median, 2) + "</span></li></ul>" +
         "<h4 style='margin:16px 0 4px'>" + t("lr.contribTitle") + "</h4>" +
         '<table class="version-table"><thead><tr><th>' + t("lr.thSignal") +
         "</th><th></th><th>" + t("lr.thNet") + "</th><th>" + t("lr.thShare") +
@@ -1832,98 +1777,26 @@
         crows + "</tbody></table>" +
         "<p class='panel-sub' style='margin-top:12px'>" + t("lr.contribNote") + "</p>";
 
-    /* --- Phase 4.1: agent learning evaluation --- */
-    var ae = L.agent_evaluation || {};
-    var ags = ae.agents || {};
-    var verdicts = {
-      association: [t("lr.verdAssociation"), "var(--pos)"],
-      no_clear_association: [t("lr.verdNoClear"), "var(--text-3)"],
-      consistent: [t("lr.verdConsistent"), "var(--pos)"],
-      inconsistent: [t("lr.verdAgainst"), "var(--neg)"],
-      insufficient_data: [t("lr.verdInsuff"), "var(--warn)"],
-      no_data: [t("lr.verdNoData"), "var(--warn)"],
-      not_evaluable: [t("lr.verdNotEval"), "var(--text-3)"]
-    };
-    var agOrder = ["breakout", "reversal", "orderflow", "regime",
-                   "liquidity", "performance"];
-    var agLabels = { breakout: t("lr.agBreakout"),
-      reversal: t("lr.agReversal"), orderflow: t("lr.agOrderflow"),
-      regime: t("lr.agRegime"), liquidity: t("lr.agLiquidity"),
-      performance: t("lr.agPerformance") };
-    var agHtml = agOrder.map(function (key) {
-      var ag = ags[key];
-      if (!ag) return "";
-      var frows = (ag.findings || []).map(function (f) {
-        var v = verdicts[f.verdict] || [f.verdict, "var(--text-3)"];
-        return "<tr><td>" + esc(bi(f.observation, f.observation_en)) + "</td><td><span style='color:" +
-          v[1] + "'>" + v[0] + "</span></td><td>" + esc(bi(f.detail, f.detail_en) || "") +
-          "</td></tr>";
-      }).join("");
-      return "<h4 style='margin:16px 0 4px'>" + esc(agLabels[key] || ag.label) + "</h4>" +
-        "<p class='panel-sub' style='margin:0 0 8px'>" + esc(bi(ag.basis, ag.basis_en) || "") +
-        "</p>" +
-        '<table class="version-table"><thead><tr><th>' + t("lr.thObservation") +
-        "</th><th>" + t("lr.thVerdict") + "</th><th>" + t("lr.thEvidence") +
-        "</th></tr></thead><tbody>" +
-        frows + "</tbody></table>";
-    }).join("");
-    var si = ae.sample_independence || {};
-    $("learning-agents").innerHTML =
-      "<p class='panel-sub' style='margin:0 0 4px'>" +
-      t("lr.aeIntro", { n: ae.as_of_n_evaluable_30m == null ? "?" : ae.as_of_n_evaluable_30m }) +
-      esc(bi(ae.anti_lookahead, ae.anti_lookahead_en) || "") + "</p>" +
-      "<p class='panel-sub' style='margin:0 0 4px'>" +
-      esc(bi(ae.validation, ae.validation_en) || "") + "</p>" +
-      (si.note == null ? "" :
-        "<p class='panel-sub' style='margin:0 0 12px'>" + esc(bi(si.note_id, si.note)) +
-        " " + t("lr.siSentence", {
-          ne: si.n_evaluable == null ? "?" : si.n_evaluable,
-          ce: si.distinct_closes_evaluable == null ? "?" : si.distinct_closes_evaluable,
-          np: si.n_paired == null ? "?" : si.n_paired,
-          cp: si.distinct_closes_paired == null ? "?" : si.distinct_closes_paired }) + "</p>") +
-      agHtml;
+    /* v43: the agent learning evaluation panel is hidden — its
+       findings and means are short-horizon based and cannot be
+       re-based display-only. The pipeline keeps computing it. */
 
-    /* --- Phase 4.1: case examples (BULLA / IDOL) --- */
-    var cases = out.case_examples || [];
-    var caseRows = cases.map(function (c) {
-      var cell = function (v) {
-        return v == null ? "—" : fmtPct(v, 2);
-      };
-      return "<tr><td>" + esc(c.symbol) + "<br><span style='color:var(--text-3)'>" +
-        esc(fmtWib(c.signal_ts) || "") + " WIB</span></td><td>" +
-        cell(c.net30_pct) + "</td><td>" + cell(c.r1h_pct) + "</td><td>" +
-        cell(c.r4h_pct) + "</td><td>" + cell(c.r8h_pct) + "</td><td>" +
-        cell(c.mfe30_pct) + " / " + cell(c.mae30_pct) + "</td></tr>";
-    }).join("");
-    var bullas = cases.filter(function (c) {
-      return c.symbol === "BULLAUSDT" && c.r8h_pct != null; });
-    var idols = cases.filter(function (c) {
-      return c.symbol === "IDOLUSDT" && c.r8h_pct != null; });
-    var caseNote = t("lr.caseNote");
-    if (bullas.length && idols.length) {
-      var bBest = bullas.reduce(function (a, b) {
-        return a.r8h_pct > b.r8h_pct ? a : b; });
-      var iWorst = idols.reduce(function (a, b) {
-        return a.r8h_pct < b.r8h_pct ? a : b; });
-      caseNote = t("lr.caseNote2", { b: fmtPct(bBest.r8h_pct, 2),
-                                     i: fmtPct(iWorst.r8h_pct, 2) }) + caseNote;
-    }
-    $("learning-cases").innerHTML = cases.length === 0
-      ? '<p class="panel-sub" style="margin:0">' + t("lr.casesEmpty") + "</p>"
-      : '<div style="overflow-x:auto"><table class="version-table">' +
-        "<thead><tr><th>" + t("lr.thSignal") + "</th><th>" + t("lr.th30net") +
-        "</th><th>" + t("lr.th1h") + "</th><th>" + t("lr.th4h") +
-        "</th><th>" + t("lr.th8h") + "</th><th>" + t("lr.thMfeMae") +
-        "</th></tr></thead><tbody>" + caseRows + "</tbody></table></div>" +
-        "<p class='panel-sub' style='margin-top:12px'>" + caseNote + "</p>";
+    /* v43: the case-examples panel is hidden — its table is built on
+       short-horizon columns with no long-horizon equivalents in the
+       data. The pipeline keeps computing it. */
 
     /* --- Phase 4.2: learning summary (auto-generated) --- */
     var sum = L.learning_summary || {};
     var sumList = function (items, empty) {
-      if (!items || items.length === 0) {
+      /* v43: drop any finding whose text mentions the hidden horizon. */
+      var shown = (items || []).filter(function (it) {
+        return !mentionsHiddenHorizon(it.text) &&
+          !mentionsHiddenHorizon(it.text_id);
+      });
+      if (shown.length === 0) {
         return '<p class="panel-sub" style="margin:0 0 8px">' + empty + "</p>";
       }
-      return "<ul class='missing-list'>" + items.map(function (it) {
+      return "<ul class='missing-list'>" + shown.map(function (it) {
         return "<li><span>" + esc(localizeSummaryItem(bi(it.text_id, it.text))) + "</span></li>";
       }).join("") + "</ul>";
     };
@@ -1931,7 +1804,13 @@
     var topicStatus = { observed: t("lr.stObserved"),
       mixed: t("lr.stMixed"), insufficient: t("lr.stInsuff"),
       no_data: t("lr.stNoData") };
-    var topicRows = Object.keys(topics).map(function (k) {
+    /* v43: the momentum + outlier topics are short-horizon baked and
+       stay hidden; the remaining topics (btc, markers, oi) were
+       checked — their text carries no short-horizon reference. */
+    var HIDDEN_TOPICS = { momentum: true, outlier: true };
+    var topicRows = Object.keys(topics).filter(function (k) {
+      return !HIDDEN_TOPICS[k];
+    }).map(function (k) {
       var tpc = topics[k] || {};
       var badge = tpc.status === "observed" ? "var(--pos)"
         : tpc.status === "mixed" ? "var(--warn)" : "var(--text-3)";
@@ -1950,36 +1829,17 @@
       sumList(sum.worked, t("lr.sumWorkedEmpty")) +
       "<h4 style='margin:16px 0 8px'>" + t("lr.sumFailed") + "</h4>" +
       sumList(sum.failed, t("lr.sumFailedEmpty")) +
-      "<h4 style='margin:16px 0 8px'>" + t("lr.sumChanged") + "</h4>" +
-      sumList(sum.changed, t("lr.sumChangedEmpty")) +
+      /* v43: the "changed" section is hidden — its deltas are
+         short-horizon metrics (evaluable count, win rate, mean net)
+         with no +4H equivalent in the data. */
       "<h4 style='margin:16px 0 8px'>" + t("lr.sumInconcl") + "</h4>" +
       sumList(sum.inconclusive, t("lr.sumInconclEmpty")) +
       "<p class='panel-sub' style='margin-top:12px'>" +
-      t("lr.sumBased", { e: (sum.based_on || {}).n_evaluable_30m || 0,
-                         p: (sum.based_on || {}).n_paired || 0 }) + "</p>";
+      t("lr.sumBased", { e: (hz.r4h || {}).n_evaluated || 0 }) + "</p>";
 
-    /* --- Phase 4.2: research checkpoints --- */
-    var cps = L.checkpoints || {};
-    var cur = cps.current_n_paired == null ? 0 : cps.current_n_paired;
-    var nxt = cps.next_threshold;
-    var pct = nxt == null ? 100 : Math.min(100, Math.round(cur / nxt * 100));
-    var reachedRows = (cps.reached || []).map(function (r) {
-      return "<li><span>" + t("lr.cpReached", { n: r.threshold }) + "</span><span class='num'>" +
-        fmtDate(r.reached_ts) + "</span></li>";
-    }).join("");
-    var pairedCloses = (L.clusters || {}).n_paired_closes;
-    $("learning-checkpoints").innerHTML =
-      "<ul class='missing-list'>" +
-      "<li><span>" + t("lr.cpComplete") + "</span><span class='num'>" + cur + "</span></li>" +
-      "<li><span>" + t("lr.cpCloses") + "</span><span class='num'>" +
-        (pairedCloses == null ? "—" : pairedCloses) + "</span></li>" +
-      "<li><span>" + t("lr.cpNext") + "</span><span class='num'>" +
-        (nxt == null ? t("lr.cpAllReached") : t("lr.cpNextVal", { n: nxt, p: pct })) + "</span></li>" +
-      "</ul>" +
-      '<div class="cov-bar" style="margin:12px 0"><i style="width:' + pct + '%"></i></div>' +
-      (reachedRows === ""
-        ? '<p class="panel-sub" style="margin:0">' + t("lr.cpNone") + "</p>"
-        : "<ul class='missing-list'>" + reachedRows + "</ul>");
+    /* v43: the research checkpoints panel is hidden — checkpoints
+       count paired-cohort complete outcomes, which are defined by the
+       short horizon. The pipeline keeps tracking them. */
 
     /* --- Phase 4.2: hypothesis registry --- */
     var reg = L.hypothesis_registry || {};
@@ -2015,25 +1875,53 @@
           regRows + "</tbody></table></div>");
 
     /* --- OLV: close clusters (signals grouped by 4H close) --- */
+    /* v43: per-close outcomes are computed client-side from the +4H
+       returns. The pipeline's outcome_by_close table is
+       short-horizon based (wins, mean net/gross) and no longer
+       rendered. Concentration figures are plain signal counts and
+       stay as published. */
     var cl = L.clusters || {};
     var conc = cl.concentration || {};
     var nRecon = DATA.signals.filter(function (s) {
       return s.reconstruction != null;
     }).length;
-    var clRows = (cl.outcome_by_close || []).map(function (c) {
-      return "<tr><td>" + esc(fmtWib(c.close_ts) || "?") + " WIB</td><td>" +
-        c.n_signals + "</td><td>" + c.n_evaluable + "</td><td>" +
-        c.wins + "</td><td>" + fmtPct(c.mean_net30_pct, 2) + "</td><td>" +
-        fmtPct(c.mean_r30_pct, 2) + "</td></tr>";
+    var closeStats = {};
+    DATA.signals.forEach(function (s) {
+      var cs = closeStats[s.signal_ts];
+      if (!cs) {
+        cs = { n: 0, nEval: 0, nPos: 0, sum: 0 };
+        closeStats[s.signal_ts] = cs;
+      }
+      cs.n++;
+      var r = r4hOf(s);
+      if (r != null) {
+        cs.nEval++;
+        if (r > 0) cs.nPos++;
+        cs.sum += r;
+      }
+    });
+    var closeKeys = Object.keys(closeStats).map(Number)
+      .sort(function (a, b) { return a - b; });
+    var nEval4h = 0, nEvalCloses = 0;
+    closeKeys.forEach(function (k) {
+      nEval4h += closeStats[k].nEval;
+      if (closeStats[k].nEval > 0) nEvalCloses++;
+    });
+    var clRows = closeKeys.map(function (k) {
+      var c = closeStats[k];
+      return "<tr><td>" + esc(fmtWib(k) || "?") + " WIB</td><td>" +
+        c.n + "</td><td>" + c.nEval + "</td><td>" +
+        c.nPos + "</td><td>" +
+        (c.nEval ? fmtPct(c.sum / c.nEval, 2) : "—") + "</td></tr>";
     }).join("");
     $("learning-clusters").innerHTML =
       "<ul class='missing-list'>" +
       "<li><span>" + t("lr.clEval") + "</span><span class='num'>" +
-        (cl.n_evaluable == null ? "—" : cl.n_evaluable) + "</span></li>" +
+        nEval4h + "</span></li>" +
       "<li><span>" + t("lr.clClosesAll") + "</span><span class='num'>" +
-        (cl.n_unique_closes == null ? "—" : cl.n_unique_closes) + "</span></li>" +
+        closeKeys.length + "</span></li>" +
       "<li><span>" + t("lr.clClosesEval") + "</span><span class='num'>" +
-        (cl.n_evaluable_closes == null ? "—" : cl.n_evaluable_closes) + "</span></li>" +
+        nEvalCloses + "</span></li>" +
       "<li><span>" + t("lr.clLargest") + "</span><span class='num'>" +
         (conc.largest_close_n == null ? "—" : t("lr.clLargestVal", {
           n: conc.largest_close_n,
@@ -2048,7 +1936,7 @@
       '<div style="overflow-x:auto;margin-top:12px"><table class="version-table">' +
       "<thead><tr><th>" + t("lr.thCloseWib") + "</th><th>" + t("lr.thSignals") +
       "</th><th>" + t("lr.thEvaluable") + "</th><th>" + t("lr.thWins") +
-      "</th><th>" + t("lr.thMeanNet") + "</th><th>" + t("lr.thMeanGross") +
+      "</th><th>" + t("lr.thMeanNet") +
       "</th></tr></thead><tbody>" +
       clRows + "</tbody></table></div>" +
       "<p class='panel-sub' style='margin-top:12px'>" + esc(bi(cl.note_id, cl.note) || "") +
@@ -2057,7 +1945,14 @@
 
   /* ---------------------------------------------------------- timeline */
   function renderTimeline() {
-    $("milestones").innerHTML = (DATA.timeline || []).map(function (m) {
+    /* v43: drop timeline entries whose text mentions the hidden
+       horizon (the v2.3.0 "Long horizons" milestone does). */
+    $("milestones").innerHTML = (DATA.timeline || []).filter(function (m) {
+      return !mentionsHiddenHorizon(m.title) &&
+        !mentionsHiddenHorizon(m.title_id) &&
+        !mentionsHiddenHorizon(m.text) &&
+        !mentionsHiddenHorizon(m.text_id);
+    }).map(function (m) {
       return "<li><span class='t-date'>" + esc(m.date) + "</span><h4>" +
         esc(bi(m.title_id, m.title)) + "</h4><p>" + esc(bi(m.text_id, m.text)) + "</p></li>";
     }).join("");
@@ -2084,7 +1979,9 @@
     var recos = [];
     var dq = DATA.data_quality || {};
     var prof = dq.missing_data_profile || {};
-    var nEval = DATA.overview.n_evaluable_30m || 0;
+    var r4hTl = (DATA.learnings && DATA.learnings.horizons &&
+      DATA.learnings.horizons.r4h) || {};
+    var nEval = r4hTl.n_evaluated || 0;
     if ((prof.funding_rate || {}).missing === (prof.funding_rate || {}).n) {
       recos.push(t("tl.recoFunding"));
     }
@@ -2117,8 +2014,12 @@
       case "symbol": return sig.symbol;
       case "signal_ts": return sig.signal_ts;
       case "price": return d.close;
-      case "net30": return net30Of(sig);
       case "r4h": return r4hOf(sig);
+      case "r12h": return hzOf(sig, "h12");
+      case "r1d": return hzOf(sig, "h1d");
+      case "r2d": return hzOf(sig, "h2d");
+      case "r3d": return hzOf(sig, "h3d");
+      case "r1w": return hzOf(sig, "h1w");
       case "rvol": return d.rvol;
       case "markers": return sig.reversal ? sig.reversal.markers_observed : null;
       case "regime": return rg.btc_regime;
@@ -2130,11 +2031,17 @@
 
   /* v36: one explorer data row (extracted so renderExplorer can emit
      grouped or flat lists from the same markup) */
+  /* v43: one TF cell — evaluated return with sign colour, "—" when the
+     horizon is still pending (research grid convention). */
+  function tfCell(v) {
+    return "<td class='" + (v == null ? "" : v >= 0 ? "pos" : "neg") + "'>" +
+      (v == null ? "—" : fmtPct(v, 2)) + "</td>";
+  }
+
   function explorerRowHtml(s) {
     var d = (s.snapshot && s.snapshot.decisions) || {};
     var m = (s.orderflow && s.orderflow.metrics) || {};
     var rg = (s.regime && s.regime.metrics) || {};
-    var net = net30Of(s), r4h = r4hOf(s);
     var dots = ["breakout", "reversal", "orderflow", "regime", "liquidity"].map(function (a) {
       var st = s[a] && s[a].status;
       var cls = st === "COMPLETED" ? "dot-ok" :
@@ -2143,11 +2050,9 @@
     }).join("");
     return '<tr data-id="' + esc(s.signal_id) + '"><td>' + esc(s.symbol) +
       "</td><td>" + esc(fmtWib(s.signal_ts) || "—") +
-      "</td><td>" + esc(fmtPrice(d.close) || "—") +
-      "</td><td class='" + (net == null ? "" : net >= 0 ? "pos" : "neg") + "'>" +
-      (net == null ? '<span class="na">N/A</span>' : fmtPct(net, 2)) +
-      "</td><td class='" + (r4h == null ? "" : r4h >= 0 ? "pos" : "neg") + "'>" +
-      (r4h == null ? '<span class="na">N/A</span>' : fmtPct(r4h, 2)) +
+      "</td><td>" + esc(fmtPrice(d.close) || "—") + "</td>" +
+      tfCell(r4hOf(s)) + tfCell(hzOf(s, "h12")) + tfCell(hzOf(s, "h1d")) +
+      tfCell(hzOf(s, "h2d")) + tfCell(hzOf(s, "h3d")) + tfCell(hzOf(s, "h1w")) +
       "</td><td>" + (d.rvol == null ? "—" : fmtNum(d.rvol, 2) + "×") +
       "</td><td>" + ((s.reversal && s.reversal.markers_observed) == null ? "—" : s.reversal.markers_observed + "/6") +
       "</td><td>" + esc(rg.btc_regime || "—") +
@@ -2163,9 +2068,11 @@
     var rows = DATA.signals.filter(function (s) {
       if (q && s.symbol.toLowerCase().indexOf(q) === -1) return false;
       if (outF) {
-        var c = clsOf(s);
-        if (outF === "__pending__") { if (c) return false; }
-        else if (c !== outF) return false;
+        /* v43: the outcome filter is the sign of the +4H return. */
+        var r = r4hOf(s);
+        if (outF === "__pending__") { if (r != null) return false; }
+        else if (outF === "__pos4h__") { if (r == null || r <= 0) return false; }
+        else if (outF === "__neg4h__") { if (r == null || r >= 0) return false; }
       }
       if (regF) {
         var rg = (s.regime && s.regime.metrics) || {};
@@ -2193,7 +2100,7 @@
       var groups = groupByClose(rows);
       groups.forEach(function (g) {
         var open = groupIsOpen(g, anyFilter);
-        html += '<tr class="close-group-head"><td colspan="11">' +
+        html += '<tr class="close-group-head"><td colspan="15">' +
           groupHeadButtonHtml(g, open) + "</td></tr>";
         if (open) {
           var showAll = !!GROUP_SHOW_ALL[g.close_ts];
@@ -2201,7 +2108,7 @@
             : g.signals.slice(0, GROUP_PAGE_SIZE);
           html += items.map(explorerRowHtml).join("");
           if (g.signals.length > GROUP_PAGE_SIZE) {
-            html += '<tr class="close-group-more"><td colspan="11">' +
+            html += '<tr class="close-group-more"><td colspan="15">' +
               groupMoreButtonHtml(g) + "</td></tr>";
           }
         }
@@ -2423,13 +2330,15 @@
 
   /* v38: fingerprint for the browser-side data sync layer
      (data-sync.js polls meta.json and compares). Null until the
-     research data has loaded. */
+     research data has loaded. v43: the fingerprint key name stays
+     research_n_eval30 because data-sync.js reads it by name; the
+     value is now the +4H evaluable count. */
   window.RaptorResearchSync = {
     getFingerprint: function () {
       if (!DATA) return null;
       return {
         research_n_signals: DATA.overview.n_signals,
-        research_n_eval30: DATA.learnings.n_evaluable_30m,
+        research_n_eval30: ((DATA.learnings.horizons || {}).r4h || {}).n_evaluated,
         research_n_paired: DATA.learnings.paired_horizons.n_paired
       };
     }

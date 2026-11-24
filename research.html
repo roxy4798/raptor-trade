@@ -127,7 +127,7 @@
       <div class="panel-grid">
         <div class="panel card">
           <h3 data-i18n="panel.horizons">Outcome by horizon</h3>
-          <p class="panel-sub" data-i18n="panel.horizons.sub">All evaluable signals per horizon — n differs because data completeness differs. For the same-cohort comparison, see Paired horizons below.</p>
+          <p class="panel-sub" data-i18n="panel.horizons.sub">All evaluable signals per horizon — n differs because data completeness differs.</p>
           <div id="learning-horizons"></div>
         </div>
         <div class="panel card">
@@ -143,25 +143,10 @@
       </div>
       <div class="panel-grid">
         <div class="panel card">
-          <h3 data-i18n="panel.paired">Paired horizons — same signals, all four readings</h3>
-          <p class="panel-sub" data-i18n="panel.paired.sub">Only signals with every horizon evaluated, in gross returns so horizons are comparable. The cleanest read of how performance changes over time — at the cost of a smaller sample.</p>
-          <div id="learning-paired"></div>
-        </div>
-        <div class="panel card">
           <h3 data-i18n="panel.distribution">Distribution &amp; contributions</h3>
-          <p class="panel-sub" data-i18n="panel.distribution.sub">Where the +30m net outcomes sit, and how much each signal contributes to the total sum.</p>
+          <p class="panel-sub" data-i18n="panel.distribution.sub">Where the +4H outcomes sit, and how much each signal contributes to the total sum.</p>
           <div id="learning-distribution"></div>
         </div>
-      </div>
-      <div class="panel card">
-        <h3 data-i18n="panel.agentsEval">Agent learning evaluation</h3>
-        <p class="panel-sub" data-i18n="panel.agentsEval.sub">Each agent's observations tested against actual outcomes. Everything here is exploratory — no predictive accuracy is claimed for any agent, and out-of-sample validation is not possible yet (holdout plan: once n reaches 40, the first 20 signals become the discovery set).</p>
-        <div id="learning-agents"></div>
-      </div>
-      <div class="panel card">
-        <h3 data-i18n="panel.cases">Case examples — BULLA &amp; IDOL</h3>
-        <p class="panel-sub" data-i18n="panel.cases.sub">Research illustrations of how two signals behaved across horizons. Examples only — never the basis for a strategy conclusion.</p>
-        <div id="learning-cases"></div>
       </div>
       <div class="panel card">
         <h3 data-i18n="panel.summary">Learning summary — auto-generated</h3>
@@ -169,11 +154,6 @@
         <div id="learning-summary"></div>
       </div>
       <div class="panel-grid">
-        <div class="panel card">
-          <h3 data-i18n="panel.checkpoints">Research checkpoints</h3>
-          <p class="panel-sub" data-i18n="panel.checkpoints.sub">Progress toward the next evaluation checkpoint. A “complete outcome” means all four horizons (+30m/+1H/+4H/+8H) evaluated for the same signal. Checkpoints mark progress only — they are not a claim of statistical significance.</p>
-          <div id="learning-checkpoints"></div>
-        </div>
         <div class="panel card">
           <h3 data-i18n="panel.registry">Hypothesis registry</h3>
           <p class="panel-sub" data-i18n="panel.registry.sub">Hypotheses are recorded frozen the moment they first appear, and tested only on signals published after that moment. The exploration/validation split freezes once 40 evaluable signals exist (whole 4H closes until ≥20 evaluable signals = discovery set).</p>
@@ -223,9 +203,8 @@
         <label class="sr-only" for="explorer-outcome" data-i18n="lbl.filterOutcome">Filter by outcome</label>
         <select id="explorer-outcome">
           <option value="" data-i18n="filter.allOutcomes">All outcomes</option>
-          <option value="PUMP CONTINUED" data-i18n="filter.continued">Continued</option>
-          <option value="REVERSAL" data-i18n="filter.reversal">Reversal</option>
-          <option value="SIDEWAYS" data-i18n="filter.sideways">Sideways</option>
+          <option value="__pos4h__" data-i18n="filter.pos4h">+4H positive</option>
+          <option value="__neg4h__" data-i18n="filter.neg4h">+4H negative</option>
           <option value="__pending__" data-i18n="filter.pending">Not evaluated yet</option>
         </select>
         <label class="sr-only" for="explorer-regime" data-i18n="lbl.filterRegime">Filter by BTC regime</label>
@@ -244,8 +223,12 @@
               <th data-sort="symbol" data-i18n="th.symbol">Symbol</th>
               <th data-sort="signal_ts" data-i18n="th.close">Close (WIB)</th>
               <th data-sort="price" data-i18n="th.price">Price</th>
-              <th data-sort="net30" data-i18n="th.net30">+30m net</th>
               <th data-sort="r4h" data-i18n="th.r4h">+4H</th>
+              <th data-sort="r12h" data-i18n="th.r12h">+12H</th>
+              <th data-sort="r1d" data-i18n="th.r1d">+1D</th>
+              <th data-sort="r2d" data-i18n="th.r2d">+2D</th>
+              <th data-sort="r3d" data-i18n="th.r3d">+3D</th>
+              <th data-sort="r1w" data-i18n="th.r1w">+1W</th>
               <th data-sort="rvol" data-i18n="th.rvol">RVOL</th>
               <th data-sort="markers" data-i18n="th.markers">Markers</th>
               <th data-sort="regime" data-i18n="th.regime">BTC regime</th>

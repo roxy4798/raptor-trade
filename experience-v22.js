@@ -20,7 +20,7 @@ var Q = {
 var TXT = {
   en: {
     terminalKicker:'00 / ADVANCED TERMINAL', terminalTitle:'Deep-Dive Terminal', terminalMeta:'HIGH-CLARITY SIGNAL REVIEW / PROFESSIONAL MODE',
-    search:'Search ticker or setup...', fAll:'ALL', fLong:'LONG', fStrong:'STRONG', fNoData:'NO DATA',
+    search:'Search ticker or setup...', fAll:'ALL', fLong:'LONG', fStrong:'STRONG', fNoData:'+4H PENDING',
     signalFinder:'SIGNAL FINDER', latestHigh:'LATEST HIGH-CONFIDENCE ALERT', launch:'Launch Deep-Dive Terminal',
     interactive:'Interactive Focus Canvas', official:'Official PNG', derivedNote:'Derived focus canvas from the exported signal metrics — a guided visual aid, not a live exchange chart.',
     pngLeft:'Original source chart PNG preserved', pngRight:'visual review only',
@@ -39,7 +39,7 @@ var TXT = {
   },
   id: {
     terminalKicker:'00 / TERMINAL LANJUTAN', terminalTitle:'Terminal Deep-Dive', terminalMeta:'TINJAUAN SINYAL BERKEJERNIHAN TINGGI / MODE PROFESIONAL',
-    search:'Cari ticker atau setup...', fAll:'SEMUA', fLong:'LONG', fStrong:'STRONG', fNoData:'TANPA DATA',
+    search:'Cari ticker atau setup...', fAll:'SEMUA', fLong:'LONG', fStrong:'STRONG', fNoData:'+4H BELUM MATENG',
     signalFinder:'PENCARI SINYAL', latestHigh:'ALERT HIGH-CONFIDENCE TERBARU', launch:'Buka Terminal Deep-Dive',
     interactive:'Kanvas Fokus Interaktif', official:'PNG Resmi', derivedNote:'Kanvas fokus ini diturunkan dari metrik sinyal hasil ekspor — alat bantu visual, bukan chart exchange live.',
     pngLeft:'PNG chart sumber asli tetap dipertahankan', pngRight:'hanya untuk review visual',
@@ -69,7 +69,12 @@ function pct(n,d){ if(n===null||n===undefined||Number.isNaN(Number(n))) return '
 function money(n){ if(n===null||n===undefined||Number.isNaN(Number(n))) return 'N/A'; var v=Number(n), abs=Math.abs(v); if(abs>=10000) return '$'+v.toLocaleString("en-US",{maximumFractionDigits:0}); if(abs>=100) return '$'+v.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}); return '$'+String(Number(v.toPrecision(6))); }
 function formatClose(s){ return LANG.useWIB&&LANG.useWIB() ? (s.close_wib+' WIB') : (s.close_utc+' UTC'); }
 function qualityOf(s){ return (s.rvol||0)>=3 || (s.breakout_margin||0)>=3 || (s.chg_4h||0)>=5 ? 'strong' : 'standard'; }
-function hasNoData(s){ return !s.tracker || s.tracker.r30===null || s.tracker.r30===undefined; }
+/* v43 (25 Nov 2026, Raka: no +30m anywhere): "no data" now means no
+   EVALUATED +4H result — the tracker r30 check is gone. (v22 is not
+   loaded by the template; v23 is the live DDT. Kept consistent anyway.) */
+function hasNoData(s){ var h=(s.tf||{}).h4||{}; return h.status!=='evaluated' || h.return_pct===null || h.return_pct===undefined; }
+/* v43: the footer shows the +4H return when evaluated, else "Ready". */
+function tf4hFooter(s){ var h=(s.tf||{}).h4||{}; if(h.status==='evaluated'&&h.return_pct!==null&&h.return_pct!==undefined) return t('status')+' · +4H '+pct(h.return_pct,2); return t('ready'); }
 function setupOf(s){ if((s.breakout_margin||0)>=1 && (s.chg_4h||0)>=3) return t('setupBreakout'); if((s.rvol||0)>=5) return t('setupVolume'); if((s.chg_4h||0)>=2) return t('setupTrend'); return t('setupMomentum'); }
 function getFiltered(){ return signals.filter(function(s){
   var q=((s.symbol||'')+' '+setupOf(s)+' '+(qualityOf(s))).toLowerCase();
@@ -180,7 +185,7 @@ function renderDetail(){
           +metricBox(t('rsi'), num(s.rsi_4h,1))
         +'</div>'
         +'<div class="ddt-chart-surface">'+chartViews+'</div>'
-        +'<div class="ddt-footer-strip"><span>'+t('indicators')+'</span><b>'+(noData?t('ready'):(t('status')+' · +30m '+pct((s.tracker?.r30||0)*100,2)))+'</b></div>'
+        +'<div class="ddt-footer-strip"><span>'+t('indicators')+'</span><b>'+tf4hFooter(s)+'</b></div>'
       +'</div>'
     +'</div>';
   Array.prototype.forEach.call(Q.detail.querySelectorAll('.ddt-tab'),function(btn){ btn.onclick=function(){ state.tab=btn.getAttribute('data-tab'); renderDetail(); }; });

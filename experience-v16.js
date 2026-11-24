@@ -119,7 +119,7 @@ function setupBars(){
  const label=doc.createElement('div');label.className='v16-bar-explainer';barbox.after(label);
  const update=i=>{chosen=i;rows.forEach((r,n)=>{r.classList.toggle('v16-bar-selected',n===i);r.setAttribute('aria-pressed',String(i===n));});
   const row=rows[i];if(!row){label.textContent=L('TOUCH OR HOVER A RETURN TO INSPECT','SENTUH ATAU ARAHKAN KE RETURN');return;}
-  label.innerHTML=`<span>${$('.bar-sym',row)?.textContent||'—'}</span><strong>${$('.bar-val',row)?.textContent||'—'}</strong><small>${L('Recorded +30m change · historical','Perubahan +30m · historis')}</small>`;
+  label.innerHTML=`<span>${$('.bar-sym',row)?.textContent||'—'}</span><strong>${$('.bar-val',row)?.textContent||'—'}</strong><small>${L('Recorded +4H return · historical','Return +4H tercatat · historis')}</small>`;
  };
  rows.forEach((row,i)=>{
    row.setAttribute('tabindex','0');row.setAttribute('role','button');row.setAttribute('aria-label',`${$('.bar-sym',row)?.textContent} ${$('.bar-val',row)?.textContent} historical result`);

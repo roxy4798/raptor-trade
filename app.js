@@ -34,7 +34,9 @@ tick(); setInterval(tick, 1000);
 
 var tbody = document.getElementById("signal-rows");
 var sortState = {key:"close_ts", dir:-1};
-var tableSearch = "", tableFilter = "all";
+var tableSearch = "";
+/* v43: the EVALUATED / NO DATA outcome filters are gone (Raka: no +30m
+   anywhere — they filtered on the tracker classification). Search only. */
 
 /* ---- v36 close grouping (build-owned) ----
    Groups apply only in the default close_ts sort; any other column sort
@@ -46,27 +48,31 @@ var collapsedGroups = {};   // close_ts -> true (group hidden); default: all but
 var expandedGroups = {};    // close_ts -> true (show all rows, not just GROUP_PAGE)
 var groupDefaultsDone = false;
 var GROUP_T = {
-  en: {signals:"signals", continued:"continued", reversed:"reversed", mean:"mean",
+  en: {signals:"signals", continued:"positive", reversed:"negative", mean:"mean",
        showAll:"Show all", showLess:"Show less", of:"of"},
-  id: {signals:"sinyal", continued:"lanjut", reversed:"berbalik", mean:"rata-rata",
+  id: {signals:"sinyal", continued:"positif", reversed:"negatif", mean:"rata-rata",
        showAll:"Tampilkan semua", showLess:"Tampilkan lebih sedikit", of:"dari"}
 };
 function groupT(k){ return (GROUP_T[I18N.get()==="id"?"id":"en"]||GROUP_T.en)[k]||GROUP_T.en[k]||k; }
+/* v43 (25 Nov 2026, Raka: no +30m anywhere): group stats are +4H-based —
+   counts of evaluated +4H returns above/below zero + their mean (PERCENT,
+   not the old tracker net fraction). */
 function groupStats(list){
-  var cont=0, rev=0, nets=[];
+  var cont=0, rev=0, rets=[];
   list.forEach(function(s){
-    var c = s.tracker && s.tracker.classification;
-    if(c==="PUMP CONTINUED") cont++;
-    else if(c==="REVERSAL") rev++;
-    if(s.tracker && s.tracker.net!==null && s.tracker.net!==undefined) nets.push(s.tracker.net*100);
+    var h = (s.tf||{}).h4||{};
+    if(h.status==="evaluated" && h.return_pct!==null && h.return_pct!==undefined){
+      if(h.return_pct>0) cont++; else rev++;
+      rets.push(h.return_pct);
+    }
   });
-  var mean = nets.length ? nets.reduce(function(a,b){return a+b;},0)/nets.length : null;
+  var mean = rets.length ? rets.reduce(function(a,b){return a+b;},0)/rets.length : null;
   return {n:list.length, cont:cont, rev:rev, mean:mean};
 }
 function groupHeadHtml(ts, st, collapsed, closeStr){
   var stats = "";
   if(st.mean!==null) stats = ' &middot; <span class="gh-stat">'+st.cont+' '+groupT("continued")+'</span> &middot; <span class="gh-stat">'+st.rev+' '+groupT("reversed")+'</span> &middot; <span class="gh-stat">'+groupT("mean")+' '+(st.mean>=0?"+":"")+st.mean.toFixed(2)+'%</span>';
-  return '<tr class="close-group-head" data-close-ts="'+ts+'"><td colspan="16"><button type="button" class="close-group-toggle" aria-expanded="'+(!collapsed)+'" data-close-ts="'+ts+'"><span class="gh-chev">'+(collapsed?"▸":"▾")+'</span><span class="gh-close">'+closeStr+'</span><span class="gh-count">'+st.n+' '+groupT("signals")+'</span>'+stats+'</button></td></tr>';
+  return '<tr class="close-group-head" data-close-ts="'+ts+'"><td colspan="15"><button type="button" class="close-group-toggle" aria-expanded="'+(!collapsed)+'" data-close-ts="'+ts+'"><span class="gh-chev">'+(collapsed?"▸":"▾")+'</span><span class="gh-close">'+closeStr+'</span><span class="gh-count">'+st.n+' '+groupT("signals")+'</span>'+stats+'</button></td></tr>';
 }
 var SORT_KEYS = { "symbol": function(s){ return s.symbol; }, "close_ts": function(s){ return s.close_ts; }, "price": function(s){ return s.price; }, "chg_4h": function(s){ return s.chg_4h; }, "rvol": function(s){ return s.rvol; }, "breakout_margin": function(s){ return s.breakout_margin; }, "rsi_4h": function(s){ return s.rsi_4h; },
   "tf_h4": function(s){ var h=s.tf&&s.tf.h4; return h&&h.status==="evaluated"?h.return_pct:null; },
@@ -81,12 +87,9 @@ function fmtPctG(v){ if(v===null||v===undefined) return I18N.t('na'); if(v===0) 
 function fmtPctFracG(v){ if(v===null||v===undefined) return I18N.t('na'); return fmtPctG(v*100); }
 function fmtPrice(v){ if(v===null||v===undefined) return I18N.t('na'); if(Math.abs(v)>=10000) return v.toLocaleString("en-US",{maximumFractionDigits:0}); if(Math.abs(v)>=100) return v.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}); return String(Number(v.toPrecision(6))); }
 function clsOf(v){ if(v===null||v===undefined) return "na"; return v>=0 ? "up" : "down"; }
-function badgeInfo(c){ var map = {"PUMP CONTINUED":[I18N.t('badgeGood'),"good"], "REVERSAL":[I18N.t('badgeBad'),"bad"], "SIDEWAYS":[I18N.t('badgeNeutral'),"neutral"], "INSUFFICIENT DATA":[I18N.t('badgeWarn'),"warn"]}; return map[c] || [I18N.t('badgeUnknown'),"neutral"]; }
-function badgeOf(c){ var e=badgeInfo(c); return '<span class="badge '+e[1]+'">'+e[0]+'</span>'; }
 function closeCellHtml(s){ return I18N.useWIB() ? '<span class="close-wib">'+s.close_wib+' WIB</span>' : '<span class="close-utc">'+s.close_utc+' UTC</span>'; }
 function closeText(s){ return I18N.useWIB() ? (s.close_wib+' WIB') : (s.close_utc+' UTC'); }
 function rowHtml(s){
-    var t = s.tracker;
     var latest = (s.close_ts === LATEST_TS) ? ' class="latest"' : "";
     return '<tr data-sid="'+s.signal_id+'" tabindex="0" role="button" aria-label="Details '+s.symbol+'"'+latest+'>'
       +'<td class="sym"><span class="sym-name">'+s.symbol+'</span><span class="sym-mkt">'+s.market+'</span></td>'
@@ -100,7 +103,8 @@ function rowHtml(s){
          performance) — the TF cells carry the returns now. */
       + tfCellsHtml(s)
       + tfStripHtml(s)
-      +'<td>'+badgeOf(t ? t.classification : null)+'</td>'
+      /* v43: the tracker badge cell is gone (Raka: no +30m anywhere) —
+         the TF cells carry the outcomes now. */
       +'<td class="live-cell num" data-live-symbol="'+s.symbol+'" data-live-market="'+s.market+'" data-live-close="'+(s.price??'')+'"><span class="live-dot connecting"></span><span class="live-price">\u2026</span></td></tr>';
 }
 /* v40: TF performance cells — JS mirror of build.py tf_cells_html /
@@ -160,11 +164,11 @@ function tfBoxHtml(s){
   return '<div class="tf-box"><h4>'+I18N.t('metricTF')+'</h4><div class="tf-grid">'+cells+'</div></div>';
 }
 function renderRows(list){
-  if(!list.length){ tbody.innerHTML = '<tr class="empty-state"><td class="no-results" colspan="16">'+(I18N.get()==='id'?'Tidak ada sinyal yang cocok. Coba simbol atau filter lain.':'No signals match this search. Try another symbol or filter.')+'</td></tr>'; return; }
+  if(!list.length){ tbody.innerHTML = '<tr class="empty-state"><td class="no-results" colspan="15">'+(I18N.get()==='id'?'Tidak ada sinyal yang cocok. Coba simbol atau filter lain.':'No signals match this search. Try another symbol or filter.')+'</td></tr>'; return; }
   if(sortState.key !== "close_ts"){ tbody.innerHTML = list.map(rowHtml).join(""); return; }
   /* Grouped by close (default sort only). The list is already close_ts
      desc, so groups are contiguous. */
-  var filtering = tableSearch !== "" || tableFilter !== "all";
+  var filtering = tableSearch !== "";
   var groups = [], cur = null;
   list.forEach(function(s){
     if(!cur || cur.ts !== s.close_ts){ cur = {ts:s.close_ts, rows:[]}; groups.push(cur); }
@@ -180,7 +184,7 @@ function renderRows(list){
     var shown = showAll ? g.rows : g.rows.slice(0, GROUP_PAGE);
     html += shown.map(rowHtml).join("");
     if(g.rows.length > GROUP_PAGE){
-      html += '<tr class="close-group-more" data-close-ts="'+g.ts+'"><td colspan="16"><button type="button" class="close-group-more-btn" data-close-ts="'+g.ts+'">'
+      html += '<tr class="close-group-more" data-close-ts="'+g.ts+'"><td colspan="15"><button type="button" class="close-group-more-btn" data-close-ts="'+g.ts+'">'
         + (showAll ? groupT("showLess") : groupT("showAll")+" "+g.rows.length+" ("+shown.length+" "+groupT("of")+" "+g.rows.length+")")
         + '</button></td></tr>';
     }
@@ -191,8 +195,7 @@ function applyTable(){
   var fn = SORT_KEYS[sortState.key];
   var list = DATA.signals.filter(function(s){
     var q = (s.symbol + " " + s.market).toLowerCase();
-    var cl = s.tracker && s.tracker.classification;
-    return q.indexOf(tableSearch) !== -1 && (tableFilter === "all" || (tableFilter === "evaluated" && !!s.tracker && s.tracker.r30 !== null && s.tracker.r30 !== undefined) || (tableFilter === "insufficient" && (!s.tracker || cl === "INSUFFICIENT DATA")));
+    return q.indexOf(tableSearch) !== -1;
   });
   list.sort(function(a,b){ var va=fn(a), vb=fn(b); if(va===null||va===undefined) return vb===null||vb===undefined ? 0 : 1; if(vb===null||vb===undefined) return -1; if(typeof va === "string") return sortState.dir * va.localeCompare(vb); return sortState.dir * (va-vb); });
   renderRows(list);
@@ -201,7 +204,7 @@ function applyTable(){
 }
 function sortBy(key){ if(!SORT_KEYS[key]) return; if(sortState.key === key) sortState.dir *= -1; else {sortState.key = key; sortState.dir = key === "symbol" ? 1 : -1;} applyTable(); }
 document.querySelectorAll("th[data-sort]").forEach(function(th){ th.setAttribute("tabindex", "0"); th.addEventListener("click", function(){sortBy(th.getAttribute("data-sort"));}); th.addEventListener("keydown", function(e){ if(e.key === "Enter" || e.key === " "){ e.preventDefault();sortBy(th.getAttribute("data-sort")); }}); });
-window.addEventListener("raptor:filter", function(e){ var detail = e.detail || {}; if(typeof detail.search === "string") tableSearch = detail.search.trim().toLowerCase(); if(detail.filter === "all" || detail.filter === "evaluated" || detail.filter === "insufficient") tableFilter = detail.filter; applyTable(); });
+window.addEventListener("raptor:filter", function(e){ var detail = e.detail || {}; if(typeof detail.search === "string") tableSearch = detail.search.trim().toLowerCase(); applyTable(); });
 applyTable();
 
 var backdrop = document.getElementById("modal-backdrop"); var modalBody = document.getElementById("modal-body"); var previousFocus = null;
@@ -223,18 +226,10 @@ function fmtBookDelay(sec){
 function openModal(sid){
   var s = SIGNALS[sid]; if(!s) return; currentModalSid=sid;
   if(!backdrop.classList.contains("open")) previousFocus = document.activeElement;
-  var t = s.tracker;
   var chartHtml = s.chart ? '<div class="chart-viewer" id="chart-viewer"><div class="chart-viewer-toolbar"><span>'+I18N.t('modalChart')+'</span><div class="chart-actions"><button type="button" id="chart-zoom" aria-pressed="false">'+I18N.t('modalZoom')+'</button><a href="'+s.chart+'" download="'+s.symbol+'-4h-chart.png" target="_blank" rel="noopener noreferrer">'+I18N.t('modalSave')+'</a></div></div><div class="chart-viewport" id="chart-viewport"><img class="chart" src="'+s.chart+'" loading="eager" decoding="async" alt="Historical 4H candlestick chart for '+s.symbol+'; original exported PNG, not a live chart"></div></div>' : '<p class="muted">Chart not available.</p>';
-  var trkHtml;
-  if(!t){ trkHtml = '<p class="muted">'+I18N.t('modalNoTracker')+'</p>'; }
-  else if(t.r30===null || t.r30===undefined){ var reason = I18N.get()==='id' ? (t.insufficient_reason||'data 1m tidak lengkap') : (t.insufficient_reason_en||'incomplete 1m data'); trkHtml = '<p class="muted">'+I18N.t('modalInsuff',{reason:reason})+'</p>'; }
-  else { /* v41: the +1m/+5m/+15m/+30m/net/MFE/MAE numbers are gone
-      (Raka: all +30m displays become TF performance — the TF box above
-      carries the returns now). Only the classification badge stays,
-      with a note on its basis (frozen RULES v1.0.0). */
-      trkHtml = '<div class="tracker-grid">'
-      + metric("Classification", badgeOf(t.classification), "")
-      + '</div><p class="muted">'+I18N.t('modalTrackerNote')+'</p>'; }
+  /* v43: the tracker classification box is gone (Raka: no +30m anywhere
+     — the classification was a +30m label). The TF box above carries
+     the outcomes now. */
   var hh = (s.hh!==null&&s.hh!==undefined) ? s.hh+"/4" : I18N.t('na'); var hl = (s.hl!==null&&s.hl!==undefined) ? s.hl+"/4" : I18N.t('na');
   var liq = s.liq_validated===true ? I18N.t('yes') : (s.liq_validated===false ? I18N.t('noInfo') : I18N.t('na'));
   modalBody.innerHTML = '<div class="modal-head"><div><h3 id="modal-title">'+s.symbol+' <span class="muted" style="font-weight:400;font-size:14px">'+s.market+'</span></h3>'
@@ -265,7 +260,7 @@ function openModal(sid){
     + metric(I18N.t('metricLiq'), liq)
     + metric(I18N.t('metricVol4H'), fmtUsdC(s.quote_volume))
     + metric(I18N.t('metricVol24H'), fmtUsdC(s.qv24h))
-    + '</div>' + tfBoxHtml(s) + '<div class="tracker-box"><h4>'+I18N.t('modalTracker')+'</h4>' + trkHtml + '</div>';
+    + '</div>' + tfBoxHtml(s);
   backdrop.classList.add("open"); document.body.style.overflow = "hidden"; try { history.replaceState(null, "", "#sig="+s.symbol+"_"+Math.round(s.close_ts)); } catch(e){}
   var zoomBtn=document.getElementById('chart-zoom'); if(zoomBtn)zoomBtn.addEventListener('click',function(){ var wrap=document.getElementById('chart-viewer'); var isZoomed=wrap.classList.toggle('zoomed'); zoomBtn.setAttribute('aria-pressed',String(isZoomed)); zoomBtn.textContent=isZoomed?I18N.t('modalFit'):I18N.t('modalZoom'); var frame=document.getElementById('chart-viewport');if(frame){frame.scrollTop=0;frame.scrollLeft=0;} });
   backdrop.scrollTop=0; document.getElementById("modal-close").addEventListener("click", closeModal); document.getElementById("modal-close").focus({preventScroll:true});
