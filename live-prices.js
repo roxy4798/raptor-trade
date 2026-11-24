@@ -124,13 +124,33 @@ function cellHtml(symbol, market, closeRef){
   if(state === 'stale') out += '<span class="live-tag">' + I18N.t('liveStale') + '</span>';
   return out;
 }
+/* v39 (24 Nov 2026): pct-only rendering for the per-signal +30m list
+   (data-live-mode="pct"). Same live return vs the signal close as the
+   history table's Live column, without the price — the row only has
+   room for one small line under the frozen +30m value. */
+function pctHtml(symbol, market, closeRef){
+  var state = symbolState(symbol, market);
+  if(state === 'connecting') return '\u2026';
+  if(state === 'unavailable') return '\u2014';
+  var p = prices[keyOf(symbol, market)];
+  if(!p) return '\u2026';
+  var chg = fmtChg(p.price, closeRef);
+  if(!chg) return '\u2014';
+  return 'live <span class="live-chg ' + chg.cls + '">' + chg.text + '</span>';
+}
 function renderEl(el){
   var symbol = el.getAttribute('data-live-symbol');
   var market = el.getAttribute('data-live-market') || 'USD-M';
   var closeRaw = el.getAttribute('data-live-close');
   var closeRef = (closeRaw === null || closeRaw === '') ? null : parseFloat(closeRaw);
-  var html = cellHtml(symbol, market, closeRef);
+  var html = (el.getAttribute('data-live-mode') === 'pct')
+    ? pctHtml(symbol, market, closeRef)
+    : cellHtml(symbol, market, closeRef);
   if(el._liveHtml !== html){ el.innerHTML = html; el._liveHtml = html; }
+  /* pct rows show no stale tag (no room) — dim the line instead. */
+  if(el.getAttribute('data-live-mode') === 'pct'){
+    el.classList.toggle('is-stale', symbolState(symbol, market) === 'stale');
+  }
 }
 function globalState(){
   var anyLive = false, anyStale = false, anyConnecting = false;
