@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_ts": 1795479107.5146158,
-  "generated_wib": "24 Nov 2026, 07:11 WIB",
+  "generated_ts": 1795480610.198245,
+  "generated_wib": "24 Nov 2026, 07:36 WIB",
   "rules_version": "v2.1.2",
   "next_close_ts": 1795492800.0,
   "source": "Binance Futures Mainnet (local)"
@@ -18,11 +18,10 @@
   "gap_blocked": 0,
   "universe_total": 849,
   "classes": {
-   "BELUM DINILAI": 1,
+   "INSUFFICIENT DATA": 8,
    "PUMP CONTINUED": 41,
    "SIDEWAYS": 275,
-   "REVERSAL": 27,
-   "INSUFFICIENT DATA": 7
+   "REVERSAL": 27
   },
   "first_signal_date": "21 Nov 2026"
  },
@@ -34,9 +33,9 @@
   "eligible": 840,
   "gap_blocked": 0,
   "universe_total": 849,
-  "signals_total": 389,
-  "heartbeat_age_s": 27.0,
-  "uptime_s": 2053.0,
+  "signals_total": 388,
+  "heartbeat_age_s": 8.0,
+  "uptime_s": 1181.8,
   "backfill_missing": 50,
   "backfill_pending": 0,
   "backfill_filled": 3360
@@ -2385,7 +2384,21 @@
    "quote_volume": 304876.408956,
    "qv24h": 1218931.427963,
    "chart": "charts/SOLVUSDT_1795478400.png",
-   "tracker": null
+   "tracker": {
+    "classification": "INSUFFICIENT DATA",
+    "reason": null,
+    "r1": null,
+    "r5": null,
+    "r15": null,
+    "r30": null,
+    "mfe": null,
+    "mae": null,
+    "net": null,
+    "evaluated_ts": 1795480609.6891577,
+    "candles_used": 0,
+    "insufficient_reason": "candle 1m prod lokal tidak lengkap: 28/31 candle (gap atau window sudah terpotong dari store rolling 120 bar)",
+    "insufficient_reason_en": "incomplete local prod 1m candles: 28/31 candles (gap, or window already trimmed from the rolling 120-bar store)"
+   }
   },
   {
    "signal_id": "PROD WS:USD-M:CYSUSDT:LONG SIGNAL:1795464000.0",
