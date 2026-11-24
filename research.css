@@ -258,12 +258,22 @@ html.motion-off .reveal{opacity:1;transform:none;transition:none}
   .rail-link span{display:block;font:600 9px var(--font-sans);letter-spacing:.02em}
   .rail-link.active::before{left:50%;top:-5px;height:2px;width:28px;transform:translateX(-50%);border-radius:2px}
   main{padding-bottom:94px}
+  /* r5 (24 Nov 2026): version-tables (paired horizons, per-signal
+     outcomes) are 340–390px of unbreakable columns — at 320px they
+     pushed the document 36px wide and clipped the last column with
+     no way to reach it. The table becomes its own horizontal scroll
+     container instead: full width, swipeable, nothing cut off. */
+  .version-table{display:block;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
 }
 @media (max-width: 650px){
   main{padding:20px 16px 94px}
   .cov-row{grid-template-columns:86px 1fr 88px}
   .bucket-row{grid-template-columns:86px 1fr 104px}
   .section{margin-top:44px}
+  /* r5 (24 Nov 2026): .insight-grid's 340px min track overflowed the
+     288px content column at 320px (docW 356). Single column here, and
+     the same for the 300px grids before they break too. */
+  .insight-grid,.panel-grid,.agent-grid{grid-template-columns:minmax(0,1fr)}
 }
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto}
