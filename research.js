@@ -2362,6 +2362,20 @@
     load();
   });
 
+  /* v38: fingerprint for the browser-side data sync layer
+     (data-sync.js polls meta.json and compares). Null until the
+     research data has loaded. */
+  window.RaptorResearchSync = {
+    getFingerprint: function () {
+      if (!DATA) return null;
+      return {
+        research_n_signals: DATA.overview.n_signals,
+        research_n_eval30: DATA.learnings.n_evaluable_30m,
+        research_n_paired: DATA.learnings.paired_horizons.n_paired
+      };
+    }
+  };
+
   /* v36 test hook: lets verification suites expand all groups before
      counting rows. DATA-null guarded (no-op before the page loads). */
   window.RaptorResearchDensity = {
