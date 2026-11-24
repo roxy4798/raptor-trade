@@ -22,7 +22,21 @@
    WS state.
    Fallback: REST ticker/price batch poll every 5s while a market's
    WebSocket is down OR silent, chunked at 100 symbols per request
-   for the same URL-length reason. */
+   for the same URL-length reason.
+   24 Nov audit round 3: TWO fresh cloud-browser sessions (13:41 and
+   13:54 WIB) both showed every USD-M row "live unavailable"
+   (278/278) while COIN-M rows ticked — yet the identical check at
+   02:37 WIB passed 294/294 with no code change since, and Binance
+   reports no outage. The cloud browser's egress is US-blocked for
+   fstream + fapi (HTTP 451 / WS timeout, the same block this VM
+   sees), while dstream is not blocked. Second fallback for USD-M:
+   when the primary path (fstream WS + fapi REST) is down, or no
+   transport has delivered a tick 30s after load, the USD-M
+   miniTicker streams are subscribed on dstream instead — Binance
+   serves USD-M streams on dstream since the CM-UM merge (the 4H
+   watcher already runs all 840 symbols' kline_4h on one dstream
+   connection; miniTicker verified from this VM 13:5x WIB:
+   BTC/ETH/SOLUSDT ticks in 2.7s). COIN-M needs no fallback. */
 (function(){
 'use strict';
 var DATA = window.RAPTOR_DATA || {signals: []};
@@ -36,26 +50,36 @@ var SUBSCRIBE_CHUNK = 100; /* streams per SUBSCRIBE request */
 var STARTED_AT = Date.now();
 
 /* ---- symbol universe: unique symbols per market ---- */
-var MARKETS = {}; /* market -> {symbols:[], ws:null, wsFailed:false, restFailed:false, transportUpAt:0, reconnectAt:0, attempts:0, lastWsTickAt:0} */
+var MARKETS = {}; /* market -> {symbols:[], ws:null, wsFailed:false, restFailed:false, transportUpAt:0, reconnectAt:0, attempts:0, lastWsTickAt:0, firstTickAt:0, fbWs:null, fbFailed:false, fbEngaged:false, fbTimer:null, fbAttempts:0} */
 (DATA.signals || []).forEach(function(s){
   if(!s || !s.symbol) return;
   var m = s.market || 'USD-M';
-  if(!MARKETS[m]) MARKETS[m] = {symbols: [], ws: null, wsFailed: false, restFailed: false, transportUpAt: 0, reconnectTimer: null, attempts: 0, restTimer: null, lastWsTickAt: 0};
+  if(!MARKETS[m]) MARKETS[m] = {symbols: [], ws: null, wsFailed: false, restFailed: false, transportUpAt: 0, reconnectTimer: null, attempts: 0, restTimer: null, lastWsTickAt: 0, firstTickAt: 0, fbWs: null, fbFailed: false, fbEngaged: false, fbTimer: null, fbAttempts: 0};
   if(MARKETS[m].symbols.indexOf(s.symbol) === -1) MARKETS[m].symbols.push(s.symbol);
 });
 var MARKET_NAMES = Object.keys(MARKETS);
 if(!MARKET_NAMES.length) return; /* no signals, nothing to stream */
 
 var WS_URL = {'USD-M': 'wss://fstream.binance.com/ws', 'COIN-M': 'wss://dstream.binance.com/ws'};
+var FB_WS_URL = {'USD-M': 'wss://dstream.binance.com/ws'}; /* USD-M only: dstream also serves USD-M streams post-merge */
 var REST_URL = {'USD-M': 'https://fapi.binance.com/fapi/v1/ticker/price', 'COIN-M': 'https://dapi.binance.com/dapi/v1/ticker/price'};
 
 /* ---- price store: key "SYMBOL|MARKET" -> {price, lastTick} ---- */
 var prices = {};
 var lastUpdateAt = 0; /* ms of the last successful tick/REST update, any symbol */
 function keyOf(symbol, market){ return symbol + '|' + (market || 'USD-M'); }
-function marketDown(m){
+function primaryDown(m){
   var st = MARKETS[m];
   return !!(st && st.wsFailed && st.restFailed);
+}
+function marketDown(m){
+  var st = MARKETS[m];
+  if(!st || !primaryDown(m)) return false;
+  /* A healthy engaged fallback means the market is still being
+     served — the cells go back to 'connecting' until its ticks
+     arrive, instead of 'unavailable'. */
+  if(m === 'USD-M' && st.fbEngaged && !st.fbFailed) return false;
+  return true;
 }
 function symbolState(symbol, market){
   var p = prices[keyOf(symbol, market)];
@@ -166,8 +190,18 @@ function onPrice(symbol, market, price, via){
   var st = MARKETS[market];
   if(st){
     if(via === 'ws'){ st.wsFailed = false; st.lastWsTickAt = Date.now(); }
+    /* A fallback tick proves the fallback feed is alive — it clears
+       fbFailed and counts as a WS tick (so REST polling stays off),
+       but it must NOT clear wsFailed: the primary is still down. */
+    if(via === 'ws-fb'){ st.fbFailed = false; st.lastWsTickAt = Date.now(); }
     if(via === 'rest') st.restFailed = false;
     if(!st.transportUpAt) st.transportUpAt = Date.now();
+    /* firstTickAt is the fallback trigger's clock: a tick from ANY
+       transport (primary WS, fallback WS, REST) proves the market
+       is served. transportUpAt cannot be used — the WS onopen
+       handler sets it on connect, so a silent-but-open WS would
+       block the trigger forever. */
+    if(!st.firstTickAt) st.firstTickAt = Date.now();
   }
   renderSymbol(symbol, market);
 }
@@ -238,6 +272,82 @@ function onWsDown(market){
     st.reconnectTimer = null;
     connectWs(market);
   }, delay);
+  maybeEngageFallback(market);
+  renderAll();
+}
+
+/* ---- dstream fallback for USD-M (audit round 3) ----
+   Engaged only when the primary path has actually failed, so
+   healthy networks never carry the extra connection: (a) the
+   primary WS is down AND the REST probe failed, or (b) no
+   transport has delivered a single tick 30s after load (covers
+   the silent-but-open WS case, where wsFailed stays false).
+   Idempotent: returns early once engaged. The fallback keeps
+   retrying with backoff like the primary; if dstream is down
+   too, cells stay honestly 'unavailable'. */
+function maybeEngageFallback(market){
+  if(market !== 'USD-M') return;
+  var st = MARKETS[market];
+  if(!st || st.fbEngaged || typeof WebSocket === 'undefined') return;
+  if(primaryDown(market) || (!st.firstTickAt && Date.now() - STARTED_AT > UNAVAILABLE_AFTER_MS)){
+    st.fbEngaged = true;
+    connectFallback(market);
+  }
+}
+function connectFallback(market){
+  var st = MARKETS[market];
+  if(!st) return;
+  try{ if(st.fbWs){ st.fbWs.close(); } }catch(e){}
+  var ws;
+  try{ ws = new WebSocket(FB_WS_URL[market]); }catch(e){ onFbDown(market); return; }
+  st.fbWs = ws;
+  var opened = false;
+  var timer = setTimeout(function(){
+    if(!opened && ws.readyState === WebSocket.CONNECTING){ try{ ws.close(); }catch(e){} }
+  }, WS_CONNECT_TIMEOUT_MS);
+  ws.onopen = function(){
+    opened = true; clearTimeout(timer);
+    st.fbAttempts = 0; st.fbFailed = false;
+    if(!st.transportUpAt) st.transportUpAt = Date.now();
+    try{
+      var syms = st.symbols;
+      for(var i = 0; i < syms.length; i += SUBSCRIBE_CHUNK){
+        var chunk = syms.slice(i, i + SUBSCRIBE_CHUNK);
+        ws.send(JSON.stringify({method: 'SUBSCRIBE',
+          params: chunk.map(function(s){ return s.toLowerCase() + '@miniTicker'; }),
+          id: 1001 + (i / SUBSCRIBE_CHUNK)}));
+      }
+    }catch(e){ /* send failed: onclose/onerror will drive the retry */ }
+    renderAll();
+  };
+  ws.onmessage = function(ev){
+    var msg;
+    try{ msg = JSON.parse(ev.data); }catch(e){ return; }
+    if(msg && msg.error){
+      try{ console.warn('[raptor-live] fallback WS subscribe error (' + market + '):', JSON.stringify(msg.error)); }catch(e){}
+      st.fbFailed = true;
+      renderAll();
+      return;
+    }
+    var d = (msg && msg.data) || msg;
+    if(d && d.s && d.c !== undefined) onPrice(String(d.s), market, d.c, 'ws-fb');
+  };
+  var down = function(){ clearTimeout(timer); onFbDown(market); };
+  ws.onerror = down;
+  ws.onclose = down;
+}
+function onFbDown(market){
+  var st = MARKETS[market];
+  if(!st) return;
+  st.fbFailed = true;
+  if(st.fbWs){ try{ st.fbWs.onopen = st.fbWs.onmessage = st.fbWs.onerror = st.fbWs.onclose = null; }catch(e){} st.fbWs = null; }
+  if(st.fbTimer) return;
+  var delay = Math.min(1000 * Math.pow(2, st.fbAttempts), 30000);
+  st.fbAttempts++;
+  st.fbTimer = setTimeout(function(){
+    st.fbTimer = null;
+    connectFallback(market);
+  }, delay);
   renderAll();
 }
 
@@ -252,15 +362,16 @@ function onWsDown(market){
 function restPoll(market){
   var st = MARKETS[market];
   if(!st || typeof fetch === 'undefined') return;
-  if(st.ws && st.ws.readyState === WebSocket.OPEN
-     && st.lastWsTickAt && (Date.now() - st.lastWsTickAt) < WS_SILENT_MS) return; /* WS delivering: no polling */
+  var wsLive = (st.ws && st.ws.readyState === WebSocket.OPEN)
+    || (st.fbWs && st.fbWs.readyState === WebSocket.OPEN);
+  if(wsLive && st.lastWsTickAt && (Date.now() - st.lastWsTickAt) < WS_SILENT_MS) return; /* a WS (primary or fallback) is delivering: no polling */
   var base = REST_URL[market] || REST_URL['USD-M'];
   var chunks = [];
   for(var i = 0; i < st.symbols.length; i += 100) chunks.push(st.symbols.slice(i, i + 100));
   var pending = chunks.length, anyOk = false;
   function finish(){
     pending--;
-    if(pending === 0 && !anyOk){ st.restFailed = true; renderAll(); }
+    if(pending === 0 && !anyOk){ st.restFailed = true; maybeEngageFallback(market); renderAll(); }
   }
   chunks.forEach(function(syms){
     var url = base + '?symbols=' + encodeURIComponent(JSON.stringify(syms));
@@ -287,7 +398,10 @@ MARKET_NAMES.forEach(function(m){
   setInterval(function(){ restPoll(m); }, REST_POLL_MS);
   setTimeout(function(){ restPoll(m); }, 1500); /* early REST probe: covers WS-blocked networks fast */
 });
-setInterval(renderAll, 1000); /* staleness transitions + re-apply after re-renders */
+setInterval(function(){
+  maybeEngageFallback('USD-M'); /* silent-WS case: no tick from any transport 30s after load */
+  renderAll();
+}, 1000); /* staleness transitions + re-apply after re-renders */
 if('MutationObserver' in window){
   var mo = new MutationObserver(function(){ renderAll(); });
   mo.observe(document.body, {childList: true, subtree: true});
@@ -305,7 +419,7 @@ window.RaptorLive = {getState: function(){
   var out = {markets: {}, lastUpdateAt: lastUpdateAt};
   MARKET_NAMES.forEach(function(m){
     var st = MARKETS[m];
-    out.markets[m] = {symbols: st.symbols.length, wsOpen: !!(st.ws && st.ws.readyState === WebSocket.OPEN), wsFailed: st.wsFailed, restFailed: st.restFailed, wsSilentMs: st.lastWsTickAt ? (Date.now() - st.lastWsTickAt) : null};
+    out.markets[m] = {symbols: st.symbols.length, wsOpen: !!(st.ws && st.ws.readyState === WebSocket.OPEN), wsFailed: st.wsFailed, restFailed: st.restFailed, wsSilentMs: st.lastWsTickAt ? (Date.now() - st.lastWsTickAt) : null, fbEngaged: !!st.fbEngaged, fbOpen: !!(st.fbWs && st.fbWs.readyState === WebSocket.OPEN), fbFailed: !!st.fbFailed};
   });
   return out;
 }};
