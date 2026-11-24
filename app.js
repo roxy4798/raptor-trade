@@ -234,6 +234,33 @@ window.RaptorDensity = {
   collapseAll: function(){ DATA.signals.forEach(function(s){ collapsedGroups[s.close_ts]=true; delete expandedGroups[s.close_ts]; }); applyTable(); },
   getState: function(){ return {sortKey: sortState.key, collapsed: Object.keys(collapsedGroups).filter(function(k){return collapsedGroups[k];}), expanded: Object.keys(expandedGroups)}; }
 };
+/* v37: per-signal list cap — the top 15 rows stay visible, the rest hide
+   behind this toggle (server renders data-collapsed + the button when
+   n > 15). Rows stay in the DOM so v16 hover handlers keep working. */
+var PER_SIGNAL_PAGE = 15;
+function perSignalBtnText(btn, expanded){
+  var total = parseInt(btn.getAttribute("data-total") || "0", 10);
+  if(expanded) return groupT("showLess");
+  return groupT("showAll") + " " + total + " (" + PER_SIGNAL_PAGE + " " + groupT("of") + " " + total + ")";
+}
+function initPerSignalToggle(){
+  var btn = document.querySelector(".per-signal-more-btn");
+  if(!btn) return;
+  var bars = btn.parentElement.querySelector(".bars");
+  function refresh(){
+    var expanded = btn.getAttribute("aria-expanded") === "true";
+    btn.textContent = perSignalBtnText(btn, expanded);
+  }
+  btn.addEventListener("click", function(){
+    var expanded = btn.getAttribute("aria-expanded") === "true";
+    btn.setAttribute("aria-expanded", String(!expanded));
+    if(bars){ if(expanded) bars.setAttribute("data-collapsed", ""); else bars.removeAttribute("data-collapsed"); }
+    refresh();
+  });
+  window.addEventListener("raptor:lang", refresh);
+  refresh();
+}
+initPerSignalToggle();
 window.addEventListener('raptor:lang',function(){ applyTable(); if(currentModalSid && backdrop.classList.contains('open')) openModal(currentModalSid); });
 openFromHash();
 })();

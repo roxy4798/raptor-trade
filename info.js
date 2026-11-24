@@ -9,7 +9,7 @@ function closeText(v){ return I18N.useWIB() ? (v.close_wib+' WIB') : (v.close_ut
 var ev=G.filter(function(s){return s.tracker&&s.tracker.r30!=null});
 var bestR=ev.reduce(function(a,b){return !a||b.tracker.r30>a.tracker.r30?b:a},null);
 var mv=top('chg_4h'),rv=top('rvol'),lat=G[0];
-var nIns=K.classes['INSUFFICIENT DATA']||0,nUp=K.classes['PUMP CONTINUED']||0,nSw=K.classes['SIDEWAYS']||0,tot=K.total||G.length;
+var nIns=K.classes['INSUFFICIENT DATA']||0,nUp=K.classes['PUMP CONTINUED']||0,nSw=K.classes['SIDEWAYS']||0,nRev=K.classes['REVERSAL']||0,tot=K.total||G.length;
 var maxC=Math.max.apply(null,S.signals_per_close.map(function(c){return c.count})); var busy=S.signals_per_close.filter(function(c){return c.count===maxC})[0];
 var sec=el('section','card insight'); sec.id='insight';
 function render(){
@@ -23,11 +23,20 @@ function render(){
   (lat?'<div class="hl"><small>'+I18N.t('latestSignal')+'</small><strong>'+lat.symbol.replace('USDT','')+'</strong><span>'+closeText(lat)+' · RSI 4h '+f(lat.rsi_4h,1)+'</span></div>':'')+
   '</div><div class="ins-grid">'+
   '<div><h3>'+I18N.t('outcomeMix')+'</h3><div class="mix" role="img" aria-label="Outcome mix">'+
-  [[nUp,'#c6ff4d'],[nSw,'#35f0ff'],[nIns,'#ffb02e']].map(function(a,i){return '<i style="--i:'+i+';width:'+(a[0]/tot*100)+'%;background:'+a[1]+'"></i>'}).join('')+'</div>'+
-  '<ul class="mix-leg"><li><em style="background:#c6ff4d"></em>'+I18N.t('continuedUp')+'<b>'+nUp+' · '+f(nUp/tot*100,0)+'%</b></li><li><em style="background:#35f0ff"></em>'+I18N.t('sideways')+'<b>'+nSw+' · '+f(nSw/tot*100,0)+'%</b></li><li><em style="background:#ffb02e"></em>'+I18N.t('noData')+'<b>'+nIns+' · '+f(nIns/tot*100,0)+'%</b></li></ul>'+
+  /* v37: REVERSAL was missing from the bar + legend (the 3-category list
+     predates it) — the bar summed to ~92%. Segments use flex-grow so the
+     2px gaps never clip the smallest segment. */
+  [[nUp,'#c6ff4d'],[nSw,'#35f0ff'],[nRev,'#ff5d73'],[nIns,'#ffb02e']].map(function(a,i){return '<i style="--i:'+i+';flex:'+a[0]+' 1 0%;background:'+a[1]+'"></i>'}).join('')+'</div>'+
+  '<ul class="mix-leg"><li><em style="background:#c6ff4d"></em>'+I18N.t('continuedUp')+'<b>'+nUp+' · '+f(nUp/tot*100,0)+'%</b></li><li><em style="background:#35f0ff"></em>'+I18N.t('sideways')+'<b>'+nSw+' · '+f(nSw/tot*100,0)+'%</b></li><li><em style="background:#ff5d73"></em>'+I18N.t('reversed')+'<b>'+nRev+' · '+f(nRev/tot*100,0)+'%</b></li><li><em style="background:#ffb02e"></em>'+I18N.t('noData')+'<b>'+nIns+' · '+f(nIns/tot*100,0)+'%</b></li></ul>'+
   '<p class="ins-note">'+I18N.t('noDataDesc')+'</p></div>'+
   '<div><h3>'+I18N.t('signalsPerClose')+'</h3><div class="cl">'+
-  S.signals_per_close.map(function(c,i){ var p=maxC?c.count/maxC*100:0; var label=I18N.useWIB()? c.close_wib+' WIB' : new Date(c.close_ts*1000).toISOString().slice(11,16)+' UTC'; var short=I18N.useWIB()?c.close_wib.slice(-5):new Date(c.close_ts*1000).toISOString().slice(11,16); return '<div class="'+(c.count===maxC?'max ':'')+(c.count?'':'zero')+'" title="'+label+': '+c.count+' signal(s)"><span>'+c.count+'</span><i style="--i:'+i+';height:'+Math.max(p,3)+'%"></i><small>'+short+'</small></div>'; }).join('')+'</div>'+
+  /* v37: the 294 flood bar overflowed the 130px chart and its label bled
+     into the guide column ("tumpang tindih"). Bar heights now use a
+     square-root scale (the count labels still show true numbers) capped
+     at 68% so count + time labels fit inside the column, and time
+     labels render only every 3rd close + the max bar + the last close
+     (full label stays in the title attr). */
+  S.signals_per_close.map(function(c,i){ var p=maxC?Math.sqrt(c.count)/Math.sqrt(maxC)*68:0; var label=I18N.useWIB()? c.close_wib+' WIB' : new Date(c.close_ts*1000).toISOString().slice(11,16)+' UTC'; var short=I18N.useWIB()?c.close_wib.slice(-5):new Date(c.close_ts*1000).toISOString().slice(11,16); var showLabel=(i%3===0)||c.count===maxC||i===S.signals_per_close.length-1; return '<div class="'+(c.count===maxC?'max ':'')+(c.count?'':'zero')+'" title="'+label+': '+c.count+' signal(s)"><span>'+c.count+'</span><i style="--i:'+i+';height:'+Math.max(p,3)+'%"></i><small>'+(showLabel?short:'')+'</small></div>'; }).join('')+'</div>'+
   '<p class="ins-note">'+I18N.t('clusters')+'</p></div>'+
   '<div><h3>'+I18N.t('howToRead')+'</h3><dl class="guide">'+
   '<div><dt>'+I18N.t('thChg')+'</dt><dd>'+I18N.t('guideChg')+'</dd></div>'+
