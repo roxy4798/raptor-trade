@@ -20,6 +20,15 @@ var lastIdx=S.signals_per_close.length-1, maxIdx=S.signals_per_close.indexOf(bus
 var labelIdx={}; labelIdx[lastIdx]=1;
 if(maxIdx!==lastIdx&&Math.abs(maxIdx-lastIdx)>1)labelIdx[maxIdx]=1;
 for(var li=0;li<=lastIdx;li+=3){ if(labelIdx[li])continue; var adj=false; for(var k in labelIdx){ if(Math.abs(+k-li)<=1){adj=true;break} } if(!adj)labelIdx[li]=1; }
+/* v37c: the 294 flood bar is a 24x outlier — scaling to it crushes the
+   other 19 closes into 3–14px crumbs and leaves the chart 90% empty
+   ("tidak rapih dan tidak enak dilihat"). Scale to capC, the highest
+   count BELOW the max (12 now), and render the max bar broken off at
+   88% with a break mark (see density-v36.css) + its true "294" label,
+   so the distribution of normal closes is actually visible. When
+   there is no outlier (all counts equal) capC == maxC and no bar is
+   broken. */
+var capC=0; S.signals_per_close.forEach(function(c){ if(c.count<maxC&&c.count>capC)capC=c.count; }); if(!capC)capC=maxC;
 var sec=el('section','card insight'); sec.id='insight';
 function render(){
   sec.innerHTML='<div class="ins-head"><div><div class="section-kicker">'+I18N.t('insightKicker')+'</div><h2>'+I18N.t('insightTitle')+' <span class="h2-note">'+I18N.t('insightNote')+'</span></h2></div></div>'+
@@ -41,13 +50,17 @@ function render(){
   '<div><h3>'+I18N.t('signalsPerClose')+'</h3><div class="cl">'+
   /* v37: the 294 flood bar overflowed the 130px chart and its label bled
      into the guide column ("tumpang tindih"). Bar heights now use a
-     square-root scale (the count labels still show true numbers) capped
-     at 68% so count + time labels fit inside the column, and time
-     labels render only for labelIdx (v37b: every 3rd close + max + last,
-     de-adjacent — never two neighbouring columns, or the "HH:MM"
-     labels overlap once the columns share the cell).
-     (full label stays in the title attr). */
-  S.signals_per_close.map(function(c,i){ var p=maxC?Math.sqrt(c.count)/Math.sqrt(maxC)*68:0; var label=I18N.useWIB()? c.close_wib+' WIB' : new Date(c.close_ts*1000).toISOString().slice(11,16)+' UTC'; var short=I18N.useWIB()?c.close_wib.slice(-5):new Date(c.close_ts*1000).toISOString().slice(11,16); var showLabel=!!labelIdx[i]; return '<div class="'+(c.count===maxC?'max ':'')+(c.count?'':'zero')+'" title="'+label+': '+c.count+' signal(s)"><span>'+c.count+'</span><i style="--i:'+i+';height:'+Math.max(p,3)+'%"></i><small>'+(showLabel?short:'')+'</small></div>'; }).join('')+'</div>'+
+     square-root scale capped at 68% so count + time labels fit inside
+     the column (bar + labels must fit the column height — the overflow
+     mechanism); time labels render only for labelIdx (v37b: every 3rd
+     close + max + last, de-adjacent — never two neighbouring columns,
+     or the "HH:MM" labels overlap once the columns share the cell).
+     v37c: the sqrt scale is taken against capC (the highest count
+     below the max), not maxC — otherwise the 294 outlier crushes the
+     other closes into crumbs. The max bar is drawn broken at 88% with
+     a break mark and its true count label (full label stays in the
+     title attr). */
+  S.signals_per_close.map(function(c,i){ var isOut=c.count===maxC&&maxC>capC; var p=isOut?88:(capC?Math.sqrt(c.count)/Math.sqrt(capC)*68:0); var label=I18N.useWIB()? c.close_wib+' WIB' : new Date(c.close_ts*1000).toISOString().slice(11,16)+' UTC'; var short=I18N.useWIB()?c.close_wib.slice(-5):new Date(c.close_ts*1000).toISOString().slice(11,16); var showLabel=!!labelIdx[i]; return '<div class="'+(c.count===maxC?'max ':'')+(isOut?'broken ':'')+(c.count?'':'zero')+'" title="'+label+': '+c.count+' signal(s)"><span>'+c.count+'</span><i style="--i:'+i+';height:'+Math.max(p,3)+'%"></i><small>'+(showLabel?short:'')+'</small></div>'; }).join('')+'</div>'+
   '<p class="ins-note">'+I18N.t('clusters')+'</p></div>'+
   '<div><h3>'+I18N.t('howToRead')+'</h3><dl class="guide">'+
   '<div><dt>'+I18N.t('thChg')+'</dt><dd>'+I18N.t('guideChg')+'</dd></div>'+

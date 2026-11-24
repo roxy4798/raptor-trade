@@ -243,3 +243,41 @@ section[id] {
     gap: 2px;
   }
 }
+
+/* ---- v37c (24 Nov 2026): per-close chart "tidak rapih dan tidak enak
+   dilihat" ----
+   The 294 flood bar is a 24x outlier; scaling to it crushed the other
+   19 closes into 3-14px crumbs and left the chart 90% empty air.
+   info.js now scales to capC (highest count below the max) and draws
+   the max bar broken off at 88%. The two white slashes near the top
+   of the broken bar are the standard broken-axis mark: the bar is
+   truncated, its "294" label + title carry the true count, and the
+   "BUSIEST 4H CLOSE" card above states it too. The 2px column gap
+   gives the count/time labels breathing room from the bars. */
+.ins-grid .cl div {
+  gap: 2px;
+}
+.ins-grid .cl div.broken i {
+  position: relative;
+  /* The 88% bar + labels overfill the 112px column by ~15px; without
+     this the flex container shrinks the bar back below the 68% bars.
+     flex-shrink:0 keeps the full height — the overflow goes up into
+     the .cl padding-top (18px), so the "294" label stays inside. */
+  flex-shrink: 0;
+}
+.ins-grid .cl div.broken i::before,
+.ins-grid .cl div.broken i::after {
+  content: "";
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.9);
+  transform: skewY(-18deg);
+}
+.ins-grid .cl div.broken i::before {
+  top: 12px;
+}
+.ins-grid .cl div.broken i::after {
+  top: 18px;
+}
