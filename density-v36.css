@@ -212,3 +212,34 @@ section[id] {
 .per-signal-more-btn:hover {
   color: var(--accent, #b9f38a);
 }
+
+/* ---- v37b (24 Nov 2026): per-close chart still overlapping ("masih
+   tumpang tindih") ----
+   Root cause: the .cl columns refused to shrink — flex items default
+   to min-width:auto, and their label content ("00:00" ~30px) set the
+   floor, so the 20-column chart overflowed its grid cell by ~350px
+   and the last bars' labels printed on top of the guide column (at
+   1440px the "3"/"1"/"5"/"00:00"/"04:00" labels reached 104px into
+   the guide cell; at 1280px even "294" did). On phones the flood bar
+   itself was clipped away by the card's overflow:hidden.
+   min-width:0 lets the columns share the cell; the sparse labels
+   (every 3rd close + max + last) then fit without colliding, and the
+   last column's label bleeds only into the 22px grid gap. Tighter
+   gaps below 1280px / 640px give the columns more room. */
+.ins-grid .cl div {
+  min-width: 0;
+}
+.ins-grid .cl span,
+.ins-grid .cl small {
+  white-space: nowrap;
+}
+@media (max-width: 1280px) {
+  .ins-grid .cl {
+    gap: 4px;
+  }
+}
+@media (max-width: 640px) {
+  .ins-grid .cl {
+    gap: 2px;
+  }
+}

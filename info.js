@@ -11,6 +11,15 @@ var bestR=ev.reduce(function(a,b){return !a||b.tracker.r30>a.tracker.r30?b:a},nu
 var mv=top('chg_4h'),rv=top('rvol'),lat=G[0];
 var nIns=K.classes['INSUFFICIENT DATA']||0,nUp=K.classes['PUMP CONTINUED']||0,nSw=K.classes['SIDEWAYS']||0,nRev=K.classes['REVERSAL']||0,tot=K.total||G.length;
 var maxC=Math.max.apply(null,S.signals_per_close.map(function(c){return c.count})); var busy=S.signals_per_close.filter(function(c){return c.count===maxC})[0];
+/* v37b: time labels must never sit on adjacent columns — with the
+   columns now sharing the cell (min-width:0), adjacent "HH:MM" labels
+   overlap (the max bar at i=16 sat next to the every-3rd label at 15,
+   and the last bar at 19 next to the one at 18). Keep last + max
+   first, then every 3rd unless adjacent to a kept label. */
+var lastIdx=S.signals_per_close.length-1, maxIdx=S.signals_per_close.indexOf(busy);
+var labelIdx={}; labelIdx[lastIdx]=1;
+if(maxIdx!==lastIdx&&Math.abs(maxIdx-lastIdx)>1)labelIdx[maxIdx]=1;
+for(var li=0;li<=lastIdx;li+=3){ if(labelIdx[li])continue; var adj=false; for(var k in labelIdx){ if(Math.abs(+k-li)<=1){adj=true;break} } if(!adj)labelIdx[li]=1; }
 var sec=el('section','card insight'); sec.id='insight';
 function render(){
   sec.innerHTML='<div class="ins-head"><div><div class="section-kicker">'+I18N.t('insightKicker')+'</div><h2>'+I18N.t('insightTitle')+' <span class="h2-note">'+I18N.t('insightNote')+'</span></h2></div></div>'+
@@ -34,9 +43,11 @@ function render(){
      into the guide column ("tumpang tindih"). Bar heights now use a
      square-root scale (the count labels still show true numbers) capped
      at 68% so count + time labels fit inside the column, and time
-     labels render only every 3rd close + the max bar + the last close
+     labels render only for labelIdx (v37b: every 3rd close + max + last,
+     de-adjacent — never two neighbouring columns, or the "HH:MM"
+     labels overlap once the columns share the cell).
      (full label stays in the title attr). */
-  S.signals_per_close.map(function(c,i){ var p=maxC?Math.sqrt(c.count)/Math.sqrt(maxC)*68:0; var label=I18N.useWIB()? c.close_wib+' WIB' : new Date(c.close_ts*1000).toISOString().slice(11,16)+' UTC'; var short=I18N.useWIB()?c.close_wib.slice(-5):new Date(c.close_ts*1000).toISOString().slice(11,16); var showLabel=(i%3===0)||c.count===maxC||i===S.signals_per_close.length-1; return '<div class="'+(c.count===maxC?'max ':'')+(c.count?'':'zero')+'" title="'+label+': '+c.count+' signal(s)"><span>'+c.count+'</span><i style="--i:'+i+';height:'+Math.max(p,3)+'%"></i><small>'+(showLabel?short:'')+'</small></div>'; }).join('')+'</div>'+
+  S.signals_per_close.map(function(c,i){ var p=maxC?Math.sqrt(c.count)/Math.sqrt(maxC)*68:0; var label=I18N.useWIB()? c.close_wib+' WIB' : new Date(c.close_ts*1000).toISOString().slice(11,16)+' UTC'; var short=I18N.useWIB()?c.close_wib.slice(-5):new Date(c.close_ts*1000).toISOString().slice(11,16); var showLabel=!!labelIdx[i]; return '<div class="'+(c.count===maxC?'max ':'')+(c.count?'':'zero')+'" title="'+label+': '+c.count+' signal(s)"><span>'+c.count+'</span><i style="--i:'+i+';height:'+Math.max(p,3)+'%"></i><small>'+(showLabel?short:'')+'</small></div>'; }).join('')+'</div>'+
   '<p class="ins-note">'+I18N.t('clusters')+'</p></div>'+
   '<div><h3>'+I18N.t('howToRead')+'</h3><dl class="guide">'+
   '<div><dt>'+I18N.t('thChg')+'</dt><dd>'+I18N.t('guideChg')+'</dd></div>'+
