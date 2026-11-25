@@ -6,7 +6,9 @@
   dist/agents/index.html. Edit this template or config.json instead —
   see agents/FRAMEWORK.md for the placeholder list.
   Rendered location: dist/agents/index.html, so ../assets/ is
-  "../assets/" and ../ is "../" on the rendered page.
+  "../assets/" (agent-page.css only — the one file that lives under
+  dist/assets/) and ../ is "../" (the dist root: style.css,
+  branding/, characters/) and ../ is "../" on the rendered page.
   NO Rive instances on this page — static portraits only. PRISM links
   to /agents/prism/; every other agent shows an honest COMING SOON
   status (RAPTOR additionally shows STRATEGY CORE) with NO dead links
@@ -18,9 +20,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AI Agents | Raptor Trade</title>
 <meta name="description" content="The twelve Raptor Trade AI research agents. One live character (PRISM); eleven coming soon. Research only — never a signal filter.">
-<link rel="icon" href="../assets/branding/official-raptor-icon.png">
+<link rel="icon" href="../branding/official-raptor-icon.png">
 <script>try{document.documentElement.lang=(localStorage.getItem('raptorLang')==='id'?'id':'en');}catch(e){}</script>
-<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../style.css">
 <link rel="stylesheet" href="../assets/agents/agent-page.css">
 </head>
 <body>
@@ -28,7 +30,7 @@
 
 <!-- ============ MAIN NAV (Dashboard / Research / AI Agents) ============ -->
 <aside class="app-rail" aria-label="Main navigation">
-  <a class="rail-logo" href="../index.html" aria-label="Raptor Trade home"><img class="brand-symbol" src="../assets/branding/official-raptor-logo.webp" alt="" width="45" height="45"></a>
+  <a class="rail-logo" href="../index.html" aria-label="Raptor Trade home"><img class="brand-symbol" src="../branding/official-raptor-logo.webp" alt="" width="45" height="45"></a>
   <nav class="rail-nav" aria-label="Agent pages">
     <a class="rail-link" href="../index.html" aria-label="Dashboard" title="Dashboard"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span data-i18n="nav.dashboard">Dashboard</span></a>
     <a class="rail-link" href="../research.html" aria-label="Research" title="Research"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6M11 8v6"/></svg><span data-i18n="nav.research">Research</span></a>
@@ -50,84 +52,84 @@
   <div class="agents-grid" id="agents-grid">
     <!--
       <article class="agent-card is-soon" style="--agent-accent:#22d3ee">
-<img src="../assets/characters/agent-01.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-01.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 01</span>
 <span class="agent-name">AXIOM</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Breakout Intelligence" data-id="Inteligensi Breakout">Breakout Intelligence</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Studies breakout strength, volume (RVOL) and EMA alignment on published 4H signals. Research only — it never filters, approves, or blocks a signal." data-id="Mempelajari kekuatan breakout, volume (RVOL), dan keselarasan EMA pada sinyal 4J yang diterbitkan. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Studies breakout strength, volume (RVOL) and EMA alignment on published 4H signals. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-soon" style="--agent-accent:#a78bfa">
-<img src="../assets/characters/agent-02.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-02.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 02</span>
 <span class="agent-name">VEX</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Reversal Intelligence" data-id="Inteligensi Reversal">Reversal Intelligence</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Studies reversal markers and momentum exhaustion on published 4H signals. Research only — it never filters, approves, or blocks a signal." data-id="Mempelajari penanda reversal dan kelelahan momentum pada sinyal 4J yang diterbitkan. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Studies reversal markers and momentum exhaustion on published 4H signals. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-soon" style="--agent-accent:#4ade80">
-<img src="../assets/characters/agent-03.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-03.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 03</span>
 <span class="agent-name">FLUX</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Order Flow Intelligence" data-id="Inteligensi Arus Order">Order Flow Intelligence</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Studies taker buy/sell flow, order-book imbalance, volume delta, open interest and funding on published 4H signals. Research only — it never filters, approves, or blocks a signal." data-id="Mempelajari arus taker buy/sell, imbalance order book, volume delta, open interest, dan funding pada sinyal 4J yang diterbitkan. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Studies taker buy/sell flow, order-book imbalance, volume delta, open interest and funding on published 4H signals. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-soon" style="--agent-accent:#facc15">
-<img src="../assets/characters/agent-04.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-04.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 04</span>
 <span class="agent-name">ATLAS</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Market Regime Intelligence" data-id="Inteligensi Rezim Pasar">Market Regime Intelligence</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Studies BTC/ETH trend, market breadth and BTC correlation at signal time. Research only — it never filters, approves, or blocks a signal." data-id="Mempelajari tren BTC/ETH, breadth pasar, dan korelasi dengan BTC pada saat sinyal diterbitkan. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Studies BTC/ETH trend, market breadth and BTC correlation at signal time. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-soon" style="--agent-accent:#60a5fa">
-<img src="../assets/characters/agent-05.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-05.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 05</span>
 <span class="agent-name">NEXUS</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Liquidity Intelligence" data-id="Inteligensi Likuiditas">Liquidity Intelligence</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Studies spread, order-book depth and slippage at signal time. Research only — it never filters, approves, or blocks a signal." data-id="Mempelajari spread, depth order book, dan slippage pada saat sinyal diterbitkan. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Studies spread, order-book depth and slippage at signal time. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-soon" style="--agent-accent:#fb7185">
-<img src="../assets/characters/agent-06.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-06.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 06</span>
 <span class="agent-name">SYNAPSE</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Performance Learning" data-id="Pembelajaran Performa">Performance Learning</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Studies signal outcomes at every horizon, learning checkpoints and the hypothesis registry. Research only — it never filters, approves, or blocks a signal." data-id="Mempelajari hasil sinyal di setiap horizon, checkpoint pembelajaran, dan registri hipotesis. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Studies signal outcomes at every horizon, learning checkpoints and the hypothesis registry. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-core" style="--agent-accent:#fb923c">
-<img src="../assets/characters/agent-07.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-07.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 07</span>
 <span class="agent-name">RAPTOR</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Pump Ignition Intelligence" data-id="Inteligensi Ignisi Pompa">Pump Ignition Intelligence</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="The strategy core. Studies whether the first 4H pump continues on the next 4H candle, and which first-pump characteristics predict it. Research only — it never filters, approves, or blocks a signal." data-id="Inti strategi. Mempelajari apakah pompa 4J pertama berlanjut di candle 4J berikutnya, dan karakteristik pompa pertama apa yang memprediksinya. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">The strategy core. Studies whether the first 4H pump continues on the next 4H candle, and which first-pump characteristics predict it. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag core">STRATEGY CORE</span><span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-soon" style="--agent-accent:#a3e635">
-<img src="../assets/characters/agent-08.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-08.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 08</span>
 <span class="agent-name">SPECTRE</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Missed Opportunity Intelligence" data-id="Inteligensi Peluang Terlewat">Missed Opportunity Intelligence</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Studies the pumps the scanner did not signal — which gate blocked them, and what was missed. Research only — it never filters, approves, or blocks a signal." data-id="Mempelajari pompa yang tidak disinyalkan scanner — gate mana yang memblokirnya, dan apa yang terlewat. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Studies the pumps the scanner did not signal — which gate blocked them, and what was missed. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <a class="agent-card is-live" href="prism/" style="--agent-accent:#e879f9">
-<img src="../assets/characters/agent-09.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-09.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 09</span>
 <span class="agent-name">PRISM</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Filter Discovery &amp; Optimization" data-id="Penemuan &amp; Optimasi Filter">Filter Discovery &amp; Optimization</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Runs virtual filter trials in the Shadow Lab: the same published signals re-scored under alternative filter configurations, to discover which filters would have helped — before any filter ever changes. Research only — it never filters, approves, or blocks a signal." data-id="Menjalankan uji filter virtual di Shadow Lab: sinyal yang sama dinilai ulang dengan konfigurasi filter alternatif, untuk menemukan filter mana yang akan membantu — sebelum filter apa pun diubah. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Runs virtual filter trials in the Shadow Lab: the same published signals re-scored under alternative filter configurations, to discover which filters would have helped — before any filter ever changes. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag live">LIVE</span></a>
     <article class="agent-card is-soon" style="--agent-accent:#cbd5e1">
-<img src="../assets/characters/agent-10.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-10.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 10</span>
 <span class="agent-name">VERITAS</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Independent Strategy Validation" data-id="Validasi Strategi Independen">Independent Strategy Validation</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Independently checks the strategy and its research for look-ahead, leakage and overfitting. Research only — it never filters, approves, or blocks a signal." data-id="Memeriksa strategi dan risetnya secara independen terhadap look-ahead, leakage, dan overfitting. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Independently checks the strategy and its research for look-ahead, leakage and overfitting. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-soon" style="--agent-accent:#2dd4bf">
-<img src="../assets/characters/agent-11.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-11.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 11</span>
 <span class="agent-name">APEX</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Take Profit &amp; Exit Intelligence" data-id="Inteligensi Take Profit &amp; Exit">Take Profit &amp; Exit Intelligence</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Studies take-profit-before-stop-loss rates and exit efficiency at each horizon. Research only — it never filters, approves, or blocks a signal." data-id="Mempelajari tingkat take-profit-sebelum-stop-loss dan efisiensi exit di setiap horizon. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Studies take-profit-before-stop-loss rates and exit efficiency at each horizon. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-soon" style="--agent-accent:#f87171">
-<img src="../assets/characters/agent-12.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-12.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 12</span>
 <span class="agent-name">AEGIS</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Risk &amp; Portfolio Intelligence" data-id="Inteligensi Risiko &amp; Portofolio">Risk &amp; Portfolio Intelligence</span></span>
@@ -153,84 +155,84 @@
       cards client-side from config.json.
     -->
     <article class="agent-card is-soon" style="--agent-accent:#22d3ee">
-<img src="../assets/characters/agent-01.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-01.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 01</span>
 <span class="agent-name">AXIOM</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Breakout Intelligence" data-id="Inteligensi Breakout">Breakout Intelligence</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Studies breakout strength, volume (RVOL) and EMA alignment on published 4H signals. Research only — it never filters, approves, or blocks a signal." data-id="Mempelajari kekuatan breakout, volume (RVOL), dan keselarasan EMA pada sinyal 4J yang diterbitkan. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Studies breakout strength, volume (RVOL) and EMA alignment on published 4H signals. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-soon" style="--agent-accent:#a78bfa">
-<img src="../assets/characters/agent-02.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-02.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 02</span>
 <span class="agent-name">VEX</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Reversal Intelligence" data-id="Inteligensi Reversal">Reversal Intelligence</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Studies reversal markers and momentum exhaustion on published 4H signals. Research only — it never filters, approves, or blocks a signal." data-id="Mempelajari penanda reversal dan kelelahan momentum pada sinyal 4J yang diterbitkan. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Studies reversal markers and momentum exhaustion on published 4H signals. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-soon" style="--agent-accent:#4ade80">
-<img src="../assets/characters/agent-03.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-03.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 03</span>
 <span class="agent-name">FLUX</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Order Flow Intelligence" data-id="Inteligensi Arus Order">Order Flow Intelligence</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Studies taker buy/sell flow, order-book imbalance, volume delta, open interest and funding on published 4H signals. Research only — it never filters, approves, or blocks a signal." data-id="Mempelajari arus taker buy/sell, imbalance order book, volume delta, open interest, dan funding pada sinyal 4J yang diterbitkan. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Studies taker buy/sell flow, order-book imbalance, volume delta, open interest and funding on published 4H signals. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-soon" style="--agent-accent:#facc15">
-<img src="../assets/characters/agent-04.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-04.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 04</span>
 <span class="agent-name">ATLAS</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Market Regime Intelligence" data-id="Inteligensi Rezim Pasar">Market Regime Intelligence</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Studies BTC/ETH trend, market breadth and BTC correlation at signal time. Research only — it never filters, approves, or blocks a signal." data-id="Mempelajari tren BTC/ETH, breadth pasar, dan korelasi dengan BTC pada saat sinyal diterbitkan. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Studies BTC/ETH trend, market breadth and BTC correlation at signal time. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-soon" style="--agent-accent:#60a5fa">
-<img src="../assets/characters/agent-05.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-05.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 05</span>
 <span class="agent-name">NEXUS</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Liquidity Intelligence" data-id="Inteligensi Likuiditas">Liquidity Intelligence</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Studies spread, order-book depth and slippage at signal time. Research only — it never filters, approves, or blocks a signal." data-id="Mempelajari spread, depth order book, dan slippage pada saat sinyal diterbitkan. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Studies spread, order-book depth and slippage at signal time. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-soon" style="--agent-accent:#fb7185">
-<img src="../assets/characters/agent-06.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-06.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 06</span>
 <span class="agent-name">SYNAPSE</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Performance Learning" data-id="Pembelajaran Performa">Performance Learning</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Studies signal outcomes at every horizon, learning checkpoints and the hypothesis registry. Research only — it never filters, approves, or blocks a signal." data-id="Mempelajari hasil sinyal di setiap horizon, checkpoint pembelajaran, dan registri hipotesis. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Studies signal outcomes at every horizon, learning checkpoints and the hypothesis registry. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-core" style="--agent-accent:#fb923c">
-<img src="../assets/characters/agent-07.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-07.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 07</span>
 <span class="agent-name">RAPTOR</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Pump Ignition Intelligence" data-id="Inteligensi Ignisi Pompa">Pump Ignition Intelligence</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="The strategy core. Studies whether the first 4H pump continues on the next 4H candle, and which first-pump characteristics predict it. Research only — it never filters, approves, or blocks a signal." data-id="Inti strategi. Mempelajari apakah pompa 4J pertama berlanjut di candle 4J berikutnya, dan karakteristik pompa pertama apa yang memprediksinya. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">The strategy core. Studies whether the first 4H pump continues on the next 4H candle, and which first-pump characteristics predict it. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag core">STRATEGY CORE</span><span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-soon" style="--agent-accent:#a3e635">
-<img src="../assets/characters/agent-08.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-08.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 08</span>
 <span class="agent-name">SPECTRE</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Missed Opportunity Intelligence" data-id="Inteligensi Peluang Terlewat">Missed Opportunity Intelligence</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Studies the pumps the scanner did not signal — which gate blocked them, and what was missed. Research only — it never filters, approves, or blocks a signal." data-id="Mempelajari pompa yang tidak disinyalkan scanner — gate mana yang memblokirnya, dan apa yang terlewat. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Studies the pumps the scanner did not signal — which gate blocked them, and what was missed. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <a class="agent-card is-live" href="prism/" style="--agent-accent:#e879f9">
-<img src="../assets/characters/agent-09.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-09.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 09</span>
 <span class="agent-name">PRISM</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Filter Discovery &amp; Optimization" data-id="Penemuan &amp; Optimasi Filter">Filter Discovery &amp; Optimization</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Runs virtual filter trials in the Shadow Lab: the same published signals re-scored under alternative filter configurations, to discover which filters would have helped — before any filter ever changes. Research only — it never filters, approves, or blocks a signal." data-id="Menjalankan uji filter virtual di Shadow Lab: sinyal yang sama dinilai ulang dengan konfigurasi filter alternatif, untuk menemukan filter mana yang akan membantu — sebelum filter apa pun diubah. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Runs virtual filter trials in the Shadow Lab: the same published signals re-scored under alternative filter configurations, to discover which filters would have helped — before any filter ever changes. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag live">LIVE</span></a>
     <article class="agent-card is-soon" style="--agent-accent:#cbd5e1">
-<img src="../assets/characters/agent-10.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-10.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 10</span>
 <span class="agent-name">VERITAS</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Independent Strategy Validation" data-id="Validasi Strategi Independen">Independent Strategy Validation</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Independently checks the strategy and its research for look-ahead, leakage and overfitting. Research only — it never filters, approves, or blocks a signal." data-id="Memeriksa strategi dan risetnya secara independen terhadap look-ahead, leakage, dan overfitting. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Independently checks the strategy and its research for look-ahead, leakage and overfitting. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-soon" style="--agent-accent:#2dd4bf">
-<img src="../assets/characters/agent-11.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-11.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 11</span>
 <span class="agent-name">APEX</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Take Profit &amp; Exit Intelligence" data-id="Inteligensi Take Profit &amp; Exit">Take Profit &amp; Exit Intelligence</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Studies take-profit-before-stop-loss rates and exit efficiency at each horizon. Research only — it never filters, approves, or blocks a signal." data-id="Mempelajari tingkat take-profit-sebelum-stop-loss dan efisiensi exit di setiap horizon. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Studies take-profit-before-stop-loss rates and exit efficiency at each horizon. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-soon" style="--agent-accent:#f87171">
-<img src="../assets/characters/agent-12.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-12.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 12</span>
 <span class="agent-name">AEGIS</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Risk &amp; Portfolio Intelligence" data-id="Inteligensi Risiko &amp; Portofolio">Risk &amp; Portfolio Intelligence</span></span>
@@ -249,84 +251,84 @@
 <script>
 /* Directory fallback renderer (framework v1.0.0): if the build step has
    not pre-rendered <article class="agent-card is-soon" style="--agent-accent:#22d3ee">
-<img src="../assets/characters/agent-01.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-01.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 01</span>
 <span class="agent-name">AXIOM</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Breakout Intelligence" data-id="Inteligensi Breakout">Breakout Intelligence</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Studies breakout strength, volume (RVOL) and EMA alignment on published 4H signals. Research only — it never filters, approves, or blocks a signal." data-id="Mempelajari kekuatan breakout, volume (RVOL), dan keselarasan EMA pada sinyal 4J yang diterbitkan. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Studies breakout strength, volume (RVOL) and EMA alignment on published 4H signals. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-soon" style="--agent-accent:#a78bfa">
-<img src="../assets/characters/agent-02.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-02.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 02</span>
 <span class="agent-name">VEX</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Reversal Intelligence" data-id="Inteligensi Reversal">Reversal Intelligence</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Studies reversal markers and momentum exhaustion on published 4H signals. Research only — it never filters, approves, or blocks a signal." data-id="Mempelajari penanda reversal dan kelelahan momentum pada sinyal 4J yang diterbitkan. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Studies reversal markers and momentum exhaustion on published 4H signals. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-soon" style="--agent-accent:#4ade80">
-<img src="../assets/characters/agent-03.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-03.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 03</span>
 <span class="agent-name">FLUX</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Order Flow Intelligence" data-id="Inteligensi Arus Order">Order Flow Intelligence</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Studies taker buy/sell flow, order-book imbalance, volume delta, open interest and funding on published 4H signals. Research only — it never filters, approves, or blocks a signal." data-id="Mempelajari arus taker buy/sell, imbalance order book, volume delta, open interest, dan funding pada sinyal 4J yang diterbitkan. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Studies taker buy/sell flow, order-book imbalance, volume delta, open interest and funding on published 4H signals. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-soon" style="--agent-accent:#facc15">
-<img src="../assets/characters/agent-04.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-04.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 04</span>
 <span class="agent-name">ATLAS</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Market Regime Intelligence" data-id="Inteligensi Rezim Pasar">Market Regime Intelligence</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Studies BTC/ETH trend, market breadth and BTC correlation at signal time. Research only — it never filters, approves, or blocks a signal." data-id="Mempelajari tren BTC/ETH, breadth pasar, dan korelasi dengan BTC pada saat sinyal diterbitkan. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Studies BTC/ETH trend, market breadth and BTC correlation at signal time. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-soon" style="--agent-accent:#60a5fa">
-<img src="../assets/characters/agent-05.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-05.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 05</span>
 <span class="agent-name">NEXUS</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Liquidity Intelligence" data-id="Inteligensi Likuiditas">Liquidity Intelligence</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Studies spread, order-book depth and slippage at signal time. Research only — it never filters, approves, or blocks a signal." data-id="Mempelajari spread, depth order book, dan slippage pada saat sinyal diterbitkan. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Studies spread, order-book depth and slippage at signal time. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-soon" style="--agent-accent:#fb7185">
-<img src="../assets/characters/agent-06.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-06.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 06</span>
 <span class="agent-name">SYNAPSE</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Performance Learning" data-id="Pembelajaran Performa">Performance Learning</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Studies signal outcomes at every horizon, learning checkpoints and the hypothesis registry. Research only — it never filters, approves, or blocks a signal." data-id="Mempelajari hasil sinyal di setiap horizon, checkpoint pembelajaran, dan registri hipotesis. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Studies signal outcomes at every horizon, learning checkpoints and the hypothesis registry. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-core" style="--agent-accent:#fb923c">
-<img src="../assets/characters/agent-07.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-07.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 07</span>
 <span class="agent-name">RAPTOR</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Pump Ignition Intelligence" data-id="Inteligensi Ignisi Pompa">Pump Ignition Intelligence</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="The strategy core. Studies whether the first 4H pump continues on the next 4H candle, and which first-pump characteristics predict it. Research only — it never filters, approves, or blocks a signal." data-id="Inti strategi. Mempelajari apakah pompa 4J pertama berlanjut di candle 4J berikutnya, dan karakteristik pompa pertama apa yang memprediksinya. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">The strategy core. Studies whether the first 4H pump continues on the next 4H candle, and which first-pump characteristics predict it. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag core">STRATEGY CORE</span><span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-soon" style="--agent-accent:#a3e635">
-<img src="../assets/characters/agent-08.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-08.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 08</span>
 <span class="agent-name">SPECTRE</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Missed Opportunity Intelligence" data-id="Inteligensi Peluang Terlewat">Missed Opportunity Intelligence</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Studies the pumps the scanner did not signal — which gate blocked them, and what was missed. Research only — it never filters, approves, or blocks a signal." data-id="Mempelajari pompa yang tidak disinyalkan scanner — gate mana yang memblokirnya, dan apa yang terlewat. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Studies the pumps the scanner did not signal — which gate blocked them, and what was missed. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <a class="agent-card is-live" href="prism/" style="--agent-accent:#e879f9">
-<img src="../assets/characters/agent-09.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-09.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 09</span>
 <span class="agent-name">PRISM</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Filter Discovery &amp; Optimization" data-id="Penemuan &amp; Optimasi Filter">Filter Discovery &amp; Optimization</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Runs virtual filter trials in the Shadow Lab: the same published signals re-scored under alternative filter configurations, to discover which filters would have helped — before any filter ever changes. Research only — it never filters, approves, or blocks a signal." data-id="Menjalankan uji filter virtual di Shadow Lab: sinyal yang sama dinilai ulang dengan konfigurasi filter alternatif, untuk menemukan filter mana yang akan membantu — sebelum filter apa pun diubah. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Runs virtual filter trials in the Shadow Lab: the same published signals re-scored under alternative filter configurations, to discover which filters would have helped — before any filter ever changes. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag live">LIVE</span></a>
     <article class="agent-card is-soon" style="--agent-accent:#cbd5e1">
-<img src="../assets/characters/agent-10.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-10.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 10</span>
 <span class="agent-name">VERITAS</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Independent Strategy Validation" data-id="Validasi Strategi Independen">Independent Strategy Validation</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Independently checks the strategy and its research for look-ahead, leakage and overfitting. Research only — it never filters, approves, or blocks a signal." data-id="Memeriksa strategi dan risetnya secara independen terhadap look-ahead, leakage, dan overfitting. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Independently checks the strategy and its research for look-ahead, leakage and overfitting. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-soon" style="--agent-accent:#2dd4bf">
-<img src="../assets/characters/agent-11.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-11.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 11</span>
 <span class="agent-name">APEX</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Take Profit &amp; Exit Intelligence" data-id="Inteligensi Take Profit &amp; Exit">Take Profit &amp; Exit Intelligence</span></span>
 <span class="agent-desc"><span class="agent-i18n" data-en="Studies take-profit-before-stop-loss rates and exit efficiency at each horizon. Research only — it never filters, approves, or blocks a signal." data-id="Mempelajari tingkat take-profit-sebelum-stop-loss dan efisiensi exit di setiap horizon. Hanya riset — tidak pernah memfilter, menyetujui, atau memblokir sinyal.">Studies take-profit-before-stop-loss rates and exit efficiency at each horizon. Research only — it never filters, approves, or blocks a signal.</span></span>
 <span class="agent-tag soon">COMING SOON</span></article>
     <article class="agent-card is-soon" style="--agent-accent:#f87171">
-<img src="../assets/characters/agent-12.jpg" alt="" loading="lazy" width="900" height="1080">
+<img src="../characters/agent-12.jpg" alt="" loading="lazy" width="900" height="1080">
 <span class="agent-num">AGENT 12</span>
 <span class="agent-name">AEGIS</span>
 <span class="agent-spec"><span class="agent-i18n" data-en="Risk &amp; Portfolio Intelligence" data-id="Inteligensi Risiko &amp; Portofolio">Risk &amp; Portfolio Intelligence</span></span>
@@ -337,13 +339,16 @@
 (function () {
   'use strict';
   var grid = document.getElementById('agents-grid');
-  if (!grid || grid.children.length) return;
   var CONFIG_URL = '../assets/agents/config.json';
   function lang() {
     try { var l = localStorage.getItem('raptorLang'); if (l === 'id' || l === 'en') return l; } catch (e) {}
     return 'en';
   }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  /* Fallback renderer: only when the build step did NOT pre-render the
+     cards. When pre-rendered, the grid already has children and this
+     fetch is skipped — but the language wiring below must still run. */
+  if (grid && !grid.children.length) {
   fetch(CONFIG_URL).then(function (r) { return r.json(); }).then(function (cfg) {
     (cfg.agents || []).forEach(function (a) {
       var live = a.status === 'live';
@@ -357,7 +362,7 @@
       var tags = live ? '<span class="agent-tag live">LIVE</span>'
         : core ? '<span class="agent-tag core">STRATEGY CORE</span><span class="agent-tag soon">COMING SOON</span>'
         : '<span class="agent-tag soon">COMING SOON</span>';
-      el.innerHTML = '<img src="../' + esc(a.portrait) + '" alt="" loading="lazy" width="900" height="1080">'
+      el.innerHTML = '<img src="../' + esc(a.portrait.replace(/^assets\//, '')) + '" alt="" loading="lazy" width="900" height="1080">'
         + '<span class="agent-num">AGENT ' + esc(a.num) + '</span>'
         + '<span class="agent-name">' + esc(a.name) + '</span>'
         + '<span class="agent-spec">' + esc(spec) + '</span>'
@@ -365,14 +370,40 @@
       grid.appendChild(el);
     });
   }).catch(function () { /* keep the empty grid honest: no cards invented */ });
+  }
+  /* Language switch (framework v1.0.0): same raptorLang key as the
+     agent pages. Swaps chrome strings ([data-i18n], small local dict)
+     and per-agent strings (.agent-i18n, data-en/data-id) — including
+     on load, so a stored 'id' applies to the pre-rendered cards too. */
+  var DIR_I18N = {
+    en: { 'dir.skip': 'Skip to the agent directory', 'dir.eyebrow': 'RAPTOR TRADE · AI AGENTS', 'dir.title': 'Twelve agents. One intelligence team.', 'dir.sub': 'Twelve research agents power the research on this page — they only observe and report; they never filter, approve, or block a signal. One character is live today; the rest are coming soon.', 'dir.count': '1 live · 11 coming soon', 'dir.note': 'Characters are research presenters, not trading signals. Every agent page carries its evidence and its limitations.', 'nav.dashboard': 'Dashboard', 'nav.research': 'Research', 'nav.agents': 'AI Agents', 'lang.label': 'Language', 'footer.motto': 'OBSERVE. VERIFY. DECIDE.', 'footer.disclaimer': 'Research only — this page never filters, approves, or blocks a signal. Nothing here is financial advice.' },
+    id: { 'dir.skip': 'Lewati ke direktori agent', 'dir.eyebrow': 'RAPTOR TRADE · AGEN AI', 'dir.title': 'Dua belas agent. Satu tim intelijen.', 'dir.sub': 'Dua belas agent riset menggerakkan riset di halaman ini — mereka hanya mengamati dan melaporkan; tidak pernah memfilter, menyetujui, atau memblokir sinyal. Satu karakter sudah live hari ini; sisanya segera hadir.', 'dir.count': '1 live · 11 segera hadir', 'dir.note': 'Karakter adalah presenter riset, bukan sinyal trading. Setiap halaman agent membawa bukti dan keterbatasannya.', 'nav.dashboard': 'Dashboard', 'nav.research': 'Riset', 'nav.agents': 'Agen AI', 'lang.label': 'Bahasa', 'footer.motto': 'AMATI. VERIFIKASI. PUTUSKAN.', 'footer.disclaimer': 'Hanya riset — halaman ini tidak pernah memfilter, menyetujui, atau memblokir sinyal. Bukan nasihat finansial.' }
+  };
+  function applyDirI18n() {
+    var l = lang();
+    var dict = DIR_I18N[l] || DIR_I18N.en;
+    try { document.documentElement.lang = l; } catch (e) {}
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+      var v = dict[el.getAttribute('data-i18n')];
+      if (v != null) el.textContent = v;
+    });
+    document.querySelectorAll('.agent-i18n[data-en]').forEach(function (el) {
+      var v = l === 'id' ? (el.getAttribute('data-id') || el.getAttribute('data-en')) : el.getAttribute('data-en');
+      if (v != null) el.textContent = v;
+    });
+    document.querySelectorAll('#lang-switch [data-lang]').forEach(function (b) {
+      var on = b.getAttribute('data-lang') === l;
+      b.classList.toggle('active', on); b.setAttribute('aria-pressed', String(on));
+    });
+  }
   document.getElementById('lang-switch').addEventListener('click', function (e) {
     var btn = e.target.closest('[data-lang]');
     if (!btn) return;
     try { localStorage.setItem('raptorLang', btn.getAttribute('data-lang')); } catch (err) {}
-    document.querySelectorAll('#lang-switch [data-lang]').forEach(function (b) {
-      var on = b === btn; b.classList.toggle('active', on); b.setAttribute('aria-pressed', String(on));
-    });
+    applyDirI18n();
+    try { window.dispatchEvent(new CustomEvent('raptor:lang', { detail: { lang: btn.getAttribute('data-lang') } })); } catch (err2) {}
   });
+  applyDirI18n();
 })();
 </script>
 </body>

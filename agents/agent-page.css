@@ -201,12 +201,12 @@ code { font-size: .86em; background: rgba(0, 0, 0, .35); padding: 0 .3em; border
 .agent-section .facts dt { font-weight: 700; font-size: .9rem; color: var(--text-1); }
 .agent-section .facts dd { margin: 2px 0 0; font-size: .9rem; color: var(--text-2); }
 .agent-section .facts dd.src { color: var(--text-3); font-size: .76rem; margin-top: 4px; }
-.agent-section .kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
+.agent-section .kpis { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; margin-top: 4px; }
 .agent-section .kpi { background: var(--bg-2); border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
 .agent-section .kpi-wide { grid-column: 1 / -1; }
 .agent-section .kpi-label { margin: 0; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--text-2); }
 .agent-section .kpi-value { margin: 4px 0 2px; font-size: 1.25rem; font-weight: 800; line-height: 1.2; color: var(--text-1); }
-.agent-section .kpi-sub { margin: 0; font-size: .82rem; color: var(--text-2); }
+.agent-section .kpi-sub { margin: 0; font-size: .82rem; color: var(--text-2); overflow-wrap: anywhere; word-break: break-word; }
 .agent-section .panel-foot { color: var(--text-3); font-size: .8rem; margin: 14px 0 0; }
 .agent-section .chip { display: inline-block; font-size: .76rem; font-weight: 700; letter-spacing: .04em; padding: 4px 10px; border-radius: 999px; background: var(--bg-2); border: 1px solid var(--line-strong); color: var(--text-1); }
 .agent-section .chip-accent { border-color: var(--agent-accent); color: var(--text-1); background: color-mix(in srgb, var(--agent-accent) 14%, transparent); }
@@ -218,6 +218,7 @@ code { font-size: .86em; background: rgba(0, 0, 0, .35); padding: 0 .3em; border
 .roster-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
 .roster h2 { margin: 0; font-size: 1.1rem; }
 .roster-count { margin: 0; color: var(--text-2); font-size: .82rem; }
+.roster-status { margin: 8px 0 0; color: var(--text-2); font-size: .88rem; min-height: 1.2em; }
 .roster-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
 .agent-btn, a.agent-btn {
   display: block; width: 100%; padding: 0; cursor: pointer; min-width: 0; text-decoration: none;
@@ -293,7 +294,7 @@ html.motion-off *, html.motion-off *::before, html.motion-off *::after { animati
   .roster-grid { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 6px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
   .agent-btn { flex: 0 0 112px; scroll-snap-align: start; }
   .agents-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .agent-section .kpis { grid-template-columns: 1fr 1fr; }
+  .agent-section .kpis { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 }
 
 /* ---------- small phones ---------- */
@@ -314,7 +315,7 @@ html.motion-off *, html.motion-off *::before, html.motion-off *::after { animati
   .stage-hint { font-size: .72rem; padding: 5px 10px; max-width: 94%; white-space: normal; text-align: center; }
   .agent-btn { flex-basis: 104px; }
   .agent-section { padding: 14px; }
-  .agent-section .kpis { grid-template-columns: 1fr; }
+  .agent-section .kpis { grid-template-columns: minmax(0, 1fr); }
   .agent-section .kpi-wide { grid-column: auto; }
   .agents-grid { grid-template-columns: 1fr; }
   .roster { padding: 12px; }

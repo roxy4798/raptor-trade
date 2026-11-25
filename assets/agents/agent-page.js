@@ -214,7 +214,7 @@
       el.setAttribute('aria-label', a.num + ' ' + a.name + (live ? ', live' : core ? ', strategy core, coming soon' : ', coming soon — not rigged yet'));
       if (live) el.href = '../' + a.slug + '/';
       var img = document.createElement('img');
-      img.src = '../../assets/' + a.portrait;
+      img.src = '../../' + a.portrait.replace(/^assets\//, '');
       img.alt = '';
       img.loading = 'lazy';
       img.decoding = 'async';
@@ -235,11 +235,29 @@
       el.appendChild(meta);
       if (!live) {
         el.addEventListener('click', function () {
-          var note = document.querySelector('.roster-note');
+          var status = document.getElementById('roster-status');
+          var note = status || document.querySelector('.roster-note');
           if (note) note.textContent = t('roster.soonNote', { name: a.name });
         });
       }
       grid.appendChild(el);
+    });
+  }
+  /* ---------------- roster strip: wire pre-rendered buttons ----------------
+     The build step pre-renders {{ROSTER_HTML}}; buildRoster() above only
+     covers the empty-grid fallback. Pre-rendered coming-soon buttons
+     need the same honest feedback on click (they never navigate). */
+  function wireRosterButtons() {
+    var grid = $('roster-grid');
+    if (!grid) return;
+    Array.prototype.forEach.call(grid.querySelectorAll('.agent-btn.coming-soon'), function (btn) {
+      btn.addEventListener('click', function () {
+        var nameEl = btn.querySelector('.agent-name');
+        var name = nameEl ? nameEl.textContent : '';
+        var status = document.getElementById('roster-status');
+        var note = status || document.querySelector('.roster-note');
+        if (note) note.textContent = t('roster.soonNote', { name: name });
+      });
     });
   }
   function loadRoster() {
@@ -824,6 +842,7 @@
     initDevPanel();
     initPausePlumbing();
     loadRoster();
+    wireRosterButtons();
     tryLoadRive(); // lazy: the .riv is fetched only when its agent page opens
     playEntrance();
   }

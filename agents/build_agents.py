@@ -269,12 +269,14 @@ def roster_count_en(agents) -> str:
 def build_roster(agents, current_slug: str) -> str:
     """12-agent roster strip for an agent page. Shape mirrors the
     client-side fallback in agent-page.js buildRoster() (same classes,
-    same tags), except image URLs use the correct path: the config
-    portrait already starts with 'assets/', so the page-relative
-    prefix is '../../' (not '../../assets/'). RAPTOR carries BOTH the
-    STRATEGY CORE and the COMING SOON tag (FRAMEWORK.md), where the
-    JS fallback shows only one — the pre-rendered strip is what
-    ships, so the honest two-tag form wins."""
+    same tags). Portraits resolve to ../../characters/agent-NN.jpg:
+    the config portrait already starts with 'assets/', so
+    _portrait_rel() strips that one leading segment (emitting the
+    config value verbatim would give the broken
+    ../../assets/characters/...). RAPTOR carries BOTH the STRATEGY
+    CORE and the COMING SOON tag (FRAMEWORK.md), where the JS fallback
+    shows only one — the pre-rendered strip is what ships, so the
+    honest two-tag form wins."""
     out = []
     for a in agents:
         slug = a.get("slug", "")
@@ -282,7 +284,7 @@ def build_roster(agents, current_slug: str) -> str:
         live = status == "live"
         core = status == "strategy_core"
         current = slug == current_slug
-        img = (f'<img src="../../{esc(a.get("portrait", ""))}" alt="" '
+        img = (f'<img src="../../{esc(_portrait_rel(a))}" alt="" '
                f'loading="lazy" decoding="async" width="450" height="540">')
         if core:
             tags = ('<span class="agent-tag core">STRATEGY CORE</span>'
@@ -321,15 +323,16 @@ def build_roster(agents, current_slug: str) -> str:
 def build_directory_cards(agents) -> str:
     """12 cards for /agents/. Live agents link to their page; the rest
     are <article> (no link, no dead page). RAPTOR additionally shows
-    STRATEGY CORE. Portraits resolve to ../assets/characters/... from
-    dist/agents/index.html."""
+    STRATEGY CORE. Portraits resolve to ../characters/... from
+    dist/agents/index.html (config portrait has its leading 'assets/'
+    stripped by _portrait_rel())."""
     out = []
     for a in agents:
         slug = a.get("slug", "")
         status = a.get("status", "coming_soon")
         live = status == "live"
         core = status == "strategy_core"
-        img = (f'<img src="../{esc(a.get("portrait", ""))}" alt="" '
+        img = (f'<img src="../{esc(_portrait_rel(a))}" alt="" '
                f'loading="lazy" width="900" height="1080">')
         spec = bi(a.get("specialization_en", ""), a.get("specialization_id", ""))
         desc = bi(a.get("desc_en", ""), a.get("desc_id", ""))
@@ -371,13 +374,14 @@ def _check_no_placeholders(text: str, where: str) -> None:
 
 
 def _portrait_rel(agent: dict) -> str:
-    """{{PORTRAIT_PATH}} as the template concatenates it:
-    {{ASSET_BASE}}{{PORTRAIT_PATH}} must yield
-    ../../assets/characters/agent-NN.jpg. The config portrait already
-    starts with 'assets/', so strip that one leading segment here —
-    emitting the config value verbatim would produce the broken
-    ../../assets/assets/characters/... (framework-contract bug found
-    26 Nov 2026; see changes-prism-page.md)."""
+    """{{PORTRAIT_PATH}} as the templates concatenate it:
+    {{ROOT_BASE}}{{PORTRAIT_PATH}} must yield
+    ../../characters/agent-NN.jpg on an agent page (../characters/
+    on the directory page). The config portrait already starts with
+    'assets/', so strip that one leading segment here — emitting the
+    config value verbatim would produce the broken
+    ../../assets/characters/... (characters/ lives at the dist root,
+    not under dist/assets/)."""
     p = agent.get("portrait", "")
     if p.startswith("assets/"):
         p = p[len("assets/"):]
@@ -422,7 +426,8 @@ def render_agent_page(template: str, agent: dict, cfg: dict,
         "RIV_PATH": rive or "",
         "STATE_MACHINE": agent.get("state_machine") or "",
         "ASSET_BASE": "../../assets/",
-        "SITE_BASE": "../",
+        "ROOT_BASE": "../../",
+        "SITE_BASE": "../../",
         "SECTIONS_HTML": sections_html,
         "ROSTER_HTML": roster_html,
         "ROSTER_COUNT_EN": roster_count_en(cfg.get("agents", [])),
@@ -1420,6 +1425,7 @@ def build_all(dist_dir, config_path, research_state_dir):
     agents_out.mkdir(parents=True, exist_ok=True)
     dir_html = (dir_template
                 .replace("{{ASSET_BASE}}", "../assets/")
+                .replace("{{ROOT_BASE}}", "../")
                 .replace("{{SITE_BASE}}", "../")
                 .replace("{{AGENT_CARDS_HTML}}", build_directory_cards(agents))
                 .replace("{{CONFIG_URL}}", "../assets/agents/config.json"))
