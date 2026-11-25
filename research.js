@@ -3336,9 +3336,13 @@
         "</span></li>" +
       "<li><span>Discovery / validation closes</span>" +
         "<span class='num'>" +
-        (IG.discovery_closes == null ? "—" : IG.discovery_closes) +
+        (Array.isArray(IG.discovery_closes) ?
+          IG.discovery_closes.length :
+          (IG.discovery_closes == null ? "—" : IG.discovery_closes)) +
         " / " +
-        (IG.validation_closes == null ? "—" : IG.validation_closes) +
+        (Array.isArray(IG.validation_closes) ?
+          IG.validation_closes.length :
+          (IG.validation_closes == null ? "—" : IG.validation_closes)) +
         "</span></li>" +
       "<li><span>Flood close share of replay</span>" +
         "<span class='num'>" +
