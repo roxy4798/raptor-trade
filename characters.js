@@ -28,15 +28,22 @@
     if (io) io.observe(slot);
   }
 
-  /* Short skill name per agent — shown on the portrait itself so
-     every character carries its name wherever it appears
-     (Raka 25 Nov 2026: "Setiap karakternya harus muncul namanya"). */
-  var NAMES = {
-    "01": "BREAKOUT", "02": "REVERSAL", "03": "ORDER FLOW",
-    "04": "MARKET REGIME", "05": "LIQUIDITY", "06": "PERFORMANCE",
-    "07": "PUMP IGNITION", "08": "MISSED OPPORTUNITY",
-    "09": "FILTER DISCOVERY", "10": "VALIDATION",
-    "11": "TAKE PROFIT & EXIT", "12": "RISK & PORTFOLIO"
+  /* Personal identity per agent (Raka 25 Nov 2026 19:50 WIB — approved
+     personal names; name = primary identity, specialization = subtitle).
+     color = the agent's canonical color, used for its name everywhere. */
+  var IDENTITY = {
+    "01": { name: "AXIOM",   short: "BREAKOUT",           spec: "Breakout Intelligence",               color: "#22d3ee" },
+    "02": { name: "VEX",     short: "REVERSAL",           spec: "Reversal Intelligence",               color: "#a78bfa" },
+    "03": { name: "FLUX",    short: "ORDER FLOW",         spec: "Order Flow Intelligence",             color: "#4ade80" },
+    "04": { name: "ATLAS",   short: "MARKET REGIME",      spec: "Market Regime Intelligence",          color: "#facc15" },
+    "05": { name: "NEXUS",   short: "LIQUIDITY",          spec: "Liquidity Intelligence",              color: "#60a5fa" },
+    "06": { name: "SYNAPSE", short: "PERFORMANCE",        spec: "Performance Learning",                color: "#fb7185" },
+    "07": { name: "RAPTOR",  short: "PUMP IGNITION",      spec: "Pump Ignition Intelligence",          color: "#fcd34d" },
+    "08": { name: "SPECTRE", short: "MISSED OPPORTUNITY", spec: "Missed Opportunity Intelligence",     color: "#a3e635" },
+    "09": { name: "PRISM",   short: "FILTER DISCOVERY",   spec: "Filter Discovery & Optimization",     color: "#e879f9" },
+    "10": { name: "VERITAS", short: "VALIDATION",         spec: "Independent Strategy Validation",     color: "#cbd5e1" },
+    "11": { name: "APEX",    short: "TAKE PROFIT & EXIT", spec: "Take Profit & Exit Intelligence",     color: "#2dd4bf" },
+    "12": { name: "AEGIS",   short: "RISK & PORTFOLIO",    spec: "Risk & Portfolio Intelligence",       color: "#f87171" }
   };
 
   function renderSlot(slot) {
@@ -55,18 +62,40 @@
     img.style.setProperty("--del", (-(uid % 3)) + "s");
     slot.appendChild(img);
     /* Name on the character: a ribbon across the bottom of team
-       portraits; a nameplate under section-head portraits. Coverage
-       minis already sit next to the agent name in their row. */
-    var label = NAMES[n] || "";
-    if (label && slot.classList.contains("agent-char--team")) {
+       portraits (personal name, primary + specialization subtitle);
+       a nameplate under section-head portraits (AGENT NN — NAME +
+       specialization subtitle). Coverage minis already sit next to
+       the agent name in their row. */
+    var id = IDENTITY[n] || null;
+    if (id && slot.classList.contains("agent-char--team")) {
       var rib = document.createElement("span");
       rib.className = "char-ribbon";
-      rib.textContent = label;
+      rib.style.setProperty("--rac", id.color);
+      var rn = document.createElement("span");
+      rn.className = "rib-name";
+      rn.textContent = id.name;
+      var rs = document.createElement("span");
+      rs.className = "rib-spec";
+      rs.textContent = id.short;
+      rib.appendChild(rn);
+      rib.appendChild(rs);
       slot.appendChild(rib);
-    } else if (label && slot.classList.contains("agent-char--head")) {
+    } else if (id && slot.classList.contains("agent-char--head")) {
       var plate = document.createElement("span");
       plate.className = "char-nameplate";
-      plate.textContent = "AGENT " + n + " — " + label;
+      plate.style.setProperty("--rac", id.color);
+      var pt = document.createElement("span");
+      pt.className = "plate-tag";
+      pt.textContent = "AGENT " + n + " — ";
+      var pn = document.createElement("span");
+      pn.className = "plate-name";
+      pn.textContent = id.name;
+      var ps = document.createElement("span");
+      ps.className = "plate-spec";
+      ps.textContent = id.spec;
+      plate.appendChild(pt);
+      plate.appendChild(pn);
+      plate.appendChild(ps);
       slot.parentNode.insertBefore(plate, slot.nextSibling);
     }
     observe(slot);
@@ -87,6 +116,8 @@
      Motion mini animate() runner-up; Lottie rejected (can't animate
      a raster JPG). */
   var gsapReady = false;
+  var enterIO = null; /* shared entrance observer (v55): fires the
+    gsap.to only when a slot truly enters the viewport */
   function motionOK() {
     if (document.documentElement.classList.contains("motion-off")) return false;
     if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
@@ -115,12 +146,52 @@
     var dir = isHead ? 1 : -1; /* head slots live on the right: run in from the right */
     var delay = isTeam ? ((uid - 1) % 12) * 0.05 : 0; /* team cascade, one by one */
     slot.dataset.entered = "";
-    window.gsap.from(slot, {
-      x: dir * dist, rotation: dir * 6, opacity: 0,
-      duration: 0.7, delay: delay, ease: "back.out(1.4)",
-      scrollTrigger: { trigger: slot, start: "top 88%", once: true },
-      onComplete: function () { slot.dataset.entered = "1"; }
-    });
+    /* v55 — the dash-in never showed, two causes found by frame
+       sampling (25 Nov 2026): (1) gsap.from() + ScrollTrigger never
+       rendered its start pose before the trigger fired; (2) after
+       fixing that with gsap.set + gsap.to, the ScrollTrigger STILL
+       fired at page load — while the research data was still
+       loading, the page was short, so all 18 team/head slots sat
+       inside the "top 88%" band; the once:true triggers fired +
+       killed themselves and the tween completed before the user ever
+       scrolled (probe: entered='1', 0 active tweens, only the 5
+       late-rendered coverage triggers left). Fix: keep the gsap.set
+       start pose, but trigger the gsap.to with an Intersection-
+       Observer — the same pattern the page already uses for .reveal
+       and .char-paused — which fires only when the slot truly
+       enters the viewport, however tall the page grows. */
+    window.gsap.set(slot, { x: dir * dist, rotation: dir * 6, opacity: 0 });
+    if (!("IntersectionObserver" in window)) {
+      /* No observer: show the portrait, no entrance. */
+      window.gsap.set(slot, { clearProps: "all" });
+      slot.dataset.entered = "1";
+    } else {
+      if (!enterIO) {
+        enterIO = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) {
+            if (!en.isIntersecting) return;
+            var t = en.target;
+            var s = t.classList.contains("agent-char") ? t : t.querySelector(".agent-char");
+            if (!s || s.dataset.entered === "1") return;
+            enterIO.unobserve(t);
+            var d = s.classList.contains("agent-char--team") ? ((+s.getAttribute("data-agent") - 1) % 12) * 0.05 : 0;
+            window.gsap.to(s, {
+              x: 0, rotation: 0, opacity: 1,
+              duration: 0.7, delay: d, ease: "back.out(1.4)",
+              onComplete: function () { s.dataset.entered = "1"; }
+            });
+          });
+        }, { rootMargin: "0px 0px -12% 0px", threshold: 0 });
+      }
+      /* Observe the slot's PARENT (team card / section head / coverage
+         row), not the slot itself: a slot parked at ±120px can sit
+         entirely outside main's overflow-x:clip bounds (the head
+         slots sit +120px right of main's edge), so its own rect never
+         intersects the viewport and an observer on the slot would
+         never fire — the head portraits stayed invisible. The parent
+         is always inside main, so it intersects reliably. */
+      enterIO.observe(slot.parentNode || slot);
+    }
     var hop = function () {
       if (!motionOK() || slot.dataset.entered !== "1") return;
       window.gsap.to(slot, { y: -10, rotation: 2, duration: 0.35, ease: "back.out(2)", yoyo: true, repeat: 1, overwrite: "auto" });
