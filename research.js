@@ -3294,8 +3294,10 @@
   function renderIgnition() {
     var IG = ((DATA.learnings || {}).ignition_research) || null;
     var ids = ["ignition-overview", "ignition-oi", "ignition-squeeze",
-               "ignition-features", "ignition-hypotheses",
-               "ignition-recommendations"];
+               "ignition-features", "ignition-nextcandle",
+               "ignition-pump", "ignition-structure",
+               "ignition-hypotheses", "ignition-hypotheses-ph",
+               "ignition-entry", "ignition-recommendations"];
     if (!IG || IG.status === "ERROR") {
       ids.forEach(function (id) {
         var el = $(id);
@@ -3327,6 +3329,9 @@
     /* Overview: coverage */
     $("ignition-overview").innerHTML =
       '<ul class="missing-list">' +
+      "<li><span>Research version</span><span class='num'>" +
+        (IG.version == null ? "—" : esc(String(IG.version))) +
+        "</span></li>" +
       "<li><span>Signals evaluated (+4H)</span><span class='num'>" +
         (IG.n_evaluated_h4 == null ? "—" : IG.n_evaluated_h4) +
         "</span></li>" +
