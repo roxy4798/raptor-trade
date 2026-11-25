@@ -69,6 +69,10 @@ main{max-width:1240px;margin:0 auto;padding:28px 28px 64px;position:relative;z-i
 .stat-value{font-family:var(--font-mono);font-size:28px;font-weight:600;margin:6px 0 2px;text-shadow:0 0 22px rgba(185,243,138,.22)}
 .stat-note{font-size:12.5px;color:var(--text-2);margin:0}
 .panel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-top:12px}
+/* v44: section 07 pairs very uneven cards (e.g. Outcome classes next
+   to the 23-row per-close table) — equal-height stretch leaves big
+   blank holes in the shorter card. Natural height, section 07 only. */
+#ridethewave .panel-grid{align-items:start}
 .panel{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-1);margin-top:12px}
 .panel-grid .panel{margin-top:0}
 .panel h3{margin:0 0 4px;font-size:16px}
