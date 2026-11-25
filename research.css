@@ -75,6 +75,15 @@ main{max-width:1240px;margin:0 auto;padding:28px 28px 64px;position:relative;z-i
 #ridethewave .panel-grid{align-items:start}
 #exit .panel-grid{align-items:start}
 #joint .panel-grid{align-items:start}
+/* v46 patch (live check 12:23–12:25 WIB): hypothesis rows use
+   .missing-list flex rows; a long hypothesis text + the
+   "awaiting_validation (n=0/0)" status could push the status past
+   the panel edge (JH5 clipped at desktop width). Let the row wrap
+   and the text shrink — the status keeps its own line instead of
+   clipping. Applies to all three hypothesis lists (07/08/09). */
+#rtw-hypotheses.missing-list li,#exit-hypotheses.missing-list li,#joint-hypotheses.missing-list li{flex-wrap:wrap}
+#rtw-hypotheses.missing-list li>span:first-child,#exit-hypotheses.missing-list li>span:first-child,#joint-hypotheses.missing-list li>span:first-child{flex:1 1 220px;min-width:0}
+#rtw-hypotheses.missing-list .num,#exit-hypotheses.missing-list .num,#joint-hypotheses.missing-list .num{flex:0 0 auto;white-space:nowrap}
 .panel{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-1);margin-top:12px}
 .panel-grid .panel{margin-top:0}
 .panel h3{margin:0 0 4px;font-size:16px}

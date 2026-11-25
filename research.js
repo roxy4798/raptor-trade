@@ -108,7 +108,7 @@
       "rail.exit": "Take Profit & Exit",
       "sec.exit.kicker": "08 — Take Profit & Exit",
       "sec.exit.title": "Agent 11 — Take Profit & Exit Intelligence",
-      "sec.exit.sub": "What happens after a LONG entry: how far price can go, how much of it a realistic exit captures, and how long to hold. Exit net is round-trip (gross minus one full spread + 8 bps fee). If one 4H bar touches both a TP and a stop loss, the stop is assumed hit first (conservative) and counted as UNKNOWN ordering. Everything here is research — no exit rule filters or delays a signal.",
+      "sec.exit.sub": "What happens after a LONG entry: how far price can go, how much of it a realistic exit captures, and how long to hold. Exit net is round-trip (gross minus one full spread + 8 bps fee). If one 4H bar touches both a TP and a stop loss, the stop is assumed hit first (conservative) and counted as unknown ordering. Everything here is research — no exit rule filters or delays a signal.",
       "panel.exitPrimary": "Primary metrics (exit net, round-trip)",
       "panel.exitTp": "TP hit rates (MFE-based)",
       "panel.exitStrategies": "Exit strategy comparison (+12H)",
@@ -122,7 +122,7 @@
       "exit.holdH12": "HOLD mean net +12H (round-trip)",
       "exit.bestH12": "Best +12H strategy (mean net)",
       "exit.tpNote": "Hit = the highest high within the horizon reached the target. Hit-then-positive = hit and the horizon still closed at or above entry. +1W has no mature signals yet (first matures 28 Nov).",
-      "exit.stratNote": "Fixed TP and ATR TP exit at the TP level when touched, or at the −2% / −1×ATR stop when touched first. If one bar touches both, the stop is assumed first (conservative) — see UNKNOWN. Trailing and exhaustion exits use bar closes only, so ordering never applies. Best by mean net is a description, not a validated recommendation.",
+      "exit.stratNote": "Fixed TP and ATR TP exit at the TP level when touched, or at the −2% / −1×ATR stop when touched first. If one bar touches both, the stop is assumed first (conservative) — see Unknown order. Trailing and exhaustion exits use bar closes only, so ordering never applies. Best by mean net is a description, not a validated recommendation.",
       "exit.holdNote": "Mean round-trip net of exiting at the close of bar k after entry (1 bar = +4H, 3 = +12H, 6 = +1D, 12 = +2D, 18 = +3D, 42 = +1W). The best bar is the highest mean — with the flood dominating the sample, treat it as an observation, not an optimal holding rule.",
       "exit.gbNote": "Giveback = MFE minus the realized HOLD return: how much of the peak was given back by holding to the horizon close. Time-to-max-close counts only signals with a full 42-bar path (none mature yet).",
       "exit.entryNote": "TP+5% hit rate at +12H by entry characteristic. Buckets with n<5 show no rate. A higher hit rate for late breakouts (margin 5%+) does not mean late entries are better — they also rose the most before the signal.",
@@ -507,7 +507,7 @@
       "rail.exit": "Take Profit & Exit",
       "sec.exit.kicker": "08 — Take Profit & Exit",
       "sec.exit.title": "Agent 11 — Take Profit & Exit Intelligence",
-      "sec.exit.sub": "Apa yang terjadi setelah entry LONG: sejauh mana harga bisa naik, berapa banyak yang bisa ditangkap exit realistis, dan berapa lama sebaiknya hold. Exit net adalah round-trip (gross dikurangi satu full spread + fee 8 bps). Jika satu bar 4H menyentuh TP dan stop loss sekaligus, stop diasumsikan kena dulu (konservatif) dan dihitung sebagai urutan UNKNOWN. Semua di sini adalah riset — tidak ada aturan exit yang memfilter atau menunda sinyal.",
+      "sec.exit.sub": "Apa yang terjadi setelah entry LONG: sejauh mana harga bisa naik, berapa banyak yang bisa ditangkap exit realistis, dan berapa lama sebaiknya hold. Exit net adalah round-trip (gross dikurangi satu full spread + fee 8 bps). Jika satu bar 4H menyentuh TP dan stop loss sekaligus, stop diasumsikan kena dulu (konservatif) dan dihitung sebagai urutan yang tidak diketahui. Semua di sini adalah riset — tidak ada aturan exit yang memfilter atau menunda sinyal.",
       "panel.exitPrimary": "Metrik utama (exit net, round-trip)",
       "panel.exitTp": "TP hit rate (berbasis MFE)",
       "panel.exitStrategies": "Perbandingan strategi exit (+12H)",
@@ -521,7 +521,7 @@
       "exit.holdH12": "HOLD mean net +12H (round-trip)",
       "exit.bestH12": "Strategi +12H terbaik (mean net)",
       "exit.tpNote": "Hit = high tertinggi selama horizon mencapai target. Hit-then-positive = hit dan horizon tetap tutup di atas atau sama dengan entry. +1W belum ada sinyal yang matang (pertama matang 28 Nov).",
-      "exit.stratNote": "Fixed TP dan ATR TP keluar di level TP saat tersentuh, atau di stop −2% / −1×ATR saat tersentuh duluan. Jika satu bar menyentuh keduanya, stop diasumsikan dulu (konservatif) — lihat UNKNOWN. Trailing dan exhaustion exit hanya memakai close bar, jadi urutan tidak berlaku. Terbaik menurut mean net adalah deskripsi, bukan rekomendasi tervalidasi.",
+      "exit.stratNote": "Fixed TP dan ATR TP keluar di level TP saat tersentuh, atau di stop −2% / −1×ATR saat tersentuh duluan. Jika satu bar menyentuh keduanya, stop diasumsikan dulu (konservatif) — lihat Unknown order. Trailing dan exhaustion exit hanya memakai close bar, jadi urutan tidak berlaku. Terbaik menurut mean net adalah deskripsi, bukan rekomendasi tervalidasi.",
       "exit.holdNote": "Mean net round-trip bila keluar di close bar ke-k setelah entry (1 bar = +4H, 3 = +12H, 6 = +1D, 12 = +2D, 18 = +3D, 42 = +1W). Bar terbaik adalah mean tertinggi — dengan flood mendominasi sampel, anggap ini observasi, bukan aturan hold optimal.",
       "exit.gbNote": "Giveback = MFE dikurangi return HOLD yang terealisasi: seberapa banyak puncak yang diberikan kembali karena hold sampai close horizon. Time-to-max-close hanya menghitung sinyal dengan path 42 bar penuh (belum ada yang matang).",
       "exit.entryNote": "TP+5% hit rate di +12H per karakteristik entry. Bucket dengan n<5 tidak menampilkan rate. Hit rate lebih tinggi untuk late breakout (margin 5%+) bukan berarti entry terlambat lebih baik — mereka juga sudah naik paling banyak sebelum sinyal.",
@@ -2446,7 +2446,7 @@
       "<thead><tr><th>Strategy</th><th>n</th><th>Mean net +12H</th>" +
       "<th>Median net</th><th>Positive</th><th>Profit factor</th>" +
       "<th>Avg win / loss</th><th>Max DD (pp)</th>" +
-      "<th>Close cons.</th><th>UNKNOWN</th><th>Ex-flood mean</th>" +
+      "<th>Close cons.</th><th>Unknown order</th><th>Ex-flood mean</th>" +
       "</tr></thead><tbody>" + stratRows + "</tbody></table></div>" +
       "<p class='panel-sub' style='margin-top:12px'>" +
         t("exit.stratNote") + "</p>";
