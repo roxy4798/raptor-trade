@@ -175,12 +175,17 @@
       "rail.ignition": "Pump Ignition",
       "sec.ignition.kicker": "11 — Pump Ignition",
       "sec.ignition.title": "Agent 07 — Pump Ignition Intelligence",
-      "sec.ignition.sub": "What the pre-entry picture looks like before a signal fires — squeeze, Bollinger Band width, ATR contraction, volume acceleration, price compression, momentum acceleration, and pre-breakout open interest — measured only on bars before the signal close, never after. The goal is not the biggest pump: it is the entry that is immediately followed by a rise, so a realistic small TP is reached more often. Every number here is descriptive — one close (the 23 Nov flood) dominates the sample, and hypotheses IH1–IH6 are frozen and awaiting prospective closes.",
+      "sec.ignition.sub": "What the pre-entry picture looks like before a signal fires — squeeze, Bollinger Band width, ATR contraction, volume acceleration, price compression, momentum acceleration, and pre-breakout open interest — measured only on bars before the signal close, never after. The goal is not the biggest pump: it is the entry that is immediately followed by a rise, so a realistic small TP is reached more often. Every number here is descriptive — one close (the 23 Nov flood) dominates the sample, and hypotheses IH1–IH6 are frozen and awaiting prospective closes. v1.1.0 adds the first pump candle itself: pump strength (open-to-close, vs ATR, vs the contract's own history), candle structure (body, wicks, close position, previous candle, exhaustion), and six separated next-candle rates — bullish close, positive gross, positive net, TP-before-SL, continuation failure, and reversal — with pooled, close-weighted, and ex-flood views. Hypotheses PH1–PH6 are frozen alongside IH1–IH6.",
       "panel.ignOverview": "Ignition overview — coverage",
       "panel.ignOi": "Open interest coverage",
       "panel.ignSqueeze": "Squeeze × breakout margin",
       "panel.ignFeatures": "Pre-entry features — per bucket (+4H)",
+      "panel.ignNext": "Next-candle performance — six rates, separated",
+      "panel.ignPump": "Pump strength — absolute, vs ATR, vs own history",
+      "panel.ignStruct": "Candle structure — first pump candle",
       "panel.ignHyps": "Ignition hypotheses (frozen, awaiting new closes)",
+      "panel.ignPh": "Pump-continuation hypotheses PH1–PH6 (frozen, v1.1.0)",
+      "panel.ignExec": "Entry realism — benchmark vs execution",
       "panel.ignRecos": "Ignition recommendations",
       "ign.notYet": "Pump Ignition research not built yet — the daily builder (after the 08:00 WIB risk) has not run.",
       "ign.overviewNote": "Ignition features are computed on the Shadow Lab A0 replay (436 signals, including backfill extras; production sent 390). Pre-signal bars only — a feature can never see the signal bar or anything after it.",
@@ -188,7 +193,12 @@
       "ign.sqNote": "Squeeze is the standard TTM-style definition: Bollinger Bands (20, 2σ) inside Keltner Channels (20, 1.5× ATR10). Released = squeeze at some point in the 6 bars before the signal, but not on the bar right before it. Margin band is the breakout margin: early <0.5%, late ≥5%.",
       "ign.featNote": "One row per feature bucket. Positive = share of signals with net +4H > 0. TP+1% before SL = share that touched +1% before the −2% stop. Profit factor = gross wins / gross losses; “no losses” means the bucket had no losing signal. Buckets with n<5 are shown but carry no conclusion.",
       "ign.hypNote": "IH verdicts are gap-based on validation closes (flood and later): holds needs n≥5/side and a gap ≥2pp in the expected direction. IH5 (OI rising) holds on the numbers but its falling side is 7 signals from a single close — fragile, not a finding.",
-      "ign.recoNote": "All ignition recommendations are INSUFFICIENT EVIDENCE in v1.0.0 — ignition features are measured for the first time and no hypothesis has been validated on a prospective close yet.",
+      "ign.recoNote": "All ignition recommendations are INSUFFICIENT EVIDENCE in v1.1.0 — ignition features are measured for the first time and no hypothesis has been validated on a prospective close yet.",
+      "ign.nxcNote": "Six rates, kept apart on purpose. Bullish close = the next candle closes above its own open. Positive gross = the next close is above the signal close. Positive net = gross minus one full spread + 8bps fee. Failure = 100 − positive gross (the next candle did not continue, technically). A signal can continue technically yet lose after costs — or fail technically yet end positive. Pooled is flood-dominated; close-weighted and ex-flood are the honest views.",
+      "ign.pumpNote": "Pump is the signal candle's open-to-close rise. The <1 bucket exists because production signals can pump under 1% — mostly low-volatility stock-token perps. Pump / ATR14 divides the pump by the pre-pump ATR14; pump vs own history is the percentile of the pump's size against the contract's own prior-60-bar |open-to-close| moves.",
+      "ign.structNote": "One row per bucket of the first pump candle (or the candle before it). Body-to-range, close position and wicks are shares of the candle's high−low range. RSI 4H and green streak measure momentum exhaustion before the signal. Buckets with n<5 are shown but carry no conclusion.",
+      "ign.phNote": "PH verdicts are gap-based on validation closes (flood and later): holds needs n≥5/side and a gap ≥2pp in the expected direction. PH5 (small upper wick) holds on the numbers — check its closes per side before believing it; the flood close still dominates every verdict.",
+      "ign.execNote": "The signal close is a benchmark entry, not a guaranteed fill. The execution model buys at the ask (half a spread above the close); its total cost equals the benchmark model, so the two nets differ by less than 0.02pp on every signal — the spread is already fully costed. Funding is excluded from net (measured October bounds in the funding note).",
       "rail.missed": "Missed Opportunity",
       "sec.missed.kicker": "12 — Missed Opportunity",
       "sec.missed.title": "Agent 08 — Missed Opportunity Intelligence",
@@ -657,12 +667,17 @@
       "rail.ignition": "Ignisi Pump",
       "sec.ignition.kicker": "11 — Ignisi Pump",
       "sec.ignition.title": "Agent 07 — Pump Ignition Intelligence",
-      "sec.ignition.sub": "Seperti apa gambaran pra-entry sebelum sinyal muncul — squeeze, lebar Bollinger Band, kontraksi ATR, akselerasi volume, kompresi harga, akselerasi momentum, dan open interest pra-breakout — diukur hanya dari bar sebelum close sinyal, tidak pernah sesudahnya. Tujuannya bukan pump terbesar: melainkan entry yang langsung diikuti kenaikan, supaya TP kecil yang realistis lebih sering tercapai. Semua angka di sini deskriptif — satu close (flood 23 Nov) mendominasi sampel, dan hipotesis IH1–IH6 dibekukan dan masih menunggu close prospektif.",
+      "sec.ignition.sub": "Seperti apa gambaran pra-entry sebelum sinyal muncul — squeeze, lebar Bollinger Band, kontraksi ATR, akselerasi volume, kompresi harga, akselerasi momentum, dan open interest pra-breakout — diukur hanya dari bar sebelum close sinyal, tidak pernah sesudahnya. Tujuannya bukan pump terbesar: melainkan entry yang langsung diikuti kenaikan, supaya TP kecil yang realistis lebih sering tercapai. Semua angka di sini deskriptif — satu close (flood 23 Nov) mendominasi sampel, dan hipotesis IH1–IH6 dibekukan dan masih menunggu close prospektif. v1.1.0 menambahkan candle pump pertamanya sendiri: kekuatan pump (open-to-close, vs ATR, vs histori kontrak itu sendiri), struktur candle (body, wick, close position, candle sebelumnya, exhaustion), dan enam rate candle berikutnya yang dipisah — bullish close, positive gross, positive net, TP-before-SL, continuation failure, dan reversal — dengan pandangan pooled, close-weighted, dan ex-flood. Hipotesis PH1–PH6 dibekukan bersama IH1–IH6.",
       "panel.ignOverview": "Gambaran ignisi — cakupan",
       "panel.ignOi": "Cakupan open interest",
       "panel.ignSqueeze": "Squeeze × margin breakout",
       "panel.ignFeatures": "Fitur pra-entry — per bucket (+4H)",
+      "panel.ignNext": "Performa candle berikutnya — enam rate, dipisah",
+      "panel.ignPump": "Kekuatan pump — absolut, vs ATR, vs histori sendiri",
+      "panel.ignStruct": "Struktur candle — candle pump pertama",
       "panel.ignHyps": "Hipotesis ignisi (beku, menunggu close baru)",
+      "panel.ignPh": "Hipotesis pump-continuation PH1–PH6 (beku, v1.1.0)",
+      "panel.ignExec": "Entry realistis — benchmark vs eksekusi",
       "panel.ignRecos": "Rekomendasi ignisi",
       "ign.notYet": "Riset Pump Ignition belum dibangun — builder harian (setelah risk 08:00 WIB) belum berjalan.",
       "ign.overviewNote": "Fitur ignisi dihitung pada replay A0 Shadow Lab (436 sinyal, termasuk extra backfill; produksi mengirim 390). Hanya bar pra-sinyal — sebuah fitur tidak pernah melihat bar sinyal atau apa pun sesudahnya.",
@@ -670,7 +685,12 @@
       "ign.sqNote": "Squeeze memakai definisi standar TTM-style: Bollinger Bands (20, 2σ) di dalam Keltner Channels (20, 1,5× ATR10). Released = squeeze pernah terjadi di 6 bar sebelum sinyal, tapi tidak di bar tepat sebelum sinyal. Margin band adalah margin breakout: early <0,5%, late ≥5%.",
       "ign.featNote": "Satu baris per bucket fitur. Positive = porsi sinyal dengan net +4H > 0. TP+1% before SL = porsi yang menyentuh +1% sebelum stop −2%. Profit factor = gross win / gross loss; “no losses” berarti bucket itu tidak punya sinyal yang rugi. Bucket dengan n<5 ditampilkan tapi tidak membawa kesimpulan.",
       "ign.hypNote": "Verdict IH berbasis gap pada close validasi (flood dan sesudahnya): holds butuh n≥5/sisi dan gap ≥2pp searah yang diharapkan. IH5 (OI naik) holds secara angka tapi sisi turunnya hanya 7 sinyal dari satu close — rapuh, bukan temuan.",
-      "ign.recoNote": "Semua rekomendasi ignisi masih INSUFFICIENT EVIDENCE di v1.0.0 — fitur ignisi baru pertama kali diukur dan belum ada hipotesis yang tervalidasi pada close prospektif.",
+      "ign.recoNote": "Semua rekomendasi ignisi masih INSUFFICIENT EVIDENCE di v1.1.0 — fitur ignisi baru pertama kali diukur dan belum ada hipotesis yang tervalidasi pada close prospektif.",
+      "ign.nxcNote": "Enam rate, sengaja dipisah. Bullish close = candle berikutnya close di atas open-nya sendiri. Positive gross = close berikutnya di atas close sinyal. Positive net = gross dikurangi satu spread penuh + fee 8bps. Failure = 100 − positive gross (candle berikutnya tidak melanjutkan, secara teknis). Sinyal bisa lanjut secara teknis tapi rugi setelah biaya — atau gagal secara teknis tapi tetap untung. Pooled didominasi flood; close-weighted dan ex-flood adalah pandangan yang jujur.",
+      "ign.pumpNote": "Pump adalah kenaikan open-to-close candle sinyal. Bucket <1 ada karena sinyal produksi bisa pump di bawah 1% — kebanyakan stock-token perps yang volatilitasnya rendah. Pump / ATR14 membagi pump dengan ATR14 pra-pump; pump vs histori sendiri adalah persentil ukuran pump terhadap pergerakan |open-to-close| 60 bar sebelumnya dari kontrak yang sama.",
+      "ign.structNote": "Satu baris per bucket candle pump pertama (atau candle sebelumnya). Body-to-range, close position, dan wick adalah porsi dari range high−low candle. RSI 4H dan green streak mengukur kelelahan momentum sebelum sinyal. Bucket dengan n<5 ditampilkan tapi tidak membawa kesimpulan.",
+      "ign.phNote": "Verdict PH berbasis gap pada close validasi (flood dan sesudahnya): holds butuh n≥5/sisi dan gap ≥2pp searah yang diharapkan. PH5 (upper wick kecil) holds secara angka — cek closes per sisi sebelum mempercayainya; close flood masih mendominasi setiap verdict.",
+      "ign.execNote": "Close sinyal adalah benchmark entry, bukan harga fill yang pasti tersedia. Model eksekusi membeli di ask (setengah spread di atas close); total biayanya sama dengan model benchmark, jadi kedua net berbeda kurang dari 0,02pp pada setiap sinyal — spread sudah sepenuhnya diperhitungkan. Funding tidak termasuk dalam net (batas terukur Oktober di catatan funding).",
       "rail.missed": "Peluang Terlewat",
       "sec.missed.kicker": "12 — Peluang Terlewat",
       "sec.missed.title": "Agent 08 — Missed Opportunity Intelligence",
@@ -3439,6 +3459,95 @@
       "<p class='panel-sub' style='margin-top:12px'>" +
         t("ign.featNote") + "</p>";
 
+    /* Next-candle performance (v1.1.0): six rates, separated */
+    var nc = IG.next_candle || {};
+    var ncRows = [["pooled", "Pooled (all signals)"],
+                  ["close_weighted", "Close-weighted"],
+                  ["ex_flood", "Ex-flood"]].map(function (pair) {
+      var s = nc[pair[0]] || {};
+      return "<tr><td>" + pair[1] + "</td>" +
+        "<td>" + (s.n == null ? "—" : s.n) + "</td>" +
+        "<td>" + (s.n_closes == null ? "—" : s.n_closes) + "</td>" +
+        "<td>" + pc(s.bullish_close_rate_pct, 1) + "</td>" +
+        "<td>" + pc(s.positive_gross_rate_pct, 1) + "</td>" +
+        "<td>" + pc(s.positive_net_rate_pct, 1) + "</td>" +
+        "<td>" + pc(s.continuation_failure_rate_pct, 1) + "</td>" +
+        "<td>" + pc(s.reversal_rate_pct, 1) + "</td>" +
+        "<td>" + pc(s.tp_before_sl_1pct_pct, 1) + "</td>" +
+        "<td>" + pc(s.mean_gross_pct) + "</td>" +
+        "<td>" + pc(s.mean_net_rt_pct) + "</td>" +
+        "<td>" + pc(s.mean_net_exec_pct) + "</td>" +
+        "<td>" + pc(s.median_mfe_pct) + "</td>" +
+        "<td>" + pc(s.median_mae_pct) + "</td>" +
+        "<td>" + pfCell(s.profit_factor) + "</td></tr>";
+    }).join("");
+    $("ignition-nextcandle").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>View</th><th>n</th><th>Closes</th>" +
+      "<th>Bullish close</th><th>+Gross</th><th>+Net</th>" +
+      "<th>Failure</th><th>Reversal</th><th>TP+1% before SL</th>" +
+      "<th>Mean gross</th><th>Mean net</th><th>Mean net exec</th>" +
+      "<th>Median MFE</th><th>Median MAE</th><th>Profit factor</th>" +
+      "</tr></thead><tbody>" + ncRows +
+      "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("ign.nxcNote") + "</p>";
+
+    /* Pump strength + candle structure (v1.1.0) */
+    var bucketCols = function (r) {
+      return "<td>" + (r.n == null ? "—" : r.n) + "</td>" +
+        "<td>" + (r.n_closes == null ? "—" : r.n_closes) + "</td>" +
+        "<td>" + pc(r.bullish_close_rate_pct, 1) + "</td>" +
+        "<td>" + pc(r.positive_gross_rate_pct, 1) + "</td>" +
+        "<td>" + pc(r.positive_net_rate_pct, 1) + "</td>" +
+        "<td>" + pc(r.continuation_failure_rate_pct, 1) + "</td>" +
+        "<td>" + pc(r.tp_before_sl_1pct_pct, 1) + "</td>" +
+        "<td>" + pc(r.mean_net_rt_pct) + "</td>" +
+        "<td>" + pc(r.median_mfe_pct) + "</td>" +
+        "<td>" + pc(r.median_mae_pct) + "</td>" +
+        "<td>" + pfCell(r.profit_factor) + "</td>";
+    };
+    var bucketHead = "<thead><tr><th>Feature</th><th>Bucket</th>" +
+      "<th>n</th><th>Closes</th><th>Bullish close</th>" +
+      "<th>+Gross</th><th>+Net</th><th>Failure</th>" +
+      "<th>TP+1% before SL</th><th>Mean net +4H</th>" +
+      "<th>Median MFE</th><th>Median MAE</th>" +
+      "<th>Profit factor</th></tr></thead>";
+    var bucketTable = function (featList, labels) {
+      var rows = featList.map(function (f) {
+        var rs = ((IG.features || {})[f]) || [];
+        return rs.map(function (r) {
+          return "<tr><td>" + esc(labels[f] || f) + "</td>" +
+            "<td>" + esc(String(r.bucket)) + "</td>" +
+            bucketCols(r) + "</tr>";
+        }).join("");
+      }).join("");
+      return '<div style="overflow-x:auto"><table class="version-table">' +
+        bucketHead + "<tbody>" + rows + "</tbody></table></div>";
+    };
+    $("ignition-pump").innerHTML =
+      bucketTable(["pump_abs_pct", "pump_atr_mult", "pump_vol_pctile"],
+        {pump_abs_pct: "Pump (open-to-close)",
+         pump_atr_mult: "Pump / ATR14",
+         pump_vol_pctile: "Pump vs own history (pctile)"}) +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("ign.pumpNote") + "</p>";
+    $("ignition-structure").innerHTML =
+      bucketTable(["body_to_range", "close_position", "upper_wick_pct",
+                   "lower_wick_pct", "prev_bullish", "prev_body_pct",
+                   "margin_pct", "rsi_4h", "green_streak"],
+        {body_to_range: "Body-to-range",
+         close_position: "Close position",
+         upper_wick_pct: "Upper wick (% of range)",
+         lower_wick_pct: "Lower wick (% of range)",
+         prev_bullish: "Previous candle",
+         prev_body_pct: "Previous candle body",
+         margin_pct: "Breakout margin",
+         rsi_4h: "RSI 4H (exhaustion)",
+         green_streak: "Green streak (bars)"}) +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("ign.structNote") + "</p>";
+
     /* Hypotheses IH1–IH6 */
     var hyps = (IG.hypotheses || []).map(function (h) {
       var v = h.validation_after_created || {};
@@ -3458,6 +3567,44 @@
       '<ul class="missing-list">' + hyps + "</ul>" +
       "<p class='panel-sub' style='margin-top:12px'>" +
         t("ign.hypNote") + "</p>";
+
+    /* Hypotheses PH1–PH6 (v1.1.0) */
+    var phHyps = (IG.hypotheses_ph || []).map(function (h) {
+      var v = h.validation_after_created || {};
+      var extra = "";
+      if (v.n_a != null && v.n_b != null) {
+        extra = " (n=" + v.n_a + "/" + v.n_b;
+        if (v.n_closes_a != null) {
+          extra += ", closes=" + v.n_closes_a + "/" + v.n_closes_b;
+        }
+        extra += ")";
+      }
+      return "<li><span>" + esc(h.id) + " — " +
+        esc(bi(h.text, h.text_en)) + "</span><span class='num'>" +
+        esc(h.status || "") + esc(extra) + "</span></li>";
+    }).join("");
+    $("ignition-hypotheses-ph").innerHTML =
+      '<ul class="missing-list">' + phHyps + "</ul>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("ign.phNote") + "</p>";
+
+    /* Entry realism (v1.1.0) */
+    var er = IG.entry_realism || {};
+    $("ignition-entry").innerHTML =
+      "<p class='panel-sub' style='margin:0 0 8px'><b>Benchmark:</b> " +
+        esc(bi(er.benchmark_entry, er.benchmark_entry_en) || "—") +
+        "</p>" +
+      "<p class='panel-sub' style='margin:0 0 8px'><b>Execution:</b> " +
+        esc(bi(er.execution_entry, er.execution_entry_en) || "—") +
+        "</p>" +
+      "<p class='panel-sub' style='margin:0 0 8px'><b>Slippage scenario:</b> +" +
+        (er.slippage_scenario_bps == null ?
+          "—" : er.slippage_scenario_bps) +
+        " bps — " + esc(bi(er.note, er.note_en) || "") + "</p>" +
+      "<p class='panel-sub' style='margin:0'><b>Funding:</b> " +
+        esc(bi(er.funding_note, er.funding_note_en) || "—") + "</p>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("ign.execNote") + "</p>";
 
     /* Recommendations */
     var recos = (IG.recommendations || []).map(function (r) {
