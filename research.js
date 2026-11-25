@@ -108,7 +108,7 @@
       "rail.exit": "Take Profit & Exit",
       "sec.exit.kicker": "08 — Take Profit & Exit",
       "sec.exit.title": "Agent 11 — Take Profit & Exit Intelligence",
-      "sec.exit.sub": "What happens after a LONG entry: how far price can go, how much of it a realistic exit captures, and how long to hold. Exit net is round-trip (gross minus twice spread + 8 bps fee). If one 4H bar touches both a TP and a stop loss, the stop is assumed hit first (conservative) and counted as UNKNOWN ordering. Everything here is research — no exit rule filters or delays a signal.",
+      "sec.exit.sub": "What happens after a LONG entry: how far price can go, how much of it a realistic exit captures, and how long to hold. Exit net is round-trip (gross minus one full spread + 8 bps fee). If one 4H bar touches both a TP and a stop loss, the stop is assumed hit first (conservative) and counted as UNKNOWN ordering. Everything here is research — no exit rule filters or delays a signal.",
       "panel.exitPrimary": "Primary metrics (exit net, round-trip)",
       "panel.exitTp": "TP hit rates (MFE-based)",
       "panel.exitStrategies": "Exit strategy comparison (+12H)",
@@ -128,6 +128,21 @@
       "exit.entryNote": "TP+5% hit rate at +12H by entry characteristic. Buckets with n<5 show no rate. A higher hit rate for late breakouts (margin 5%+) does not mean late entries are better — they also rose the most before the signal.",
       "exit.recoNote": "Every exit recommendation carries its evidence, sample size, limitations, and impact. INSUFFICIENT EVIDENCE is a valid, honest outcome — it means the data is too thin for a claim, not that the exit failed.",
       "exit.hypNote": "Frozen the moment they first appeared; validated only on closes published after that moment. No verdict until ≥10 signals per side on new closes.",
+      "panel.exitEntryDist": "Entry-specific TP potential (MFE distribution @ +4H)",
+      "exit.distNote": "MFE is the historical maximum rise in the first 4H bar — not a pre-entry TP estimate. The realistic read is the TP hit curve: the TP level that share of signals with this characteristic actually touched. Buckets with n<5 show no rate. Squeeze (BB width <25) does not reach further than wide bands in this sample — descriptive, flood-dominated.",
+      "rail.joint": "Joint Entry & Exit",
+      "sec.joint.kicker": "09 — Joint Entry & Exit",
+      "sec.joint.title": "Joint Entry & Exit Research",
+      "sec.joint.sub": "Which entry config, paired with which exit, holds up best — judged on consistency first (positive net rate, TP hit rate, profit factor, median net, drawdown, close consistency), profit size second. Nine frozen candidates J0–J8 only — never all 130 combinations. Net is round-trip (gross minus one full spread + 8 bps fee) and only computed on signals with a measured spread (n_net); gross, MFE and TP hit cover every signal of the config. MFE is the historical maximum rise, not a pre-entry TP estimate. Everything here is research — no combination is applied to production.",
+      "panel.jointPerConfig": "TP potential by entry config (all 10 lab configs)",
+      "panel.jointCandidates": "Joint candidates J0–J8 (+4H primary)",
+      "panel.jointHyps": "Joint hypotheses (frozen, awaiting new closes)",
+      "panel.jointRecos": "Joint recommendations",
+      "joint.notYet": "Joint research not built yet — the daily builder (after the 08:00 WIB lab) has not run.",
+      "joint.perConfigNote": "TP hit rates are MFE-based at +4H. Missed good = hard pumps (≥+1% in 4H) the config did not fire on. A4/A5/A9 reach further (higher median MFE) but fire far fewer signals and miss more — descriptive, flood-dominated, not validated.",
+      "joint.candNote": "Net is round-trip and only on signals with a measured spread (n_net); hard-pump and TP rates cover all signals. Max DD is the drawdown of the chronological per-signal net sequence — signals overlap, so it is not a portfolio drawdown. Best by mean net is a description, not a validated recommendation.",
+      "joint.hypNote": "Hypotheses are validated only on closes after they were frozen. Until new closes arrive, every verdict is awaiting_validation.",
+      "joint.recoNote": "All joint recommendations are INSUFFICIENT EVIDENCE in v1.0.0 — no candidate is applied to production. A non-INSUFFICIENT verdict needs a ≥1.0pp gap in the same direction on both discovery and validation, n≥10/side on validation closes, and survival of the ex-flood aggregation.",
       "panel.agents": "Research coverage per agent",
       "panel.agents.sub": "Each agent is scored independently — one agent's missing data never blocks another.",
       "panel.regimes": "Market regime at signal time",
@@ -492,7 +507,7 @@
       "rail.exit": "Take Profit & Exit",
       "sec.exit.kicker": "08 — Take Profit & Exit",
       "sec.exit.title": "Agent 11 — Take Profit & Exit Intelligence",
-      "sec.exit.sub": "Apa yang terjadi setelah entry LONG: sejauh mana harga bisa naik, berapa banyak yang bisa ditangkap exit realistis, dan berapa lama sebaiknya hold. Exit net adalah round-trip (gross dikurangi dua kali spread + fee 8 bps). Jika satu bar 4H menyentuh TP dan stop loss sekaligus, stop diasumsikan kena dulu (konservatif) dan dihitung sebagai urutan UNKNOWN. Semua di sini adalah riset — tidak ada aturan exit yang memfilter atau menunda sinyal.",
+      "sec.exit.sub": "Apa yang terjadi setelah entry LONG: sejauh mana harga bisa naik, berapa banyak yang bisa ditangkap exit realistis, dan berapa lama sebaiknya hold. Exit net adalah round-trip (gross dikurangi satu full spread + fee 8 bps). Jika satu bar 4H menyentuh TP dan stop loss sekaligus, stop diasumsikan kena dulu (konservatif) dan dihitung sebagai urutan UNKNOWN. Semua di sini adalah riset — tidak ada aturan exit yang memfilter atau menunda sinyal.",
       "panel.exitPrimary": "Metrik utama (exit net, round-trip)",
       "panel.exitTp": "TP hit rate (berbasis MFE)",
       "panel.exitStrategies": "Perbandingan strategi exit (+12H)",
@@ -512,6 +527,21 @@
       "exit.entryNote": "TP+5% hit rate di +12H per karakteristik entry. Bucket dengan n<5 tidak menampilkan rate. Hit rate lebih tinggi untuk late breakout (margin 5%+) bukan berarti entry terlambat lebih baik — mereka juga sudah naik paling banyak sebelum sinyal.",
       "exit.recoNote": "Setiap rekomendasi exit membawa bukti, ukuran sampel, batasan, dan dampaknya. INSUFFICIENT EVIDENCE adalah hasil yang valid dan jujur — artinya datanya terlalu tipis untuk klaim, bukan berarti exit-nya gagal.",
       "exit.hypNote": "Dibekukan saat pertama muncul; divalidasi hanya pada close yang dipublikasikan setelah momen itu. Belum ada verdict sampai ≥10 sinyal per sisi pada close baru.",
+      "panel.exitEntryDist": "Potensi TP per karakteristik entry (distribusi MFE @ +4H)",
+      "exit.distNote": "MFE adalah kenaikan maksimum HISTORIS pada bar 4H pertama — bukan estimasi TP sebelum entry. Bacaan yang realistis adalah kurva hit TP: level TP yang benar-benar disentuh sekian persen sinyal dengan karakteristik ini. Bucket dengan n<5 tidak menampilkan rate. Squeeze (lebar BB <25) tidak mencapai lebih jauh dari band lebar di sampel ini — deskriptif, didominasi flood.",
+      "rail.joint": "Joint Entry & Exit",
+      "sec.joint.kicker": "09 — Joint Entry & Exit",
+      "sec.joint.title": "Riset Gabungan Entry & Exit",
+      "sec.joint.sub": "Kombinasi config entry + strategi exit mana yang paling konsisten — dinilai dari konsistensi dulu (positive net rate, TP hit rate, profit factor, median net, drawdown, konsistensi antar-close), ukuran profit belakangan. Hanya 9 kandidat beku J0–J8 — bukan seluruh 130 kombinasi. Net adalah round-trip (gross dikurangi satu full spread + fee 8 bps) dan hanya dihitung pada sinyal dengan spread terukur (n_net); gross, MFE, dan TP hit mencakup semua sinyal config. MFE adalah kenaikan maksimum historis, bukan estimasi TP sebelum entry. Semua di sini adalah riset — tidak ada kombinasi yang diterapkan ke produksi.",
+      "panel.jointPerConfig": "Potensi TP per config entry (10 config lab)",
+      "panel.jointCandidates": "Kandidat gabungan J0–J8 (+4H utama)",
+      "panel.jointHyps": "Hipotesis gabungan (beku, menunggu close baru)",
+      "panel.jointRecos": "Rekomendasi gabungan",
+      "joint.notYet": "Riset gabungan belum dibangun — builder harian (setelah lab 08:00 WIB) belum berjalan.",
+      "joint.perConfigNote": "TP hit rate berbasis MFE di +4H. Missed good = hard pump (≥+1% dalam 4H) yang tidak ditembak config itu. A4/A5/A9 mencapai lebih jauh (median MFE lebih tinggi) tapi menembak jauh lebih sedikit sinyal dan melewatkan lebih banyak — deskriptif, didominasi flood, belum tervalidasi.",
+      "joint.candNote": "Net adalah round-trip dan hanya pada sinyal dengan spread terukur (n_net); hard-pump dan TP rate mencakup semua sinyal. Max DD adalah drawdown dari urutan net per sinyal secara kronologis — sinyal tumpang tindih, jadi ini bukan drawdown portofolio. Terbaik menurut mean net adalah deskripsi, bukan rekomendasi tervalidasi.",
+      "joint.hypNote": "Hipotesis divalidasi hanya pada close setelah dibekukan. Sampai ada close baru, semua verdict masih awaiting_validation.",
+      "joint.recoNote": "Semua rekomendasi gabungan masih INSUFFICIENT EVIDENCE di v1.0.0 — tidak ada kandidat yang diterapkan ke produksi. Verdict non-INSUFFICIENT butuh gap ≥1,0pp searah di discovery dan validation, n≥10/sisi pada close validasi, dan lolos agregasi ex-flood.",
       "panel.agents": "Cakupan riset per agent",
       "panel.agents.sub": "Setiap agent dinilai secara independen — data yang hilang dari satu agent tidak pernah memblokir agent lain.",
       "panel.regimes": "Rezim pasar saat sinyal",
@@ -992,6 +1022,7 @@
     renderLearning();
     renderRideTheWave();
     renderExit();
+    renderJoint();
     renderTimeline();
     renderExplorer();
     watchReveals();
@@ -2318,6 +2349,7 @@
     var EX = ((DATA.learnings || {}).exit_research) || null;
     var ids = ["exit-primary", "exit-tphit", "exit-strategies",
                "exit-holding", "exit-giveback", "exit-entrytp",
+               "exit-entrydist",
                "exit-recommendations", "exit-hypotheses"];
     if (!EX || EX.status === "ERROR") {
       ids.forEach(function (id) {
@@ -2356,7 +2388,8 @@
     var horizons = ["h4", "h12", "h1d", "h2d", "h3d", "h1w"];
     var hLabels = {h4: "+4H", h12: "+12H", h1d: "+1D",
                    h2d: "+2D", h3d: "+3D", h1w: "+1W"};
-    var targets = ["2.0", "3.0", "5.0", "10.0", "15.0"];
+    var targets = ["0.5", "1.0", "1.5", "2.0", "3.0", "4.0", "5.0",
+                   "10.0", "15.0"];
     var tp = EX.tp_hit_rates || {};
     var tpRows = targets.map(function (tg) {
       var cells = horizons.map(function (h) {
@@ -2382,17 +2415,28 @@
       "<p class='panel-sub' style='margin-top:12px'>" +
         t("exit.tpNote") + "</p>";
 
-    /* Exit strategies at +12H */
+    /* Exit strategies at +12H (with consistency metrics, v1.1.0) */
     var stratRows = (EX.strategies || []).map(function (s) {
       var h12 = (s.horizons || {}).h12 || {};
       var agg = s.agg_h12 || {};
       var xf = agg.excluding_largest_batch || {};
+      var wl = (h12.avg_win_pct == null || h12.avg_loss_pct == null)
+        ? "—" : nm(h12.avg_win_pct, 2) + " / " +
+          nm(h12.avg_loss_pct, 2);
       return "<tr><td>" + esc(s.id) + " " +
         esc(bi(s.label, s.label_en)) + "</td>" +
         "<td>" + (h12.n == null ? "—" : h12.n) + "</td>" +
         "<td>" + pc(h12.mean_net_rt_pct) + "</td>" +
+        "<td>" + pc(h12.median_net_rt_pct) + "</td>" +
         "<td>" + (h12.pct_positive_net_rt == null ? "—" :
           nm(h12.pct_positive_net_rt, 1) + "%") + "</td>" +
+        "<td>" + (h12.profit_factor == null ? "—" :
+          nm(h12.profit_factor, 2)) + "</td>" +
+        "<td>" + wl + "</td>" +
+        "<td>" + (h12.max_drawdown_pp == null ? "—" :
+          nm(h12.max_drawdown_pp, 1)) + "</td>" +
+        "<td>" + (h12.close_consistency_pct == null ? "—" :
+          nm(h12.close_consistency_pct, 1) + "%") + "</td>" +
         "<td>" + (h12.unknown_order_n == null ? "—" :
           h12.unknown_order_n) + "</td>" +
         "<td>" + pc(xf.mean_net_rt_pct) + "</td></tr>";
@@ -2400,7 +2444,9 @@
     $("exit-strategies").innerHTML =
       '<div style="overflow-x:auto"><table class="version-table">' +
       "<thead><tr><th>Strategy</th><th>n</th><th>Mean net +12H</th>" +
-      "<th>Positive</th><th>UNKNOWN</th><th>Ex-flood mean</th>" +
+      "<th>Median net</th><th>Positive</th><th>Profit factor</th>" +
+      "<th>Avg win / loss</th><th>Max DD (pp)</th>" +
+      "<th>Close cons.</th><th>UNKNOWN</th><th>Ex-flood mean</th>" +
       "</tr></thead><tbody>" + stratRows + "</tbody></table></div>" +
       "<p class='panel-sub' style='margin-top:12px'>" +
         t("exit.stratNote") + "</p>";
@@ -2480,6 +2526,66 @@
       "<p class='panel-sub' style='margin-top:12px'>" +
         t("exit.entryNote") + "</p>";
 
+    /* Entry-specific TP distributions (v1.1.0): MFE/MAE + TP hit
+       @ +4H per entry characteristic, with a dimension picker. */
+    var distDims = [
+      ["margin", "Breakout margin"],
+      ["rvol", "RVOL"],
+      ["pre_rise_3bar", "Pre-rise 3 bar"],
+      ["atr_pctile", "ATR percentile"],
+      ["vol_accel", "Volume acceleration"],
+      ["bb_width_pctile", "BB width percentile"],
+      ["ema_aligned", "EMA alignment"],
+      ["btc_regime", "BTC regime"],
+      ["oi_chg_24h", "OI change 24h"],
+      ["exhaustion_markers", "Exhaustion markers"],
+      ["spread_band", "Spread band"],
+    ];
+    var distData = EX.entry_tp_distributions || {};
+    window.__exitDistDim = window.__exitDistDim || "margin";
+    var renderDistTable = function (dim) {
+      var buckets = distData[dim] || {};
+      var rows = Object.keys(buckets).map(function (b) {
+        var d = buckets[b] || {};
+        var hits = d.tp_hit_rates || {};
+        var cell = function (tg) {
+          var h = hits[tg] || {};
+          return "<td>" + (h.hit_rate_pct == null ? "—" :
+            nm(h.hit_rate_pct, 1) + "%") + "</td>";
+        };
+        return "<tr><td>" + esc(b) + "</td>" +
+          "<td>" + (d.n == null ? "—" : d.n) + "</td>" +
+          "<td>" + (d.n_closes == null ? "—" : d.n_closes) + "</td>" +
+          "<td>" + pc(d.median_mfe_pct) + "</td>" +
+          "<td>" + pc(d.mfe_p90_pct) + "</td>" +
+          "<td>" + pc(d.median_mae_pct) + "</td>" +
+          cell("0.5") + cell("1.0") + cell("2.0") + cell("5.0") +
+          "</tr>";
+      }).join("");
+      $("exit-dist-table").innerHTML =
+        '<div style="overflow-x:auto"><table class="version-table">' +
+        "<thead><tr><th>Band</th><th>n</th><th>Closes</th>" +
+        "<th>Median MFE</th><th>MFE p90</th><th>Median MAE</th>" +
+        "<th>TP+0.5%</th><th>TP+1%</th><th>TP+2%</th>" +
+        "<th>TP+5%</th></tr></thead><tbody>" + rows +
+        "</tbody></table></div>";
+    };
+    $("exit-entrydist").innerHTML =
+      '<select id="exit-dist-dim" aria-label="Entry characteristic">' +
+      distDims.map(function (d) {
+        return "<option value='" + d[0] + "'" +
+          (d[0] === window.__exitDistDim ? " selected" : "") + ">" +
+          esc(d[1]) + "</option>";
+      }).join("") + "</select>" +
+      '<div id="exit-dist-table" style="margin-top:12px"></div>' +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("exit.distNote") + "</p>";
+    renderDistTable(window.__exitDistDim);
+    $("exit-dist-dim").addEventListener("change", function (ev) {
+      window.__exitDistDim = ev.target.value;
+      renderDistTable(window.__exitDistDim);
+    });
+
     /* Recommendations */
     var recos = (EX.recommendations || []).map(function (r) {
       return "<li><span>" + esc(bi(r.filter, r.filter_en)) +
@@ -2505,6 +2611,120 @@
       '<ul class="missing-list">' + hyps + "</ul>" +
       "<p class='panel-sub' style='margin-top:12px'>" +
         t("exit.hypNote") + "</p>";
+  }
+
+  function renderJoint() {
+    var JN = ((DATA.learnings || {}).joint_research) || null;
+    var ids = ["joint-perconfig", "joint-candidates",
+               "joint-hypotheses", "joint-recommendations"];
+    if (!JN || JN.status === "ERROR") {
+      ids.forEach(function (id) {
+        var el = $(id);
+        if (el) el.innerHTML = '<p class="panel-sub" style="margin:0">' +
+          t("exit.notYet") + "</p>";
+      });
+      return;
+    }
+    if (JN.status === "not yet") {
+      ids.forEach(function (id) {
+        var el = $(id);
+        if (el) el.innerHTML = '<p class="panel-sub" style="margin:0">' +
+          esc(bi(JN.note, JN.note_en) || t("joint.notYet")) + "</p>";
+      });
+      return;
+    }
+    var pc = function (v, dec) {
+      return v == null ? "—" : fmtPct(v, dec == null ? 2 : dec);
+    };
+    var nm = function (v, dec) {
+      return v == null ? "—" : fmtNum(v, dec == null ? 1 : dec);
+    };
+
+    /* TP potential by entry config (all 10 lab configs) */
+    var pcRows = (JN.per_config_tp || []).map(function (c) {
+      var hits = (c.tp_hit_rates || {}).h4 || {};
+      var cell = function (tg) {
+        var h = hits[tg] || {};
+        return "<td>" + (h.hit_rate_pct == null ? "—" :
+          nm(h.hit_rate_pct, 1) + "%") + "</td>";
+      };
+      return "<tr><td>" + esc(c.id) + "</td>" +
+        "<td>" + (c.n == null ? "—" : c.n) + "</td>" +
+        "<td>" + (c.n_closes == null ? "—" : c.n_closes) + "</td>" +
+        "<td>" + pc(c.median_mfe_h4_pct) + "</td>" +
+        "<td>" + pc(c.mfe_p90_h4_pct) + "</td>" +
+        "<td>" + pc(c.median_mae_h4_pct) + "</td>" +
+        cell("0.5") + cell("1.0") + cell("2.0") + cell("5.0") +
+        "<td>" + (c.missed_good_n == null ? "—" :
+          c.missed_good_n) + "</td></tr>";
+    }).join("");
+    $("joint-perconfig").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>Config</th><th>n</th><th>Closes</th>" +
+      "<th>Median MFE +4H</th><th>MFE p90</th><th>Median MAE</th>" +
+      "<th>TP+0.5%</th><th>TP+1%</th><th>TP+2%</th><th>TP+5%</th>" +
+      "<th>Missed good</th></tr></thead><tbody>" + pcRows +
+      "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("joint.perConfigNote") + "</p>";
+
+    /* Joint candidates J0–J8 (+4H primary) */
+    var candRows = (JN.candidates || []).map(function (c) {
+      var h4 = (c.horizons || {}).h4 || {};
+      var agg = c.agg_h4 || {};
+      var xf = agg.excluding_largest_batch || {};
+      return "<tr><td>" + esc(c.id) + " " +
+        esc(bi(c.label, c.label_en)) + "</td>" +
+        "<td>" + (c.n_signals == null ? "—" : c.n_signals) + "</td>" +
+        "<td>" + (h4.n == null ? "—" : h4.n) + "</td>" +
+        "<td>" + pc(h4.mean_net_rt_pct) + "</td>" +
+        "<td>" + pc(h4.median_net_rt_pct) + "</td>" +
+        "<td>" + (h4.pct_positive_net_rt == null ? "—" :
+          nm(h4.pct_positive_net_rt, 1) + "%") + "</td>" +
+        "<td>" + (h4.profit_factor == null ? "—" :
+          nm(h4.profit_factor, 2)) + "</td>" +
+        "<td>" + (h4.close_consistency_pct == null ? "—" :
+          nm(h4.close_consistency_pct, 1) + "%") + "</td>" +
+        "<td>" + (h4.hard_pump_hit_rate_pct == null ? "—" :
+          nm(h4.hard_pump_hit_rate_pct, 1) + "%") + "</td>" +
+        "<td>" + pc(xf.mean_net_rt_pct) + "</td></tr>";
+    }).join("");
+    $("joint-candidates").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>Candidate</th><th>n</th><th>n_net</th>" +
+      "<th>Mean net +4H</th><th>Median net</th><th>Positive</th>" +
+      "<th>Profit factor</th><th>Close cons.</th>" +
+      "<th>Hard pump</th><th>Ex-flood mean</th>" +
+      "</tr></thead><tbody>" + candRows + "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("joint.candNote") + "</p>";
+
+    /* Hypotheses JH1–JH5 */
+    var hyps = (JN.hypotheses || []).map(function (h) {
+      var v = h.validation_after_created || {};
+      return "<li><span>" + esc(h.id) + " — " +
+        esc(bi(h.text, h.text_en)) + "</span><span class='num'>" +
+        esc(h.status || "") + " (n=" +
+        (v.n_a == null ? "—" : v.n_a) + "/" +
+        (v.n_b == null ? "—" : v.n_b) +
+        ")</span></li>";
+    }).join("");
+    $("joint-hypotheses").innerHTML =
+      '<ul class="missing-list">' + hyps + "</ul>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("joint.hypNote") + "</p>";
+
+    /* Recommendations */
+    var recos = (JN.recommendations || []).map(function (r) {
+      return "<li><span>" + esc(r.id) + " — " +
+        esc(r.candidate || "") + " (" + esc(r.kind || "") +
+        ")</span><span class='num'>" +
+        esc(r.status || "") + "</span></li>";
+    }).join("");
+    $("joint-recommendations").innerHTML =
+      '<ul class="missing-list">' + recos + "</ul>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("joint.recoNote") + "</p>";
   }
 
   function renderTimeline() {

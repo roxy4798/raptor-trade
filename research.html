@@ -24,6 +24,7 @@
     <a class="rail-link" href="#explorer" data-section="explorer" aria-label="Explorer" title="Explorer"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10"/></svg><span data-i18n="rail.explorer">Explorer</span></a>
     <a class="rail-link" href="#ridethewave" data-section="ridethewave" aria-label="Ride the Wave" title="Ride the Wave"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17c3-6 6-9 9-9s6 3 9 9"/><path d="M12 8V3"/></svg><span data-i18n="rail.ridethewave">Ride the Wave</span></a>
     <a class="rail-link" href="#exit" data-section="exit" aria-label="Take Profit &amp; Exit" title="Take Profit &amp; Exit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v10"/><path d="M7 8l5-5 5 5"/><path d="M4 21h16"/></svg><span data-i18n="rail.exit">Take Profit &amp; Exit</span></a>
+    <a class="rail-link" href="#joint" data-section="joint" aria-label="Joint Entry &amp; Exit" title="Joint Entry &amp; Exit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16"/><path d="M12 4v16"/></svg><span data-i18n="rail.joint">Joint Entry &amp; Exit</span></a>
     <a class="rail-link" href="index.html" aria-label="Back to Signal Observatory" title="Back to Signal Observatory"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/></svg><span data-i18n="rail.home">Home</span></a>
   </nav>
   <div class="rail-base"><span class="rail-base-line"></span><span class="rail-orientation">R / RESEARCH • 2026</span></div>
@@ -303,7 +304,7 @@
       <div class="section-head">
         <p class="section-kicker" data-i18n="sec.exit.kicker">08 — Take Profit &amp; Exit</p>
         <h2 data-i18n="sec.exit.title">Agent 11 — Take Profit &amp; Exit Intelligence</h2>
-        <p class="section-sub" data-i18n="sec.exit.sub">What happens after a LONG entry: how far price can go, how much of it a realistic exit captures, and how long to hold. Exit net is round-trip (gross minus twice spread + 8 bps fee). If one 4H bar touches both a TP and a stop loss, the stop is assumed hit first (conservative) and counted as UNKNOWN ordering. Everything here is research — no exit rule filters or delays a signal.</p>
+        <p class="section-sub" data-i18n="sec.exit.sub">What happens after a LONG entry: how far price can go, how much of it a realistic exit captures, and how long to hold. Exit net is round-trip (gross minus one full spread + 8 bps fee). If one 4H bar touches both a TP and a stop loss, the stop is assumed hit first (conservative) and counted as UNKNOWN ordering. Everything here is research — no exit rule filters or delays a signal.</p>
       </div>
       <div class="panel-grid">
         <div class="panel card">
@@ -334,12 +335,42 @@
         <div id="exit-entrytp"></div>
       </div>
       <div class="panel card">
+        <h3 data-i18n="panel.exitEntryDist">Entry-specific TP potential (MFE distribution @ +4H)</h3>
+        <div id="exit-entrydist"></div>
+      </div>
+      <div class="panel card">
         <h3 data-i18n="panel.exitRecos">Exit recommendations</h3>
         <div id="exit-recommendations"></div>
       </div>
       <div class="panel card">
         <h3 data-i18n="panel.exitHyps">Exit hypotheses (frozen, awaiting new closes)</h3>
         <div id="exit-hypotheses"></div>
+      </div>
+    </section>
+
+    <section id="joint" class="section">
+      <div class="section-head">
+        <p class="section-kicker" data-i18n="sec.joint.kicker">09 — Joint Entry &amp; Exit</p>
+        <h2 data-i18n="sec.joint.title">Joint Entry &amp; Exit Research</h2>
+        <p class="section-sub" data-i18n="sec.joint.sub">Which entry config, paired with which exit, holds up best — judged on consistency first (positive net rate, TP hit rate, profit factor, median net, drawdown, close consistency), profit size second. Nine frozen candidates J0–J8 only — never all 130 combinations. Net is round-trip (gross minus one full spread + 8 bps fee) and only computed on signals with a measured spread (n_net); gross, MFE and TP hit cover every signal of the config. MFE is the historical maximum rise, not a pre-entry TP estimate. Everything here is research — no combination is applied to production.</p>
+      </div>
+      <div class="panel card">
+        <h3 data-i18n="panel.jointPerConfig">TP potential by entry config (all 10 lab configs)</h3>
+        <div id="joint-perconfig"></div>
+      </div>
+      <div class="panel card">
+        <h3 data-i18n="panel.jointCandidates">Joint candidates J0–J8 (+4H primary)</h3>
+        <div id="joint-candidates"></div>
+      </div>
+      <div class="panel-grid">
+        <div class="panel card">
+          <h3 data-i18n="panel.jointHyps">Joint hypotheses (frozen, awaiting new closes)</h3>
+          <div id="joint-hypotheses"></div>
+        </div>
+        <div class="panel card">
+          <h3 data-i18n="panel.jointRecos">Joint recommendations</h3>
+          <div id="joint-recommendations"></div>
+        </div>
       </div>
     </section>
 
