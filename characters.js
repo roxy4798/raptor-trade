@@ -28,6 +28,17 @@
     if (io) io.observe(slot);
   }
 
+  /* Short skill name per agent — shown on the portrait itself so
+     every character carries its name wherever it appears
+     (Raka 25 Nov 2026: "Setiap karakternya harus muncul namanya"). */
+  var NAMES = {
+    "01": "BREAKOUT", "02": "REVERSAL", "03": "ORDER FLOW",
+    "04": "MARKET REGIME", "05": "LIQUIDITY", "06": "PERFORMANCE",
+    "07": "PUMP IGNITION", "08": "MISSED OPPORTUNITY",
+    "09": "FILTER DISCOVERY", "10": "VALIDATION",
+    "11": "TAKE PROFIT & EXIT", "12": "RISK & PORTFOLIO"
+  };
+
   function renderSlot(slot) {
     if (!slot || slot.dataset.charDone) return;
     var n = slot.getAttribute("data-agent");
@@ -43,7 +54,79 @@
     img.style.setProperty("--dur", (4.6 + (uid % 5) * 0.5) + "s");
     img.style.setProperty("--del", (-(uid % 3)) + "s");
     slot.appendChild(img);
+    /* Name on the character: a ribbon across the bottom of team
+       portraits; a nameplate under section-head portraits. Coverage
+       minis already sit next to the agent name in their row. */
+    var label = NAMES[n] || "";
+    if (label && slot.classList.contains("agent-char--team")) {
+      var rib = document.createElement("span");
+      rib.className = "char-ribbon";
+      rib.textContent = label;
+      slot.appendChild(rib);
+    } else if (label && slot.classList.contains("agent-char--head")) {
+      var plate = document.createElement("span");
+      plate.className = "char-nameplate";
+      plate.textContent = "AGENT " + n + " — " + label;
+      slot.parentNode.insertBefore(plate, slot.nextSibling);
+    }
     observe(slot);
+    setupMotion(slot);
+  }
+
+  /* ---- lively motion (GSAP 3.15, vendored in vendor/gsap.min.js
+     + vendor/ScrollTrigger.min.js) ----
+     The portraits themselves keep the CSS idle bob (transform-only,
+     motion-aware). GSAP adds the two things CSS can't do cleanly:
+     (1) a run-in entrance — each character dashes in from the side
+     with a lean when it scrolls into view (ScrollTrigger, once);
+     (2) a hop on hover/tap. All GSAP work targets the SLOT, never
+     the img, so it never fights the CSS bob. If GSAP failed to load,
+     or motion is off, everything degrades to static portraits +
+     CSS bob. Research: GSAP 3.15 recommended 25 Nov 2026 (12M+
+     sites, ScrollTrigger industry standard, free since 3.13);
+     Motion mini animate() runner-up; Lottie rejected (can't animate
+     a raster JPG). */
+  var gsapReady = false;
+  function motionOK() {
+    if (document.documentElement.classList.contains("motion-off")) return false;
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
+    return !!(window.gsap && window.ScrollTrigger);
+  }
+  function setupMotion(slot) {
+    if (!motionOK()) return;
+    if (!gsapReady) {
+      window.gsap.registerPlugin(window.ScrollTrigger);
+      gsapReady = true;
+      /* If the OS reduced-motion setting flips on mid-visit, stop
+         every character tween and clear it back to the static pose. */
+      if (window.matchMedia) {
+        window.matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change", function (e) {
+          if (e.matches && window.gsap) {
+            window.gsap.killTweensOf(".agent-char");
+            window.gsap.set(".agent-char", { clearProps: "all" });
+          }
+        });
+      }
+    }
+    var isHead = slot.classList.contains("agent-char--head");
+    var isCov = slot.classList.contains("cov-char");
+    var isTeam = slot.classList.contains("agent-char--team");
+    var dist = isCov ? 40 : 120;
+    var dir = isHead ? 1 : -1; /* head slots live on the right: run in from the right */
+    var delay = isTeam ? ((uid - 1) % 12) * 0.05 : 0; /* team cascade, one by one */
+    slot.dataset.entered = "";
+    window.gsap.from(slot, {
+      x: dir * dist, rotation: dir * 6, opacity: 0,
+      duration: 0.7, delay: delay, ease: "back.out(1.4)",
+      scrollTrigger: { trigger: slot, start: "top 88%", once: true },
+      onComplete: function () { slot.dataset.entered = "1"; }
+    });
+    var hop = function () {
+      if (!motionOK() || slot.dataset.entered !== "1") return;
+      window.gsap.to(slot, { y: -10, rotation: 2, duration: 0.35, ease: "back.out(2)", yoyo: true, repeat: 1, overwrite: "auto" });
+    };
+    slot.addEventListener("mouseenter", hop);
+    slot.addEventListener("click", hop);
   }
 
   function renderAll(root) {
