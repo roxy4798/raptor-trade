@@ -309,6 +309,10 @@ button.close-group-head .cg-label{overflow:hidden;text-overflow:ellipsis;white-s
 .close-group-items{padding:2px 0 6px}
 button.close-group-more{display:block;width:100%;text-align:center;background:transparent;border:1px dashed var(--line-strong);border-radius:8px;padding:7px;color:var(--text-2);font-size:12px;font-weight:600;margin:4px 0 6px}
 button.close-group-more:hover{color:var(--accent);border-color:var(--accent)}
+/* Contributors table (Learning): rows past the first 10 stay hidden
+   until the Show more toggle expands the table (Raka 25 Nov). */
+.contrib-table .contrib-extra{display:none}
+.contrib-table.expanded .contrib-extra{display:table-row}
 /* explorer group rows */
 tr.close-group-head td{padding:0;border-bottom:1px solid var(--line)}
 tr.close-group-head button.close-group-head{padding:10px 12px;border-bottom:0}

@@ -482,6 +482,8 @@
       "lr.thSignal": "Signal", "lr.thNet": "+4H",
       "lr.thShare": "Share of sum",
       "lr.contribNote": "Shares above 100% mean one signal outweighs the entire total — the rest of the signals cancel each other out.",
+      "lr.showMore": "Show more ({n} more)",
+      "lr.showLess": "Show less",
       "lr.verdAssociation": "Association observed",
       "lr.verdNoClear": "No clear association",
       "lr.verdConsistent": "Consistent with hypothesis",
@@ -1004,6 +1006,8 @@
       "lr.thSignal": "Sinyal", "lr.thNet": "+4H",
       "lr.thShare": "Porsi dari total",
       "lr.contribNote": "Porsi di atas 100% berarti satu sinyal mengalahkan seluruh total — sinyal-sinyal lainnya saling meniadakan.",
+      "lr.showMore": "Tampilkan lebih banyak ({n} lagi)",
+      "lr.showLess": "Tampilkan lebih sedikit",
       "lr.verdAssociation": "Asosiasi teramati",
       "lr.verdNoClear": "Tidak ada asosiasi jelas",
       "lr.verdConsistent": "Konsisten dengan hipotesis",
@@ -2043,6 +2047,10 @@
   }
 
   /* ------------------------------------------------- learning (Phase 4) */
+  /* Contributors table: collapsed to 10 rows by default (Raka 25 Nov —
+     the full list runs hundreds of rows down the page). */
+  var CONTRIB_SHOW = 10;
+  var contribExpanded = false;
   function renderLearning() {
     var L = DATA.learnings || {};
     var hz = L.horizons || {};
@@ -2142,16 +2150,24 @@
     contribs.forEach(function (c) {
       maxAbs = Math.max(maxAbs, Math.abs(c.v));
     });
-    var crows = contribs.map(function (c) {
+    var crows = contribs.map(function (c, i) {
       var w = maxAbs ? Math.round(Math.abs(c.v) / maxAbs * 100) : 0;
       var col = c.v >= 0 ? "var(--pos)" : "var(--neg)";
       var share = st && st.sum !== 0 ? c.v / st.sum * 100 : null;
-      return "<tr><td>" + esc(c.symbol) + "</td><td>" +
+      return "<tr" + (i >= CONTRIB_SHOW ? " class=\"contrib-extra\"" : "") +
+        "><td>" + esc(c.symbol) + "</td><td>" +
         "<div style='background:" + col + ";height:8px;border-radius:99px;width:" +
         w + "%;min-width:2px'></div></td><td>" + fmtPct(c.v, 2) +
         "</td><td>" + (share == null ? "—" :
           fmtNum(share, 0) + "%") + "</td></tr>";
     }).join("");
+    var contribToggle = contribs.length > CONTRIB_SHOW
+      ? "<button type=\"button\" class=\"close-group-more\" " +
+        "id=\"lr-contrib-toggle\" style=\"margin-top:10px\">" +
+        (contribExpanded ? t("lr.showLess")
+          : t("lr.showMore", { n: contribs.length - CONTRIB_SHOW })) +
+        "</button>"
+      : "";
     $("learning-distribution").innerHTML = !st
       ? '<p class="panel-sub" style="margin:0">' + t("lr.notEnough") + "</p>"
       : "<h4 style='margin:0 0 4px'>" + t("lr.distTitle", { n: st.n }) + "</h4>" +
@@ -2165,11 +2181,21 @@
         "<li><span>" + t("lr.mvwMedian") + "</span><span class='num'>" +
         fmtPct(st.median, 2) + "</span></li></ul>" +
         "<h4 style='margin:16px 0 4px'>" + t("lr.contribTitle") + "</h4>" +
-        '<table class="version-table"><thead><tr><th>' + t("lr.thSignal") +
+        '<table class="version-table contrib-table' +
+        (contribExpanded ? " expanded" : "") +
+        '"><thead><tr><th>' + t("lr.thSignal") +
         "</th><th></th><th>" + t("lr.thNet") + "</th><th>" + t("lr.thShare") +
         "</th></tr></thead><tbody>" +
-        crows + "</tbody></table>" +
+        crows + "</tbody></table>" + contribToggle +
         "<p class='panel-sub' style='margin-top:12px'>" + t("lr.contribNote") + "</p>";
+    var ctBtn = $("lr-contrib-toggle");
+    if (ctBtn) ctBtn.addEventListener("click", function () {
+      contribExpanded = !contribExpanded;
+      var tbl = document.querySelector("#learning-distribution .contrib-table");
+      if (tbl) tbl.classList.toggle("expanded", contribExpanded);
+      ctBtn.textContent = contribExpanded ? t("lr.showLess")
+        : t("lr.showMore", { n: contribs.length - CONTRIB_SHOW });
+    });
 
     /* v43: the agent learning evaluation panel is hidden — its
        findings and means are short-horizon based and cannot be
