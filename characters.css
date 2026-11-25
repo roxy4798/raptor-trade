@@ -11,7 +11,7 @@
 .agent-char{display:block;flex:0 0 auto;line-height:0}
 .agent-char svg{display:block;width:100%;height:100%}
 .agent-char--team{width:112px;height:134px;margin:0 auto}
-.team-card--flagship .agent-char--team{width:126px;height:151px}
+.team-card--flagship .agent-char--team{width:140px;height:168px}
 .agent-char--head{width:78px;height:94px;margin-top:2px}
 .cov-char{width:30px;height:36px}
 
@@ -78,7 +78,7 @@ html.motion-off .agent-char *{animation:none!important}
   .team-grid{grid-template-columns:repeat(3,1fr);gap:10px}
   .team-card{padding:14px 8px 12px}
   .agent-char--team{width:92px;height:110px}
-  .team-card--flagship .agent-char--team{width:104px;height:125px}
+  .team-card--flagship .agent-char--team{width:118px;height:142px}
   .team-role{min-height:40px}
 }
 @media (max-width:560px){
