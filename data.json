@@ -1,14 +1,14 @@
 {
  "meta": {
-  "generated_ts": 1795593110.0242789,
-  "generated_wib": "25 Nov 2026, 14:51 WIB",
+  "generated_ts": 1795593928.7204876,
+  "generated_wib": "25 Nov 2026, 15:05 WIB",
   "rules_version": "v2.1.2",
-  "next_close_ts": 1795593600.0,
+  "next_close_ts": 1795608000.0,
   "source": "Binance Futures Mainnet (local)"
  },
  "kpis": {
-  "total": 390,
-  "last24": 34,
+  "total": 401,
+  "last24": 41,
   "win_rate": 12.339331619537274,
   "wins": 48,
   "n_eval": 389,
@@ -18,6 +18,7 @@
   "gap_blocked": 0,
   "universe_total": 849,
   "classes": {
+   "BELUM DINILAI": 11,
    "PUMP CONTINUED": 48,
    "SIDEWAYS": 308,
    "REVERSAL": 33,
@@ -33,9 +34,9 @@
   "eligible": 840,
   "gap_blocked": 0,
   "universe_total": 849,
-  "signals_total": 436,
-  "heartbeat_age_s": 1.0,
-  "uptime_s": 2984.8,
+  "signals_total": 448,
+  "heartbeat_age_s": 9.0,
+  "uptime_s": 3795.0,
   "backfill_missing": 50,
   "backfill_pending": 0,
   "backfill_filled": 3360
@@ -171,6 +172,11 @@
     "close_ts": 1795579200.0,
     "close_wib": "25 Nov 11:00",
     "count": 2
+   },
+   {
+    "close_ts": 1795593600.0,
+    "close_wib": "25 Nov 15:00",
+    "count": 11
    }
   ],
   "cum_net_curve": [
@@ -2644,26 +2650,26 @@
    }
   ],
   "n_eval": 352,
-  "n_total": 390
+  "n_total": 401
  },
  "tf_summary": {
   "horizons": {
    "h4": {
-    "n": 388,
-    "mean": -1.4130498539286485,
-    "median": -2.074670042609106,
-    "pct_positive": 18.298969072164947,
+    "n": 390,
+    "mean": -1.297161745288232,
+    "median": -2.02942169216922,
+    "pct_positive": 18.71794871794872,
     "best": {
-     "symbol": "GUAUSDT",
-     "value": 34.33772755806655,
-     "close_utc": "24 Nov 16:00"
+     "symbol": "BIGTIMEUSDT",
+     "value": 42.33642743943853,
+     "close_utc": "25 Nov 04:00"
     }
    },
    "h12": {
-    "n": 384,
-    "mean": -2.188253196047167,
-    "median": -2.5603320976052943,
-    "pct_positive": 17.96875,
+    "n": 387,
+    "mean": -2.1508217684814372,
+    "median": -2.543331673982896,
+    "pct_positive": 18.087855297157624,
     "best": {
      "symbol": "BULLAUSDT",
      "value": 43.139534883720934,
@@ -2671,10 +2677,10 @@
     }
    },
    "h1d": {
-    "n": 356,
-    "mean": -5.935308345636199,
-    "median": -6.030204823948138,
-    "pct_positive": 9.831460674157304,
+    "n": 360,
+    "mean": -5.923502478331318,
+    "median": -5.98606062709125,
+    "pct_positive": 9.722222222222223,
     "best": {
      "symbol": "BULLAUSDT",
      "value": 44.18604651162789,
@@ -2682,10 +2688,10 @@
     }
    },
    "h2d": {
-    "n": 34,
-    "mean": -2.4819506733663017,
-    "median": -2.850197438004376,
-    "pct_positive": 41.17647058823529,
+    "n": 46,
+    "mean": -2.7679302120209166,
+    "median": -3.39778944751874,
+    "pct_positive": 34.78260869565217,
     "best": {
      "symbol": "LISTAUSDT",
      "value": 44.18117554653751,
@@ -2693,10 +2699,10 @@
     }
    },
    "h3d": {
-    "n": 12,
-    "mean": -7.954096854786178,
-    "median": -0.6304491979105598,
-    "pct_positive": 41.66666666666667,
+    "n": 15,
+    "mean": -9.016080115841312,
+    "median": -1.6657638136511443,
+    "pct_positive": 33.33333333333333,
     "best": {
      "symbol": "AIGENSYNUSDT",
      "value": 8.48806366047745,
@@ -5039,10 +5045,682 @@
     "close_ts": 1795564800.0,
     "close_wib": "25 Nov 07:00",
     "mean_pct": -1.41304985392865
+   },
+   {
+    "symbol": "BIGTIMEUSDT",
+    "close_ts": 1795579200.0,
+    "close_wib": "25 Nov 11:00",
+    "mean_pct": -1.300583331323593
+   },
+   {
+    "symbol": "LLYUSDT",
+    "close_ts": 1795579200.0,
+    "close_wib": "25 Nov 11:00",
+    "mean_pct": -1.2971617452882336
    }
   ]
  },
  "signals": [
+  {
+   "signal_id": "PROD WS:USD-M:WAXPUSDT:LONG SIGNAL:1795593600.0",
+   "symbol": "WAXPUSDT",
+   "market": "USD-M",
+   "close_ts": 1795593600.0,
+   "close_wib": "25 Nov 15:00",
+   "close_utc": "25 Nov 08:00",
+   "price": 0.003607,
+   "open": 0.003366,
+   "chg_4h": 7.128007128007121,
+   "ema20": 0.003351030619025134,
+   "ema50": 0.0033897875112091583,
+   "ema500": 0.004296364965406827,
+   "rvol": 111.52483111624592,
+   "taker_buy": 0.5016862999239969,
+   "breakout_level": 0.003473,
+   "breakout_margin": 3.858335732795854,
+   "hh": 2,
+   "hl": 3,
+   "atr14_pct": 3.2850196660051725,
+   "rsi_5m": null,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 69.37839063412572,
+   "spread": 2.7991602519235803,
+   "impact": 17.013213301225186,
+   "depth": 111.60603900000001,
+   "book_delay_s": 3.2,
+   "liq_validated": false,
+   "quote_volume": 7919731.897897,
+   "qv24h": 9013333.269682001,
+   "chart": "charts/WAXPUSDT_1795593600.png",
+   "tracker": null,
+   "tf": {
+    "h4": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h12": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h1d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h2d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h3d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h1w": {
+     "status": "pending",
+     "return_pct": null
+    }
+   }
+  },
+  {
+   "signal_id": "PROD WS:USD-M:SLXUSDT:LONG SIGNAL:1795593600.0",
+   "symbol": "SLXUSDT",
+   "market": "USD-M",
+   "close_ts": 1795593600.0,
+   "close_wib": "25 Nov 15:00",
+   "close_utc": "25 Nov 08:00",
+   "price": 0.03163,
+   "open": 0.02933,
+   "chg_4h": 7.841800204568701,
+   "ema20": 0.029539402346833027,
+   "ema50": 0.030493419782560375,
+   "ema500": 0.0571071967684689,
+   "rvol": 40.030569879965526,
+   "taker_buy": 0.4926245917530382,
+   "breakout_level": 0.03143,
+   "breakout_margin": 0.636334712058539,
+   "hh": 2,
+   "hl": 3,
+   "atr14_pct": 5.2946266269761315,
+   "rsi_5m": null,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 60.79893231186366,
+   "spread": 9.510223490250533,
+   "impact": 21.53732355918913,
+   "depth": 286.17354,
+   "book_delay_s": 7.2,
+   "liq_validated": false,
+   "quote_volume": 14793525.83702,
+   "qv24h": 20014269.96307,
+   "chart": "charts/SLXUSDT_1795593600.png",
+   "tracker": null,
+   "tf": {
+    "h4": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h12": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h1d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h2d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h3d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h1w": {
+     "status": "pending",
+     "return_pct": null
+    }
+   }
+  },
+  {
+   "signal_id": "PROD WS:USD-M:MANTRAUSDT:LONG SIGNAL:1795593600.0",
+   "symbol": "MANTRAUSDT",
+   "market": "USD-M",
+   "close_ts": 1795593600.0,
+   "close_wib": "25 Nov 15:00",
+   "close_utc": "25 Nov 08:00",
+   "price": 0.002108,
+   "open": 0.001771,
+   "chg_4h": 19.09604519774011,
+   "ema20": 0.001818252129638785,
+   "ema50": 0.0019801611796744175,
+   "ema500": 0.0036589762952127735,
+   "rvol": 38.457673879580256,
+   "taker_buy": 0.48882143245628124,
+   "breakout_level": 0.001893,
+   "breakout_margin": 11.357633386159542,
+   "hh": 2,
+   "hl": 2,
+   "atr14_pct": 4.442445784759537,
+   "rsi_5m": null,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 67.24649481644249,
+   "spread": 14.181044670290541,
+   "impact": 20.214520746518566,
+   "depth": 1303.46357,
+   "book_delay_s": 9.9,
+   "liq_validated": false,
+   "quote_volume": 11671183.253959,
+   "qv24h": 14838871.759073,
+   "chart": "charts/MANTRAUSDT_1795593600.png",
+   "tracker": null,
+   "tf": {
+    "h4": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h12": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h1d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h2d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h3d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h1w": {
+     "status": "pending",
+     "return_pct": null
+    }
+   }
+  },
+  {
+   "signal_id": "PROD WS:USD-M:PHAROSUSDT:LONG SIGNAL:1795593600.0",
+   "symbol": "PHAROSUSDT",
+   "market": "USD-M",
+   "close_ts": 1795593600.0,
+   "close_wib": "25 Nov 15:00",
+   "close_utc": "25 Nov 08:00",
+   "price": 0.7493,
+   "open": 0.6375,
+   "chg_4h": 17.537254901960786,
+   "ema20": 0.6213338438123132,
+   "ema50": 0.5792905322581403,
+   "ema500": 0.5454804804332256,
+   "rvol": 20.140577946043717,
+   "taker_buy": 0.5365337484336974,
+   "breakout_level": 0.7189,
+   "breakout_margin": 4.228682709695366,
+   "hh": 3,
+   "hl": 2,
+   "atr14_pct": 5.7695217186646035,
+   "rsi_5m": null,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 73.99112111403188,
+   "spread": 4.0013337779255345,
+   "impact": 13.30685177487873,
+   "depth": 116.2081,
+   "book_delay_s": 12.8,
+   "liq_validated": false,
+   "quote_volume": 14166557.9427,
+   "qv24h": 59210623.081,
+   "chart": "charts/PHAROSUSDT_1795593600.png",
+   "tracker": null,
+   "tf": {
+    "h4": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h12": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h1d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h2d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h3d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h1w": {
+     "status": "pending",
+     "return_pct": null
+    }
+   }
+  },
+  {
+   "signal_id": "PROD WS:USD-M:ALICEUSDT:LONG SIGNAL:1795593600.0",
+   "symbol": "ALICEUSDT",
+   "market": "USD-M",
+   "close_ts": 1795593600.0,
+   "close_wib": "25 Nov 15:00",
+   "close_utc": "25 Nov 08:00",
+   "price": 0.1001,
+   "open": 0.0959,
+   "chg_4h": 4.270833333333326,
+   "ema20": 0.09553114155736095,
+   "ema50": 0.09884975031177642,
+   "ema500": 0.1286601915618002,
+   "rvol": 12.1407906492702,
+   "taker_buy": 0.5166093905102763,
+   "breakout_level": 0.0991,
+   "breakout_margin": 1.0090817356205861,
+   "hh": 2,
+   "hl": 4,
+   "atr14_pct": 3.014963985386223,
+   "rsi_5m": null,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 62.09696684880296,
+   "spread": 10.00500250125091,
+   "impact": 20.134142586219895,
+   "depth": 1616.23747,
+   "book_delay_s": 15.9,
+   "liq_validated": false,
+   "quote_volume": 2446668.0174,
+   "qv24h": 3832176.5700999997,
+   "chart": "charts/ALICEUSDT_1795593600.png",
+   "tracker": null,
+   "tf": {
+    "h4": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h12": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h1d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h2d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h3d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h1w": {
+     "status": "pending",
+     "return_pct": null
+    }
+   }
+  },
+  {
+   "signal_id": "PROD WS:USD-M:DODOXUSDT:LONG SIGNAL:1795593600.0",
+   "symbol": "DODOXUSDT",
+   "market": "USD-M",
+   "close_ts": 1795593600.0,
+   "close_wib": "25 Nov 15:00",
+   "close_utc": "25 Nov 08:00",
+   "price": 0.045489,
+   "open": 0.043518,
+   "chg_4h": 4.50994807701144,
+   "ema20": 0.041045863824090686,
+   "ema50": 0.0374294557483679,
+   "ema500": 0.024567448615050228,
+   "rvol": 2.28840084138884,
+   "taker_buy": 0.5044727590885899,
+   "breakout_level": 0.044938,
+   "breakout_margin": 1.2261337843250766,
+   "hh": 2,
+   "hl": 3,
+   "atr14_pct": 3.6838673219857045,
+   "rsi_5m": null,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 75.85690529145056,
+   "spread": 4.179728317658953,
+   "impact": null,
+   "depth": 908.255803,
+   "book_delay_s": 18.6,
+   "liq_validated": false,
+   "quote_volume": 3794941.962848,
+   "qv24h": 21936305.562845,
+   "chart": "charts/DODOXUSDT_1795593600.png",
+   "tracker": null,
+   "tf": {
+    "h4": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h12": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h1d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h2d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h3d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h1w": {
+     "status": "pending",
+     "return_pct": null
+    }
+   }
+  },
+  {
+   "signal_id": "PROD WS:USD-M:BTWUSDT:LONG SIGNAL:1795593600.0",
+   "symbol": "BTWUSDT",
+   "market": "USD-M",
+   "close_ts": 1795593600.0,
+   "close_wib": "25 Nov 15:00",
+   "close_utc": "25 Nov 08:00",
+   "price": 0.878,
+   "open": 0.8006,
+   "chg_4h": 9.667749188108923,
+   "ema20": 0.7339617796492985,
+   "ema50": 0.7004015293743605,
+   "ema500": 0.9659735867931435,
+   "rvol": 1.8851931191661713,
+   "taker_buy": 0.5090117478809288,
+   "breakout_level": 0.8547,
+   "breakout_margin": 2.7261027261027246,
+   "hh": 4,
+   "hl": 3,
+   "atr14_pct": 7.065434113053234,
+   "rsi_5m": null,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 71.92277429024601,
+   "spread": 3.4042553191485614,
+   "impact": 13.432224932301452,
+   "depth": 131.2857,
+   "book_delay_s": 20.7,
+   "liq_validated": false,
+   "quote_volume": 17593976.9948,
+   "qv24h": 48100562.73296,
+   "chart": "charts/BTWUSDT_1795593600.png",
+   "tracker": null,
+   "tf": {
+    "h4": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h12": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h1d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h2d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h3d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h1w": {
+     "status": "pending",
+     "return_pct": null
+    }
+   }
+  },
+  {
+   "signal_id": "PROD WS:USD-M:WMTUSDT:LONG SIGNAL:1795593600.0",
+   "symbol": "WMTUSDT",
+   "market": "USD-M",
+   "close_ts": 1795593600.0,
+   "close_wib": "25 Nov 15:00",
+   "close_utc": "25 Nov 08:00",
+   "price": 133.04,
+   "open": 132.36,
+   "chg_4h": 0.4985647378758095,
+   "ema20": 130.18724923834205,
+   "ema50": 128.87417543507055,
+   "ema500": 119.34469525598595,
+   "rvol": 2.3608839061397324,
+   "taker_buy": 0.5772372153148427,
+   "breakout_level": 132.62,
+   "breakout_margin": 0.31669431458300973,
+   "hh": 3,
+   "hl": 3,
+   "atr14_pct": 0.9052295081089614,
+   "rsi_5m": null,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 73.83005580551388,
+   "spread": 2.255554302469917,
+   "impact": 6.413190714021752,
+   "depth": 66.49980000000001,
+   "book_delay_s": 23.5,
+   "liq_validated": false,
+   "quote_volume": 454313.7671,
+   "qv24h": 2878767.2811000003,
+   "chart": "charts/WMTUSDT_1795593600.png",
+   "tracker": null,
+   "tf": {
+    "h4": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h12": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h1d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h2d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h3d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h1w": {
+     "status": "pending",
+     "return_pct": null
+    }
+   }
+  },
+  {
+   "signal_id": "PROD WS:USD-M:MCDUSDT:LONG SIGNAL:1795593600.0",
+   "symbol": "MCDUSDT",
+   "market": "USD-M",
+   "close_ts": 1795593600.0,
+   "close_wib": "25 Nov 15:00",
+   "close_utc": "25 Nov 08:00",
+   "price": 282.18,
+   "open": 280.48,
+   "chg_4h": 0.5738318423209943,
+   "ema20": 276.81933017660793,
+   "ema50": 275.00447213620436,
+   "ema500": null,
+   "rvol": 1.300380127258001,
+   "taker_buy": 0.5696802583800744,
+   "breakout_level": 281.86,
+   "breakout_margin": 0.11353154048108748,
+   "hh": 2,
+   "hl": 3,
+   "atr14_pct": 0.6521470953044343,
+   "rsi_5m": null,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 81.10992034029132,
+   "spread": null,
+   "impact": null,
+   "depth": null,
+   "book_delay_s": 30.6,
+   "liq_validated": false,
+   "quote_volume": 140187.9618,
+   "qv24h": 738854.9603,
+   "chart": "charts/MCDUSDT_1795593600.png",
+   "tracker": null,
+   "tf": {
+    "h4": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h12": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h1d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h2d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h3d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h1w": {
+     "status": "pending",
+     "return_pct": null
+    }
+   }
+  },
+  {
+   "signal_id": "PROD WS:USD-M:PORTALUSDT:LONG SIGNAL:1795593600.0",
+   "symbol": "PORTALUSDT",
+   "market": "USD-M",
+   "close_ts": 1795593600.0,
+   "close_wib": "25 Nov 15:00",
+   "close_utc": "25 Nov 08:00",
+   "price": 0.01247,
+   "open": 0.01192,
+   "chg_4h": 4.6140939597315445,
+   "ema20": 0.011911286242593758,
+   "ema50": 0.011919941105106047,
+   "ema500": 0.013522294365852764,
+   "rvol": 2.528341088453636,
+   "taker_buy": 0.48793306869211556,
+   "breakout_level": 0.01237,
+   "breakout_margin": 0.8084074373484187,
+   "hh": 2,
+   "hl": 2,
+   "atr14_pct": 3.0073614946245955,
+   "rsi_5m": null,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 61.66910789658649,
+   "spread": 8.01603206412793,
+   "impact": 59.6126106154899,
+   "depth": 569.786934,
+   "book_delay_s": 33.6,
+   "liq_validated": false,
+   "quote_volume": 355028.559266,
+   "qv24h": 1163457.299159,
+   "chart": "charts/PORTALUSDT_1795593600.png",
+   "tracker": null,
+   "tf": {
+    "h4": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h12": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h1d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h2d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h3d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h1w": {
+     "status": "pending",
+     "return_pct": null
+    }
+   }
+  },
+  {
+   "signal_id": "PROD WS:USD-M:KOUSDT:LONG SIGNAL:1795593600.0",
+   "symbol": "KOUSDT",
+   "market": "USD-M",
+   "close_ts": 1795593600.0,
+   "close_wib": "25 Nov 15:00",
+   "close_utc": "25 Nov 08:00",
+   "price": 98.51,
+   "open": 98.07,
+   "chg_4h": 0.44865912103600686,
+   "ema20": 97.22864879196686,
+   "ema50": 97.30741471457738,
+   "ema500": 92.84038968157371,
+   "rvol": 1.5430570740339702,
+   "taker_buy": 0.7206651943396883,
+   "breakout_level": 98.45,
+   "breakout_margin": 0.060944641950230846,
+   "hh": 3,
+   "hl": 3,
+   "atr14_pct": 0.7560958280869953,
+   "rsi_5m": null,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 66.86641968880113,
+   "spread": null,
+   "impact": null,
+   "depth": null,
+   "book_delay_s": 42.7,
+   "liq_validated": false,
+   "quote_volume": 244084.368,
+   "qv24h": 1216498.9858,
+   "chart": "charts/KOUSDT_1795593600.png",
+   "tracker": null,
+   "tf": {
+    "h4": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h12": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h1d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h2d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h3d": {
+     "status": "pending",
+     "return_pct": null
+    },
+    "h1w": {
+     "status": "pending",
+     "return_pct": null
+    }
+   }
+  },
   {
    "signal_id": "PROD WS:USD-M:BIGTIMEUSDT:LONG SIGNAL:1795579200.0",
    "symbol": "BIGTIMEUSDT",
@@ -5092,8 +5770,8 @@
    },
    "tf": {
     "h4": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": 42.33642743943853
     },
     "h12": {
      "status": "pending",
@@ -5166,8 +5844,8 @@
    },
    "tf": {
     "h4": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": 0.03383522246658277
     },
     "h12": {
      "status": "pending",
@@ -5318,8 +5996,8 @@
      "return_pct": 10.430247718383301
     },
     "h12": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": 9.908735332464147
     },
     "h1d": {
      "status": "pending",
@@ -5392,8 +6070,8 @@
      "return_pct": 0.09611794155475195
     },
     "h12": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -0.9791583110902224
     },
     "h1d": {
      "status": "pending",
@@ -5466,8 +6144,8 @@
      "return_pct": -0.5389585929124086
     },
     "h12": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -1.00837414157805
     },
     "h1d": {
      "status": "pending",
@@ -7320,8 +7998,8 @@
      "return_pct": -6.496519721577732
     },
     "h1d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -3.7122969837587005
     },
     "h2d": {
      "status": "pending",
@@ -7394,8 +8072,8 @@
      "return_pct": -7.627865961199298
     },
     "h1d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -2.6014109347442638
     },
     "h2d": {
      "status": "pending",
@@ -7468,8 +8146,8 @@
      "return_pct": -9.261300992282251
     },
     "h1d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -10.088202866593166
     },
     "h2d": {
      "status": "pending",
@@ -7542,8 +8220,8 @@
      "return_pct": 3.300180831826416
     },
     "h1d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -3.089210367691375
     },
     "h2d": {
      "status": "pending",
@@ -30560,8 +31238,8 @@
      "return_pct": -2.592592592592591
     },
     "h2d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -6.666666666666665
     },
     "h3d": {
      "status": "pending",
@@ -30634,8 +31312,8 @@
      "return_pct": 3.024691358024678
     },
     "h2d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -8.438271604938286
     },
     "h3d": {
      "status": "pending",
@@ -30708,8 +31386,8 @@
      "return_pct": -6.48616483189527
     },
     "h2d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -8.583754834870572
     },
     "h3d": {
      "status": "pending",
@@ -30782,8 +31460,8 @@
      "return_pct": 1.7518770110833026
     },
     "h2d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -6.506971755452263
     },
     "h3d": {
      "status": "pending",
@@ -30856,8 +31534,8 @@
      "return_pct": -0.7609780439121749
     },
     "h2d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": 7.4725548902195404
     },
     "h3d": {
      "status": "pending",
@@ -30930,8 +31608,8 @@
      "return_pct": 2.173079381311527
     },
     "h2d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -0.07669691934039102
     },
     "h3d": {
      "status": "pending",
@@ -31004,8 +31682,8 @@
      "return_pct": 2.6838762548658135
     },
     "h2d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -4.5892235197705356
     },
     "h3d": {
      "status": "pending",
@@ -31078,8 +31756,8 @@
      "return_pct": 0.27658266748618043
     },
     "h2d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -3.2267977873386533
     },
     "h3d": {
      "status": "pending",
@@ -31152,8 +31830,8 @@
      "return_pct": -1.2204142011834285
     },
     "h2d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -4.068047337278102
     },
     "h3d": {
      "status": "pending",
@@ -31226,8 +31904,8 @@
      "return_pct": 2.810211755392844
     },
     "h2d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -2.533148624579451
     },
     "h3d": {
      "status": "pending",
@@ -31300,8 +31978,8 @@
      "return_pct": -1.661070860576075
     },
     "h2d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -7.404135006184842
     },
     "h3d": {
      "status": "pending",
@@ -31374,8 +32052,8 @@
      "return_pct": 4.97939560439562
     },
     "h2d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": 1.6826923076923128
     },
     "h3d": {
      "status": "pending",
@@ -32858,8 +33536,8 @@
      "return_pct": -16.535433070866144
     },
     "h3d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -14.729041222788341
     },
     "h1w": {
      "status": "pending",
@@ -32932,8 +33610,8 @@
      "return_pct": -16.7583280955374
     },
     "h3d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -23.397234443746072
     },
     "h1w": {
      "status": "pending",
@@ -33006,8 +33684,8 @@
      "return_pct": 34.574756229685796
     },
     "h3d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -1.6657638136511443
     },
     "h1w": {
      "status": "pending",

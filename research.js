@@ -172,6 +172,60 @@
       "risk.sensNote": "Cost ×0 = gross only (no costs), ×1 = base round-trip cost (spread + 8 bps fee), ×2 = cost doubled. Liquidation proxy = share of signals whose MAE reached −33.3% (3x), −20% (5x), or −10% (10x). Simplified: isolated margin, no maintenance margin, no funding, MAE from 4H lows — a proxy, never a liquidation rate.",
       "risk.hypNote": "Hypotheses are validated only on closes after they were frozen, on per-close portfolio means (fixed-capital). Until new closes arrive, every verdict is awaiting_validation.",
       "risk.recoNote": "All risk recommendations are INSUFFICIENT EVIDENCE in v1.0.0 — nothing is applied to production. A non-INSUFFICIENT verdict needs a ≥1.0pp gap in the same direction on both discovery and validation, n≥10/side on validation closes, survival of the ex-flood aggregation, and drawdown no worse than baseline.",
+      "rail.ignition": "Pump Ignition",
+      "sec.ignition.kicker": "11 — Pump Ignition",
+      "sec.ignition.title": "Agent 07 — Pump Ignition Intelligence",
+      "sec.ignition.sub": "What the pre-entry picture looks like before a signal fires — squeeze, Bollinger Band width, ATR contraction, volume acceleration, price compression, momentum acceleration, and pre-breakout open interest — measured only on bars before the signal close, never after. The goal is not the biggest pump: it is the entry that is immediately followed by a rise, so a realistic small TP is reached more often. Every number here is descriptive — one close (the 23 Nov flood) dominates the sample, and hypotheses IH1–IH6 are frozen and awaiting prospective closes.",
+      "panel.ignOverview": "Ignition overview — coverage",
+      "panel.ignOi": "Open interest coverage",
+      "panel.ignSqueeze": "Squeeze × breakout margin",
+      "panel.ignFeatures": "Pre-entry features — per bucket (+4H)",
+      "panel.ignHyps": "Ignition hypotheses (frozen, awaiting new closes)",
+      "panel.ignRecos": "Ignition recommendations",
+      "ign.notYet": "Pump Ignition research not built yet — the daily builder (after the 08:00 WIB risk) has not run.",
+      "ign.overviewNote": "Ignition features are computed on the Shadow Lab A0 replay (436 signals, including backfill extras; production sent 390). Pre-signal bars only — a feature can never see the signal bar or anything after it.",
+      "ign.oiNote": "Open interest comes from the daily Binance metrics archive (1-day lag) — a signal whose archive is not yet published has no OI value, reported as missing, never estimated.",
+      "ign.sqNote": "Squeeze is the standard TTM-style definition: Bollinger Bands (20, 2σ) inside Keltner Channels (20, 1.5× ATR10). Released = squeeze at some point in the 6 bars before the signal, but not on the bar right before it. Margin band is the breakout margin: early <0.5%, late ≥5%.",
+      "ign.featNote": "One row per feature bucket. Positive = share of signals with net +4H > 0. TP+1% before SL = share that touched +1% before the −2% stop. Profit factor = gross wins / gross losses; “no losses” means the bucket had no losing signal. Buckets with n<5 are shown but carry no conclusion.",
+      "ign.hypNote": "IH verdicts are gap-based on validation closes (flood and later): holds needs n≥5/side and a gap ≥2pp in the expected direction. IH5 (OI rising) holds on the numbers but its falling side is 7 signals from a single close — fragile, not a finding.",
+      "ign.recoNote": "All ignition recommendations are INSUFFICIENT EVIDENCE in v1.0.0 — ignition features are measured for the first time and no hypothesis has been validated on a prospective close yet.",
+      "rail.missed": "Missed Opportunity",
+      "sec.missed.kicker": "12 — Missed Opportunity",
+      "sec.missed.title": "Agent 08 — Missed Opportunity Intelligence",
+      "sec.missed.sub": "Eligible contracts that never signalled but then rose — which gate blocked them, how far they were from the threshold, and what removing or loosening one gate would have added, winners AND losers together. Counterfactual impact is in gross +4H return only: the spread of a non-signal is unmeasured, so net is never computed here. Scope is v2.1.2 closes only (from 22 Nov 15:00 WIB).",
+      "panel.missedOverview": "Missed-opportunity overview",
+      "panel.missedPassed": "Passed the gate, not sent",
+      "panel.missedGates": "Which gate blocked the winners (and the losers)",
+      "panel.missedCombos": "Failing gate combinations",
+      "panel.missedCf": "Counterfactuals — what one gate change would have added",
+      "panel.missedTop": "Top missed winners",
+      "panel.missedHyps": "Missed hypotheses (frozen, awaiting new closes)",
+      "panel.missedRecos": "Missed recommendations",
+      "missed.notYet": "Missed Opportunity research not built yet — the daily builder (after the 08:00 WIB ignition) has not run.",
+      "missed.overviewNote": "Eligible = every evaluated contract at a v2.1.2 close, signals and non-signals together. Winner = +4H return ≥ +1% (the tracker threshold); big miss = ≥ +5%; loser = ≤ −1%. One close is one market condition, not hundreds of independent samples.",
+      "missed.passedNote": "These contracts passed the engine gates but were never sent — dedup (a production LONG SIGNAL in the prior 1–3 closes) or the chart-validation gate. The watcher log does not separate dedup from the chart gate, so the split is not shown.",
+      "missed.gatesNote": "“Blocked” counts a gate among the failing gates of a winner/loser; “only gate” counts contracts where that gate was the single failure. Median gap is how far the actual value sat from the threshold (pp for breakout and close>open, × for RVOL). Most missed winners fail two or more gates — they were not near-misses.",
+      "missed.comboNote": "Every failing-gate combination among winners and losers. The dominant pair is breakout + RVOL together.",
+      "missed.cfNote": "Each counterfactual removes or loosens exactly one gate and counts what would have signalled. Mean gross r4h is the mean +4H return of the added set (gross — net is not computed for non-signals). “Would but dedup” counts added winners that would still have been suppressed by the 3-close dedup.",
+      "missed.topNote": "The largest +4H rises among eligible non-signals, with the gates that blocked each one. NVDL +43.39% was blocked by breakout (16.46pp below the high) and RVOL (0.90× vs 1.3×).",
+      "missed.hypNote": "MH verdicts need n≥5/side and a gap ≥2pp on validation closes. MH1 and MH3 are still awaiting validation; MH2 does not hold — only 14.9% of validation winners were blocked by a single gate.",
+      "missed.recoNote": "All missed recommendations are INSUFFICIENT EVIDENCE in v1.0.0 — attribution covers v2.1.2 closes only and hypotheses MH1–MH3 are not yet prospectively validated.",
+      "rail.validation": "Independent Validation",
+      "sec.validation.kicker": "13 — Independent Validation",
+      "sec.validation.title": "Agent 10 — Independent Strategy Validation",
+      "sec.validation.sub": "This agent audits the research process itself — look-ahead bias, data leakage, survivorship bias, selection bias, overfitting, multiple testing, parameter sensitivity, walk-forward validation, prospective validation, cluster dependency, and reproducibility. It never blocks a production signal; it grades how much the research conclusions can be trusted.",
+      "panel.valSummary": "Validation summary",
+      "panel.valProspective": "Prospective validation per registry",
+      "panel.valChecks": "The 11 checks",
+      "panel.valWf": "Walk-forward — expanding train, next 5 closes as test",
+      "panel.valRecos": "Validation recommendations",
+      "panel.valLimits": "Limitations",
+      "val.notYet": "Independent validation not built yet — the daily builder (after the 08:00 WIB missed) has not run.",
+      "val.summaryNote": "Verdicts are gap-based, not significance tests — there are no p-values anywhere in this research. Warning means “read the numbers with this caveat”; fail would mean a check found a concrete defect.",
+      "val.prospNote": "A hypothesis is only validated on closes after it was frozen. LH has 1 prospective validation close so far; EH, JH, RH, IH and MH have 0 — every verdict so far rests on the flood close, which predates the hypotheses.",
+      "val.checksNote": "Each check re-derives its evidence from the raw files (decisions, candles, state files) — it does not trust the summaries it is checking.",
+      "val.wfNote": "Expanding train, test = next 5 closes. Early folds are tiny (fold 1 trains on 10 closes with 5 A0 signals) — read the test means as stability probes, not performance claims. Best-on-train changes across folds, which is what an overfit selector would hide.",
+      "val.recoNote": "Validation recommendations concern the research process (wait for prospective closes, freeze new hypotheses) — never a strategy change. All 11 are INSUFFICIENT EVIDENCE in v1.0.0.",
       "panel.agents": "Research coverage per agent",
       "panel.agents.sub": "Each agent is scored independently — one agent's missing data never blocks another.",
       "panel.regimes": "Market regime at signal time",
@@ -600,6 +654,60 @@
       "risk.sensNote": "Biaya ×0 = gross saja (tanpa biaya), ×1 = biaya round-trip dasar (spread + fee 8 bps), ×2 = biaya digandakan. Proxy likuidasi = porsi sinyal yang MAE-nya mencapai −33,3% (3x), −20% (5x), atau −10% (10x). Disederhanakan: isolated margin, tanpa maintenance margin, tanpa funding, MAE dari low 4H — proxy, bukan angka likuidasi.",
       "risk.hypNote": "Hipotesis divalidasi hanya pada close setelah dibekukan, memakai mean portofolio per close (fixed-capital). Sampai ada close baru, semua verdict masih awaiting_validation.",
       "risk.recoNote": "Semua rekomendasi risiko masih INSUFFICIENT EVIDENCE di v1.0.0 — tidak ada yang diterapkan ke produksi. Verdict non-INSUFFICIENT butuh gap ≥1,0pp searah di discovery dan validation, n≥10/sisi pada close validasi, lolos agregasi ex-flood, dan drawdown tidak lebih buruk dari baseline.",
+      "rail.ignition": "Ignisi Pump",
+      "sec.ignition.kicker": "11 — Ignisi Pump",
+      "sec.ignition.title": "Agent 07 — Pump Ignition Intelligence",
+      "sec.ignition.sub": "Seperti apa gambaran pra-entry sebelum sinyal muncul — squeeze, lebar Bollinger Band, kontraksi ATR, akselerasi volume, kompresi harga, akselerasi momentum, dan open interest pra-breakout — diukur hanya dari bar sebelum close sinyal, tidak pernah sesudahnya. Tujuannya bukan pump terbesar: melainkan entry yang langsung diikuti kenaikan, supaya TP kecil yang realistis lebih sering tercapai. Semua angka di sini deskriptif — satu close (flood 23 Nov) mendominasi sampel, dan hipotesis IH1–IH6 dibekukan dan masih menunggu close prospektif.",
+      "panel.ignOverview": "Gambaran ignisi — cakupan",
+      "panel.ignOi": "Cakupan open interest",
+      "panel.ignSqueeze": "Squeeze × margin breakout",
+      "panel.ignFeatures": "Fitur pra-entry — per bucket (+4H)",
+      "panel.ignHyps": "Hipotesis ignisi (beku, menunggu close baru)",
+      "panel.ignRecos": "Rekomendasi ignisi",
+      "ign.notYet": "Riset Pump Ignition belum dibangun — builder harian (setelah risk 08:00 WIB) belum berjalan.",
+      "ign.overviewNote": "Fitur ignisi dihitung pada replay A0 Shadow Lab (436 sinyal, termasuk extra backfill; produksi mengirim 390). Hanya bar pra-sinyal — sebuah fitur tidak pernah melihat bar sinyal atau apa pun sesudahnya.",
+      "ign.oiNote": "Open interest berasal dari arsip metrics harian Binance (lag 1 hari) — sinyal yang arsipnya belum terbit tidak punya nilai OI, dilaporkan hilang, tidak pernah diestimasi.",
+      "ign.sqNote": "Squeeze memakai definisi standar TTM-style: Bollinger Bands (20, 2σ) di dalam Keltner Channels (20, 1,5× ATR10). Released = squeeze pernah terjadi di 6 bar sebelum sinyal, tapi tidak di bar tepat sebelum sinyal. Margin band adalah margin breakout: early <0,5%, late ≥5%.",
+      "ign.featNote": "Satu baris per bucket fitur. Positive = porsi sinyal dengan net +4H > 0. TP+1% before SL = porsi yang menyentuh +1% sebelum stop −2%. Profit factor = gross win / gross loss; “no losses” berarti bucket itu tidak punya sinyal yang rugi. Bucket dengan n<5 ditampilkan tapi tidak membawa kesimpulan.",
+      "ign.hypNote": "Verdict IH berbasis gap pada close validasi (flood dan sesudahnya): holds butuh n≥5/sisi dan gap ≥2pp searah yang diharapkan. IH5 (OI naik) holds secara angka tapi sisi turunnya hanya 7 sinyal dari satu close — rapuh, bukan temuan.",
+      "ign.recoNote": "Semua rekomendasi ignisi masih INSUFFICIENT EVIDENCE di v1.0.0 — fitur ignisi baru pertama kali diukur dan belum ada hipotesis yang tervalidasi pada close prospektif.",
+      "rail.missed": "Peluang Terlewat",
+      "sec.missed.kicker": "12 — Peluang Terlewat",
+      "sec.missed.title": "Agent 08 — Missed Opportunity Intelligence",
+      "sec.missed.sub": "Kontrak eligible yang tidak pernah memberi sinyal tapi kemudian naik — gate mana yang memblokirnya, seberapa jauh dari threshold, dan apa yang akan ditambahkan bila satu gate dihapus atau dilonggarkan, winner DAN loser sekaligus. Dampak counterfactual hanya dalam gross return +4H: spread non-sinyal tidak terukur, jadi net tidak pernah dihitung di sini. Cakupan hanya close v2.1.2 (sejak 22 Nov 15:00 WIB).",
+      "panel.missedOverview": "Gambaran peluang terlewat",
+      "panel.missedPassed": "Lolos gate, tidak terkirim",
+      "panel.missedGates": "Gate mana yang memblokir winner (dan loser)",
+      "panel.missedCombos": "Kombinasi gate yang gagal",
+      "panel.missedCf": "Counterfactual — apa yang ditambahkan satu perubahan gate",
+      "panel.missedTop": "Winner terlewat terbesar",
+      "panel.missedHyps": "Hipotesis missed (beku, menunggu close baru)",
+      "panel.missedRecos": "Rekomendasi missed",
+      "missed.notYet": "Riset Missed Opportunity belum dibangun — builder harian (setelah ignition 08:00 WIB) belum berjalan.",
+      "missed.overviewNote": "Eligible = semua kontrak yang dievaluasi pada satu close v2.1.2, sinyal dan non-sinyal sekaligus. Winner = return +4H ≥ +1% (threshold tracker); big miss = ≥ +5%; loser = ≤ −1%. Satu close adalah satu kondisi pasar, bukan ratusan sampel independen.",
+      "missed.passedNote": "Kontrak ini lolos gate engine tapi tidak pernah terkirim — dedup (sinyal LONG produksi dalam 1–3 close sebelumnya) atau chart-validation gate. Log watcher tidak memisahkan dedup dari chart gate, jadi split-nya tidak ditampilkan.",
+      "missed.gatesNote": "“Blocked” menghitung gate di antara gate yang gagal pada satu winner/loser; “only gate” menghitung kontrak yang gate itu satu-satunya kegagalan. Median gap adalah seberapa jauh nilai aktual dari threshold (pp untuk breakout dan close>open, × untuk RVOL). Sebagian besar winner terlewat gagal di dua gate atau lebih — mereka bukan near-miss.",
+      "missed.comboNote": "Setiap kombinasi gate yang gagal pada winner dan loser. Pasangan dominan adalah breakout + RVOL bersamaan.",
+      "missed.cfNote": "Setiap counterfactual menghapus atau melonggarkan tepat satu gate dan menghitung apa yang akan memberi sinyal. Mean gross r4h adalah mean return +4H dari set yang ditambahkan (gross — net tidak dihitung untuk non-sinyal). “Would but dedup” menghitung winner tambahan yang tetap akan ditahan dedup 3 close.",
+      "missed.topNote": "Kenaikan +4H terbesar di antara non-sinyal eligible, beserta gate yang memblokir masing-masing. NVDL +43,39% diblokir breakout (16,46pp di bawah high) dan RVOL (0,90× vs 1,3×).",
+      "missed.hypNote": "Verdict MH butuh n≥5/sisi dan gap ≥2pp pada close validasi. MH1 dan MH3 masih awaiting validation; MH2 tidak holds — hanya 14,9% winner validasi yang diblokir satu gate saja.",
+      "missed.recoNote": "Semua rekomendasi missed masih INSUFFICIENT EVIDENCE di v1.0.0 — atribusi hanya mencakup close v2.1.2 dan hipotesis MH1–MH3 belum tervalidasi prospektif.",
+      "rail.validation": "Validasi Independen",
+      "sec.validation.kicker": "13 — Validasi Independen",
+      "sec.validation.title": "Agent 10 — Independent Strategy Validation",
+      "sec.validation.sub": "Agent ini mengaudit proses riset itu sendiri — look-ahead bias, data leakage, survivorship bias, selection bias, overfitting, multiple testing, sensitivitas parameter, walk-forward validation, validasi prospektif, ketergantungan klaster, dan reproduksibilitas. Ia tidak pernah memblokir sinyal produksi; ia menilai seberapa jauh kesimpulan riset bisa dipercaya.",
+      "panel.valSummary": "Ringkasan validasi",
+      "panel.valProspective": "Validasi prospektif per registri",
+      "panel.valChecks": "11 pemeriksaan",
+      "panel.valWf": "Walk-forward — train membesar, 5 close berikutnya sebagai test",
+      "panel.valRecos": "Rekomendasi validasi",
+      "panel.valLimits": "Keterbatasan",
+      "val.notYet": "Validasi independen belum dibangun — builder harian (setelah missed 08:00 WIB) belum berjalan.",
+      "val.summaryNote": "Verdict berbasis gap, bukan uji signifikansi — tidak ada p-value di riset ini. Warning berarti “baca angka dengan caveat ini”; fail berarti pemeriksaan menemukan cacat konkret.",
+      "val.prospNote": "Hipotesis hanya divalidasi pada close setelah dibekukan. LH sejauh ini punya 1 close validasi prospektif; EH, JH, RH, IH dan MH 0 — semua verdict sejauh ini bersandar pada close flood, yang mendahului pembuatan hipotesis.",
+      "val.checksNote": "Setiap pemeriksaan menghitung ulang buktinya dari file mentah (decisions, candle, file state) — ia tidak mempercayai ringkasan yang sedang diperiksanya.",
+      "val.wfNote": "Train membesar, test = 5 close berikutnya. Fold awal sangat kecil (fold 1 melatih dari 10 close dengan 5 sinyal A0) — baca mean test sebagai probe stabilitas, bukan klaim performa. Best-on-train berubah antar fold, persis yang akan disembunyikan selector yang overfit.",
+      "val.recoNote": "Rekomendasi validasi menyangkut proses riset (tunggu close prospektif, bekukan hipotesis baru) — bukan perubahan strategi. Ke-11-nya masih INSUFFICIENT EVIDENCE di v1.0.0.",
       "panel.agents": "Cakupan riset per agent",
       "panel.agents.sub": "Setiap agent dinilai secara independen — data yang hilang dari satu agent tidak pernah memblokir agent lain.",
       "panel.regimes": "Rezim pasar saat sinyal",
@@ -1082,6 +1190,9 @@
     renderExit();
     renderJoint();
     renderRisk();
+    renderIgnition();
+    renderMissed();
+    renderValidation();
     renderTimeline();
     renderExplorer();
     watchReveals();
@@ -3177,6 +3288,603 @@
       '<ul class="missing-list">' + recos + "</ul>" +
       "<p class='panel-sub' style='margin-top:12px'>" +
         t("risk.recoNote") + "</p>";
+  }
+
+  /* ------------------------------------------------- ignition (v48) */
+  function renderIgnition() {
+    var IG = ((DATA.learnings || {}).ignition_research) || null;
+    var ids = ["ignition-overview", "ignition-oi", "ignition-squeeze",
+               "ignition-features", "ignition-hypotheses",
+               "ignition-recommendations"];
+    if (!IG || IG.status === "ERROR") {
+      ids.forEach(function (id) {
+        var el = $(id);
+        if (el) el.innerHTML = '<p class="panel-sub" style="margin:0">' +
+          t("ign.notYet") + "</p>";
+      });
+      return;
+    }
+    if (IG.status === "not yet") {
+      ids.forEach(function (id) {
+        var el = $(id);
+        if (el) el.innerHTML = '<p class="panel-sub" style="margin:0">' +
+          esc(bi(IG.note, IG.note_en) || t("ign.notYet")) + "</p>";
+      });
+      return;
+    }
+    var pc = function (v, dec) {
+      return v == null ? "—" : fmtPct(v, dec == null ? 2 : dec);
+    };
+    var nm = function (v, dec) {
+      return v == null ? "—" : fmtNum(v, dec == null ? 1 : dec);
+    };
+    var pfCell = function (v) {
+      if (v == null) return "—";
+      if (typeof v === "number") return nm(v, 2);
+      return esc(String(v));
+    };
+
+    /* Overview: coverage */
+    $("ignition-overview").innerHTML =
+      '<ul class="missing-list">' +
+      "<li><span>Signals evaluated (+4H)</span><span class='num'>" +
+        (IG.n_evaluated_h4 == null ? "—" : IG.n_evaluated_h4) +
+        "</span></li>" +
+      "<li><span>Replay signals / closes</span><span class='num'>" +
+        (IG.n_signals_replay == null ? "—" : IG.n_signals_replay) +
+        " / " + (IG.n_closes == null ? "—" : IG.n_closes) +
+        "</span></li>" +
+      "<li><span>Discovery / validation closes</span>" +
+        "<span class='num'>" +
+        (IG.discovery_closes == null ? "—" : IG.discovery_closes) +
+        " / " +
+        (IG.validation_closes == null ? "—" : IG.validation_closes) +
+        "</span></li>" +
+      "<li><span>Flood close share of replay</span>" +
+        "<span class='num'>" +
+        pc(IG.flood_share_pct, 1) + "</span></li>" +
+      "<li><span>Skipped (no pre-signal bars)</span>" +
+        "<span class='num'>" +
+        (IG.skipped == null ? "—" : IG.skipped) + "</span></li>" +
+      "</ul>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("ign.overviewNote") + "</p>";
+
+    /* OI coverage */
+    var oi = IG.oi_coverage || {};
+    $("ignition-oi").innerHTML =
+      '<ul class="missing-list">' +
+      "<li><span>Signals with OI (24h change)</span>" +
+        "<span class='num'>" +
+        (oi.n == null ? "—" : oi.n) + " / " +
+        (oi.of == null ? "—" : oi.of) + " (" +
+        pc(oi.pct, 1) + ")</span></li>" +
+      "</ul>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        esc(oi.note || "") + "</p>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("ign.oiNote") + "</p>";
+
+    /* Squeeze x margin */
+    var sqRows = (IG.squeeze_x_margin || []).map(function (r) {
+      return "<tr><td>" + esc(r.squeeze_state) + "</td>" +
+        "<td>" + esc(r.margin_band) + "</td>" +
+        "<td>" + (r.n == null ? "—" : r.n) + "</td>" +
+        "<td>" + (r.n_closes == null ? "—" : r.n_closes) + "</td>" +
+        "<td>" + pc(r.positive_net_rate_pct, 1) + "</td>" +
+        "<td>" + pc(r.mean_net_rt_pct) + "</td>" +
+        "<td>" + pc(r.tp_before_sl_1pct_pct, 1) + "</td></tr>";
+    }).join("");
+    $("ignition-squeeze").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>Squeeze</th><th>Margin band</th><th>n</th>" +
+      "<th>Closes</th><th>Positive</th><th>Mean net +4H</th>" +
+      "<th>TP+1% before SL</th></tr></thead><tbody>" + sqRows +
+      "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("ign.sqNote") + "</p>";
+
+    /* Per-feature buckets */
+    var FEAT_ORDER = ["squeeze_state", "width_ratio", "bb_width_pctile",
+      "atr_pctile", "atr_contraction_bars", "vol_accel_3bar_pct",
+      "vol_accel_trend_pp", "range_ratio", "mom_accel_pp",
+      "macd_hist_slope", "oi_chg_24h_pct", "margin_band"];
+    var FEAT_LABELS = {
+      squeeze_state: "Squeeze state",
+      width_ratio: "BB width / ATR",
+      bb_width_pctile: "BB width percentile",
+      atr_pctile: "ATR percentile",
+      atr_contraction_bars: "ATR contraction (bars)",
+      vol_accel_3bar_pct: "Volume acceleration (3-bar)",
+      vol_accel_trend_pp: "Volume accel trend",
+      range_ratio: "Price compression (range ratio)",
+      mom_accel_pp: "Momentum acceleration",
+      macd_hist_slope: "MACD histogram slope",
+      oi_chg_24h_pct: "OI change 24h",
+      margin_band: "Breakout margin band"
+    };
+    var featRows = FEAT_ORDER.map(function (f) {
+      var rows = ((IG.features || {})[f]) || [];
+      return rows.map(function (r) {
+        return "<tr><td>" + esc(FEAT_LABELS[f] || f) + "</td>" +
+          "<td>" + esc(String(r.bucket)) + "</td>" +
+          "<td>" + (r.n == null ? "—" : r.n) + "</td>" +
+          "<td>" + (r.n_closes == null ? "—" : r.n_closes) +
+          "</td>" +
+          "<td>" + pc(r.positive_net_rate_pct, 1) + "</td>" +
+          "<td>" + pc(r.mean_net_rt_pct) + "</td>" +
+          "<td>" + pc(r.tp_before_sl_1pct_pct, 1) + "</td>" +
+          "<td>" + pc(r.median_mfe_pct) + "</td>" +
+          "<td>" + pc(r.median_mae_pct) + "</td>" +
+          "<td>" + pfCell(r.profit_factor) + "</td></tr>";
+      }).join("");
+    }).join("");
+    $("ignition-features").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>Feature</th><th>Bucket</th><th>n</th>" +
+      "<th>Closes</th><th>Positive</th><th>Mean net +4H</th>" +
+      "<th>TP+1% before SL</th><th>Median MFE</th>" +
+      "<th>Median MAE</th><th>Profit factor</th>" +
+      "</tr></thead><tbody>" + featRows +
+      "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("ign.featNote") + "</p>";
+
+    /* Hypotheses IH1–IH6 */
+    var hyps = (IG.hypotheses || []).map(function (h) {
+      var v = h.validation_after_created || {};
+      var extra = "";
+      if (v.n_a != null && v.n_b != null) {
+        extra = " (n=" + v.n_a + "/" + v.n_b;
+        if (v.n_closes_a != null) {
+          extra += ", closes=" + v.n_closes_a + "/" + v.n_closes_b;
+        }
+        extra += ")";
+      }
+      return "<li><span>" + esc(h.id) + " — " +
+        esc(bi(h.text, h.text_en)) + "</span><span class='num'>" +
+        esc(h.status || "") + esc(extra) + "</span></li>";
+    }).join("");
+    $("ignition-hypotheses").innerHTML =
+      '<ul class="missing-list">' + hyps + "</ul>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("ign.hypNote") + "</p>";
+
+    /* Recommendations */
+    var recos = (IG.recommendations || []).map(function (r) {
+      return "<li><span>" + esc(bi(r.filter, r.filter_en)) +
+        "</span><span class='num'>" +
+        esc(r.status || r.kind || "") + "</span></li>";
+    }).join("");
+    $("ignition-recommendations").innerHTML =
+      '<ul class="missing-list">' + recos + "</ul>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("ign.recoNote") + "</p>";
+  }
+
+  /* --------------------------------------------------- missed (v48) */
+  function renderMissed() {
+    var MS = ((DATA.learnings || {}).missed_research) || null;
+    var ids = ["missed-overview", "missed-passed", "missed-gates",
+               "missed-combos", "missed-counterfactuals", "missed-top",
+               "missed-hypotheses", "missed-recommendations"];
+    if (!MS || MS.status === "ERROR") {
+      ids.forEach(function (id) {
+        var el = $(id);
+        if (el) el.innerHTML = '<p class="panel-sub" style="margin:0">' +
+          t("missed.notYet") + "</p>";
+      });
+      return;
+    }
+    if (MS.status === "not yet") {
+      ids.forEach(function (id) {
+        var el = $(id);
+        if (el) el.innerHTML = '<p class="panel-sub" style="margin:0">' +
+          esc(bi(MS.note, MS.note_en) || t("missed.notYet")) + "</p>";
+      });
+      return;
+    }
+    var pc = function (v, dec) {
+      return v == null ? "—" : fmtPct(v, dec == null ? 2 : dec);
+    };
+    var nm = function (v, dec) {
+      return v == null ? "—" : fmtNum(v, dec == null ? 1 : dec);
+    };
+    var tot = MS.totals || {};
+    var sc = MS.scope || {};
+
+    /* Overview */
+    $("missed-overview").innerHTML =
+      '<ul class="missing-list">' +
+      "<li><span>Closes in scope (" +
+        esc(sc.rules_version || "—") + ")</span>" +
+        "<span class='num'>" +
+        (sc.n_closes == null ? "—" : sc.n_closes) + "</span></li>" +
+      "<li><span>Eligible contracts</span><span class='num'>" +
+        (tot.n_eligible == null ? "—" : tot.n_eligible) +
+        "</span></li>" +
+      "<li><span>Winners (+4H ≥ +1%)</span><span class='num'>" +
+        (tot.n_winners == null ? "—" : tot.n_winners) + " (" +
+        pc(tot.winner_rate_pct, 1) + ")</span></li>" +
+      "<li><span>Big misses (+4H ≥ +5%)</span><span class='num'>" +
+        (tot.n_big_miss == null ? "—" : tot.n_big_miss) +
+        "</span></li>" +
+      "<li><span>Losers (+4H ≤ −1%) / negative</span>" +
+        "<span class='num'>" +
+        (tot.n_losers == null ? "—" : tot.n_losers) + " / " +
+        (tot.n_negative == null ? "—" : tot.n_negative) +
+        "</span></li>" +
+      "</ul>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("missed.overviewNote") + "</p>";
+
+    /* Passed the gate, not sent */
+    var pns = MS.passed_not_sent || {};
+    $("missed-passed").innerHTML =
+      '<ul class="missing-list">' +
+      "<li><span>Engine SIGNALs not sent</span><span class='num'>" +
+        (pns.n == null ? "—" : pns.n) + "</span></li>" +
+      "<li><span>Mean +4H return</span><span class='num'>" +
+        pc(pns.mean_r4h_pct) + "</span></li>" +
+      "<li><span>Share ≥ +1% / positive</span><span class='num'>" +
+        pc(pns.pct_gte_1pct_r4h, 1) + " / " +
+        pc(pns.pct_positive_r4h, 1) + "</span></li>" +
+      "</ul>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        esc(pns.note || "") + "</p>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("missed.passedNote") + "</p>";
+
+    /* Gate tables: winners vs losers */
+    var gateByName = function (rows) {
+      var m = {};
+      (rows || []).forEach(function (r) { m[r.gate] = r; });
+      return m;
+    };
+    var gw = gateByName(MS.gate_table_winners);
+    var gl = gateByName(MS.gate_table_losers);
+    var gapFmt = function (r) {
+      if (!r || r.median_gap == null) return "—";
+      return r.gap_unit === "x" ? nm(r.median_gap, 2) + "×" :
+        nm(r.median_gap, 1) + "pp";
+    };
+    var gateRows = ["breakout", "green", "rvol"].map(function (g) {
+      var w = gw[g] || {}, l = gl[g] || {};
+      return "<tr><td>" + esc(g) + "</td>" +
+        "<td>" + (w.n_blocked == null ? "—" : w.n_blocked) + "</td>" +
+        "<td>" + (w.n_blocked_only == null ? "—" :
+          w.n_blocked_only) + "</td>" +
+        "<td>" + gapFmt(w) + "</td>" +
+        "<td>" + (l.n_blocked == null ? "—" : l.n_blocked) + "</td>" +
+        "<td>" + (l.n_blocked_only == null ? "—" :
+          l.n_blocked_only) + "</td>" +
+        "<td>" + gapFmt(l) + "</td></tr>";
+    }).join("");
+    $("missed-gates").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>Gate</th><th>Winners blocked</th>" +
+      "<th>Winners only-gate</th><th>Median gap (W)</th>" +
+      "<th>Losers blocked</th><th>Losers only-gate</th>" +
+      "<th>Median gap (L)</th></tr></thead><tbody>" + gateRows +
+      "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("missed.gatesNote") + "</p>";
+
+    /* Failing combos */
+    var comboLosers = {};
+    (MS.combo_table_losers || []).forEach(function (r) {
+      comboLosers[r.combo] = r.n;
+    });
+    var comboRows = (MS.combo_table_winners || []).map(function (r) {
+      return "<tr><td>" + esc(r.combo) + "</td>" +
+        "<td>" + (r.n == null ? "—" : r.n) + "</td>" +
+        "<td>" + (comboLosers[r.combo] == null ? "—" :
+          comboLosers[r.combo]) + "</td></tr>";
+    }).join("");
+    $("missed-combos").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>Failing gates</th><th>Winners</th>" +
+      "<th>Losers</th></tr></thead><tbody>" + comboRows +
+      "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("missed.comboNote") + "</p>";
+
+    /* Counterfactuals */
+    var cfRows = (MS.counterfactuals || []).map(function (c) {
+      return "<tr><td>" + esc(bi(c.label, c.label_en)) + "</td>" +
+        "<td>" + (c.n_winners_added == null ? "—" :
+          c.n_winners_added) + "</td>" +
+        "<td>" + (c.n_losers_added == null ? "—" :
+          c.n_losers_added) + "</td>" +
+        "<td>" + (c.n_negative_added == null ? "—" :
+          c.n_negative_added) + "</td>" +
+        "<td>" + (c.n_winners_would_but_dedup == null ? "—" :
+          c.n_winners_would_but_dedup) + "</td>" +
+        "<td>" + pc(c.mean_r4h_added_gross_pct) + "</td></tr>";
+    }).join("");
+    var cfNote = ((MS.counterfactuals || [])[0] || {}).net_note || "";
+    $("missed-counterfactuals").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>Change</th><th>Winners added</th>" +
+      "<th>Losers added</th><th>Negative added</th>" +
+      "<th>Would but dedup</th><th>Mean gross +4H added</th>" +
+      "</tr></thead><tbody>" + cfRows +
+      "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        esc(cfNote) + "</p>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("missed.cfNote") + "</p>";
+
+    /* Top missed */
+    var topRows = (MS.top_missed || []).slice(0, 10).map(function (m) {
+      return "<tr><td>" + esc(m.symbol) + "</td>" +
+        "<td>" + esc(fmtWib(m.close_ts) || "—") + "</td>" +
+        "<td>" + pc(m.r4h_pct) + "</td>" +
+        "<td>" + esc((m.failing || []).join(" + ")) + "</td></tr>";
+    }).join("");
+    $("missed-top").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>Symbol</th><th>Close (WIB)</th>" +
+      "<th>+4H return</th><th>Failing gates</th>" +
+      "</tr></thead><tbody>" + topRows +
+      "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("missed.topNote") + "</p>";
+
+    /* Hypotheses MH1–MH3 */
+    var hyps = (MS.hypotheses || []).map(function (h) {
+      var v = h.validation_after_created || {};
+      var extra = "";
+      if (v.winners_added != null && v.losers_added != null) {
+        extra = " (winners +" + v.winners_added + " / losers +" +
+          v.losers_added + ")";
+      } else if (v.share_pct != null) {
+        extra = " (single-gate share " + nm(v.share_pct, 1) +
+          "% — " + (v.single_gate_winners == null ? "—" :
+            v.single_gate_winners) + "/" +
+          (v.n_validation_winners == null ? "—" :
+            v.n_validation_winners) + ")";
+      }
+      return "<li><span>" + esc(h.id) + " — " +
+        esc(bi(h.text, h.text_en)) + "</span><span class='num'>" +
+        esc(h.status || "") + esc(extra) + "</span></li>";
+    }).join("");
+    $("missed-hypotheses").innerHTML =
+      '<ul class="missing-list">' + hyps + "</ul>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("missed.hypNote") + "</p>";
+
+    /* Recommendations */
+    var recos = (MS.recommendations || []).map(function (r) {
+      return "<li><span>" + esc(bi(r.filter, r.filter_en)) +
+        "</span><span class='num'>" +
+        esc(r.status || r.kind || "") + "</span></li>";
+    }).join("");
+    $("missed-recommendations").innerHTML =
+      '<ul class="missing-list">' + recos + "</ul>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("missed.recoNote") + "</p>";
+  }
+
+  /* ----------------------------------------------- validation (v48) */
+  function renderValidation() {
+    var VA = ((DATA.learnings || {}).validation_research) || null;
+    var ids = ["validation-summary", "validation-prospective",
+               "validation-checks", "validation-walkforward",
+               "validation-recommendations", "validation-limitations"];
+    if (!VA || VA.status === "ERROR") {
+      ids.forEach(function (id) {
+        var el = $(id);
+        if (el) el.innerHTML = '<p class="panel-sub" style="margin:0">' +
+          t("val.notYet") + "</p>";
+      });
+      return;
+    }
+    if (VA.status === "not yet") {
+      ids.forEach(function (id) {
+        var el = $(id);
+        if (el) el.innerHTML = '<p class="panel-sub" style="margin:0">' +
+          esc(bi(VA.note, VA.note_en) || t("val.notYet")) + "</p>";
+      });
+      return;
+    }
+    var nm = function (v, dec) {
+      return v == null ? "—" : fmtNum(v, dec == null ? 1 : dec);
+    };
+    var sm = VA.summary || {};
+    var checks = VA.checks || [];
+    var byId = {};
+    checks.forEach(function (c) { byId[c.id] = c; });
+    var mt = (byId.multiple_testing || {}).evidence || {};
+    var of = (byId.overfitting || {}).evidence || {};
+
+    /* Summary */
+    $("validation-summary").innerHTML =
+      '<ul class="missing-list">' +
+      "<li><span>Checks — pass / warning / fail / not computed</span>" +
+        "<span class='num'>" +
+        (sm.pass == null ? "—" : sm.pass) + " / " +
+        (sm.warning == null ? "—" : sm.warning) + " / " +
+        (sm.fail == null ? "—" : sm.fail) + " / " +
+        (sm.not_computed == null ? "—" : sm.not_computed) +
+        "</span></li>" +
+      "<li><span>Hypothesis tests in scope</span><span class='num'>" +
+        (mt.n_hypothesis_tests == null ? "—" :
+          mt.n_hypothesis_tests) + "</span></li>" +
+      "<li><span>Naive expected false positives @5%</span>" +
+        "<span class='num'>" +
+        nm(mt.naive_expected_false_positives_at_5pct, 2) +
+        "</span></li>" +
+      "<li><span>Tested objects vs lab closes</span>" +
+        "<span class='num'>" +
+        (of.n_tested_objects == null ? "—" : of.n_tested_objects) +
+        " vs " +
+        (of.n_closes_lab == null ? "—" : of.n_closes_lab) +
+        "</span></li>" +
+      "</ul>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("val.summaryNote") + "</p>";
+
+    /* Prospective validation per registry */
+    var prosp = (byId.prospective || {}).evidence || {};
+    var prospRows = (prosp.registries || []).map(function (r) {
+      return "<tr><td>" + esc(r.registry) + "</td>" +
+        "<td>" + (r.n_hypotheses == null ? "—" : r.n_hypotheses) +
+        "</td>" +
+        "<td>" + (r.prospective_validation_closes == null ? "—" :
+          r.prospective_validation_closes) + "</td>" +
+        "<td>" + (r.awaiting_validation == null ? "—" :
+          r.awaiting_validation) + "</td>" +
+        "<td>" + (r.holds == null ? "—" : r.holds) + "</td>" +
+        "<td>" + (r.does_not_hold == null ? "—" :
+          r.does_not_hold) + "</td>" +
+        "<td>" + (r.inconclusive == null ? "—" :
+          r.inconclusive) + "</td></tr>";
+    }).join("");
+    $("validation-prospective").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>Registry</th><th>Hypotheses</th>" +
+      "<th>Prospective closes</th><th>Awaiting</th><th>Holds</th>" +
+      "<th>Does not hold</th><th>Inconclusive</th>" +
+      "</tr></thead><tbody>" + prospRows +
+      "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("val.prospNote") + "</p>";
+
+    /* The 11 checks */
+    var CHECK_LABELS = {
+      lookahead: "Look-ahead bias",
+      leakage: "Data leakage",
+      survivorship: "Survivorship bias",
+      selection: "Selection bias",
+      overfitting: "Overfitting",
+      multiple_testing: "Multiple testing",
+      param_sensitivity: "Parameter sensitivity",
+      walkforward: "Walk-forward",
+      prospective: "Prospective validation",
+      cluster: "Cluster dependency",
+      reproducibility: "Reproducibility"
+    };
+    var evSummary = function (id, ev) {
+      ev = ev || {};
+      switch (id) {
+        case "lookahead":
+          return (ev.n_sampled == null ? "—" : ev.n_sampled) +
+            " sampled, " +
+            (ev.n_differing == null ? "—" : ev.n_differing) +
+            " differing";
+        case "leakage":
+          return (ev.disjoint ? "disjoint" : "overlap") + " + " +
+            (ev.ordered ? "ordered" : "unordered") + "; " +
+            (ev.discovery_n == null ? "—" : ev.discovery_n) +
+            " discovery / " +
+            (((ev.registries || [])[0] || {}).n_validation_closes
+              == null ? "—" :
+              ((ev.registries || [])[0] || {}).n_validation_closes) +
+            " validation closes";
+        case "survivorship":
+          return (ev.n_delisted_signals == null ? "—" :
+              ev.n_delisted_signals) + " delisted signals; universe " +
+            (ev.n_universe_active == null ? "—" :
+              ev.n_universe_active) + " active";
+        case "selection":
+          return "Group A n=" +
+            (ev.group_a_n_eligible == null ? "—" :
+              ev.group_a_n_eligible) + "; losers gate-blocked " +
+            (ev.missed_loser_gate_blocked == null ? "—" :
+              ev.missed_loser_gate_blocked);
+        case "overfitting":
+          return (ev.n_tested_objects == null ? "—" :
+              ev.n_tested_objects) + " tested objects vs " +
+            (ev.n_closes_lab == null ? "—" : ev.n_closes_lab) +
+            " lab closes (" + nm(ev.tested_per_close, 2) +
+            " per close)";
+        case "multiple_testing":
+          return (ev.n_hypothesis_tests == null ? "—" :
+              ev.n_hypothesis_tests) + " tests; " +
+            nm(ev.naive_expected_false_positives_at_5pct, 2) +
+            " expected false positives @5%";
+        case "param_sensitivity":
+          return "A0–A4 range " +
+            nm(ev.range_max_minus_min_pp, 2) + "pp";
+        case "walkforward":
+          return ((ev.folds || []).length) + " folds";
+        case "prospective":
+          return (ev.registries || []).map(function (r) {
+            return r.registry + " " +
+              (r.prospective_validation_closes == null ? "—" :
+                r.prospective_validation_closes);
+          }).join(", ");
+        case "cluster":
+          return "gap " + nm(ev.gap_signal_minus_close_pp, 2) +
+            "pp; flood " + nm(ev.largest_close_share_pct, 1) +
+            "% of signals";
+        case "reproducibility":
+          return "A0 mean-net diff " +
+            nm(ev.a0_mean_net_diff_pp, 2) + "pp; top-3 r4h diffs 0.0";
+        default:
+          return "";
+      }
+    };
+    var checkRows = checks.map(function (c) {
+      return "<tr><td>" + esc(CHECK_LABELS[c.id] || c.id) + "</td>" +
+        "<td>" + esc(c.status || "—") + "</td>" +
+        "<td>" + esc(evSummary(c.id, c.evidence)) + "</td></tr>";
+    }).join("");
+    $("validation-checks").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>Check</th><th>Status</th><th>Evidence</th>" +
+      "</tr></thead><tbody>" + checkRows +
+      "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("val.checksNote") + "</p>";
+
+    /* Walk-forward folds */
+    var wf = (byId.walkforward || {}).evidence || {};
+    var wfRows = (wf.folds || []).map(function (f, i) {
+      var cfg = f.configs || {};
+      var cell = function (k) {
+        var c = cfg[k] || {};
+        return c.mean_net_test_pct == null ? "—" :
+          fmtPct(c.mean_net_test_pct, 2);
+      };
+      return "<tr><td>Fold " + (i + 1) + "</td>" +
+        "<td>" + (f.train_closes == null ? "—" : f.train_closes) +
+        "</td>" +
+        "<td>" + (f.test_closes == null ? "—" : f.test_closes) +
+        "</td>" +
+        "<td>" + esc(f.best_on_train || "—") + "</td>" +
+        "<td>" + cell("A0") + "</td>" +
+        "<td>" + cell("A4") + "</td>" +
+        "<td>" + cell("A5") + "</td>" +
+        "<td>" + cell("A9") + "</td></tr>";
+    }).join("");
+    $("validation-walkforward").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>Fold</th><th>Train closes</th>" +
+      "<th>Test closes</th><th>Best on train</th>" +
+      "<th>A0 test mean</th><th>A4 test mean</th>" +
+      "<th>A5 test mean</th><th>A9 test mean</th>" +
+      "</tr></thead><tbody>" + wfRows +
+      "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("val.wfNote") + "</p>";
+
+    /* Recommendations */
+    var recos = (VA.recommendations || []).map(function (r) {
+      return "<li><span>" + esc(bi(r.filter, r.filter_en)) +
+        "</span><span class='num'>" +
+        esc(r.status || r.kind || "") + "</span></li>";
+    }).join("");
+    $("validation-recommendations").innerHTML =
+      '<ul class="missing-list">' + recos + "</ul>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("val.recoNote") + "</p>";
+
+    /* Limitations */
+    $("validation-limitations").innerHTML =
+      "<p class='panel-sub' style='margin:0'>" +
+        esc(bi(VA.limitations, VA.limitations_en) || "") + "</p>";
   }
 
   function renderTimeline() {
