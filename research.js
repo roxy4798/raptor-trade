@@ -122,14 +122,14 @@
       "exit.holdH12": "HOLD mean net +12H (round-trip)",
       "exit.bestH12": "Best +12H strategy (mean net)",
       "exit.tpNote": "Hit = the highest high within the horizon reached the target. Hit-then-positive = hit and the horizon still closed at or above entry. +1W has no mature signals yet (first matures 28 Nov).",
-      "exit.stratNote": "Fixed TP and ATR TP exit at the TP level when touched, or at the −2% / −1×ATR stop when touched first. If one bar touches both, the stop is assumed first (conservative) — see Unknown order. Trailing and exhaustion exits use bar closes only, so ordering never applies. Best by mean net is a description, not a validated recommendation.",
+      "exit.stratNote": "Fixed TP and ATR TP exit at the TP level when touched, or at the −2% / −1×ATR stop when touched first. Structure SL (E17/E18) keeps the same TP +3% as E2 and only moves the stop — to the signal-bar low (E17) or the breakout level (E18). If one bar touches both, the stop is assumed first (conservative) — see Unknown order. Trailing and exhaustion exits use bar closes only, so ordering never applies. Best by mean net is a description, not a validated recommendation.",
       "exit.holdNote": "Mean round-trip net of exiting at the close of bar k after entry (1 bar = +4H, 3 = +12H, 6 = +1D, 12 = +2D, 18 = +3D, 42 = +1W). The best bar is the highest mean — with the flood dominating the sample, treat it as an observation, not an optimal holding rule.",
       "exit.gbNote": "Giveback = MFE minus the realized HOLD return: how much of the peak was given back by holding to the horizon close. Time-to-max-close counts only signals with a full 42-bar path (none mature yet).",
       "exit.entryNote": "TP+5% hit rate at +12H by entry characteristic. Buckets with n<5 show no rate. A higher hit rate for late breakouts (margin 5%+) does not mean late entries are better — they also rose the most before the signal.",
       "exit.recoNote": "Every exit recommendation carries its evidence, sample size, limitations, and impact. INSUFFICIENT EVIDENCE is a valid, honest outcome — it means the data is too thin for a claim, not that the exit failed.",
       "exit.hypNote": "Frozen the moment they first appeared; validated only on closes published after that moment. No verdict until ≥10 signals per side on new closes.",
       "panel.exitEntryDist": "Entry-specific TP potential (MFE distribution @ +4H)",
-      "exit.distNote": "MFE is the historical maximum rise in the first 4H bar — not a pre-entry TP estimate. The realistic read is the TP hit curve: the TP level that share of signals with this characteristic actually touched. Buckets with n<5 show no rate. Squeeze (BB width <25) does not reach further than wide bands in this sample — descriptive, flood-dominated.",
+      "exit.distNote": "MFE is the historical maximum rise in the first 4H bar — not a pre-entry TP estimate. The realistic read is the TP hit curve: the TP level that share of signals with this characteristic actually touched. The TP+1% before SL column is stricter: the +1% level reached before the −2% stop was ever touched. Buckets with n<5 show no rate. Squeeze (BB width <25) does not reach further than wide bands in this sample — descriptive, flood-dominated.",
       "rail.joint": "Joint Entry & Exit",
       "sec.joint.kicker": "09 — Joint Entry & Exit",
       "sec.joint.title": "Joint Entry & Exit Research",
@@ -139,10 +139,39 @@
       "panel.jointHyps": "Joint hypotheses (frozen, awaiting new closes)",
       "panel.jointRecos": "Joint recommendations",
       "joint.notYet": "Joint research not built yet — the daily builder (after the 08:00 WIB lab) has not run.",
-      "joint.perConfigNote": "TP hit rates are MFE-based at +4H. Missed good = hard pumps (≥+1% in 4H) the config did not fire on. A4/A5/A9 reach further (higher median MFE) but fire far fewer signals and miss more — descriptive, flood-dominated, not validated.",
+      "joint.perConfigNote": "TP hit rates are MFE-based at +4H. The TP+1% before SL column is stricter: the +1% level reached before the −2% stop was ever touched. Missed good = hard pumps (≥+1% in 4H) the config did not fire on. A4/A5/A9 reach further (higher median MFE) but fire far fewer signals and miss more — descriptive, flood-dominated, not validated.",
       "joint.candNote": "Net is round-trip and only on signals with a measured spread (n_net); hard-pump and TP rates cover all signals. Max DD is the drawdown of the chronological per-signal net sequence — signals overlap, so it is not a portfolio drawdown. Best by mean net is a description, not a validated recommendation.",
       "joint.hypNote": "Hypotheses are validated only on closes after they were frozen. Until new closes arrive, every verdict is awaiting_validation.",
-      "joint.recoNote": "All joint recommendations are INSUFFICIENT EVIDENCE in v1.0.0 — no candidate is applied to production. A non-INSUFFICIENT verdict needs a ≥1.0pp gap in the same direction on both discovery and validation, n≥10/side on validation closes, and survival of the ex-flood aggregation.",
+      "joint.recoNote": "All joint recommendations are INSUFFICIENT EVIDENCE in v1.1.0 — no candidate is applied to production. A non-INSUFFICIENT verdict needs a ≥1.0pp gap in the same direction on both discovery and validation, n≥10/side on validation closes, and survival of the ex-flood aggregation.",
+      "panel.exitTpBsl": "TP before SL (vs SL −2%)",
+      "panel.exitRiskReward": "Risk–reward by exit family (+4H)",
+      "panel.exitFunding": "Funding cost — measured evidence",
+      "exit.tpbslNote": "MFE hit = the target level was touched at any point. TP-before-SL = the target was reached on an earlier bar than any touch of the −2% stop. SL first = the stop was touched first. UNKNOWN = TP and SL were touched on the same 4H bar (order unknown, stop assumed first). MAE-before-TP is the median drawdown endured on bars strictly before the TP-touch bar — only meaningful at +12H and beyond, because +4H is a single bar.",
+      "exit.rrNote": "One family pools every (signal × strategy) in it — not an average of strategy means. Payoff = avg win / |avg loss|. Break-even win rate = |avg loss| / (avg win + |avg loss|): the minimum win rate for expected net = 0 if win/loss sizes stay at their historical averages. Structure SL (E17/E18) uses the same TP +3% as E2 — the only difference is the stop placement.",
+      "exit.fundingNote": "Funding is NOT in exit net (the monthly archive publishes the following month, so November funding lands in December). The bounds below are measured from the October 2026 archive: a +4H hold crosses at most one 8h funding payment, a +12H hold at most two consecutive ones. Median funding is small, but the tail is fat — the worst single 8h payment in the sample was 2.00pp.",
+      "rail.risk": "Risk & Portfolio",
+      "sec.risk.kicker": "10 — Risk & Portfolio",
+      "sec.risk.title": "Agent 12 — Risk & Portfolio Intelligence",
+      "sec.risk.sub": "What a strategy risks, not just what it wins — and what happens when many LONG signals fire at once. Portfolio curves are research simulations (simple cumulative sums of per-close returns, no compounding), not real trading results. Two sizing variants are compared on the same signals: fixed-notional (1 unit per signal, exposure grows with the batch) vs fixed-capital (1 unit per close, split equally). Risk of ruin is not computed — block bootstrap needs at least 60 closes, and there are only 30 so far. Everything here is research — nothing sizes a real position or sets real leverage.",
+      "panel.riskOverview": "Risk overview — exposure & correlation",
+      "panel.riskFunding": "Funding bounds & risk of ruin",
+      "panel.riskCandidates": "Risk–reward per candidate J0–J8 (+4H)",
+      "panel.riskDrawdown": "Portfolio drawdown — both sizing variants (+4H)",
+      "panel.riskEquity": "Equity curves — fixed-capital, HOLD candidates (+4H)",
+      "panel.riskStreaks": "Consecutive losses & tail risk (+4H)",
+      "panel.riskSensitivity": "Cost sensitivity & liquidation proxy (+4H)",
+      "panel.riskHyps": "Risk hypotheses (frozen, awaiting new closes)",
+      "panel.riskRecos": "Risk recommendations",
+      "risk.notYet": "Risk & Portfolio research not built yet — the daily builder (after the 08:00 WIB joint) has not run.",
+      "risk.overviewNote": "Exposure counts come from the Shadow Lab A0 replay (436 signals, including backfill extras; production sent 390). Correlation is Pearson on same-window +4H returns (signal close → next 4H close) from local Mainnet candles — descriptive, not a hedge claim.",
+      "risk.fundingNote": "Funding bounds are the measured October 2026 tail: a +4H hold pays at most one 8h payment, a +12H hold at most two. Risk of ruin is deliberately not computed — estimating it from 30 closes would be fabrication.",
+      "risk.candNote": "Net is round-trip and only on signals with a measured spread (n_net). Max DD (sequence) is the drawdown of the chronological per-signal net sequence — signals overlap, so it is not a portfolio drawdown; the portfolio drawdown is in the next panel. Break-even win rate is the minimum win rate for expected net = 0 at historical win/loss sizes.",
+      "risk.ddNote": "Fixed-notional takes 1 unit per signal (the flood close = ~294 units of exposure); fixed-capital takes 1 unit per close split equally. The gap between the two totals is the concentration cost of taking every signal at full size. Duration is closes from the peak to a new high — empty means the curve never recovered within the observed closes.",
+      "risk.equityNote": "Fixed-capital equity curves (cumulative sum of per-close mean nets, +4H) for the four HOLD candidates. J0 is the production baseline; J3/J5/J7 are the selective configs. The flood close is one point on each curve — not 294 independent points.",
+      "risk.streakNote": "Consecutive losing signals are counted in chronological order (by close, then symbol). Tail = mean of the worst 5% of per-signal nets. One long losing streak can erase many small wins — compare it with the win rate, not instead of it.",
+      "risk.sensNote": "Cost ×0 = gross only (no costs), ×1 = base round-trip cost (spread + 8 bps fee), ×2 = cost doubled. Liquidation proxy = share of signals whose MAE reached −33.3% (3x), −20% (5x), or −10% (10x). Simplified: isolated margin, no maintenance margin, no funding, MAE from 4H lows — a proxy, never a liquidation rate.",
+      "risk.hypNote": "Hypotheses are validated only on closes after they were frozen, on per-close portfolio means (fixed-capital). Until new closes arrive, every verdict is awaiting_validation.",
+      "risk.recoNote": "All risk recommendations are INSUFFICIENT EVIDENCE in v1.0.0 — nothing is applied to production. A non-INSUFFICIENT verdict needs a ≥1.0pp gap in the same direction on both discovery and validation, n≥10/side on validation closes, survival of the ex-flood aggregation, and drawdown no worse than baseline.",
       "panel.agents": "Research coverage per agent",
       "panel.agents.sub": "Each agent is scored independently — one agent's missing data never blocks another.",
       "panel.regimes": "Market regime at signal time",
@@ -521,14 +550,14 @@
       "exit.holdH12": "HOLD mean net +12H (round-trip)",
       "exit.bestH12": "Strategi +12H terbaik (mean net)",
       "exit.tpNote": "Hit = high tertinggi selama horizon mencapai target. Hit-then-positive = hit dan horizon tetap tutup di atas atau sama dengan entry. +1W belum ada sinyal yang matang (pertama matang 28 Nov).",
-      "exit.stratNote": "Fixed TP dan ATR TP keluar di level TP saat tersentuh, atau di stop −2% / −1×ATR saat tersentuh duluan. Jika satu bar menyentuh keduanya, stop diasumsikan dulu (konservatif) — lihat Unknown order. Trailing dan exhaustion exit hanya memakai close bar, jadi urutan tidak berlaku. Terbaik menurut mean net adalah deskripsi, bukan rekomendasi tervalidasi.",
+      "exit.stratNote": "Fixed TP dan ATR TP keluar di level TP saat tersentuh, atau di stop −2% / −1×ATR saat tersentuh duluan. Structure SL (E17/E18) mempertahankan TP +3% yang sama dengan E2 dan hanya memindahkan stop — ke low bar sinyal (E17) atau level breakout (E18). Jika satu bar menyentuh keduanya, stop diasumsikan dulu (konservatif) — lihat Unknown order. Trailing dan exhaustion exit hanya memakai close bar, jadi urutan tidak berlaku. Terbaik menurut mean net adalah deskripsi, bukan rekomendasi tervalidasi.",
       "exit.holdNote": "Mean net round-trip bila keluar di close bar ke-k setelah entry (1 bar = +4H, 3 = +12H, 6 = +1D, 12 = +2D, 18 = +3D, 42 = +1W). Bar terbaik adalah mean tertinggi — dengan flood mendominasi sampel, anggap ini observasi, bukan aturan hold optimal.",
       "exit.gbNote": "Giveback = MFE dikurangi return HOLD yang terealisasi: seberapa banyak puncak yang diberikan kembali karena hold sampai close horizon. Time-to-max-close hanya menghitung sinyal dengan path 42 bar penuh (belum ada yang matang).",
       "exit.entryNote": "TP+5% hit rate di +12H per karakteristik entry. Bucket dengan n<5 tidak menampilkan rate. Hit rate lebih tinggi untuk late breakout (margin 5%+) bukan berarti entry terlambat lebih baik — mereka juga sudah naik paling banyak sebelum sinyal.",
       "exit.recoNote": "Setiap rekomendasi exit membawa bukti, ukuran sampel, batasan, dan dampaknya. INSUFFICIENT EVIDENCE adalah hasil yang valid dan jujur — artinya datanya terlalu tipis untuk klaim, bukan berarti exit-nya gagal.",
       "exit.hypNote": "Dibekukan saat pertama muncul; divalidasi hanya pada close yang dipublikasikan setelah momen itu. Belum ada verdict sampai ≥10 sinyal per sisi pada close baru.",
       "panel.exitEntryDist": "Potensi TP per karakteristik entry (distribusi MFE @ +4H)",
-      "exit.distNote": "MFE adalah kenaikan maksimum HISTORIS pada bar 4H pertama — bukan estimasi TP sebelum entry. Bacaan yang realistis adalah kurva hit TP: level TP yang benar-benar disentuh sekian persen sinyal dengan karakteristik ini. Bucket dengan n<5 tidak menampilkan rate. Squeeze (lebar BB <25) tidak mencapai lebih jauh dari band lebar di sampel ini — deskriptif, didominasi flood.",
+      "exit.distNote": "MFE adalah kenaikan maksimum HISTORIS pada bar 4H pertama — bukan estimasi TP sebelum entry. Bacaan yang realistis adalah kurva hit TP: level TP yang benar-benar disentuh sekian persen sinyal dengan karakteristik ini. Kolom TP+1% before SL lebih ketat: level +1% tercapai sebelum stop −2% pernah tersentuh. Bucket dengan n<5 tidak menampilkan rate. Squeeze (lebar BB <25) tidak mencapai lebih jauh dari band lebar di sampel ini — deskriptif, didominasi flood.",
       "rail.joint": "Joint Entry & Exit",
       "sec.joint.kicker": "09 — Joint Entry & Exit",
       "sec.joint.title": "Riset Gabungan Entry & Exit",
@@ -538,10 +567,39 @@
       "panel.jointHyps": "Hipotesis gabungan (beku, menunggu close baru)",
       "panel.jointRecos": "Rekomendasi gabungan",
       "joint.notYet": "Riset gabungan belum dibangun — builder harian (setelah lab 08:00 WIB) belum berjalan.",
-      "joint.perConfigNote": "TP hit rate berbasis MFE di +4H. Missed good = hard pump (≥+1% dalam 4H) yang tidak ditembak config itu. A4/A5/A9 mencapai lebih jauh (median MFE lebih tinggi) tapi menembak jauh lebih sedikit sinyal dan melewatkan lebih banyak — deskriptif, didominasi flood, belum tervalidasi.",
+      "joint.perConfigNote": "TP hit rate berbasis MFE di +4H. Kolom TP+1% before SL lebih ketat: level +1% tercapai sebelum stop −2% pernah tersentuh. Missed good = hard pump (≥+1% dalam 4H) yang tidak ditembak config itu. A4/A5/A9 mencapai lebih jauh (median MFE lebih tinggi) tapi menembak jauh lebih sedikit sinyal dan melewatkan lebih banyak — deskriptif, didominasi flood, belum tervalidasi.",
       "joint.candNote": "Net adalah round-trip dan hanya pada sinyal dengan spread terukur (n_net); hard-pump dan TP rate mencakup semua sinyal. Max DD adalah drawdown dari urutan net per sinyal secara kronologis — sinyal tumpang tindih, jadi ini bukan drawdown portofolio. Terbaik menurut mean net adalah deskripsi, bukan rekomendasi tervalidasi.",
       "joint.hypNote": "Hipotesis divalidasi hanya pada close setelah dibekukan. Sampai ada close baru, semua verdict masih awaiting_validation.",
-      "joint.recoNote": "Semua rekomendasi gabungan masih INSUFFICIENT EVIDENCE di v1.0.0 — tidak ada kandidat yang diterapkan ke produksi. Verdict non-INSUFFICIENT butuh gap ≥1,0pp searah di discovery dan validation, n≥10/sisi pada close validasi, dan lolos agregasi ex-flood.",
+      "joint.recoNote": "Semua rekomendasi gabungan masih INSUFFICIENT EVIDENCE di v1.1.0 — tidak ada kandidat yang diterapkan ke produksi. Verdict non-INSUFFICIENT butuh gap ≥1,0pp searah di discovery dan validation, n≥10/sisi pada close validasi, dan lolos agregasi ex-flood.",
+      "panel.exitTpBsl": "TP sebelum SL (vs SL −2%)",
+      "panel.exitRiskReward": "Risk–reward per keluarga exit (+4H)",
+      "panel.exitFunding": "Biaya funding — bukti terukur",
+      "exit.tpbslNote": "MFE hit = level target pernah tersentuh. TP-before-SL = target tercapai di bar yang lebih awal daripada sentuhan pertama stop −2%. SL first = stop kena duluan. UNKNOWN = TP dan SL tersentuh di bar 4H yang sama (urutan tidak diketahui, stop diasumsikan dulu). MAE-before-TP adalah median drawdown yang ditahan pada bar-bar sebelum bar TP tersentuh — hanya bermakna di +12H ke atas, karena +4H hanya satu bar.",
+      "exit.rrNote": "Satu keluarga mem-pool semua (sinyal × strategi) di dalamnya — bukan rata-rata dari mean strategi. Payoff = avg win / |avg loss|. Break-even win rate = |avg loss| / (avg win + |avg loss|): win rate minimum supaya expected net = 0 bila ukuran win/loss tetap seperti rata-rata historis. Structure SL (E17/E18) memakai TP +3% yang sama dengan E2 — satu-satunya perbedaan adalah penempatan stop.",
+      "exit.fundingNote": "Funding TIDAK masuk exit net (arsip bulanan terbit bulan berikutnya, jadi funding November baru ada di Desember). Batas di bawah ini terukur dari arsip Oktober 2026: hold +4H melewati maksimal satu pembayaran funding 8 jam, hold +12H maksimal dua pembayaran berurutan. Median funding kecil, tapi ekornya gemuk — pembayaran 8 jam terburuk di sampel adalah 2,00pp.",
+      "rail.risk": "Risk & Portfolio",
+      "sec.risk.kicker": "10 — Risk & Portfolio",
+      "sec.risk.title": "Agent 12 — Risk & Portfolio Intelligence",
+      "sec.risk.sub": "Apa risiko sebuah strategi, bukan cuma apa yang bisa dimenangkan — dan apa yang terjadi saat banyak sinyal LONG muncul sekaligus. Kurva portofolio adalah simulasi riset (jumlah kumulatif sederhana return per close, tanpa compounding), bukan hasil trading nyata. Dua varian sizing dibandingkan pada sinyal yang sama: fixed-notional (1 unit per sinyal, exposure membesar bersama batch) vs fixed-capital (1 unit per close, dibagi rata). Risk of ruin tidak dihitung — block bootstrap butuh minimal 60 close, dan sejauh ini baru 30. Semua di sini adalah riset — tidak ada yang mengatur ukuran posisi nyata atau leverage nyata.",
+      "panel.riskOverview": "Gambaran risiko — exposure & korelasi",
+      "panel.riskFunding": "Batas funding & risk of ruin",
+      "panel.riskCandidates": "Risk–reward per kandidat J0–J8 (+4H)",
+      "panel.riskDrawdown": "Drawdown portofolio — kedua varian sizing (+4H)",
+      "panel.riskEquity": "Kurva ekuitas — fixed-capital, kandidat HOLD (+4H)",
+      "panel.riskStreaks": "Kerugian beruntun & tail risk (+4H)",
+      "panel.riskSensitivity": "Sensitivitas biaya & proxy likuidasi (+4H)",
+      "panel.riskHyps": "Hipotesis risiko (beku, menunggu close baru)",
+      "panel.riskRecos": "Rekomendasi risiko",
+      "risk.notYet": "Riset Risk & Portfolio belum dibangun — builder harian (setelah joint 08:00 WIB) belum berjalan.",
+      "risk.overviewNote": "Hitungan exposure berasal dari replay A0 Shadow Lab (436 sinyal, termasuk extra backfill; produksi mengirim 390). Korelasi adalah Pearson atas return +4H di jendela yang sama (close sinyal → close 4H berikutnya) dari candle Mainnet lokal — deskriptif, bukan klaim hedge.",
+      "risk.fundingNote": "Batas funding adalah ekor terukur Oktober 2026: hold +4H membayar maksimal satu pembayaran 8 jam, hold +12H maksimal dua. Risk of ruin sengaja tidak dihitung — mengestimasinya dari 30 close akan jadi fabrikasi.",
+      "risk.candNote": "Net adalah round-trip dan hanya pada sinyal dengan spread terukur (n_net). Max DD (sequence) adalah drawdown dari urutan net per sinyal secara kronologis — sinyal tumpang tindih, jadi ini bukan drawdown portofolio; drawdown portofolio ada di panel berikutnya. Break-even win rate adalah win rate minimum supaya expected net = 0 pada ukuran win/loss historis.",
+      "risk.ddNote": "Fixed-notional mengambil 1 unit per sinyal (close flood = ~294 unit exposure); fixed-capital mengambil 1 unit per close dibagi rata. Selisih kedua total adalah biaya konsentrasi bila semua sinyal diambil dengan ukuran penuh. Durasi adalah jumlah close dari puncak sampai mencapai high baru — kosong berarti kurva tidak pernah pulih dalam close yang teramati.",
+      "risk.equityNote": "Kurva ekuitas fixed-capital (jumlah kumulatif mean net per close, +4H) untuk empat kandidat HOLD. J0 adalah baseline produksi; J3/J5/J7 adalah config selektif. Close flood adalah satu titik di tiap kurva — bukan 294 titik independen.",
+      "risk.streakNote": "Kerugian beruntun dihitung berurutan secara kronologis (per close, lalu simbol). Tail = mean dari 5% net per sinyal terburuk. Satu rangkaian kerugian panjang bisa menghapus banyak kemenangan kecil — bandingkan dengan win rate, bukan sebagai penggantinya.",
+      "risk.sensNote": "Biaya ×0 = gross saja (tanpa biaya), ×1 = biaya round-trip dasar (spread + fee 8 bps), ×2 = biaya digandakan. Proxy likuidasi = porsi sinyal yang MAE-nya mencapai −33,3% (3x), −20% (5x), atau −10% (10x). Disederhanakan: isolated margin, tanpa maintenance margin, tanpa funding, MAE dari low 4H — proxy, bukan angka likuidasi.",
+      "risk.hypNote": "Hipotesis divalidasi hanya pada close setelah dibekukan, memakai mean portofolio per close (fixed-capital). Sampai ada close baru, semua verdict masih awaiting_validation.",
+      "risk.recoNote": "Semua rekomendasi risiko masih INSUFFICIENT EVIDENCE di v1.0.0 — tidak ada yang diterapkan ke produksi. Verdict non-INSUFFICIENT butuh gap ≥1,0pp searah di discovery dan validation, n≥10/sisi pada close validasi, lolos agregasi ex-flood, dan drawdown tidak lebih buruk dari baseline.",
       "panel.agents": "Cakupan riset per agent",
       "panel.agents.sub": "Setiap agent dinilai secara independen — data yang hilang dari satu agent tidak pernah memblokir agent lain.",
       "panel.regimes": "Rezim pasar saat sinyal",
@@ -1023,6 +1081,7 @@
     renderRideTheWave();
     renderExit();
     renderJoint();
+    renderRisk();
     renderTimeline();
     renderExplorer();
     watchReveals();
@@ -2348,6 +2407,7 @@
   function renderExit() {
     var EX = ((DATA.learnings || {}).exit_research) || null;
     var ids = ["exit-primary", "exit-tphit", "exit-strategies",
+               "exit-tpbsl", "exit-riskreward", "exit-funding",
                "exit-holding", "exit-giveback", "exit-entrytp",
                "exit-entrydist",
                "exit-recommendations", "exit-hypotheses"];
@@ -2451,6 +2511,108 @@
       "<p class='panel-sub' style='margin-top:12px'>" +
         t("exit.stratNote") + "</p>";
 
+    /* TP-before-SL (v1.2.0): MFE hit vs actually reached before SL.
+       MAE-before-TP is only meaningful at +12H (a +4H window is a
+       single bar, so there is no bar before the TP-touch bar). */
+    var tbs = EX.tp_before_sl || {};
+    var tbsRows = targets.map(function (tg) {
+      var d4 = (tbs.h4 || {})[tg] || {};
+      var d12 = (tbs.h12 || {})[tg] || {};
+      var mfe4 = ((tp.h4 || {})[tg] || {}).hit_rate_pct;
+      return "<tr><td>+" + parseFloat(tg) + "%</td>" +
+        "<td>" + (mfe4 == null ? "—" : nm(mfe4, 1) + "%") + "</td>" +
+        "<td>" + (d4.tp_before_sl_rate_pct == null ? "—" :
+          nm(d4.tp_before_sl_rate_pct, 1) + "%") + "</td>" +
+        "<td>" + (d12.tp_before_sl_rate_pct == null ? "—" :
+          nm(d12.tp_before_sl_rate_pct, 1) + "%") + "</td>" +
+        "<td>" + (d4.sl_first_rate_pct == null ? "—" :
+          nm(d4.sl_first_rate_pct, 1) + "%") + "</td>" +
+        "<td>" + (d4.unknown_rate_pct == null ? "—" :
+          nm(d4.unknown_rate_pct, 1) + "%") + "</td>" +
+        "<td>" + pc(d12.median_mae_before_tp_pct) + "</td></tr>";
+    }).join("");
+    var tbsN = ((tbs.h4 || {})["1.0"] || {}).n;
+    $("exit-tpbsl").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>Target</th><th>MFE hit +4H</th>" +
+      "<th>Before SL +4H</th><th>Before SL +12H</th>" +
+      "<th>SL first +4H</th><th>Unknown +4H</th>" +
+      "<th>MAE before TP +12H</th></tr></thead><tbody>" +
+      tbsRows +
+      "<tr><td>n</td><td colspan='6'>" +
+        (tbsN == null ? "—" : tbsN) + "</td></tr>" +
+      "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("exit.tpbslNote") + "</p>";
+
+    /* Risk-reward by exit family @ +4H (v1.2.0, pooled rows) */
+    var rrRows = (EX.risk_reward_h4 || []).map(function (f) {
+      var wl = (f.avg_win_pct == null || f.avg_loss_pct == null)
+        ? "—" : nm(f.avg_win_pct, 2) + " / " +
+          nm(f.avg_loss_pct, 2);
+      return "<tr><td>" + esc(f.label) + "</td>" +
+        "<td>" + (f.n == null ? "—" : f.n) + "</td>" +
+        "<td>" + pc(f.mean_net_rt_pct) + "</td>" +
+        "<td>" + pc(f.median_net_rt_pct) + "</td>" +
+        "<td>" + (f.pct_positive_net_rt == null ? "—" :
+          nm(f.pct_positive_net_rt, 1) + "%") + "</td>" +
+        "<td>" + (f.profit_factor == null ? "—" :
+          nm(f.profit_factor, 2)) + "</td>" +
+        "<td>" + wl + "</td>" +
+        "<td>" + (f.payoff_ratio == null ? "—" :
+          nm(f.payoff_ratio, 2)) + "</td>" +
+        "<td>" + (f.breakeven_win_rate_pct == null ? "—" :
+          nm(f.breakeven_win_rate_pct, 1) + "%") + "</td>" +
+        "<td>" + (f.max_drawdown_pp == null ? "—" :
+          nm(f.max_drawdown_pp, 1)) + "</td>" +
+        "<td>" + (f.close_consistency_pct == null ? "—" :
+          nm(f.close_consistency_pct, 1) + "%") + "</td></tr>";
+    }).join("");
+    $("exit-riskreward").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>Family</th><th>n</th><th>Mean net +4H</th>" +
+      "<th>Median net</th><th>Positive</th><th>Profit factor</th>" +
+      "<th>Avg win / loss</th><th>Payoff</th>" +
+      "<th>Break-even win rate</th><th>Max DD (pp)</th>" +
+      "<th>Close cons.</th></tr></thead><tbody>" + rrRows +
+      "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("exit.rrNote") + "</p>";
+
+    /* Funding evidence (v1.2.0, measured — not assumed) */
+    var fund = EX.funding_evidence || {};
+    if (fund.status === "measured") {
+      $("exit-funding").innerHTML =
+        '<ul class="missing-list">' +
+        "<li><span>Archive month / symbols / observations</span>" +
+          "<span class='num'>" + esc(fund.month || "—") + " / " +
+          (fund.n_symbols == null ? "—" : fund.n_symbols) + " / " +
+          (fund.n_obs == null ? "—" : fund.n_obs) + "</span></li>" +
+        "<li><span>Single 8h payment |funding| — median / p95 / p99</span>" +
+          "<span class='num'>" +
+          pc(fund.single_8h_median_abs_pct, 4) + " / " +
+          pc(fund.single_8h_p95_abs_pct, 4) + " / " +
+          pc(fund.single_8h_p99_abs_pct, 4) + "</span></li>" +
+        "<li><span>Single 8h payment — worst in sample" +
+          (fund.worst_symbol ? " (" + esc(fund.worst_symbol) + ")" : "") +
+          "</span><span class='num'>" +
+          pc(fund.single_8h_max_abs_pct, 2) + "</span></li>" +
+        "<li><span>Two consecutive 8h payments — median / p95 / p99</span>" +
+          "<span class='num'>" +
+          pc(fund.pair_2x8h_median_abs_pct, 4) + " / " +
+          pc(fund.pair_2x8h_p95_abs_pct, 4) + " / " +
+          pc(fund.pair_2x8h_p99_abs_pct, 4) + "</span></li>" +
+        "</ul>" +
+        "<p class='panel-sub' style='margin-top:12px'>" +
+          esc(bi(fund.note, fund.note_en) || "") + "</p>" +
+        "<p class='panel-sub' style='margin-top:12px'>" +
+          t("exit.fundingNote") + "</p>";
+    } else {
+      $("exit-funding").innerHTML =
+        "<p class='panel-sub' style='margin:0'>" +
+        esc(bi(fund.note, fund.note_en) || t("exit.notYet")) + "</p>";
+    }
+
     /* Holding curve: exit at bar k close */
     var curve = EX.holding_curve || [];
     var bestK = null;
@@ -2548,11 +2710,13 @@
       var rows = Object.keys(buckets).map(function (b) {
         var d = buckets[b] || {};
         var hits = d.tp_hit_rates || {};
+        var bsl = d.tp_before_sl_rates || {};
         var cell = function (tg) {
           var h = hits[tg] || {};
           return "<td>" + (h.hit_rate_pct == null ? "—" :
             nm(h.hit_rate_pct, 1) + "%") + "</td>";
         };
+        var bsl1 = bsl["1.0"] || {};
         return "<tr><td>" + esc(b) + "</td>" +
           "<td>" + (d.n == null ? "—" : d.n) + "</td>" +
           "<td>" + (d.n_closes == null ? "—" : d.n_closes) + "</td>" +
@@ -2560,6 +2724,8 @@
           "<td>" + pc(d.mfe_p90_pct) + "</td>" +
           "<td>" + pc(d.median_mae_pct) + "</td>" +
           cell("0.5") + cell("1.0") + cell("2.0") + cell("5.0") +
+          "<td>" + (bsl1.tp_before_sl_rate_pct == null ? "—" :
+            nm(bsl1.tp_before_sl_rate_pct, 1) + "%") + "</td>" +
           "</tr>";
       }).join("");
       $("exit-dist-table").innerHTML =
@@ -2567,7 +2733,7 @@
         "<thead><tr><th>Band</th><th>n</th><th>Closes</th>" +
         "<th>Median MFE</th><th>MFE p90</th><th>Median MAE</th>" +
         "<th>TP+0.5%</th><th>TP+1%</th><th>TP+2%</th>" +
-        "<th>TP+5%</th></tr></thead><tbody>" + rows +
+        "<th>TP+5%</th><th>TP+1% before SL</th></tr></thead><tbody>" + rows +
         "</tbody></table></div>";
     };
     $("exit-entrydist").innerHTML =
@@ -2643,6 +2809,7 @@
     /* TP potential by entry config (all 10 lab configs) */
     var pcRows = (JN.per_config_tp || []).map(function (c) {
       var hits = (c.tp_hit_rates || {}).h4 || {};
+      var bsl = (c.tp_before_sl_h4 || {})["1.0"] || {};
       var cell = function (tg) {
         var h = hits[tg] || {};
         return "<td>" + (h.hit_rate_pct == null ? "—" :
@@ -2655,6 +2822,8 @@
         "<td>" + pc(c.mfe_p90_h4_pct) + "</td>" +
         "<td>" + pc(c.median_mae_h4_pct) + "</td>" +
         cell("0.5") + cell("1.0") + cell("2.0") + cell("5.0") +
+        "<td>" + (bsl.tp_before_sl_rate_pct == null ? "—" :
+          nm(bsl.tp_before_sl_rate_pct, 1) + "%") + "</td>" +
         "<td>" + (c.missed_good_n == null ? "—" :
           c.missed_good_n) + "</td></tr>";
     }).join("");
@@ -2663,6 +2832,7 @@
       "<thead><tr><th>Config</th><th>n</th><th>Closes</th>" +
       "<th>Median MFE +4H</th><th>MFE p90</th><th>Median MAE</th>" +
       "<th>TP+0.5%</th><th>TP+1%</th><th>TP+2%</th><th>TP+5%</th>" +
+      "<th>TP+1% before SL</th>" +
       "<th>Missed good</th></tr></thead><tbody>" + pcRows +
       "</tbody></table></div>" +
       "<p class='panel-sub' style='margin-top:12px'>" +
@@ -2699,7 +2869,7 @@
       "<p class='panel-sub' style='margin-top:12px'>" +
         t("joint.candNote") + "</p>";
 
-    /* Hypotheses JH1–JH5 */
+    /* Hypotheses JH1–JH6 */
     var hyps = (JN.hypotheses || []).map(function (h) {
       var v = h.validation_after_created || {};
       return "<li><span>" + esc(h.id) + " — " +
@@ -2725,6 +2895,288 @@
       '<ul class="missing-list">' + recos + "</ul>" +
       "<p class='panel-sub' style='margin-top:12px'>" +
         t("joint.recoNote") + "</p>";
+  }
+
+  function renderRisk() {
+    var RK = ((DATA.learnings || {}).risk_research) || null;
+    var ids = ["risk-overview", "risk-funding", "risk-candidates",
+               "risk-drawdown", "risk-equity", "risk-streaks",
+               "risk-sensitivity", "risk-hypotheses",
+               "risk-recommendations"];
+    if (!RK || RK.status === "ERROR") {
+      ids.forEach(function (id) {
+        var el = $(id);
+        if (el) el.innerHTML = '<p class="panel-sub" style="margin:0">' +
+          t("risk.notYet") + "</p>";
+      });
+      return;
+    }
+    if (RK.status === "not yet") {
+      ids.forEach(function (id) {
+        var el = $(id);
+        if (el) el.innerHTML = '<p class="panel-sub" style="margin:0">' +
+          esc(bi(RK.note, RK.note_en) || t("risk.notYet")) + "</p>";
+      });
+      return;
+    }
+    var pc = function (v, dec) {
+      return v == null ? "—" : fmtPct(v, dec == null ? 2 : dec);
+    };
+    var nm = function (v, dec) {
+      return v == null ? "—" : fmtNum(v, dec == null ? 1 : dec);
+    };
+
+    /* Overview: exposure + correlation */
+    var ex = RK.exposure || {};
+    var corr = RK.correlation || {};
+    var btc = corr.BTCUSDT || {};
+    var eth = corr.ETHUSDT || {};
+    $("risk-overview").innerHTML =
+      '<ul class="missing-list">' +
+      "<li><span>Signals (A0 replay) / closes</span>" +
+        "<span class='num'>" +
+        (ex.n_signals == null ? "—" : ex.n_signals) + " / " +
+        (ex.n_closes == null ? "—" : ex.n_closes) + "</span></li>" +
+      "<li><span>Max simultaneous signals (one close)</span>" +
+        "<span class='num'>" +
+        (ex.max_simultaneous == null ? "—" : ex.max_simultaneous) +
+        "</span></li>" +
+      "<li><span>Flood close: signals / share of universe</span>" +
+        "<span class='num'>" +
+        (ex.flood_n == null ? "—" : ex.flood_n) + " / " +
+        (ex.flood_share_of_universe_pct == null ? "—" :
+          nm(ex.flood_share_of_universe_pct, 1) + "%") +
+        "</span></li>" +
+      "<li><span>Median signals per close</span>" +
+        "<span class='num'>" +
+        (ex.median_per_close == null ? "—" :
+          nm(ex.median_per_close, 1)) + "</span></li>" +
+      "<li><span>Correlation vs BTC +4H</span><span class='num'>" +
+        (btc.pearson_r == null ? "—" : nm(btc.pearson_r, 2)) +
+        " (n=" + (btc.n == null ? "—" : btc.n) + ")</span></li>" +
+      "<li><span>Correlation vs ETH +4H</span><span class='num'>" +
+        (eth.pearson_r == null ? "—" : nm(eth.pearson_r, 2)) +
+        " (n=" + (eth.n == null ? "—" : eth.n) + ")</span></li>" +
+      "</ul>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("risk.overviewNote") + "</p>";
+
+    /* Funding bounds + risk of ruin */
+    var fb = RK.funding_bounds || {};
+    var ror = RK.risk_of_ruin || {};
+    $("risk-funding").innerHTML =
+      '<ul class="missing-list">' +
+      "<li><span>Funding p99 — single 8h payment (" +
+        esc(fb.month || "—") + ")</span><span class='num'>" +
+        pc(fb.single_8h_p99_abs_pct, 4) + "</span></li>" +
+      "<li><span>Funding p99 — two consecutive 8h payments</span>" +
+        "<span class='num'>" +
+        pc(fb.pair_2x8h_p99_abs_pct, 4) + "</span></li>" +
+      "<li><span>Risk of ruin (block bootstrap)</span>" +
+        "<span class='num'>" +
+        esc(ror.status || "—") + "</span></li>" +
+      "</ul>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        esc(bi(ror.reason, ror.reason_en) || "") + "</p>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("risk.fundingNote") + "</p>";
+
+    /* Risk-reward per candidate J0–J8 (+4H) */
+    var candRows = (RK.candidates || []).map(function (c) {
+      return "<tr><td>" + esc(c.id) + " " +
+        esc(bi(c.label, c.label_en)) + "</td>" +
+        "<td>" + (c.n_signals == null ? "—" : c.n_signals) + "</td>" +
+        "<td>" + (c.n_net == null ? "—" : c.n_net) + "</td>" +
+        "<td>" + pc(c.mean_net_rt_h4_pct) + "</td>" +
+        "<td>" + pc(c.median_net_rt_h4_pct) + "</td>" +
+        "<td>" + (c.pct_positive_net_rt == null ? "—" :
+          nm(c.pct_positive_net_rt, 1) + "%") + "</td>" +
+        "<td>" + (c.profit_factor == null ? "—" :
+          nm(c.profit_factor, 2)) + "</td>" +
+        "<td>" + (c.payoff_ratio == null ? "—" :
+          nm(c.payoff_ratio, 2)) + "</td>" +
+        "<td>" + (c.breakeven_win_rate_pct == null ? "—" :
+          nm(c.breakeven_win_rate_pct, 1) + "%") + "</td>" +
+        "<td>" + (c.tp_before_sl_1pct_h4_pct == null ? "—" :
+          nm(c.tp_before_sl_1pct_h4_pct, 1) + "%") + "</td>" +
+        "<td>" + (c.close_consistency_pct == null ? "—" :
+          nm(c.close_consistency_pct, 1) + "%") + "</td></tr>";
+    }).join("");
+    $("risk-candidates").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>Candidate</th><th>n</th><th>n_net</th>" +
+      "<th>Mean net +4H</th><th>Median net</th><th>Positive</th>" +
+      "<th>Profit factor</th><th>Payoff</th>" +
+      "<th>Break-even win rate</th><th>TP+1% before SL</th>" +
+      "<th>Close cons.</th></tr></thead><tbody>" + candRows +
+      "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("risk.candNote") + "</p>";
+
+    /* Portfolio drawdown — both sizing variants */
+    var ddRows = (RK.candidates || []).map(function (c) {
+      var fc = c.fixed_capital || {};
+      var fn = c.fixed_notional || {};
+      return "<tr><td>" + esc(c.id) + "</td>" +
+        "<td>" + pc(fc.total_return_pp) + "</td>" +
+        "<td>" + pc(fc.max_drawdown_pp, 1) + "</td>" +
+        "<td>" + (fc.max_drawdown_duration_closes == null ? "—" :
+          fc.max_drawdown_duration_closes) + "</td>" +
+        "<td>" + (fc.max_consecutive_losing_closes == null ? "—" :
+          fc.max_consecutive_losing_closes) + "</td>" +
+        "<td>" + pc(fc.downside_deviation_pp, 2) + "</td>" +
+        "<td>" + pc(fn.total_return_pp) + "</td>" +
+        "<td>" + pc(fn.max_drawdown_pp, 1) + "</td></tr>";
+    }).join("");
+    $("risk-drawdown").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>Candidate</th><th>Fixed-capital total</th>" +
+      "<th>Fixed-capital Max DD</th><th>DD duration (closes)</th>" +
+      "<th>Consec. losing closes</th><th>Downside dev.</th>" +
+      "<th>Fixed-notional total</th>" +
+      "<th>Fixed-notional Max DD</th></tr></thead><tbody>" + ddRows +
+      "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("risk.ddNote") + "</p>";
+
+    /* Equity curves — fixed-capital, HOLD candidates (SVG) */
+    var holdIds = ["J0", "J3", "J5", "J7"];
+    var holdColors = {J0: "#7aa2f7", J3: "#e0af68",
+                      J5: "#9ece6a", J7: "#f7768e"};
+    var series = holdIds.map(function (id) {
+      var c = (RK.candidates || []).find(function (x) {
+        return x.id === id;
+      }) || {};
+      return {id: id,
+              curve: ((c.fixed_capital || {}).equity_curve) || []};
+    }).filter(function (s) { return s.curve.length > 1; });
+    if (series.length) {
+      var W = 720, H = 220, PAD = 28;
+      var allV = [];
+      series.forEach(function (s) {
+        s.curve.forEach(function (p) { allV.push(p.cum_return_pp); });
+      });
+      allV.push(0);
+      var vMin = Math.min.apply(null, allV);
+      var vMax = Math.max.apply(null, allV);
+      if (vMax - vMin < 1e-9) { vMax = vMin + 1; }
+      var nPts = Math.max.apply(null, series.map(function (s) {
+        return s.curve.length;
+      }));
+      var X = function (i) {
+        return PAD + i * (W - 2 * PAD) / Math.max(1, nPts - 1);
+      };
+      var Y = function (v) {
+        return H - PAD - (v - vMin) * (H - 2 * PAD) / (vMax - vMin);
+      };
+      var y0 = Y(0);
+      var svg = '<svg viewBox="0 0 ' + W + " " + H + '" width="100%" ' +
+        'style="display:block" role="img" aria-label="Equity curves">' +
+        '<line x1="' + PAD + '" y1="' + y0.toFixed(1) + '" x2="' +
+        (W - PAD) + '" y2="' + y0.toFixed(1) +
+        '" stroke="var(--hatch-widget-border, #888)" stroke-width="1" ' +
+        'stroke-dasharray="4 4"/>' +
+        series.map(function (s) {
+          var pts = s.curve.map(function (p, i) {
+            return X(i).toFixed(1) + "," + Y(p.cum_return_pp).toFixed(1);
+          }).join(" ");
+          return '<polyline points="' + pts + '" fill="none" ' +
+            'stroke="' + holdColors[s.id] + '" stroke-width="2"/>';
+        }).join("") +
+        '<text x="' + PAD + '" y="16" fill="currentColor" font-size="11">' +
+          esc(nm(vMax, 1)) + ' pp</text>' +
+        '<text x="' + PAD + '" y="' + (H - 8) + '" fill="currentColor" ' +
+          'font-size="11">' + esc(nm(vMin, 1)) + ' pp</text>' +
+        "</svg>";
+      var legend = series.map(function (s) {
+        return '<span style="margin-right:14px"><i style="display:' +
+          'inline-block;width:10px;height:10px;background:' +
+          holdColors[s.id] + ';border-radius:2px;margin-right:5px">' +
+          "</i>" + esc(s.id) + "</span>";
+      }).join("");
+      var firstTs = series[0].curve[0].ts;
+      var lastTs = series[0].curve[series[0].curve.length - 1].ts;
+      $("risk-equity").innerHTML = svg +
+        "<p style='margin:10px 0 0'>" + legend + "</p>" +
+        "<p class='panel-sub' style='margin-top:8px'>" +
+          esc((fmtWib(firstTs) || "") + " → " +
+              (fmtWib(lastTs) || "")) + "</p>" +
+        "<p class='panel-sub' style='margin-top:12px'>" +
+          t("risk.equityNote") + "</p>";
+    } else {
+      $("risk-equity").innerHTML =
+        '<p class="panel-sub" style="margin:0">' + t("risk.notYet") +
+        "</p>";
+    }
+
+    /* Consecutive losses & tail risk */
+    var stRows = (RK.candidates || []).map(function (c) {
+      return "<tr><td>" + esc(c.id) + "</td>" +
+        "<td>" + (c.max_consecutive_losing_signals == null ? "—" :
+          c.max_consecutive_losing_signals) + "</td>" +
+        "<td>" + pc(c.worst_signal_net_pct) + "</td>" +
+        "<td>" + pc(c.best_signal_net_pct) + "</td>" +
+        "<td>" + pc(c.tail_mean_worst5_pct) + "</td></tr>";
+    }).join("");
+    $("risk-streaks").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>Candidate</th><th>Consec. losing signals</th>" +
+      "<th>Worst signal</th><th>Best signal</th>" +
+      "<th>Tail (worst 5% mean)</th></tr></thead><tbody>" + stRows +
+      "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("risk.streakNote") + "</p>";
+
+    /* Cost sensitivity & liquidation proxy */
+    var seRows = (RK.candidates || []).map(function (c) {
+      var sens = c.cost_sensitivity || {};
+      var liq = c.liquidation_proxy || {};
+      return "<tr><td>" + esc(c.id) + "</td>" +
+        "<td>" + pc(sens.cost_x0_gross_only) + "</td>" +
+        "<td>" + pc(sens.cost_x1_base) + "</td>" +
+        "<td>" + pc(sens.cost_x2_doubled) + "</td>" +
+        "<td>" + (liq.lev_3x_pct == null ? "—" :
+          nm(liq.lev_3x_pct, 1) + "%") + "</td>" +
+        "<td>" + (liq.lev_5x_pct == null ? "—" :
+          nm(liq.lev_5x_pct, 1) + "%") + "</td>" +
+        "<td>" + (liq.lev_10x_pct == null ? "—" :
+          nm(liq.lev_10x_pct, 1) + "%") + "</td></tr>";
+    }).join("");
+    $("risk-sensitivity").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>Candidate</th><th>Cost ×0 (gross)</th>" +
+      "<th>Cost ×1 (base)</th><th>Cost ×2</th>" +
+      "<th>Liq. proxy 3x</th><th>Liq. proxy 5x</th>" +
+      "<th>Liq. proxy 10x</th></tr></thead><tbody>" + seRows +
+      "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("risk.sensNote") + "</p>";
+
+    /* Hypotheses RH1–RH2 */
+    var hyps = (RK.hypotheses || []).map(function (h) {
+      var v = h.validation_after_created || {};
+      return "<li><span>" + esc(h.id) + " — " +
+        esc(bi(h.text, h.text_en)) + "</span><span class='num'>" +
+        esc(h.status || "") + " (n=" +
+        (v.n_a == null ? "—" : v.n_a) + "/" +
+        (v.n_b == null ? "—" : v.n_b) +
+        ")</span></li>";
+    }).join("");
+    $("risk-hypotheses").innerHTML =
+      '<ul class="missing-list">' + hyps + "</ul>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("risk.hypNote") + "</p>";
+
+    /* Recommendations */
+    var recos = (RK.recommendations || []).map(function (r) {
+      return "<li><span>" + esc(bi(r.filter, r.filter_en)) +
+        "</span><span class='num'>" +
+        esc(r.status || r.kind || "") + "</span></li>";
+    }).join("");
+    $("risk-recommendations").innerHTML =
+      '<ul class="missing-list">' + recos + "</ul>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("risk.recoNote") + "</p>";
   }
 
   function renderTimeline() {

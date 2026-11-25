@@ -75,6 +75,7 @@ main{max-width:1240px;margin:0 auto;padding:28px 28px 64px;position:relative;z-i
 #ridethewave .panel-grid{align-items:start}
 #exit .panel-grid{align-items:start}
 #joint .panel-grid{align-items:start}
+#risk .panel-grid{align-items:start}
 /* v46 patch (live check 12:23–12:25 WIB): hypothesis rows use
    .missing-list flex rows; a long hypothesis text + the
    "awaiting_validation (n=0/0)" status could push the status past

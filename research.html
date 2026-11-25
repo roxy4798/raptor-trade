@@ -25,6 +25,7 @@
     <a class="rail-link" href="#ridethewave" data-section="ridethewave" aria-label="Ride the Wave" title="Ride the Wave"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17c3-6 6-9 9-9s6 3 9 9"/><path d="M12 8V3"/></svg><span data-i18n="rail.ridethewave">Ride the Wave</span></a>
     <a class="rail-link" href="#exit" data-section="exit" aria-label="Take Profit &amp; Exit" title="Take Profit &amp; Exit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v10"/><path d="M7 8l5-5 5 5"/><path d="M4 21h16"/></svg><span data-i18n="rail.exit">Take Profit &amp; Exit</span></a>
     <a class="rail-link" href="#joint" data-section="joint" aria-label="Joint Entry &amp; Exit" title="Joint Entry &amp; Exit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16"/><path d="M12 4v16"/></svg><span data-i18n="rail.joint">Joint Entry &amp; Exit</span></a>
+    <a class="rail-link" href="#risk" data-section="risk" aria-label="Risk &amp; Portfolio" title="Risk &amp; Portfolio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg><span data-i18n="rail.risk">Risk &amp; Portfolio</span></a>
     <a class="rail-link" href="index.html" aria-label="Back to Signal Observatory" title="Back to Signal Observatory"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/></svg><span data-i18n="rail.home">Home</span></a>
   </nav>
   <div class="rail-base"><span class="rail-base-line"></span><span class="rail-orientation">R / RESEARCH • 2026</span></div>
@@ -322,6 +323,20 @@
       </div>
       <div class="panel-grid">
         <div class="panel card">
+          <h3 data-i18n="panel.exitTpBsl">TP before SL (vs SL −2%)</h3>
+          <div id="exit-tpbsl"></div>
+        </div>
+        <div class="panel card">
+          <h3 data-i18n="panel.exitRiskReward">Risk–reward by exit family (+4H)</h3>
+          <div id="exit-riskreward"></div>
+        </div>
+      </div>
+      <div class="panel card">
+        <h3 data-i18n="panel.exitFunding">Funding cost — measured evidence</h3>
+        <div id="exit-funding"></div>
+      </div>
+      <div class="panel-grid">
+        <div class="panel card">
           <h3 data-i18n="panel.exitHolding">How long to hold (exit at bar k close)</h3>
           <div id="exit-holding"></div>
         </div>
@@ -370,6 +385,56 @@
         <div class="panel card">
           <h3 data-i18n="panel.jointRecos">Joint recommendations</h3>
           <div id="joint-recommendations"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="risk" class="section">
+      <div class="section-head">
+        <p class="section-kicker" data-i18n="sec.risk.kicker">10 — Risk &amp; Portfolio</p>
+        <h2 data-i18n="sec.risk.title">Agent 12 — Risk &amp; Portfolio Intelligence</h2>
+        <p class="section-sub" data-i18n="sec.risk.sub">What a strategy risks, not just what it wins — and what happens when many LONG signals fire at once. Portfolio curves are research simulations (simple cumulative sums of per-close returns, no compounding), not real trading results. Two sizing variants are compared on the same signals: fixed-notional (1 unit per signal, exposure grows with the batch) vs fixed-capital (1 unit per close, split equally). Risk of ruin is not computed — block bootstrap needs at least 60 closes, and there are only 30 so far. Everything here is research — nothing sizes a real position or sets real leverage.</p>
+      </div>
+      <div class="panel-grid">
+        <div class="panel card">
+          <h3 data-i18n="panel.riskOverview">Risk overview — exposure &amp; correlation</h3>
+          <div id="risk-overview"></div>
+        </div>
+        <div class="panel card">
+          <h3 data-i18n="panel.riskFunding">Funding bounds &amp; risk of ruin</h3>
+          <div id="risk-funding"></div>
+        </div>
+      </div>
+      <div class="panel card">
+        <h3 data-i18n="panel.riskCandidates">Risk–reward per candidate J0–J8 (+4H)</h3>
+        <div id="risk-candidates"></div>
+      </div>
+      <div class="panel card">
+        <h3 data-i18n="panel.riskDrawdown">Portfolio drawdown — both sizing variants (+4H)</h3>
+        <div id="risk-drawdown"></div>
+      </div>
+      <div class="panel card">
+        <h3 data-i18n="panel.riskEquity">Equity curves — fixed-capital, HOLD candidates (+4H)</h3>
+        <div id="risk-equity"></div>
+      </div>
+      <div class="panel-grid">
+        <div class="panel card">
+          <h3 data-i18n="panel.riskStreaks">Consecutive losses &amp; tail risk (+4H)</h3>
+          <div id="risk-streaks"></div>
+        </div>
+        <div class="panel card">
+          <h3 data-i18n="panel.riskSensitivity">Cost sensitivity &amp; liquidation proxy (+4H)</h3>
+          <div id="risk-sensitivity"></div>
+        </div>
+      </div>
+      <div class="panel-grid">
+        <div class="panel card">
+          <h3 data-i18n="panel.riskHyps">Risk hypotheses (frozen, awaiting new closes)</h3>
+          <div id="risk-hypotheses"></div>
+        </div>
+        <div class="panel card">
+          <h3 data-i18n="panel.riskRecos">Risk recommendations</h3>
+          <div id="risk-recommendations"></div>
         </div>
       </div>
     </section>
