@@ -2945,6 +2945,11 @@
         var link = map[en.target.id];
         if (!link) return;
         links.forEach(function (l) { l.classList.toggle("active", l === link); });
+        /* v46: rail bawah (mobile) kini bisa di-scroll horizontal —
+           pastikan link seksi aktif selalu terlihat. */
+        if (link.scrollIntoView) {
+          link.scrollIntoView({block: "nearest", inline: "nearest"});
+        }
       });
     }, { rootMargin: "-30% 0px -60% 0px" });
     Object.keys(map).forEach(function (id) {
