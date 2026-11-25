@@ -1,0 +1,92 @@
+/* Raptor Trade — Premium Animated AI Research Team (characters).
+   Layout for the team strip + section-head slots, and the idle
+   animations for the inline SVG characters (characters.js).
+   Idle motion only: bob, blink, core breathing, slow holo ring.
+   Transform/opacity animations only — no layout shift, no blur,
+   no heavy glow. Animations freeze under html.motion-off (page
+   motion toggle + prefers-reduced-motion) and pause off-screen
+   via .char-paused (IntersectionObserver in characters.js). */
+
+/* ---- slots ---- */
+.agent-char{display:block;flex:0 0 auto;line-height:0}
+.agent-char svg{display:block;width:100%;height:100%}
+.agent-char--team{width:112px;height:134px;margin:0 auto}
+.team-card--flagship .agent-char--team{width:126px;height:151px}
+.agent-char--head{width:78px;height:94px;margin-top:2px}
+.cov-char{width:30px;height:36px}
+
+/* ---- team strip ---- */
+.team-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+.team-card{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--radius);padding:18px 10px 14px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px}
+.team-card:hover{border-color:var(--line-strong)}
+.team-card--flagship{border-color:rgba(251,146,60,.55);background:linear-gradient(180deg,rgba(251,146,60,.10),var(--bg-1) 55%)}
+.team-num{font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:.14em;color:var(--text-3);margin-top:10px}
+.team-card--flagship .team-num{color:#fb923c}
+.team-name{font-size:13.5px;font-weight:700;line-height:1.3;margin-top:2px}
+.team-role{font-size:12px;line-height:1.45;color:var(--text-2);margin:4px 0 8px;min-height:34px}
+.team-link{font-size:12px;font-weight:600;margin-top:auto}
+.team-flag{font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.12em;color:#0a1206;background:#fbbf24;border-radius:99px;padding:3px 9px;margin-top:8px}
+
+/* ---- section heads with a character (floated, fixed size: the
+   kicker / title / sub text never reflows around it) ---- */
+.agent-char--head{float:right;width:78px;height:94px;margin:2px 0 8px 16px}
+
+/* ---- coverage rows with a mini character ---- */
+.cov-row--char{grid-template-columns:30px 106px 1fr 88px}
+.cov-row--char .cov-char{grid-column:1}
+
+/* ---- idle animations (transform / opacity only) ---- */
+.agent-char .char-bob{animation:charBob var(--dur,5.5s) ease-in-out infinite;animation-delay:var(--del,0s)}
+.agent-char .char-eyes{transform-box:fill-box;transform-origin:center;animation:charBlink 4.6s ease-in-out infinite;animation-delay:var(--del,-1s)}
+.agent-char .char-core{transform-box:fill-box;transform-origin:center;animation:charCore var(--dur,2.9s) ease-in-out infinite;animation-delay:var(--del,0s)}
+.agent-char .char-ring{transform-box:view-box;transform-origin:60px 80px;animation:charSpin var(--dur,26s) linear infinite}
+.agent-char .char-ring2{transform-box:fill-box;transform-origin:center;animation:charSpin var(--dur,14s) linear infinite}
+.agent-char .char-orbit{transform-box:view-box;transform-origin:60px 38px;animation:charSpin var(--dur,9s) linear infinite}
+.agent-char .char-acc{animation:charFloat var(--dur,4s) ease-in-out infinite;animation-delay:var(--del,0s)}
+.agent-char .char-wave{animation:charWave var(--dur,2.8s) ease-in-out infinite alternate}
+.agent-char .char-bars{transform-box:fill-box;transform-origin:50% 100%;animation:charBars var(--dur,2.6s) ease-in-out infinite alternate}
+.agent-char .char-nodes{animation:charCore 3.6s ease-in-out infinite}
+.agent-char .char-flame{transform-box:fill-box;transform-origin:50% 100%;animation:charFlicker var(--dur,2s) ease-in-out infinite}
+.agent-char .char-ember{animation:charEmber var(--dur,2.6s) ease-out infinite;animation-delay:var(--del,0s)}
+.agent-char .char-bubble{animation:charEmber 2.4s ease-out infinite;animation-delay:var(--del,0s)}
+.agent-char .char-sway{transform-box:fill-box;transform-origin:50% 0;animation:charSway var(--dur,5s) ease-in-out infinite alternate}
+
+@keyframes charBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes charBlink{0%,92%,100%{transform:scaleY(1)}94%,96%{transform:scaleY(.08)}}
+@keyframes charCore{0%,100%{opacity:.78;transform:scale(1)}50%{opacity:1;transform:scale(1.07)}}
+@keyframes charSpin{to{transform:rotate(360deg)}}
+@keyframes charFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-2.5px)}}
+@keyframes charWave{from{transform:translateX(-1.5px)}to{transform:translateX(1.5px)}}
+@keyframes charBars{from{transform:scaleY(.92)}to{transform:scaleY(1.05)}}
+@keyframes charFlicker{0%,100%{transform:scaleY(1)}30%{transform:scaleY(1.07)}60%{transform:scaleY(.96)}}
+@keyframes charEmber{0%{transform:translateY(0);opacity:0}25%{opacity:.9}100%{transform:translateY(-11px);opacity:0}}
+@keyframes charSway{from{transform:rotate(-2deg)}to{transform:rotate(2deg)}}
+
+/* ---- motion off: freeze every character animation ---- */
+html.motion-off .agent-char *,
+.agent-char.char-paused *{animation-play-state:paused}
+html.motion-off .agent-char *{animation:none!important}
+@media (prefers-reduced-motion:reduce){
+  .agent-char *{animation:none!important}
+}
+
+/* ---- responsive ---- */
+@media (max-width:1100px){
+  .team-grid{grid-template-columns:repeat(4,1fr)}
+}
+@media (max-width:720px){
+  .team-grid{grid-template-columns:repeat(3,1fr);gap:10px}
+  .team-card{padding:14px 8px 12px}
+  .agent-char--team{width:92px;height:110px}
+  .team-card--flagship .agent-char--team{width:104px;height:125px}
+  .team-role{min-height:40px}
+}
+@media (max-width:560px){
+  .agent-char--head{width:60px;height:72px;margin-left:10px}
+  .cov-row--char{grid-template-columns:26px 84px 1fr 76px}
+  .cov-char{width:26px;height:31px}
+}
+@media (max-width:480px){
+  .team-grid{grid-template-columns:repeat(2,1fr)}
+  .team-role{min-height:0}
+}
