@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_ts": 1795564911.8447576,
-  "generated_wib": "25 Nov 2026, 07:01 WIB",
+  "generated_ts": 1795565208.0559273,
+  "generated_wib": "25 Nov 2026, 07:06 WIB",
   "rules_version": "v2.1.2",
   "next_close_ts": 1795579200.0,
   "source": "Binance Futures Mainnet (local)"
@@ -35,8 +35,8 @@
   "gap_blocked": 0,
   "universe_total": 849,
   "signals_total": 433,
-  "heartbeat_age_s": -1.0,
-  "uptime_s": 1484.4,
+  "heartbeat_age_s": 26.0,
+  "uptime_s": 1754.4,
   "backfill_missing": 50,
   "backfill_pending": 0,
   "backfill_filled": 3360
@@ -2664,14 +2664,14 @@
     }
    },
    "h2d": {
-    "n": 25,
-    "mean": -4.03764883606239,
-    "median": -2.9650572712773604,
-    "pct_positive": 40.0,
+    "n": 27,
+    "mean": -2.066119560490789,
+    "median": -2.7353376047313915,
+    "pct_positive": 44.44444444444444,
     "best": {
-     "symbol": "ELSAUSDT",
-     "value": 34.574756229685796,
-     "close_utc": "22 Nov 08:00"
+     "symbol": "LISTAUSDT",
+     "value": 44.18117554653751,
+     "close_utc": "23 Nov 00:00"
     }
    },
    "h3d": {
@@ -31762,8 +31762,8 @@
      "return_pct": -8.082859463850522
     },
     "h2d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": 0.9748172217709294
     },
     "h3d": {
      "status": "pending",
@@ -31836,8 +31836,8 @@
      "return_pct": 23.18366278308679
     },
     "h2d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": 44.18117554653751
     },
     "h3d": {
      "status": "pending",
