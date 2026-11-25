@@ -69,6 +69,42 @@
       "sec.explorer.kicker": "06 — Data explorer",
       "sec.explorer.title": "Research Data Explorer",
       "sec.explorer.sub": "Explore every analyzed signal. Filters here only shape this table — they never affect which signals are published.",
+      "rail.ridethewave": "Ride the Wave",
+      "sec.rtw.kicker": "07 — Ride the Wave",
+      "sec.rtw.title": "Ride the Wave — Filter Discovery",
+      "sec.rtw.sub": "Evidence-based filter discovery for LONG Ride the Wave signals. Primary metrics are mean net +4H and positive net rate +4H (net of spread + 8 bps fee). Everything here is research — no AI score gates publication, and no filter changes without explicit approval.",
+      "panel.rtwPrimary": "Primary metrics (+4H net)",
+      "panel.rtwAgg": "Signal vs close vs ex-flood",
+      "panel.rtwClasses": "Outcome classes (+4H)",
+      "panel.rtwBatch": "Isolated vs market-wide",
+      "panel.rtwEarlyLate": "Early vs late breakout",
+      "panel.rtwPre": "Before the breakout",
+      "panel.rtwNonsignal": "Signals vs contracts that did not signal",
+      "panel.rtwLab": "Shadow Strategy Laboratory",
+      "panel.rtwRecos": "Evidence-based recommendations",
+      "panel.rtwHyps": "Lab hypotheses (frozen, awaiting new closes)",
+      "rtw.notYet": "Ride the Wave research is not available yet.",
+      "rtw.meanNet": "Mean net +4H",
+      "rtw.posNet": "Positive net rate +4H",
+      "rtw.medianNet": "Median net +4H",
+      "rtw.nNet": "Signals with net",
+      "rtw.aggNote": "Three quarters of all signals come from one 4H close, so that close dominates the signal-weighted average. The close-weighted and ex-flood columns show the same result without that dominance.",
+      "rtw.classNote": "CONTINUED = +4H ≥ +1%. EXHAUSTED = peaked ≥ +1% then closed ≤ 0%. REVERSED = +4H ≤ −1%.",
+      "rtw.excNote": "MFE/MAE are the true excursion within the horizon. +4H is a single bar, so its time-to-MFE is always 1 bar — meaningful time-to-MFE is in +12H/+1D. Retention = +4H return / MFE (median).",
+      "rtw.batchNote": "Isolated 1–3, Intermediate 4–19, Market-Wide Candidate 20+ signals at one close — initial research definitions, not validated trading rules. Breadth confirms how much of the universe broke out at that close.",
+      "rtw.earlyNote": "Margin bands: <0.5% (early) to 5%+ (late). Pre-signal rise, ATR expansion and volatility contraction are the context — margin alone does not say when momentum started.",
+      "rtw.nsNote": "Group A = every eligible contract that did not signal at the same close. Group B = matched per signal (same market + same RVOL band). Missed opportunity = a non-signal contract that still rose ≥ +1% in the next 4H.",
+      "rtw.labNote": "Virtual replay of historical 4H candles with the production engine. Calibration first: the baseline replay must reproduce the scanner before any alternative is interpreted.",
+      "rtw.recoNote": "Every recommendation carries its evidence, sample size, limitations, and impact. INSUFFICIENT EVIDENCE is a valid, honest outcome — it means the data is too thin for a claim, not that the filter failed.",
+      "rtw.hypNote": "Frozen the moment they first appeared; validated only on closes published after that moment. No verdict until ≥10 signals per side on new closes.",
+      "rtw.calib": "Calibration (baseline replay vs scanner)",
+      "rtw.rawMatch": "Raw gate passes vs decisions",
+      "rtw.dedupMatch": "After dedup vs sent log",
+      "rtw.mismatch": "Every mismatch is classified — see research.json for the full lists.",
+      "rtw.thConfig": "Config", "rtw.thN": "n", "rtw.thMeanNet": "Mean net +4H",
+      "rtw.thPos": "Positive net", "rtw.thCont": "Continuation",
+      "rtw.thMissed": "Missed good", "rtw.thDisc": "Discovery",
+      "rtw.thVal": "Validation",
       "panel.agents": "Research coverage per agent",
       "panel.agents.sub": "Each agent is scored independently — one agent's missing data never blocks another.",
       "panel.regimes": "Market regime at signal time",
@@ -394,6 +430,42 @@
       "sec.explorer.kicker": "06 — Penjelajah data",
       "sec.explorer.title": "Penjelajah Data Riset",
       "sec.explorer.sub": "Jelajahi setiap sinyal yang dianalisis. Filter di sini hanya membentuk tabel ini — tidak pernah memengaruhi sinyal mana yang dipublikasikan.",
+      "rail.ridethewave": "Ride the Wave",
+      "sec.rtw.kicker": "07 — Ride the Wave",
+      "sec.rtw.title": "Ride the Wave — Penemuan Filter",
+      "sec.rtw.sub": "Penemuan filter berbasis bukti untuk sinyal LONG Ride the Wave. Metrik utama adalah mean net +4H dan positive net rate +4H (net setelah spread + fee 8 bps). Semua di sini adalah riset — tidak ada skor AI yang memblokir publikasi, dan tidak ada perubahan filter tanpa persetujuan eksplisit.",
+      "panel.rtwPrimary": "Metrik utama (+4H net)",
+      "panel.rtwAgg": "Sinyal vs close vs tanpa flood",
+      "panel.rtwClasses": "Kelas outcome (+4H)",
+      "panel.rtwBatch": "Isolated vs market-wide",
+      "panel.rtwEarlyLate": "Early vs late breakout",
+      "panel.rtwPre": "Sebelum breakout",
+      "panel.rtwNonsignal": "Sinyal vs kontrak yang tidak sinyal",
+      "panel.rtwLab": "Shadow Strategy Laboratory",
+      "panel.rtwRecos": "Rekomendasi berbasis bukti",
+      "panel.rtwHyps": "Hipotesis lab (beku, menunggu close baru)",
+      "rtw.notYet": "Riset Ride the Wave belum tersedia.",
+      "rtw.meanNet": "Mean net +4H",
+      "rtw.posNet": "Positive net rate +4H",
+      "rtw.medianNet": "Median net +4H",
+      "rtw.nNet": "Sinyal dengan net",
+      "rtw.aggNote": "Tiga perempat semua sinyal berasal dari satu close 4H, jadi close itu mendominasi rata-rata berbobot sinyal. Kolom close-weighted dan ex-flood menunjukkan hasil yang sama tanpa dominasi itu.",
+      "rtw.classNote": "CONTINUED = +4H ≥ +1%. EXHAUSTED = sempat ≥ +1% lalu tutup ≤ 0%. REVERSED = +4H ≤ −1%.",
+      "rtw.excNote": "MFE/MAE adalah ekskursi sebenarnya selama horizon. +4H hanya 1 bar, jadi time-to-MFE-nya selalu 1 bar — time-to-MFE yang bermakna ada di +12H/+1D. Retention = return +4H / MFE (median).",
+      "rtw.batchNote": "Isolated 1–3, Intermediate 4–19, Market-Wide Candidate 20+ sinyal dalam satu close — definisi penelitian awal, bukan aturan trading tervalidasi. Breadth mengonfirmasi seberapa banyak universe yang breakout di close itu.",
+      "rtw.earlyNote": "Band margin: <0,5% (early) sampai 5%+ (late). Kenaikan pra-sinyal, ekspansi ATR, dan kontraksi volatilitas adalah konteksnya — margin saja tidak menjelaskan kapan momentum dimulai.",
+      "rtw.nsNote": "Grup A = semua kontrak eligible yang tidak sinyal di close yang sama. Grup B = yang sebanding per sinyal (market sama + band RVOL sama). Missed opportunity = kontrak non-sinyal yang tetap naik ≥ +1% dalam 4H berikutnya.",
+      "rtw.labNote": "Replay virtual candle 4H historis dengan engine produksi. Kalibrasi dulu: replay baseline harus mereproduksi scanner sebelum config alternatif diinterpretasikan.",
+      "rtw.recoNote": "Setiap rekomendasi membawa bukti, ukuran sampel, batasan, dan dampaknya. INSUFFICIENT EVIDENCE adalah hasil yang valid dan jujur — artinya datanya terlalu tipis untuk klaim, bukan berarti filternya gagal.",
+      "rtw.hypNote": "Dibekukan saat pertama muncul; divalidasi hanya pada close yang dipublikasikan setelah momen itu. Belum ada verdict sampai ≥10 sinyal per sisi pada close baru.",
+      "rtw.calib": "Kalibrasi (replay baseline vs scanner)",
+      "rtw.rawMatch": "Gate pass mentah vs decisions",
+      "rtw.dedupMatch": "Setelah dedup vs sent log",
+      "rtw.mismatch": "Setiap mismatch terklasifikasi — daftar lengkap ada di research.json.",
+      "rtw.thConfig": "Config", "rtw.thN": "n", "rtw.thMeanNet": "Mean net +4H",
+      "rtw.thPos": "Positive net", "rtw.thCont": "Continuation",
+      "rtw.thMissed": "Missed good", "rtw.thDisc": "Discovery",
+      "rtw.thVal": "Validation",
       "panel.agents": "Cakupan riset per agent",
       "panel.agents.sub": "Setiap agent dinilai secara independen — data yang hilang dari satu agent tidak pernah memblokir agent lain.",
       "panel.regimes": "Rezim pasar saat sinyal",
@@ -872,6 +944,7 @@
     renderSignalDetail();
     renderInsights();
     renderLearning();
+    renderRideTheWave();
     renderTimeline();
     renderExplorer();
     watchReveals();
@@ -1932,6 +2005,265 @@
       clRows + "</tbody></table></div>" +
       "<p class='panel-sub' style='margin-top:12px'>" + esc(bi(cl.note_id, cl.note) || "") +
       t("lr.clSplitNote") + "</p>";
+  }
+
+  /* ------------------------------------------------- ride the wave (v44) */
+  function renderRideTheWave() {
+    var RTW = ((DATA.learnings || {}).ride_the_wave) || null;
+    var ids = ["rtw-primary", "rtw-aggregations", "rtw-classes",
+               "rtw-batch", "rtw-earlylate", "rtw-presignal",
+               "rtw-nonsignal", "rtw-lab", "rtw-recommendations",
+               "rtw-hypotheses"];
+    if (!RTW || RTW.status === "ERROR") {
+      ids.forEach(function (id) {
+        var el = $(id);
+        if (el) el.innerHTML = '<p class="panel-sub" style="margin:0">' +
+          t("rtw.notYet") + "</p>";
+      });
+      return;
+    }
+    var pc = function (v, dec) {
+      return v == null ? "—" : fmtPct(v, dec == null ? 2 : dec);
+    };
+    var nm = function (v, dec) {
+      return v == null ? "—" : fmtNum(v, dec == null ? 1 : dec);
+    };
+
+    /* Primary metrics */
+    var pr = RTW.primary || {};
+    $("rtw-primary").innerHTML = '<ul class="missing-list">' +
+      "<li><span>" + t("rtw.meanNet") + "</span><span class='num'>" +
+        pc(pr.mean_net4h_pct) + "</span></li>" +
+      "<li><span>" + t("rtw.posNet") + "</span><span class='num'>" +
+        (pr.pct_positive_net4h == null ? "—" :
+          nm(pr.pct_positive_net4h, 1) + "%") + "</span></li>" +
+      "<li><span>" + t("rtw.medianNet") + "</span><span class='num'>" +
+        pc(pr.median_net4h_pct) + "</span></li>" +
+      "<li><span>" + t("rtw.nNet") + "</span><span class='num'>" +
+        (pr.n_net4h == null ? "—" : pr.n_net4h) + " / " +
+        (pr.n_signals == null ? "—" : pr.n_signals) + "</span></li>" +
+      "</ul>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        esc(bi(pr.note, pr.note_en) || "") + "</p>";
+
+    /* Aggregations */
+    var ag = RTW.aggregations || {};
+    var sw = ag.signal_weighted || {};
+    var cw = ag.close_weighted || {};
+    var xf = ag.excluding_largest_batch || {};
+    var lc = ag.largest_close || {};
+    $("rtw-aggregations").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th></th><th>n</th><th>" + t("rtw.thMeanNet") +
+      "</th><th>" + t("rtw.thPos") + "</th></tr></thead><tbody>" +
+      "<tr><td>Signal-weighted</td><td>" + (sw.n == null ? "—" : sw.n) +
+      "</td><td>" + pc(sw.mean_net4h_pct) + "</td><td>" +
+      (sw.pct_positive_net4h == null ? "—" :
+        nm(sw.pct_positive_net4h, 1) + "%") + "</td></tr>" +
+      "<tr><td>Close-weighted</td><td>" + (cw.n_closes == null ? "—" : cw.n_closes) +
+      "</td><td>" + pc(cw.mean_net4h_pct) + "</td><td>—</td></tr>" +
+      "<tr><td>Excluding largest batch</td><td>" + (xf.n == null ? "—" : xf.n) +
+      "</td><td>" + pc(xf.mean_net4h_pct) + "</td><td>" +
+      (xf.pct_positive_net4h == null ? "—" :
+        nm(xf.pct_positive_net4h, 1) + "%") + "</td></tr>" +
+      "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" + t("rtw.aggNote") +
+      (lc.n_signals == null ? "" : " " + t("lr.clLargestVal", {
+        n: lc.n_signals, p: nm(lc.share_pct, 1) })) + "</p>";
+
+    /* Outcome classes + excursion */
+    var cl = RTW.outcome_classes_4h || {};
+    var ex = RTW.excursion || {};
+    var ex4 = ex.h4 || {};
+    var ex12 = ex.h12 || {};
+    var ret = ex.retention4h || {};
+    var clsRows = ["CONTINUED", "EXHAUSTED", "REVERSED", "SIDEWAYS"].map(function (k) {
+      var d = cl[k] || {};
+      return "<tr><td>" + k + "</td><td>" + (d.n == null ? "—" : d.n) +
+        "</td><td>" + (d.share_pct == null ? "—" : nm(d.share_pct, 1) + "%") +
+        "</td><td>" + pc(d.mean_net4h_pct) + "</td></tr>";
+    }).join("");
+    $("rtw-classes").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>Class</th><th>n</th><th>Share</th><th>" +
+      t("rtw.thMeanNet") + "</th></tr></thead><tbody>" + clsRows +
+      "</tbody></table></div>" +
+      '<ul class="missing-list" style="margin-top:12px">' +
+      "<li><span>Mean MFE +4H</span><span class='num'>" + pc(ex4.mean_mfe_pct) + "</span></li>" +
+      "<li><span>Mean MAE +4H</span><span class='num'>" + pc(ex4.mean_mae_pct) + "</span></li>" +
+      "<li><span>Mean MFE +12H / time-to-MFE</span><span class='num'>" +
+        pc(ex12.mean_mfe_pct) + " / " + nm(ex12.mean_time_to_mfe_bars, 2) + " bars</span></li>" +
+      "<li><span>Median retention +4H</span><span class='num'>" +
+        (ret.median == null ? "—" : nm(ret.median * 100, 0) + "%") + "</span></li>" +
+      "<li><span>Retention ≥ 50%</span><span class='num'>" +
+        (ret.pct_ge_50 == null ? "—" : nm(ret.pct_ge_50, 1) + "%") + "</span></li>" +
+      "</ul>" +
+      "<p class='panel-sub' style='margin-top:12px'>" + t("rtw.classNote") +
+      " " + t("rtw.excNote") + "</p>";
+
+    /* Batch context */
+    var bc = RTW.batch_context || {};
+    var bcRows = ["Isolated", "Intermediate", "Market-Wide Candidate"].map(function (b) {
+      var d = bc[b] || {};
+      return "<tr><td>" + b + "</td><td>" + (d.n == null ? "—" : d.n) +
+        "</td><td>" + pc(d.mean_net4h_pct) + "</td><td>" +
+        (d.pct_positive_net4h == null ? "—" : nm(d.pct_positive_net4h, 1) + "%") +
+        "</td><td>" + pc(d.mean_r4h_pct) + "</td></tr>";
+    }).join("");
+    var bpRows = (RTW.batch_per_close || []).map(function (c) {
+      return "<tr><td>" + fmtWib(c.close_ts) + "</td><td>" +
+        (c.n_signals == null ? "—" : c.n_signals) + "</td><td>" +
+        esc(c.band || "—") + "</td><td>" +
+        (c.pct_breakout == null ? "—" : nm(c.pct_breakout, 1) + "%") +
+        "</td><td>" + pc(c.mean_net4h_pct) + "</td></tr>";
+    }).join("");
+    $("rtw-batch").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>Band</th><th>n</th><th>" + t("rtw.thMeanNet") +
+      "</th><th>" + t("rtw.thPos") + "</th><th>Mean +4H gross</th>" +
+      "</tr></thead><tbody>" + bcRows + "</tbody></table></div>" +
+      '<div style="overflow-x:auto;margin-top:12px"><table class="version-table">' +
+      "<thead><tr><th>Close (WIB)</th><th>n</th><th>Band</th><th>% universe breakout</th><th>" +
+      t("rtw.thMeanNet") + "</th></tr></thead><tbody>" + bpRows +
+      "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" + t("rtw.batchNote") + "</p>";
+
+    /* Early vs late */
+    var el = RTW.early_late || {};
+    var elRows = ["<0.5%", "0.5–2%", "2–5%", "5%+"].map(function (b) {
+      var d = el[b] || {};
+      return "<tr><td>" + b + "</td><td>" + (d.n == null ? "—" : d.n) +
+        "</td><td>" + pc(d.mean_net4h_pct) + "</td><td>" +
+        (d.pct_positive_net4h == null ? "—" : nm(d.pct_positive_net4h, 1) + "%") +
+        "</td><td>" + pc(d.mean_pre_rise_3bar) + "</td><td>" +
+        (d.mean_atr_pctile == null ? "—" : nm(d.mean_atr_pctile, 0)) +
+        "</td></tr>";
+    }).join("");
+    $("rtw-earlylate").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>Margin</th><th>n</th><th>" + t("rtw.thMeanNet") +
+      "</th><th>" + t("rtw.thPos") + "</th><th>Mean pre-rise 3-bar</th><th>Mean ATR %ile</th>" +
+      "</tr></thead><tbody>" + elRows + "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" + t("rtw.earlyNote") + "</p>";
+
+    /* Pre-signal buckets */
+    var pb = RTW.pre_signal_buckets || {};
+    var pbHtml = Object.keys(pb).map(function (g) {
+      var rows = Object.keys(pb[g] || {}).map(function (b) {
+        var d = pb[g][b] || {};
+        return "<tr><td>" + esc(b) + "</td><td>" + (d.n == null ? "—" : d.n) +
+          "</td><td>" + pc(d.mean_net4h_pct) + "</td><td>" +
+          (d.pct_positive_net4h == null ? "—" : nm(d.pct_positive_net4h, 1) + "%") +
+          "</td></tr>";
+      }).join("");
+      return "<h4 style='margin:14px 0 6px'>" + esc(g) + "</h4>" +
+        '<div style="overflow-x:auto"><table class="version-table">' +
+        "<thead><tr><th>Band</th><th>n</th><th>" + t("rtw.thMeanNet") +
+        "</th><th>" + t("rtw.thPos") + "</th></tr></thead><tbody>" + rows +
+        "</tbody></table></div>";
+    }).join("");
+    $("rtw-presignal").innerHTML = pbHtml;
+
+    /* Non-signal comparison */
+    var ns = RTW.nonsignal || {};
+    var ga = ns.group_a_all_eligible || {};
+    var gb = ns.group_b_matched || {};
+    var missed = ns.missed_opportunities_a || {};
+    var topMissed = (missed.top || []).map(function (m) {
+      return "<li><span>" + esc(m.symbol) + " · " + fmtWib(m.close_ts) +
+        "</span><span class='num'>" + pc(m.r4h_pct) + "</span></li>";
+    }).join("");
+    $("rtw-nonsignal").innerHTML = '<ul class="missing-list">' +
+      "<li><span>Group A — eligible non-signals (n)</span><span class='num'>" +
+        (ga.n == null ? "—" : ga.n) + "</span></li>" +
+      "<li><span>Group A — mean +4H gross</span><span class='num'>" + pc(ga.mean_r4h_pct) + "</span></li>" +
+      "<li><span>Group A — rose ≥ +1% (missed opportunities)</span><span class='num'>" +
+        (ga.pct_gte_1pct_r4h == null ? "—" : nm(ga.pct_gte_1pct_r4h, 1) + "%") +
+        " (" + (missed.n == null ? "—" : missed.n) + ")</span></li>" +
+      "<li><span>Signals that rose ≥ +1% (caught)</span><span class='num'>" +
+        (ns.signals_with_r4h_ge_1pct == null ? "—" : ns.signals_with_r4h_ge_1pct) + "</span></li>" +
+      "<li><span>Group B — matched non-signals (n)</span><span class='num'>" +
+        (gb.n_nonsignals == null ? "—" : gb.n_nonsignals) + "</span></li>" +
+      "<li><span>Group B — mean +4H gross (pooled)</span><span class='num'>" + pc(gb.mean_r4h_pct) + "</span></li>" +
+      "<li><span>Group B — mean +4H gross (close-weighted)</span><span class='num'>" +
+        pc(gb.mean_r4h_close_weighted_pct) + "</span></li>" +
+      "<li><span>Group B — rose ≥ +1%</span><span class='num'>" +
+        (gb.pct_gte_1pct_r4h == null ? "—" : nm(gb.pct_gte_1pct_r4h, 1) + "%") + "</span></li>" +
+      "</ul>" +
+      (topMissed ? "<h4 style='margin:14px 0 6px'>Top missed opportunities</h4>" +
+        '<ul class="missing-list">' + topMissed + "</ul>" : "") +
+      "<p class='panel-sub' style='margin-top:12px'>" + t("rtw.nsNote") + "</p>";
+
+    /* Shadow Lab */
+    var lab = RTW.shadow_lab || {};
+    var labHtml = "";
+    if (lab.status === "not_run_yet") {
+      labHtml = '<p class="panel-sub" style="margin:0">' +
+        esc(bi(lab.note, lab.note_en) || t("rtw.notYet")) + "</p>";
+    } else {
+      var cal = lab.calibration || {};
+      var cr = cal.raw_vs_decisions || {};
+      var cd = cal.dedup_vs_sent_log || {};
+      var cfgRows = (lab.configs || []).map(function (c) {
+        var o = c.overall || {};
+        var v = c.validation || {};
+        return "<tr><td>" + esc(c.id + " — " + (c.label || "")) + "</td><td>" +
+          (c.n_signals == null ? "—" : c.n_signals) + "</td><td>" +
+          pc(o.mean_net4h_pct) + "</td><td>" +
+          (o.pct_positive_net4h == null ? "—" : nm(o.pct_positive_net4h, 1) + "%") +
+          "</td><td>" + (o.continuation_rate_pct == null ? "—" : nm(o.continuation_rate_pct, 1) + "%") +
+          "</td><td>" + (o.missed_good_moves == null ? "—" : o.missed_good_moves) +
+          "</td><td>" + pc(v.mean_net4h_pct) + "</td></tr>";
+      }).join("");
+      labHtml = '<ul class="missing-list">' +
+        "<li><span>" + t("rtw.calib") + " — " + t("rtw.rawMatch") + "</span><span class='num'>" +
+          (cr.match_pct == null ? "—" : nm(cr.match_pct, 2) + "%") + "</span></li>" +
+        "<li><span>" + t("rtw.calib") + " — " + t("rtw.dedupMatch") + "</span><span class='num'>" +
+          (cd.match_pct == null ? "—" : nm(cd.match_pct, 2) + "%") + "</span></li>" +
+        "</ul>" +
+        "<p class='panel-sub' style='margin:6px 0 12px'>" + t("rtw.mismatch") + "</p>" +
+        '<div style="overflow-x:auto"><table class="version-table">' +
+        "<thead><tr><th>" + t("rtw.thConfig") + "</th><th>" + t("rtw.thN") +
+        "</th><th>" + t("rtw.thMeanNet") + "</th><th>" + t("rtw.thPos") +
+        "</th><th>" + t("rtw.thCont") + "</th><th>" + t("rtw.thMissed") +
+        "</th><th>" + t("rtw.thVal") + " " + t("rtw.thMeanNet") +
+        "</th></tr></thead><tbody>" + cfgRows + "</tbody></table></div>" +
+        "<p class='panel-sub' style='margin-top:12px'>" + t("rtw.labNote") +
+        " " + t("rtw.hypNote") + "</p>";
+    }
+    $("rtw-lab").innerHTML = labHtml;
+
+    /* Recommendations */
+    var recs = RTW.recommendations || [];
+    $("rtw-recommendations").innerHTML = recs.map(function (r) {
+      var labCfgs = (r.lab_configs || []).map(function (c) {
+        var o = c.overall || {};
+        return esc(c.id) + ": n=" + (c.n_signals == null ? "—" : c.n_signals) +
+          ", net " + pc(o.mean_net4h_pct);
+      }).join(" · ");
+      return '<div class="reco"><p><strong>' + esc(r.filter || "") +
+        "</strong> — <span class='badge'>" + esc(r.status || "") +
+        "</span></p><p class='panel-sub'>" +
+        esc(bi(r.limitations, r.limitations_en) || "") + "</p>" +
+        (labCfgs ? "<p class='panel-sub'>Lab: " + labCfgs + "</p>" : "") +
+        "</div>";
+    }).join("") +
+      "<p class='panel-sub' style='margin-top:12px'>" + t("rtw.recoNote") + "</p>";
+
+    /* Lab hypotheses */
+    var hyps = ((RTW.shadow_lab || {}).hypotheses) || [];
+    $("rtw-hypotheses").innerHTML = hyps.length === 0
+      ? '<p class="panel-sub" style="margin:0">' + t("rtw.notYet") + "</p>"
+      : hyps.map(function (h) {
+          var va = h.validation_after_created || {};
+          return '<div class="reco"><p><strong>' + esc(h.id) + "</strong> — " +
+            esc(bi(h.text, h.text_en) || "") + "</p><p class='panel-sub'>" +
+            "Status: " + esc(h.status || "") + " · " +
+            "new closes: n=" + (va.n_config == null ? "—" : va.n_config) +
+            " / " + (va.n_baseline == null ? "—" : va.n_baseline) +
+            "</p></div>";
+        }).join("") +
+        "<p class='panel-sub' style='margin-top:12px'>" + t("rtw.hypNote") + "</p>";
   }
 
   /* ---------------------------------------------------------- timeline */
