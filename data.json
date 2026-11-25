@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_ts": 1795580328.5570228,
-  "generated_wib": "25 Nov 2026, 11:18 WIB",
+  "generated_ts": 1795581410.5675097,
+  "generated_wib": "25 Nov 2026, 11:36 WIB",
   "rules_version": "v2.1.2",
   "next_close_ts": 1795593600.0,
   "source": "Binance Futures Mainnet (local)"
@@ -9,18 +9,17 @@
  "kpis": {
   "total": 390,
   "last24": 34,
-  "win_rate": 12.144702842377262,
-  "wins": 47,
-  "n_eval": 387,
-  "mean_net": 0.033352553242276844,
-  "median_net": -0.015213843108870901,
+  "win_rate": 12.339331619537274,
+  "wins": 48,
+  "n_eval": 389,
+  "mean_net": 0.1012060315067788,
+  "median_net": -0.0078026332843250225,
   "eligible": 840,
   "gap_blocked": 0,
   "universe_total": 849,
   "classes": {
-   "BELUM DINILAI": 2,
-   "SIDEWAYS": 307,
-   "PUMP CONTINUED": 47,
+   "PUMP CONTINUED": 48,
+   "SIDEWAYS": 308,
    "REVERSAL": 33,
    "INSUFFICIENT DATA": 1
   },
@@ -35,8 +34,8 @@
   "gap_blocked": 0,
   "universe_total": 849,
   "signals_total": 436,
-  "heartbeat_age_s": 20.0,
-  "uptime_s": 4875.0,
+  "heartbeat_age_s": 21.0,
+  "uptime_s": 5955.2,
   "backfill_missing": 50,
   "backfill_pending": 0,
   "backfill_filled": 3360
@@ -2635,9 +2634,16 @@
     "close_wib": "25 Nov 07:00",
     "net_pct": 0.36122853991974424,
     "cum_net_pct": 8.34359097552757
+   },
+   {
+    "symbol": "BIGTIMEUSDT",
+    "close_ts": 1795579200.0,
+    "close_wib": "25 Nov 11:00",
+    "net_pct": 23.91777690234697,
+    "cum_net_pct": 34.256969353045584
    }
   ],
-  "n_eval": 351,
+  "n_eval": 352,
   "n_total": 390
  },
  "tf_summary": {
@@ -5069,7 +5075,21 @@
    "quote_volume": 18616430.717429,
    "qv24h": 26396090.127977,
    "chart": "charts/BIGTIMEUSDT_1795579200.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "PUMP CONTINUED",
+    "reason": "return +30m +24.09% >= +1,00%",
+    "r1": 0.00022639800769752583,
+    "r5": 0.02467738283903098,
+    "r15": 0.3088068824994339,
+    "r30": 0.24088748019017436,
+    "mfe": 0.4421553090332806,
+    "mae": -0.008376726284808678,
+    "net": 0.23917776902346968,
+    "evaluated_ts": 1795581410.074613,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -5129,7 +5149,21 @@
    "quote_volume": 673426.3373,
    "qv24h": 5575868.5981,
    "chart": "charts/LLYUSDT_1795579200.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.29%, MFE +0.08%",
+    "r1": -0.0008106355382621055,
+    "r5": -0.0008740765803868511,
+    "r15": -0.0013675069080246738,
+    "r30": -0.0029112389330627764,
+    "mfe": 0.0007612925054982789,
+    "mae": -0.0032918851858118048,
+    "net": null,
+    "evaluated_ts": 1795581410.074613,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",

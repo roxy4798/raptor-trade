@@ -105,6 +105,29 @@
       "rtw.thPos": "Positive net", "rtw.thCont": "Continuation",
       "rtw.thMissed": "Missed good", "rtw.thDisc": "Discovery",
       "rtw.thVal": "Validation",
+      "rail.exit": "Take Profit & Exit",
+      "sec.exit.kicker": "08 — Take Profit & Exit",
+      "sec.exit.title": "Agent 11 — Take Profit & Exit Intelligence",
+      "sec.exit.sub": "What happens after a LONG entry: how far price can go, how much of it a realistic exit captures, and how long to hold. Exit net is round-trip (gross minus twice spread + 8 bps fee). If one 4H bar touches both a TP and a stop loss, the stop is assumed hit first (conservative) and counted as UNKNOWN ordering. Everything here is research — no exit rule filters or delays a signal.",
+      "panel.exitPrimary": "Primary metrics (exit net, round-trip)",
+      "panel.exitTp": "TP hit rates (MFE-based)",
+      "panel.exitStrategies": "Exit strategy comparison (+12H)",
+      "panel.exitHolding": "How long to hold (exit at bar k close)",
+      "panel.exitGiveback": "Profit giveback & time-to-max-close",
+      "panel.exitEntryTp": "Which entries reach +5% (TP hit @ +12H)",
+      "panel.exitRecos": "Exit recommendations",
+      "panel.exitHyps": "Exit hypotheses (frozen, awaiting new closes)",
+      "exit.notYet": "Take Profit & Exit research is not available yet.",
+      "exit.holdH4": "HOLD mean net +4H (round-trip)",
+      "exit.holdH12": "HOLD mean net +12H (round-trip)",
+      "exit.bestH12": "Best +12H strategy (mean net)",
+      "exit.tpNote": "Hit = the highest high within the horizon reached the target. Hit-then-positive = hit and the horizon still closed at or above entry. +1W has no mature signals yet (first matures 28 Nov).",
+      "exit.stratNote": "Fixed TP and ATR TP exit at the TP level when touched, or at the −2% / −1×ATR stop when touched first. If one bar touches both, the stop is assumed first (conservative) — see UNKNOWN. Trailing and exhaustion exits use bar closes only, so ordering never applies. Best by mean net is a description, not a validated recommendation.",
+      "exit.holdNote": "Mean round-trip net of exiting at the close of bar k after entry (1 bar = +4H, 3 = +12H, 6 = +1D, 12 = +2D, 18 = +3D, 42 = +1W). The best bar is the highest mean — with the flood dominating the sample, treat it as an observation, not an optimal holding rule.",
+      "exit.gbNote": "Giveback = MFE minus the realized HOLD return: how much of the peak was given back by holding to the horizon close. Time-to-max-close counts only signals with a full 42-bar path (none mature yet).",
+      "exit.entryNote": "TP+5% hit rate at +12H by entry characteristic. Buckets with n<5 show no rate. A higher hit rate for late breakouts (margin 5%+) does not mean late entries are better — they also rose the most before the signal.",
+      "exit.recoNote": "Every exit recommendation carries its evidence, sample size, limitations, and impact. INSUFFICIENT EVIDENCE is a valid, honest outcome — it means the data is too thin for a claim, not that the exit failed.",
+      "exit.hypNote": "Frozen the moment they first appeared; validated only on closes published after that moment. No verdict until ≥10 signals per side on new closes.",
       "panel.agents": "Research coverage per agent",
       "panel.agents.sub": "Each agent is scored independently — one agent's missing data never blocks another.",
       "panel.regimes": "Market regime at signal time",
@@ -466,6 +489,29 @@
       "rtw.thPos": "Positive net", "rtw.thCont": "Continuation",
       "rtw.thMissed": "Missed good", "rtw.thDisc": "Discovery",
       "rtw.thVal": "Validation",
+      "rail.exit": "Take Profit & Exit",
+      "sec.exit.kicker": "08 — Take Profit & Exit",
+      "sec.exit.title": "Agent 11 — Take Profit & Exit Intelligence",
+      "sec.exit.sub": "Apa yang terjadi setelah entry LONG: sejauh mana harga bisa naik, berapa banyak yang bisa ditangkap exit realistis, dan berapa lama sebaiknya hold. Exit net adalah round-trip (gross dikurangi dua kali spread + fee 8 bps). Jika satu bar 4H menyentuh TP dan stop loss sekaligus, stop diasumsikan kena dulu (konservatif) dan dihitung sebagai urutan UNKNOWN. Semua di sini adalah riset — tidak ada aturan exit yang memfilter atau menunda sinyal.",
+      "panel.exitPrimary": "Metrik utama (exit net, round-trip)",
+      "panel.exitTp": "TP hit rate (berbasis MFE)",
+      "panel.exitStrategies": "Perbandingan strategi exit (+12H)",
+      "panel.exitHolding": "Berapa lama hold (keluar di close bar k)",
+      "panel.exitGiveback": "Profit giveback & time-to-max-close",
+      "panel.exitEntryTp": "Entry mana yang mencapai +5% (TP hit @ +12H)",
+      "panel.exitRecos": "Rekomendasi exit",
+      "panel.exitHyps": "Hipotesis exit (beku, menunggu close baru)",
+      "exit.notYet": "Riset Take Profit & Exit belum tersedia.",
+      "exit.holdH4": "HOLD mean net +4H (round-trip)",
+      "exit.holdH12": "HOLD mean net +12H (round-trip)",
+      "exit.bestH12": "Strategi +12H terbaik (mean net)",
+      "exit.tpNote": "Hit = high tertinggi selama horizon mencapai target. Hit-then-positive = hit dan horizon tetap tutup di atas atau sama dengan entry. +1W belum ada sinyal yang matang (pertama matang 28 Nov).",
+      "exit.stratNote": "Fixed TP dan ATR TP keluar di level TP saat tersentuh, atau di stop −2% / −1×ATR saat tersentuh duluan. Jika satu bar menyentuh keduanya, stop diasumsikan dulu (konservatif) — lihat UNKNOWN. Trailing dan exhaustion exit hanya memakai close bar, jadi urutan tidak berlaku. Terbaik menurut mean net adalah deskripsi, bukan rekomendasi tervalidasi.",
+      "exit.holdNote": "Mean net round-trip bila keluar di close bar ke-k setelah entry (1 bar = +4H, 3 = +12H, 6 = +1D, 12 = +2D, 18 = +3D, 42 = +1W). Bar terbaik adalah mean tertinggi — dengan flood mendominasi sampel, anggap ini observasi, bukan aturan hold optimal.",
+      "exit.gbNote": "Giveback = MFE dikurangi return HOLD yang terealisasi: seberapa banyak puncak yang diberikan kembali karena hold sampai close horizon. Time-to-max-close hanya menghitung sinyal dengan path 42 bar penuh (belum ada yang matang).",
+      "exit.entryNote": "TP+5% hit rate di +12H per karakteristik entry. Bucket dengan n<5 tidak menampilkan rate. Hit rate lebih tinggi untuk late breakout (margin 5%+) bukan berarti entry terlambat lebih baik — mereka juga sudah naik paling banyak sebelum sinyal.",
+      "exit.recoNote": "Setiap rekomendasi exit membawa bukti, ukuran sampel, batasan, dan dampaknya. INSUFFICIENT EVIDENCE adalah hasil yang valid dan jujur — artinya datanya terlalu tipis untuk klaim, bukan berarti exit-nya gagal.",
+      "exit.hypNote": "Dibekukan saat pertama muncul; divalidasi hanya pada close yang dipublikasikan setelah momen itu. Belum ada verdict sampai ≥10 sinyal per sisi pada close baru.",
       "panel.agents": "Cakupan riset per agent",
       "panel.agents.sub": "Setiap agent dinilai secara independen — data yang hilang dari satu agent tidak pernah memblokir agent lain.",
       "panel.regimes": "Rezim pasar saat sinyal",
@@ -945,6 +991,7 @@
     renderInsights();
     renderLearning();
     renderRideTheWave();
+    renderExit();
     renderTimeline();
     renderExplorer();
     watchReveals();
@@ -2267,6 +2314,199 @@
   }
 
   /* ---------------------------------------------------------- timeline */
+  function renderExit() {
+    var EX = ((DATA.learnings || {}).exit_research) || null;
+    var ids = ["exit-primary", "exit-tphit", "exit-strategies",
+               "exit-holding", "exit-giveback", "exit-entrytp",
+               "exit-recommendations", "exit-hypotheses"];
+    if (!EX || EX.status === "ERROR") {
+      ids.forEach(function (id) {
+        var el = $(id);
+        if (el) el.innerHTML = '<p class="panel-sub" style="margin:0">' +
+          t("exit.notYet") + "</p>";
+      });
+      return;
+    }
+    var pc = function (v, dec) {
+      return v == null ? "—" : fmtPct(v, dec == null ? 2 : dec);
+    };
+    var nm = function (v, dec) {
+      return v == null ? "—" : fmtNum(v, dec == null ? 1 : dec);
+    };
+
+    /* Primary metrics */
+    var pr = EX.primary || {};
+    var best = pr.best_strategy_h12 || {};
+    $("exit-primary").innerHTML = '<ul class="missing-list">' +
+      "<li><span>" + t("exit.holdH4") + "</span><span class='num'>" +
+        pc(pr.hold_mean_net_rt_h4_pct) + "</span></li>" +
+      "<li><span>" + t("exit.holdH12") + "</span><span class='num'>" +
+        pc(pr.hold_mean_net_rt_h12_pct) + "</span></li>" +
+      "<li><span>" + t("exit.bestH12") + "</span><span class='num'>" +
+        (best.id ? esc(best.id) + " " + pc(best.mean_net_rt_pct)
+                 : "—") + "</span></li>" +
+      "<li><span>n (HOLD +12H)</span><span class='num'>" +
+        (pr.hold_n_h12 == null ? "—" : pr.hold_n_h12) +
+        "</span></li>" +
+      "</ul>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        esc(bi(pr.note, pr.note_en) || "") + "</p>";
+
+    /* TP hit rates: targets x horizons */
+    var horizons = ["h4", "h12", "h1d", "h2d", "h3d", "h1w"];
+    var hLabels = {h4: "+4H", h12: "+12H", h1d: "+1D",
+                   h2d: "+2D", h3d: "+3D", h1w: "+1W"};
+    var targets = ["2.0", "3.0", "5.0", "10.0", "15.0"];
+    var tp = EX.tp_hit_rates || {};
+    var tpRows = targets.map(function (tg) {
+      var cells = horizons.map(function (h) {
+        var d = (tp[h] || {})[tg] || {};
+        return "<td>" + (d.hit_rate_pct == null ? "—" :
+          nm(d.hit_rate_pct, 1) + "%") + "</td>";
+      }).join("");
+      return "<tr><td>+" + parseFloat(tg) + "%</td>" + cells + "</tr>";
+    }).join("");
+    var tpN = horizons.map(function (h) {
+      var d = ((tp[h] || {})["5.0"]) || {};
+      return "<td>" + (d.n == null ? "—" : d.n) + "</td>";
+    }).join("");
+    $("exit-tphit").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>Target</th>" +
+      horizons.map(function (h) {
+        return "<th>" + hLabels[h] + "</th>";
+      }).join("") + "</tr></thead><tbody>" +
+      tpRows +
+      "<tr><td>n (target +5%)</td>" + tpN + "</tr>" +
+      "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("exit.tpNote") + "</p>";
+
+    /* Exit strategies at +12H */
+    var stratRows = (EX.strategies || []).map(function (s) {
+      var h12 = (s.horizons || {}).h12 || {};
+      var agg = s.agg_h12 || {};
+      var xf = agg.excluding_largest_batch || {};
+      return "<tr><td>" + esc(s.id) + " " +
+        esc(bi(s.label, s.label_en)) + "</td>" +
+        "<td>" + (h12.n == null ? "—" : h12.n) + "</td>" +
+        "<td>" + pc(h12.mean_net_rt_pct) + "</td>" +
+        "<td>" + (h12.pct_positive_net_rt == null ? "—" :
+          nm(h12.pct_positive_net_rt, 1) + "%") + "</td>" +
+        "<td>" + (h12.unknown_order_n == null ? "—" :
+          h12.unknown_order_n) + "</td>" +
+        "<td>" + pc(xf.mean_net_rt_pct) + "</td></tr>";
+    }).join("");
+    $("exit-strategies").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>Strategy</th><th>n</th><th>Mean net +12H</th>" +
+      "<th>Positive</th><th>UNKNOWN</th><th>Ex-flood mean</th>" +
+      "</tr></thead><tbody>" + stratRows + "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("exit.stratNote") + "</p>";
+
+    /* Holding curve: exit at bar k close */
+    var curve = EX.holding_curve || [];
+    var bestK = null;
+    curve.forEach(function (c) {
+      if (c.mean_net_rt_pct != null &&
+          (bestK == null ||
+           c.mean_net_rt_pct > bestK.mean_net_rt_pct)) bestK = c;
+    });
+    var showK = [1, 2, 3, 4, 5, 6, 12, 18, 24, 30, 36, 42];
+    var holdRows = showK.map(function (k) {
+      var c = curve[k - 1] || {};
+      var star = (bestK && bestK.k === k) ? " ★" : "";
+      return "<tr><td>Bar " + k + star + "</td>" +
+        "<td>" + (c.n == null ? "—" : c.n) + "</td>" +
+        "<td>" + pc(c.mean_net_rt_pct) + "</td>" +
+        "<td>" + (c.pct_positive_net_rt == null ? "—" :
+          nm(c.pct_positive_net_rt, 1) + "%") + "</td></tr>";
+    }).join("");
+    $("exit-holding").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>Exit at</th><th>n</th><th>Mean net</th>" +
+      "<th>Positive</th></tr></thead><tbody>" +
+      holdRows + "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("exit.holdNote") + "</p>";
+
+    /* Giveback + time-to-max-close */
+    var gb = EX.giveback || {};
+    var ttm = EX.time_to_max_close || {};
+    var gbRows = horizons.map(function (h) {
+      var d = gb[h] || {};
+      return "<tr><td>" + hLabels[h] + "</td>" +
+        "<td>" + (d.n == null ? "—" : d.n) + "</td>" +
+        "<td>" + pc(d.mean_giveback_pp) + "</td>" +
+        "<td>" + pc(d.median_giveback_pp) + "</td>" +
+        "<td>" + (d.pct_gt_2pp == null ? "—" :
+          nm(d.pct_gt_2pp, 1) + "%") + "</td></tr>";
+    }).join("");
+    $("exit-giveback").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>Horizon</th><th>n</th><th>Mean giveback</th>" +
+      "<th>Median</th><th>&gt; 2pp</th></tr></thead><tbody>" +
+      gbRows + "</tbody></table></div>" +
+      '<ul class="missing-list" style="margin-top:12px">' +
+      "<li><span>Time-to-max-close (median bar)</span>" +
+        "<span class='num'>" +
+        (ttm.median_bar == null ? "—" : nm(ttm.median_bar, 1)) +
+        " / n=" + (ttm.n == null ? "—" : ttm.n) + "</span></li>" +
+      "<li><span>Max close within 3 bars</span><span class='num'>" +
+        (ttm.pct_within_3_bars == null ? "—" :
+          nm(ttm.pct_within_3_bars, 1) + "%") + "</span></li>" +
+      "<li><span>Max close within 6 bars</span><span class='num'>" +
+        (ttm.pct_within_6_bars == null ? "—" :
+          nm(ttm.pct_within_6_bars, 1) + "%") + "</span></li>" +
+      "</ul>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("exit.gbNote") + "</p>";
+
+    /* Entry-vs-TP (margin bands) */
+    var evt = (EX.entry_vs_tp || {}).margin || {};
+    var evtRows = ["<0.5%", "0.5-2%", "2-5%", "5%+"].map(function (b) {
+      var d = evt[b] || {};
+      return "<tr><td>" + esc(b) + "</td>" +
+        "<td>" + (d.n == null ? "—" : d.n) + "</td>" +
+        "<td>" + (d.hit_rate_pct == null ? "—" :
+          nm(d.hit_rate_pct, 1) + "%") + "</td></tr>";
+    }).join("");
+    $("exit-entrytp").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>Breakout margin</th><th>n</th>" +
+      "<th>TP+5% hit @ +12H</th></tr></thead><tbody>" +
+      evtRows + "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("exit.entryNote") + "</p>";
+
+    /* Recommendations */
+    var recos = (EX.recommendations || []).map(function (r) {
+      return "<li><span>" + esc(bi(r.filter, r.filter_en)) +
+        "</span><span class='num'>" +
+        esc(r.status || r.kind || "") + "</span></li>";
+    }).join("");
+    $("exit-recommendations").innerHTML =
+      '<ul class="missing-list">' + recos + "</ul>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("exit.recoNote") + "</p>";
+
+    /* Hypotheses */
+    var hyps = (EX.hypotheses || []).map(function (h) {
+      var v = h.validation_after_created || {};
+      return "<li><span>" + esc(h.id) + " — " +
+        esc(bi(h.text, h.text_en)) + "</span><span class='num'>" +
+        esc(h.status || "") + " (n=" +
+        (v.n_config == null ? "—" : v.n_config) + "/" +
+        (v.n_baseline == null ? "—" : v.n_baseline) +
+        ")</span></li>";
+    }).join("");
+    $("exit-hypotheses").innerHTML =
+      '<ul class="missing-list">' + hyps + "</ul>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+        t("exit.hypNote") + "</p>";
+  }
+
   function renderTimeline() {
     /* v43: drop timeline entries whose text mentions the hidden
        horizon (the v2.3.0 "Long horizons" milestone does). */
