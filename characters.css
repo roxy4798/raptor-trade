@@ -20,11 +20,14 @@
    must show its name) — ribbon across the bottom of team portraits,
    nameplate under section-head portraits; both use the site's own
    mono font and muted text color so they feel native to the page. */
-.char-ribbon{position:absolute;left:0;right:0;bottom:0;padding:6px 4px 4px;background:linear-gradient(180deg,rgba(4,8,14,0),rgba(4,8,14,.88));color:#f2f7ff;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.1em;text-align:center;line-height:1.2;pointer-events:none}
+/* v54: fixed ribbon height (2 lines, text anchored at the bottom) so every
+   name ribbon is identical — before this, 1-line vs 2-line names (MARKET
+   REGIME, TAKE PROFIT & EXIT…) covered different amounts of portrait */
+.char-ribbon{position:absolute;left:0;right:0;bottom:0;min-height:34px;display:flex;align-items:flex-end;justify-content:center;padding:6px 4px 4px;background:linear-gradient(180deg,rgba(4,8,14,0),rgba(4,8,14,.88));color:#f2f7ff;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.1em;text-align:center;line-height:1.2;pointer-events:none}
 .char-nameplate{display:block;float:right;clear:right;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--text-3);text-align:right;margin:4px 0 8px 16px}
 
 /* ---- team strip ---- */
-.team-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+.team-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
 .team-card{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--radius);padding:18px 10px 14px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px}
 .team-card:hover{border-color:var(--line-strong)}
 .team-card--flagship{border-color:rgba(251,146,60,.55);background:linear-gradient(180deg,rgba(251,146,60,.10),var(--bg-1) 55%)}

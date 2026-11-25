@@ -8,6 +8,9 @@
   --warn:#f2c578;--warn-dim:rgba(242,197,120,.10);
   --accent:#b9f38a;--accent-2:#66dbc3;--accent-dim:rgba(185,243,138,.1);
   --radius:16px;--radius-sm:10px;
+  /* v54 layout tokens — one 8px spacing scale (4px half-step); see research
+     report 25 Nov 2026 (NN/g + Material/Carbon): gaps/paddings use these only */
+  --space-1:4px;--space-2:8px;--space-3:16px;--space-4:24px;--space-5:32px;--space-6:48px;--space-7:64px;
   --shadow-1:0 1px 0 rgba(255,255,255,.035) inset,0 22px 45px -28px rgba(0,0,0,.8);
   --font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
@@ -42,8 +45,11 @@ button{font-family:inherit;cursor:pointer}
 
 main{max-width:1240px;margin:0 auto;padding:28px 28px 64px;position:relative;z-index:2}
 .section{margin-top:56px;scroll-margin-top:24px}
-.section-head h2{margin:0 0 4px;font-size:26px;letter-spacing:-.01em}
+.section-head h2{margin:0 0 4px;font-size:24px;letter-spacing:-.01em}
 .section-sub{margin:0;color:var(--text-2);font-size:14px;max-width:760px}
+/* v54: team reads as a deliberate chapter, not more of the same grid —
+   distinct band (research rec #7), subtle so the portraits stay the focus */
+#team{background:linear-gradient(180deg,rgba(185,243,138,.04),rgba(185,243,138,0) 45%),var(--bg-1);border:1px solid var(--line);border-radius:var(--radius);padding:var(--space-4)}
 
 /* States */
 .state-card{text-align:center;padding:72px 24px;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg-1)}
@@ -63,12 +69,14 @@ main{max-width:1240px;margin:0 auto;padding:28px 28px 64px;position:relative;z-i
 .hero-disclaimer{margin:8px 0 0;font-size:13px;color:var(--warn)}
 
 /* Stat grid + panels */
-.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:20px}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:var(--space-3);margin-top:20px}
 .stat-card{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow-1)}
-.stat-label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3)}
+/* v54: reserve exactly 2 label lines so every KPI value sits on the same
+   baseline — before this, "SNAPSHOT COVERAGE" wrapped and pushed 100% down */
+.stat-label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);line-height:1.4;min-height:calc(2 * 1.4em)}
 .stat-value{font-family:var(--font-mono);font-size:28px;font-weight:600;margin:6px 0 2px;text-shadow:0 0 22px rgba(185,243,138,.22)}
 .stat-note{font-size:12.5px;color:var(--text-2);margin:0}
-.panel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-top:12px}
+.panel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:var(--space-3);margin-top:12px}
 /* v44: section 07 pairs very uneven cards (e.g. Outcome classes next
    to the 23-row per-close table) — equal-height stretch leaves big
    blank holes in the shorter card. Natural height, section 07 only. */
@@ -108,7 +116,7 @@ main{max-width:1240px;margin:0 auto;padding:28px 28px 64px;position:relative;z-i
 .missing-list .num{color:var(--text-2)}
 
 /* Signal layout */
-.signal-layout{display:grid;grid-template-columns:280px 1fr;gap:12px;margin-top:20px;align-items:start}
+.signal-layout{display:grid;grid-template-columns:280px 1fr;gap:var(--space-3);margin-top:20px;align-items:start}
 .signal-list-wrap{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--radius);padding:12px;position:sticky;top:16px;z-index:3;min-width:0}
 .signal-list-wrap input,.explorer-controls input,.explorer-controls select{background:var(--bg-0);border:1px solid var(--line-strong);color:var(--text-1);border-radius:8px;padding:9px 12px;font-size:13px;font-family:inherit;width:100%}
 .signal-list-wrap input:focus,.explorer-controls input:focus,.explorer-controls select:focus{outline:2px solid var(--accent);outline-offset:0}
@@ -129,7 +137,7 @@ main{max-width:1240px;margin:0 auto;padding:28px 28px 64px;position:relative;z-i
 .detail-head h3 .sym{font-family:var(--font-mono)}
 .detail-meta{margin:6px 0 0;color:var(--text-2);font-size:13px}
 .detail-meta .num{color:var(--text-1)}
-.agent-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-top:12px}
+.agent-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:var(--space-3);margin-top:12px}
 .agent-card{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow-1)}
 .agent-card h4{margin:0;font-size:14.5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .agent-card .notes{font-size:13.5px;color:var(--text-2);margin:10px 0 0}
@@ -155,7 +163,7 @@ main{max-width:1240px;margin:0 auto;padding:28px 28px 64px;position:relative;z-i
 .outcome-cell .sub{font-size:11.5px;color:var(--text-3);margin-top:2px}
 
 /* Insights */
-.insight-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:12px;margin-top:20px}
+.insight-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:var(--space-3);margin-top:20px}
 .insight-card{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-1)}
 .insight-card h3{margin:0 0 4px;font-size:16px}
 .insight-card .insight-sub{margin:0 0 12px;font-size:13px;color:var(--text-2)}
