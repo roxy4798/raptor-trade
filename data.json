@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_ts": 1795637213.356825,
-  "generated_wib": "26 Nov 2026, 03:06 WIB",
+  "generated_ts": 1795639009.5132113,
+  "generated_wib": "26 Nov 2026, 03:36 WIB",
   "rules_version": "v2.1.2",
   "next_close_ts": 1795651200.0,
   "source": "Binance Futures Mainnet (local)"
@@ -9,20 +9,19 @@
  "kpis": {
   "total": 436,
   "last24": 49,
-  "win_rate": 12.864077669902912,
-  "wins": 53,
-  "n_eval": 412,
-  "mean_net": 0.08562118410624132,
-  "median_net": -0.015255236460042974,
+  "win_rate": 12.616822429906541,
+  "wins": 54,
+  "n_eval": 428,
+  "mean_net": 0.06394132487943405,
+  "median_net": -0.02725185409358235,
   "eligible": 840,
   "gap_blocked": 0,
   "universe_total": 849,
   "classes": {
-   "BELUM DINILAI": 23,
-   "REVERSAL": 40,
-   "PUMP CONTINUED": 53,
-   "SIDEWAYS": 319,
-   "INSUFFICIENT DATA": 1
+   "PUMP CONTINUED": 54,
+   "SIDEWAYS": 330,
+   "REVERSAL": 44,
+   "INSUFFICIENT DATA": 8
   },
   "first_signal_date": "21 Nov 2026"
  },
@@ -35,8 +34,8 @@
   "gap_blocked": 0,
   "universe_total": 849,
   "signals_total": 493,
-  "heartbeat_age_s": 18.0,
-  "uptime_s": 4456.3,
+  "heartbeat_age_s": -0.0,
+  "uptime_s": 883.9,
   "backfill_missing": 50,
   "backfill_pending": 0,
   "backfill_filled": 3360
@@ -2795,9 +2794,114 @@
     "close_wib": "25 Nov 23:00",
     "net_pct": -0.6620181322437215,
     "cum_net_pct": 28.709964405125298
+   },
+   {
+    "symbol": "BULLAUSDT",
+    "close_ts": 1795636800.0,
+    "close_wib": "26 Nov 03:00",
+    "net_pct": 3.5499162043673302,
+    "cum_net_pct": 33.279060288178265
+   },
+   {
+    "symbol": "CHILLGUYUSDT",
+    "close_ts": 1795636800.0,
+    "close_wib": "26 Nov 03:00",
+    "net_pct": -0.3776776268386533,
+    "cum_net_pct": 32.77569509620901
+   },
+   {
+    "symbol": "MANTRAUSDT",
+    "close_ts": 1795636800.0,
+    "close_wib": "26 Nov 03:00",
+    "net_pct": -1.8667434147292643,
+    "cum_net_pct": 30.297113551639534
+   },
+   {
+    "symbol": "METAUSDT",
+    "close_ts": 1795636800.0,
+    "close_wib": "26 Nov 03:00",
+    "net_pct": -0.33766438721407716,
+    "cum_net_pct": 29.857146601607766
+   },
+   {
+    "symbol": "AAPLUSDT",
+    "close_ts": 1795636800.0,
+    "close_wib": "26 Nov 03:00",
+    "net_pct": -0.33336985888991927,
+    "cum_net_pct": 29.424242015223513
+   },
+   {
+    "symbol": "VVVUSDT",
+    "close_ts": 1795636800.0,
+    "close_wib": "26 Nov 03:00",
+    "net_pct": -1.8510713687887068,
+    "cum_net_pct": 27.02850692700791
+   },
+   {
+    "symbol": "PLTRUSDT",
+    "close_ts": 1795636800.0,
+    "close_wib": "26 Nov 03:00",
+    "net_pct": -0.31212760764065967,
+    "cum_net_pct": 26.632015887315006
+   },
+   {
+    "symbol": "XMRUSDT",
+    "close_ts": 1795636800.0,
+    "close_wib": "26 Nov 03:00",
+    "net_pct": -0.33789925389777103,
+    "cum_net_pct": 26.20412725043606
+   },
+   {
+    "symbol": "COLLECTUSDT",
+    "close_ts": 1795636800.0,
+    "close_wib": "26 Nov 03:00",
+    "net_pct": -1.9109363570586027,
+    "cum_net_pct": 23.792446698698978
+   },
+   {
+    "symbol": "MOVEUSDT",
+    "close_ts": 1795636800.0,
+    "close_wib": "26 Nov 03:00",
+    "net_pct": -1.9598035459386727,
+    "cum_net_pct": 21.366357938693636
+   },
+   {
+    "symbol": "HIVEUSDT",
+    "close_ts": 1795636800.0,
+    "close_wib": "26 Nov 03:00",
+    "net_pct": -0.024648177078675972,
+    "cum_net_pct": 21.33644334387497
+   },
+   {
+    "symbol": "BANDUSDT",
+    "close_ts": 1795636800.0,
+    "close_wib": "26 Nov 03:00",
+    "net_pct": 0.5092191911709324,
+    "cum_net_pct": 21.954311799266215
+   },
+   {
+    "symbol": "BZUSDT",
+    "close_ts": 1795636800.0,
+    "close_wib": "26 Nov 03:00",
+    "net_pct": -0.157210951377981,
+    "cum_net_pct": 21.76258626544012
+   },
+   {
+    "symbol": "DKNGUSDT",
+    "close_ts": 1795636800.0,
+    "close_wib": "26 Nov 03:00",
+    "net_pct": -0.5969442848937632,
+    "cum_net_pct": 21.03573146558975
+   },
+   {
+    "symbol": "GMXUSDT",
+    "close_ts": 1795636800.0,
+    "close_wib": "26 Nov 03:00",
+    "net_pct": -1.077146461145505,
+    "cum_net_pct": 19.731999367386564
    }
   ],
-  "n_eval": 371,
+  "n_eval": 386,
   "n_total": 436
  },
  "tf_summary": {
@@ -5379,7 +5483,21 @@
    "quote_volume": 14029193.80193,
    "qv24h": 42888969.25397,
    "chart": "charts/BULLAUSDT_1795636800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "PUMP CONTINUED",
+    "reason": "return +30m +3.69% >= +1,00%",
+    "r1": 0.0015379883112889292,
+    "r5": 0.016302676099661628,
+    "r15": 0.0741310366041219,
+    "r30": 0.03691171947093208,
+    "mfe": 0.08581974776991697,
+    "mae": -0.005229160258381937,
+    "net": 0.0354991620436733,
+    "evaluated_ts": 1795639009.130653,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -5439,7 +5557,21 @@
    "quote_volume": 438062.875009,
    "qv24h": 2341426.248995,
    "chart": "charts/CHILLGUYUSDT_1795636800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.22%, MFE +0.20%",
+    "r1": -0.00040595399188081416,
+    "r5": -0.0012178619756426645,
+    "r15": -0.0008119079837618504,
+    "r30": -0.0021650879566982306,
+    "mfe": 0.002029769959404737,
+    "mae": -0.005006765899864596,
+    "net": -0.003776776268386533,
+    "evaluated_ts": 1795639009.130653,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -5499,7 +5631,21 @@
    "quote_volume": 106634166.732157,
    "qv24h": 203142388.62270102,
    "chart": "charts/MANTRAUSDT_1795636800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "REVERSAL",
+    "reason": "return +30m -1.69% <= -1,00%",
+    "r1": -0.034812076401725234,
+    "r5": -0.019408502772643277,
+    "r15": 0.013555144793591989,
+    "r30": -0.016943930991990208,
+    "mfe": 0.025878003696857554,
+    "mae": -0.03573629081947016,
+    "net": -0.018667434147292643,
+    "evaluated_ts": 1795639009.130653,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -5559,7 +5705,21 @@
    "quote_volume": 21324527.2721,
    "qv24h": 85338687.5521,
    "chart": "charts/METAUSDT_1795636800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.25%, MFE +0.62%",
+    "r1": 0.0018004030259985981,
+    "r5": 0.004641405966106182,
+    "r15": 0.004162399656437055,
+    "r30": -0.0024941363020712926,
+    "mfe": 0.006243599484655471,
+    "mae": -0.002923590234878204,
+    "net": -0.0033766438721407714,
+    "evaluated_ts": 1795639009.130653,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -5619,7 +5779,21 @@
    "quote_volume": 50646949.8543,
    "qv24h": 166751674.5432,
    "chart": "charts/AAPLUSDT_1795636800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.25%, MFE +0.10%",
+    "r1": 0.00030967596632991423,
+    "r5": 0.00019706652402806668,
+    "r15": 0.0005067424903577589,
+    "r30": -0.00250556009121361,
+    "mfe": 0.000957180259564927,
+    "mae": -0.0026744742546662703,
+    "net": -0.003333698588899193,
+    "evaluated_ts": 1795639009.130653,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -5679,7 +5853,21 @@
    "quote_volume": 29550978.44684,
    "qv24h": 71807789.93183,
    "chart": "charts/VVVUSDT_1795636800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "REVERSAL",
+    "reason": "return +30m -1.77% <= -1,00%",
+    "r1": 0.0016816344055241572,
+    "r5": -0.0016458549500877329,
+    "r15": -0.0023256646033847916,
+    "r30": -0.017675050985724083,
+    "mfe": 0.007263229453647657,
+    "mae": -0.018641096282514646,
+    "net": -0.01851071368788707,
+    "evaluated_ts": 1795639009.130653,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -5739,7 +5927,21 @@
    "quote_volume": 6663614.0589,
    "qv24h": 36090793.7804,
    "chart": "charts/PLTRUSDT_1795636800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.21%, MFE +0.61%",
+    "r1": 0.004582671391910154,
+    "r5": 0.0047048759623611325,
+    "r15": 0.0017108639863130382,
+    "r30": -0.0020774776976658638,
+    "mfe": 0.0061102285225467234,
+    "mae": -0.0023218868385677105,
+    "net": -0.0031212760764065964,
+    "evaluated_ts": 1795639009.130653,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -5799,7 +6001,21 @@
    "quote_volume": 14174526.64529,
    "qv24h": 50889834.75681,
    "chart": "charts/XMRUSDT_1795636800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.25%, MFE +0.64%",
+    "r1": -0.001116221781720994,
+    "r5": -0.0017513134851138146,
+    "r15": -0.003926021439156213,
+    "r30": -0.0025211216104387146,
+    "mfe": 0.006408652643328683,
+    "mae": -0.009083735878832266,
+    "net": -0.0033789925389777105,
+    "evaluated_ts": 1795639009.130653,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -5859,7 +6075,21 @@
    "quote_volume": 1031430.21765,
    "qv24h": 2775698.91608,
    "chart": "charts/COLLECTUSDT_1795636800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "REVERSAL",
+    "reason": "return +30m -1.76% <= -1,00%",
+    "r1": 0.0014084507042253502,
+    "r5": -0.009859154929577563,
+    "r15": -0.008450704225352101,
+    "r30": -0.017605633802816878,
+    "mfe": 0.0021126760563379143,
+    "mae": -0.017605633802816878,
+    "net": -0.019109363570586027,
+    "evaluated_ts": 1795639009.130653,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -5919,7 +6149,21 @@
    "quote_volume": 103302.763531,
    "qv24h": 368277.45158600004,
    "chart": "charts/BROCCOLIF3BUSDT_1795636800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "INSUFFICIENT DATA",
+    "reason": null,
+    "r1": null,
+    "r5": null,
+    "r15": null,
+    "r30": null,
+    "mfe": null,
+    "mae": null,
+    "net": null,
+    "evaluated_ts": 1795639009.130653,
+    "candles_used": 0,
+    "insufficient_reason": "candle 1m prod lokal tidak lengkap: 30/31 candle (gap atau window sudah terpotong dari store rolling 120 bar)",
+    "insufficient_reason_en": "incomplete local prod 1m candles: 30/31 candles (gap, or window already trimmed from the rolling 120-bar store)"
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -5979,7 +6223,21 @@
    "quote_volume": 637745.3667,
    "qv24h": 1592811.3062,
    "chart": "charts/NKEUSDT_1795636800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "INSUFFICIENT DATA",
+    "reason": null,
+    "r1": null,
+    "r5": null,
+    "r15": null,
+    "r30": null,
+    "mfe": null,
+    "mae": null,
+    "net": null,
+    "evaluated_ts": 1795639009.130653,
+    "candles_used": 0,
+    "insufficient_reason": "candle 1m prod lokal tidak lengkap: 30/31 candle (gap atau window sudah terpotong dari store rolling 120 bar)",
+    "insufficient_reason_en": "incomplete local prod 1m candles: 30/31 candles (gap, or window already trimmed from the rolling 120-bar store)"
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -6039,7 +6297,21 @@
    "quote_volume": 2103371.098517,
    "qv24h": 8109664.202931001,
    "chart": "charts/MOVEUSDT_1795636800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "REVERSAL",
+    "reason": "return +30m -1.80% <= -1,00%",
+    "r1": -0.003916193459956974,
+    "r5": -0.0007832386919914835,
+    "r15": 0.000979048364989188,
+    "r30": -0.0180144899158019,
+    "mfe": 0.004112003132954678,
+    "mae": -0.021343254356765318,
+    "net": -0.019598035459386726,
+    "evaluated_ts": 1795639009.130653,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -6099,7 +6371,21 @@
    "quote_volume": 714922.2023,
    "qv24h": 1838894.2745,
    "chart": "charts/QNTXUSDT_1795636800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "INSUFFICIENT DATA",
+    "reason": null,
+    "r1": null,
+    "r5": null,
+    "r15": null,
+    "r30": null,
+    "mfe": null,
+    "mae": null,
+    "net": null,
+    "evaluated_ts": 1795639009.130653,
+    "candles_used": 0,
+    "insufficient_reason": "candle 1m prod lokal tidak lengkap: 30/31 candle (gap atau window sudah terpotong dari store rolling 120 bar)",
+    "insufficient_reason_en": "incomplete local prod 1m candles: 30/31 candles (gap, or window already trimmed from the rolling 120-bar store)"
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -6159,7 +6445,21 @@
    "quote_volume": 624819.08365,
    "qv24h": 2704125.3653,
    "chart": "charts/HIVEUSDT_1795636800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m +0.08%, MFE +0.86%",
+    "r1": -0.0013835085777532674,
+    "r5": 0.0022136137244050946,
+    "r15": 0.003597122302158251,
+    "r30": 0.0008301051466519382,
+    "mfe": 0.00857775318206988,
+    "mae": -0.0016602102933037655,
+    "net": -0.0002464817707867597,
+    "evaluated_ts": 1795639009.130653,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -6219,7 +6519,21 @@
    "quote_volume": 479732.57313,
    "qv24h": 1434703.28282,
    "chart": "charts/BANDUSDT_1795636800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m +0.72%, MFE +1.18%",
+    "r1": -0.0026195153896529932,
+    "r5": -0.0026195153896529932,
+    "r15": 0.003929273084479323,
+    "r30": 0.007203667321545426,
+    "mfe": 0.011787819253438192,
+    "mae": -0.005893909626719096,
+    "net": 0.005092191911709324,
+    "evaluated_ts": 1795639009.130653,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -6279,7 +6593,21 @@
    "quote_volume": 92876737.5199,
    "qv24h": 454337056.32129997,
    "chart": "charts/BZUSDT_1795636800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.07%, MFE +0.20%",
+    "r1": -0.00022060445620997182,
+    "r5": -0.00044120891241994364,
+    "r15": 0.0004412089124201657,
+    "r30": -0.0006618133686300265,
+    "mfe": 0.0019854401058903015,
+    "mae": -0.0012133245091551226,
+    "net": -0.0015721095137798098,
+    "evaluated_ts": 1795639009.130653,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -6339,7 +6667,21 @@
    "quote_volume": 331223.6294,
    "qv24h": 1279489.2699,
    "chart": "charts/CRMUSDT_1795636800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "INSUFFICIENT DATA",
+    "reason": null,
+    "r1": null,
+    "r5": null,
+    "r15": null,
+    "r30": null,
+    "mfe": null,
+    "mae": null,
+    "net": null,
+    "evaluated_ts": 1795639009.130653,
+    "candles_used": 0,
+    "insufficient_reason": "candle 1m prod lokal tidak lengkap: 30/31 candle (gap atau window sudah terpotong dari store rolling 120 bar)",
+    "insufficient_reason_en": "incomplete local prod 1m candles: 30/31 candles (gap, or window already trimmed from the rolling 120-bar store)"
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -6399,7 +6741,21 @@
    "quote_volume": 419395.6263,
    "qv24h": 1279274.0435,
    "chart": "charts/DKNGUSDT_1795636800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.40%, MFE +0.40%",
+    "r1": 0.0011487650775416913,
+    "r5": -0.001723147616312537,
+    "r15": 0.003446295232624852,
+    "r30": -0.004020677771395809,
+    "mfe": 0.004020677771395809,
+    "mae": -0.004020677771395809,
+    "net": -0.005969442848937631,
+    "evaluated_ts": 1795639009.130653,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -6459,7 +6815,21 @@
    "quote_volume": 150805.5914,
    "qv24h": 657741.4854,
    "chart": "charts/IWMUSDT_1795636800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "INSUFFICIENT DATA",
+    "reason": null,
+    "r1": null,
+    "r5": null,
+    "r15": null,
+    "r30": null,
+    "mfe": null,
+    "mae": null,
+    "net": null,
+    "evaluated_ts": 1795639009.130653,
+    "candles_used": 0,
+    "insufficient_reason": "candle 1m prod lokal tidak lengkap: 30/31 candle (gap atau window sudah terpotong dari store rolling 120 bar)",
+    "insufficient_reason_en": "incomplete local prod 1m candles: 30/31 candles (gap, or window already trimmed from the rolling 120-bar store)"
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -6519,7 +6889,21 @@
    "quote_volume": 31385.4347,
    "qv24h": 340476.1128,
    "chart": "charts/EQTUSDT_1795636800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m +0.08%, MFE +0.29%",
+    "r1": 0.0007745933384972759,
+    "r5": -0.0005809450038729569,
+    "r15": 0.0019364833462431896,
+    "r30": 0.0007745933384972759,
+    "mfe": 0.0029047250193647844,
+    "mae": -0.0013555383423702327,
+    "net": null,
+    "evaluated_ts": 1795639009.130653,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -6579,7 +6963,21 @@
    "quote_volume": 78749.6736,
    "qv24h": 269625.236,
    "chart": "charts/MELIUSDT_1795636800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "INSUFFICIENT DATA",
+    "reason": null,
+    "r1": null,
+    "r5": null,
+    "r15": null,
+    "r30": null,
+    "mfe": null,
+    "mae": null,
+    "net": null,
+    "evaluated_ts": 1795639009.130653,
+    "candles_used": 0,
+    "insufficient_reason": "candle 1m prod lokal tidak lengkap: 30/31 candle (gap atau window sudah terpotong dari store rolling 120 bar)",
+    "insufficient_reason_en": "incomplete local prod 1m candles: 30/31 candles (gap, or window already trimmed from the rolling 120-bar store)"
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -6639,7 +7037,21 @@
    "quote_volume": 433713.56746,
    "qv24h": 2040693.18303,
    "chart": "charts/GMXUSDT_1795636800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.98%, MFE +0.07%",
+    "r1": -0.00012464165524106452,
+    "r5": -0.005110307864888419,
+    "r15": -0.004611741243923717,
+    "r30": -0.009846690764053312,
+    "mfe": 0.0007478499314470533,
+    "mae": -0.010345257385018014,
+    "net": -0.01077146461145505,
+    "evaluated_ts": 1795639009.130653,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -6699,7 +7111,21 @@
    "quote_volume": 312967.4652,
    "qv24h": 1690904.6811,
    "chart": "charts/COWUSDT_1795636800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "INSUFFICIENT DATA",
+    "reason": null,
+    "r1": null,
+    "r5": null,
+    "r15": null,
+    "r30": null,
+    "mfe": null,
+    "mae": null,
+    "net": null,
+    "evaluated_ts": 1795639009.130653,
+    "candles_used": 0,
+    "insufficient_reason": "candle 1m prod lokal tidak lengkap: 30/31 candle (gap atau window sudah terpotong dari store rolling 120 bar)",
+    "insufficient_reason_en": "incomplete local prod 1m candles: 30/31 candles (gap, or window already trimmed from the rolling 120-bar store)"
+   },
    "tf": {
     "h4": {
      "status": "pending",
