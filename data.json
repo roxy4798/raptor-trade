@@ -1,13 +1,13 @@
 {
  "meta": {
-  "generated_ts": 1795554527.2625663,
-  "generated_wib": "25 Nov 2026, 04:08 WIB",
+  "generated_ts": 1795564911.8447576,
+  "generated_wib": "25 Nov 2026, 07:01 WIB",
   "rules_version": "v2.1.2",
-  "next_close_ts": 1795564800.0,
+  "next_close_ts": 1795579200.0,
   "source": "Binance Futures Mainnet (local)"
  },
  "kpis": {
-  "total": 387,
+  "total": 388,
   "last24": 37,
   "win_rate": 12.176165803108809,
   "wins": 47,
@@ -18,6 +18,7 @@
   "gap_blocked": 0,
   "universe_total": 849,
   "classes": {
+   "BELUM DINILAI": 1,
    "PUMP CONTINUED": 47,
    "SIDEWAYS": 306,
    "REVERSAL": 33,
@@ -33,9 +34,9 @@
   "eligible": 840,
   "gap_blocked": 0,
   "universe_total": 849,
-  "signals_total": 431,
-  "heartbeat_age_s": 18.0,
-  "uptime_s": 5473.4,
+  "signals_total": 433,
+  "heartbeat_age_s": -1.0,
+  "uptime_s": 1484.4,
   "backfill_missing": 50,
   "backfill_pending": 0,
   "backfill_filled": 3360
@@ -161,6 +162,11 @@
     "close_ts": 1795550400.0,
     "close_wib": "25 Nov 03:00",
     "count": 3
+   },
+   {
+    "close_ts": 1795564800.0,
+    "close_wib": "25 Nov 07:00",
+    "count": 1
    }
   ],
   "cum_net_curve": [
@@ -2620,7 +2626,7 @@
    }
   ],
   "n_eval": 350,
-  "n_total": 387
+  "n_total": 388
  },
  "tf_summary": {
   "horizons": {
@@ -4995,6 +5001,66 @@
   ]
  },
  "signals": [
+  {
+   "signal_id": "PROD WS:USD-M:BLURUSDT:LONG SIGNAL:1795564800.0",
+   "symbol": "BLURUSDT",
+   "market": "USD-M",
+   "close_ts": 1795564800.0,
+   "close_wib": "25 Nov 07:00",
+   "close_utc": "25 Nov 00:00",
+   "price": 0.008613,
+   "open": 0.008099,
+   "chg_4h": 6.333333333333349,
+   "ema20": 0.007792465384437805,
+   "ema50": 0.007282430173242203,
+   "ema500": 0.011105086293271886,
+   "rvol": 1.9610099143227133,
+   "taker_buy": 0.5129775758126826,
+   "breakout_level": 0.008458,
+   "breakout_margin": 1.8325845353511543,
+   "hh": 2,
+   "hl": 3,
+   "atr14_pct": 4.493593189782833,
+   "rsi_5m": null,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 67.3143856316781,
+   "spread": 2.3185717597942626,
+   "impact": null,
+   "depth": 251.514249,
+   "book_delay_s": 2.9,
+   "liq_validated": false,
+   "quote_volume": 1972490.97208,
+   "qv24h": 10007706.34278,
+   "chart": "charts/BLURUSDT_1795564800.png",
+   "tracker": null,
+   "tf": {
+    "h4": {
+     "status": null,
+     "return_pct": null
+    },
+    "h12": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h2d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h3d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1w": {
+     "status": null,
+     "return_pct": null
+    }
+   }
+  },
   {
    "signal_id": "PROD WS:USD-M:OPGUSDT:LONG SIGNAL:1795550400.0",
    "symbol": "OPGUSDT",
