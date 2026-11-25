@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<!--
+  Raptor Trade — AI Agents directory template (framework v1.0.0).
+  DO NOT hand-edit the rendered page: the build step renders this
+  template once from assets/agents/config.json and writes
+  dist/agents/index.html. Edit this template or config.json instead —
+  see agents/FRAMEWORK.md for the placeholder list.
+  Rendered location: dist/agents/index.html, so {{ASSET_BASE}} is
+  "../assets/" and {{SITE_BASE}} is "../" on the rendered page.
+  NO Rive instances on this page — static portraits only. PRISM links
+  to /agents/prism/; every other agent shows an honest COMING SOON
+  status (RAPTOR additionally shows STRATEGY CORE) with NO dead links
+  and NO fake pages.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI Agents | Raptor Trade</title>
+<meta name="description" content="The twelve Raptor Trade AI research agents. One live character (PRISM); eleven coming soon. Research only — never a signal filter.">
+<link rel="icon" href="{{ASSET_BASE}}branding/official-raptor-icon.png">
+<script>try{document.documentElement.lang=(localStorage.getItem('raptorLang')==='id'?'id':'en');}catch(e){}</script>
+<link rel="stylesheet" href="{{ASSET_BASE}}style.css">
+<link rel="stylesheet" href="{{ASSET_BASE}}agents/agent-page.css">
+</head>
+<body>
+<a class="skip-link" href="#agents-grid" data-i18n="dir.skip">Skip to the agent directory</a>
+
+<!-- ============ MAIN NAV (Dashboard / Research / AI Agents) ============ -->
+<aside class="app-rail" aria-label="Main navigation">
+  <a class="rail-logo" href="{{SITE_BASE}}index.html" aria-label="Raptor Trade home"><img class="brand-symbol" src="{{ASSET_BASE}}branding/official-raptor-logo.webp" alt="" width="45" height="45"></a>
+  <nav class="rail-nav" aria-label="Agent pages">
+    <a class="rail-link" href="{{SITE_BASE}}index.html" aria-label="Dashboard" title="Dashboard"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span data-i18n="nav.dashboard">Dashboard</span></a>
+    <a class="rail-link" href="{{SITE_BASE}}research.html" aria-label="Research" title="Research"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6M11 8v6"/></svg><span data-i18n="nav.research">Research</span></a>
+    <a class="rail-link active" href="{{SITE_BASE}}agents/" aria-label="AI Agents" title="AI Agents"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5 6.5-5s5.7 1.5 6.5 5"/><circle cx="17" cy="9" r="2.6"/><path d="M16 15.2c2.6.3 4.6 1.7 5.3 4.8"/></svg><span data-i18n="nav.agents">AI Agents</span></a>
+  </nav>
+  <div class="rail-base"><span class="rail-base-line"></span><span class="rail-orientation">R / AGENTS &middot; 2026</span></div>
+</aside>
+
+<div class="agent-wrap">
+<header class="dir-hero">
+  <p class="eyebrow" data-i18n="dir.eyebrow">RAPTOR TRADE &middot; AI AGENTS</p>
+  <h1 data-i18n="dir.title">Twelve agents. One intelligence team.</h1>
+  <p class="dir-sub" data-i18n="dir.sub">Twelve research agents power the research on this page — they only observe and report; they never filter, approve, or block a signal. One character is live today; the rest are coming soon.</p>
+  <p class="dir-count" data-i18n="dir.count">1 live &middot; 11 coming soon</p>
+  <div class="lang-switch" id="lang-switch" role="group" aria-label="Language / Bahasa"><span class="lang-switch-label" data-i18n="lang.label">Language</span><button type="button" class="lang-btn" data-lang="en" aria-pressed="true">EN</button><button type="button" class="lang-btn" data-lang="id" aria-pressed="false">ID</button></div>
+</header>
+
+<main>
+  <div class="agents-grid" id="agents-grid">
+    <!--
+      {{AGENT_CARDS_HTML}} — the build step injects one card per agent
+      from config.json, in num order. Card shape (server-rendered):
+        live agent:    <a class="agent-card is-live" href="{{SITE_BASE}}agents/<slug>/">
+                         <img src="{{ASSET_BASE}}<portrait>" alt="">
+                         <span class="agent-num">AGENT 09</span>
+                         <span class="agent-name">PRISM</span>
+                         <span class="agent-spec agent-i18n" data-en="..." data-id="...">...</span>
+                         <span class="agent-desc agent-i18n" data-en="..." data-id="...">...</span>
+                         <span class="agent-tag live">LIVE</span></a>
+        coming soon:   <article class="agent-card is-soon"> (same inner
+                         markup, NO link) + <span class="agent-tag soon">COMING SOON</span></article>
+        strategy core: <article class="agent-card is-core"> + both
+                         <span class="agent-tag core">STRATEGY CORE</span>
+                         and <span class="agent-tag soon">COMING SOON</span></article>
+      Per-agent accent: style="--agent-accent:<color>" on the card.
+      No Rive, no dead links, no fake pages.
+      If the slot is empty (template previewed without a build), the
+      inline script below fetches {{CONFIG_URL}} and renders the same
+      cards client-side from config.json.
+    -->
+    {{AGENT_CARDS_HTML}}
+  </div>
+  <p class="dir-note" data-i18n="dir.note">Characters are research presenters, not trading signals. Every agent page carries its evidence and its limitations.</p>
+</main>
+
+<footer class="agent-foot">
+  <p><b>RAPTOR TRADE</b> &middot; <span data-i18n="footer.motto">OBSERVE. VERIFY. DECIDE.</span></p>
+  <p data-i18n="footer.disclaimer">Research only — this page never filters, approves, or blocks a signal. Nothing here is financial advice.</p>
+</footer>
+</div>
+
+<script>
+/* Directory fallback renderer (framework v1.0.0): if the build step has
+   not pre-rendered {{AGENT_CARDS_HTML}}, render the 12 cards from
+   config.json. Same shape, same honest statuses, no Rive. The build
+   step should pre-render; this only covers template previews. */
+(function () {
+  'use strict';
+  var grid = document.getElementById('agents-grid');
+  if (!grid || grid.children.length) return;
+  var CONFIG_URL = '{{CONFIG_URL}}';
+  function lang() {
+    try { var l = localStorage.getItem('raptorLang'); if (l === 'id' || l === 'en') return l; } catch (e) {}
+    return 'en';
+  }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  fetch(CONFIG_URL).then(function (r) { return r.json(); }).then(function (cfg) {
+    (cfg.agents || []).forEach(function (a) {
+      var live = a.status === 'live';
+      var core = a.status === 'strategy_core';
+      var el = document.createElement(live ? 'a' : 'article');
+      el.className = 'agent-card' + (live ? ' is-live' : core ? ' is-core' : ' is-soon');
+      el.style.setProperty('--agent-accent', a.color);
+      if (live) el.href = a.slug + '/';
+      var spec = lang() === 'id' ? a.specialization_id : a.specialization_en;
+      var desc = lang() === 'id' ? a.desc_id : a.desc_en;
+      var tags = live ? '<span class="agent-tag live">LIVE</span>'
+        : core ? '<span class="agent-tag core">STRATEGY CORE</span><span class="agent-tag soon">COMING SOON</span>'
+        : '<span class="agent-tag soon">COMING SOON</span>';
+      el.innerHTML = '<img src="../' + esc(a.portrait) + '" alt="" loading="lazy" width="900" height="1080">'
+        + '<span class="agent-num">AGENT ' + esc(a.num) + '</span>'
+        + '<span class="agent-name">' + esc(a.name) + '</span>'
+        + '<span class="agent-spec">' + esc(spec) + '</span>'
+        + '<span class="agent-desc">' + esc(desc) + '</span>' + tags;
+      grid.appendChild(el);
+    });
+  }).catch(function () { /* keep the empty grid honest: no cards invented */ });
+  document.getElementById('lang-switch').addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-lang]');
+    if (!btn) return;
+    try { localStorage.setItem('raptorLang', btn.getAttribute('data-lang')); } catch (err) {}
+    document.querySelectorAll('#lang-switch [data-lang]').forEach(function (b) {
+      var on = b === btn; b.classList.toggle('active', on); b.setAttribute('aria-pressed', String(on));
+    });
+  });
+})();
+</script>
+</body>
+</html>

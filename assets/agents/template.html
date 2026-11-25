@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<!--
+  Raptor Trade — shared AI agent page template (framework v1.0.0).
+  DO NOT hand-edit a rendered page: the build step renders this template
+  once per live / strategy_core agent from assets/agents/config.json and
+  writes dist/agents/<slug>/index.html. Edit this template, config.json,
+  agent-page.css or agent-page.js instead — see agents/FRAMEWORK.md for
+  the full placeholder list.
+  Rendered location: dist/agents/<slug>/index.html, so {{ASSET_BASE}} is
+  "../../assets/" and {{SITE_BASE}} is "../" on a rendered agent page.
+  Character + environment may move; panels, text, buttons and nav stay
+  stable and sharp. No new libraries. Rive Free runtime is vendored
+  locally (assets/agents/rive.js + rive.wasm); the .riv is lazy-loaded
+  only when its agent page opens.
+-->
+<html lang="en" data-agent="{{AGENT_SLUG}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{AGENT_NAME}} — {{AGENT_TITLE_EN}} | Raptor Trade AI Agents</title>
+<meta name="description" content="{{AGENT_NAME}} — {{AGENT_SPEC_EN}}. {{AGENT_TAGLINE_EN}} Research only — never a signal filter.">
+<link rel="icon" href="{{ASSET_BASE}}branding/official-raptor-icon.png">
+<script>try{if(localStorage.getItem('raptorMotionOff')==='1')document.documentElement.classList.add('motion-off');}catch(e){}</script>
+<script>try{document.documentElement.lang=(localStorage.getItem('raptorLang')==='id'?'id':'en');}catch(e){}</script>
+<link rel="stylesheet" href="{{ASSET_BASE}}style.css">
+<link rel="stylesheet" href="{{ASSET_BASE}}agents/agent-page.css">
+<style>:root{--agent-accent:{{AGENT_COLOR}};--agent-accent-2:{{AGENT_COLOR2}};}</style>
+</head>
+<body>
+<a class="skip-link" href="#agent-stage" data-i18n="skip">Skip to character stage</a>
+
+<!-- ============ MAIN NAV (Dashboard / Research / AI Agents) ============ -->
+<aside class="app-rail" aria-label="Main navigation">
+  <a class="rail-logo" href="{{SITE_BASE}}index.html" aria-label="Raptor Trade home"><img class="brand-symbol" src="{{ASSET_BASE}}branding/official-raptor-logo.webp" alt="" width="45" height="45"></a>
+  <nav class="rail-nav" aria-label="Agent pages">
+    <a class="rail-link" href="{{SITE_BASE}}index.html" aria-label="Dashboard" title="Dashboard"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span data-i18n="nav.dashboard">Dashboard</span></a>
+    <a class="rail-link" href="{{SITE_BASE}}research.html" aria-label="Research" title="Research"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6M11 8v6"/></svg><span data-i18n="nav.research">Research</span></a>
+    <a class="rail-link active" href="{{SITE_BASE}}agents/" aria-label="AI Agents" title="AI Agents"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5 6.5-5s5.7 1.5 6.5 5"/><circle cx="17" cy="9" r="2.6"/><path d="M16 15.2c2.6.3 4.6 1.7 5.3 4.8"/></svg><span data-i18n="nav.agents">AI Agents</span></a>
+  </nav>
+  <div class="rail-base"><span class="rail-base-line"></span><span class="rail-orientation">R / AGENTS &middot; 2026</span></div>
+</aside>
+
+<div class="agent-wrap">
+<header class="agent-topbar">
+  <div>
+    <p class="eyebrow"><span data-i18n="hero.eyebrow">RAPTOR TRADE &middot; AI AGENTS</span> &middot; <span class="agent-num">AGENT {{AGENT_NUM}}</span></p>
+    <h1><span class="agent-name" style="color:var(--agent-accent)">{{AGENT_NAME}}</span></h1>
+    <p class="agent-spec agent-i18n" data-en="{{AGENT_SPEC_EN}}" data-id="{{AGENT_SPEC_ID}}">{{AGENT_SPEC_EN}}</p>
+    <p class="agent-tagline agent-i18n" data-en="{{AGENT_TAGLINE_EN}}" data-id="{{AGENT_TAGLINE_ID}}">{{AGENT_TAGLINE_EN}}</p>
+  </div>
+  <div class="agent-tools">
+    <div class="lang-switch" id="lang-switch" role="group" aria-label="Language / Bahasa"><span class="lang-switch-label" data-i18n="lang.label">Language</span><button type="button" class="lang-btn" data-lang="en" aria-pressed="true">EN</button><button type="button" class="lang-btn" data-lang="id" aria-pressed="false">ID</button></div>
+    <button id="motion-toggle" class="motion-toggle" type="button" aria-pressed="false" title="Turn motion on or off. When off, all animation on this page stops."><span class="motion-icon" aria-hidden="true">&#9654;</span> <span data-i18n="motion.label">Motion</span>: <span id="motion-state">OFF</span></button>
+  </div>
+</header>
+
+<main class="agent-layout">
+  <!-- ============ 1 · INTERACTIVE CHARACTER & ENVIRONMENT ============ -->
+  <section class="stage-col" aria-labelledby="stage-heading">
+    <h2 id="stage-heading" class="visually-hidden" data-i18n="stage.heading">Character stage</h2>
+    <div class="stage" id="stage">
+      <div class="stage-badge loading" role="status">
+        <strong data-i18n="badge.loading">LOADING</strong>
+        <span data-i18n="badge.loadingSub">&mdash; checking for the live Rive file&hellip;</span>
+      </div>
+      <div class="stage-media" id="stage-media" tabindex="0" role="button" aria-label="{{AGENT_NAME}} on stage. Press Enter for a greeting gesture.">
+        <div class="stage-glow" aria-hidden="true"></div>
+        <div class="holo-floor" aria-hidden="true"><span class="floor-ring r1"></span><span class="floor-ring r2"></span></div>
+        <div class="floor-glow" aria-hidden="true"></div>
+        <div class="ground-shadow" aria-hidden="true"></div>
+        <div class="stage-word" aria-hidden="true">{{AGENT_NAME}}</div>
+        <span class="side-label left" aria-hidden="true">{{AGENT_SPEC_EN}}</span>
+        <span class="side-label right" aria-hidden="true">{{AGENT_ENV_EN}}</span>
+        <div class="particles" id="particles" aria-hidden="true"></div>
+        <span class="corner tl" aria-hidden="true"></span>
+        <span class="corner tr" aria-hidden="true"></span>
+        <span class="corner bl" aria-hidden="true"></span>
+        <span class="corner br" aria-hidden="true"></span>
+        <canvas id="rive-canvas" class="rive-canvas" width="696" height="832" aria-label="{{AGENT_NAME}} live Rive character" hidden></canvas>
+        <!-- Static preview: the agent portrait (assets/characters/agent-NN.jpg)
+             is the loading still while the live file draws its first frame,
+             and the fallback still if the .riv fails to load. It is a
+             portrait, not a full-body render — labelled honestly below. -->
+        <img id="static-preview" class="static-preview" src="{{ASSET_BASE}}{{PORTRAIT_PATH}}" alt="Portrait of {{AGENT_NAME}} at rest (loading still, not live animation)" width="900" height="1080" fetchpriority="high">
+        <p class="stage-hint" aria-hidden="true" data-i18n="stage.hint">Move your pointer &mdash; the character follows &middot; Tap for a gesture</p>
+      </div>
+      <div class="stage-caption">
+        <p><strong>{{AGENT_NUM}} &middot; {{AGENT_NAME}}</strong> &mdash; <span class="agent-i18n" data-en="{{AGENT_SPEC_EN}}" data-id="{{AGENT_SPEC_ID}}">{{AGENT_SPEC_EN}}</span></p>
+        <p class="stage-note"><span class="agent-i18n" data-en="{{AGENT_ENV_EN}}" data-id="{{AGENT_ENV_ID}}">{{AGENT_ENV_EN}}</span> &middot; <span data-i18n="stage.previewNote">Portrait shown while the live character loads; the live rig replaces it once its first frame is drawn.</span></p>
+      </div>
+    </div>
+    <!-- Dev-only raw state controls, hidden by default. Enabled only when the live .riv loads. -->
+    <section class="dev" aria-labelledby="dev-heading">
+      <button id="dev-toggle" class="dev-toggle" type="button" aria-expanded="false" aria-controls="dev-body" data-i18n="dev.toggle">Dev controls</button>
+      <div id="dev-body" class="dev-body" hidden>
+        <h2 id="dev-heading" class="dev-title" data-i18n="dev.title">State machine &mdash; raw controls</h2>
+        <div class="state-controls" role="group" aria-label="Character states">
+          <div class="state-buttons">
+            <button type="button" class="state-btn" data-state="greet" disabled aria-disabled="true">GREETING</button>
+            <button type="button" class="state-btn" data-state="interact" disabled aria-disabled="true">INTERACT</button>
+            <button type="button" class="state-btn" data-state="explain" disabled aria-disabled="true">EXPLAIN</button>
+            <button type="button" class="state-btn" data-state="focus" disabled aria-disabled="true">FOCUS</button>
+            <button type="button" class="state-btn" data-state="paused" disabled aria-disabled="true">PAUSED</button>
+          </div>
+          <p class="controls-note" data-i18n="dev.note">State buttons enable when the live Rive file loads.</p>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <!-- ============ 2–7 · RESEARCH SECTIONS (rendered by the build step) ============ -->
+  <div class="agent-sections">
+    <!--
+      {{SECTIONS_HTML}} — the build step injects the six remaining sections
+      here, in order, each as <section class="agent-section" id="...">:
+        2 identity   (#identity — Agent Identity & Specialization)
+        3 overview   (#overview — Research Overview)
+        4 latest     (#latest — Latest Intelligence)
+        5 metrics    (#metrics — Relevant Metrics & Interactive Charts;
+                      interactive charts only where the research data
+                      actually supports them)
+        6 history    (#history — Historical Findings)
+        7 evidence   (#evidence — Evidence & Research Limitations)
+      Content is per-agent research data, baked at build time from the
+      research state the agent actually covers (config data_sources).
+      A missing datum is shown as "no data", never estimated. Nothing
+      here is a trading recommendation.
+    -->
+    {{SECTIONS_HTML}}
+  </div>
+
+  <!-- ============ ROSTER STRIP (all 12 agents, status-aware) ============ -->
+  <section class="roster" aria-labelledby="roster-heading">
+    <div class="roster-head">
+      <h2 id="roster-heading" data-i18n="roster.title">AI Agents</h2>
+      <p class="roster-count">{{ROSTER_COUNT_EN}}</p>
+    </div>
+    <div class="roster-grid" id="roster-grid" role="list" aria-label="Character agents">
+      {{ROSTER_HTML}}
+    </div>
+    <p class="roster-note"><a href="{{SITE_BASE}}agents/" data-i18n="roster.back">&larr; Back to the AI Agents directory</a></p>
+  </section>
+</main>
+
+<footer class="agent-foot">
+  <p><b>RAPTOR TRADE</b> &middot; <span data-i18n="footer.motto">OBSERVE. VERIFY. DECIDE.</span></p>
+  <p data-i18n="footer.disclaimer">Research only — this page never filters, approves, or blocks a signal. Nothing here is financial advice. Rive runtime vendored locally; no CDN, no build step on this page.</p>
+  <p class="foot-status"><span class="status-badge status-{{AGENT_STATUS}}">{{AGENT_STATUS_LABEL_EN}}</span> <span data-i18n="footer.agent">Agent {{AGENT_NUM}} of 12</span></p>
+</footer>
+</div>
+
+<!-- Embedded config: the single source of truth for this page.
+     {{AGENT_CONFIG_JSON}} = this agent's config.json object.
+     {{ROSTER_CONFIG_JSON}} = the full {"version","agents":[...]} object.
+     agent-page.js reads the embedded JSON first and falls back to
+     fetching config.json (assets/agents/config.json) if it is absent. -->
+<script id="agent-config" type="application/json">{{AGENT_CONFIG_JSON}}</script>
+<script id="roster-config" type="application/json">{{ROSTER_CONFIG_JSON}}</script>
+{{RIVE_SCRIPT_TAG}}
+<script src="{{ASSET_BASE}}vendor/gsap.min.js"></script>
+<script src="{{ASSET_BASE}}agents/agent-page.js"></script>
+</body>
+</html>
