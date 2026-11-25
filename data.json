@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_ts": 1795566707.452692,
-  "generated_wib": "25 Nov 2026, 07:31 WIB",
+  "generated_ts": 1795567014.9340367,
+  "generated_wib": "25 Nov 2026, 07:36 WIB",
   "rules_version": "v2.1.2",
   "next_close_ts": 1795579200.0,
   "source": "Binance Futures Mainnet (local)"
@@ -9,18 +9,17 @@
  "kpis": {
   "total": 388,
   "last24": 37,
-  "win_rate": 12.176165803108809,
+  "win_rate": 12.144702842377262,
   "wins": 47,
-  "n_eval": 386,
-  "mean_net": 0.03241576470891265,
-  "median_net": -0.015234539784456939,
+  "n_eval": 387,
+  "mean_net": 0.033352553242276844,
+  "median_net": -0.015213843108870901,
   "eligible": 840,
   "gap_blocked": 0,
   "universe_total": 849,
   "classes": {
-   "BELUM DINILAI": 1,
+   "SIDEWAYS": 307,
    "PUMP CONTINUED": 47,
-   "SIDEWAYS": 306,
    "REVERSAL": 33,
    "INSUFFICIENT DATA": 1
   },
@@ -35,8 +34,8 @@
   "gap_blocked": 0,
   "universe_total": 849,
   "signals_total": 433,
-  "heartbeat_age_s": 25.0,
-  "uptime_s": 3254.8,
+  "heartbeat_age_s": 2.0,
+  "uptime_s": 3584.9,
   "backfill_missing": 50,
   "backfill_pending": 0,
   "backfill_filled": 3360
@@ -2623,9 +2622,16 @@
     "close_wib": "25 Nov 03:00",
     "net_pct": 1.8104611439689617,
     "cum_net_pct": 7.953631648134696
+   },
+   {
+    "symbol": "BLURUSDT",
+    "close_ts": 1795564800.0,
+    "close_wib": "25 Nov 07:00",
+    "net_pct": 0.36122853991974424,
+    "cum_net_pct": 8.34359097552757
    }
   ],
-  "n_eval": 350,
+  "n_eval": 351,
   "n_total": 388
  },
  "tf_summary": {
@@ -5051,7 +5057,21 @@
    "quote_volume": 1972490.97208,
    "qv24h": 10007706.34278,
    "chart": "charts/BLURUSDT_1795564800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m +0.46%, MFE +1.65%",
+    "r1": -0.0011610356437944391,
+    "r5": 0.007546731684662689,
+    "r15": 0.0017415534656912701,
+    "r30": 0.004644142575176868,
+    "mfe": 0.016486706141878527,
+    "mae": -0.0052246603970743655,
+    "net": 0.0036122853991974423,
+    "evaluated_ts": 1795567014.534131,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
