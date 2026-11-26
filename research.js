@@ -813,7 +813,7 @@
       "joint.recoNote": "Semua rekomendasi gabungan masih INSUFFICIENT EVIDENCE di v1.1.0 — tidak ada kandidat yang diterapkan ke produksi. Verdict non-INSUFFICIENT butuh gap ≥1,0pp searah di discovery dan validation, n≥10/sisi pada close validasi, dan lolos agregasi ex-flood.",
       "rail.forwardtest": "Forward Testing",
       "sec.forwardtest.kicker": "10 — Forward Testing",
-      "sec.forwardtest.title": "Forward Testing — A0 vs A4 vs A4 + ATR Expanded",
+      "sec.forwardtest.title": "Pengujian Forward — A0 vs A4 vs A4 + ATR Expanded",
       "sec.forwardtest.sub": "Close 4J baru setelah cutoff riset historis, dinilai dengan threshold dan definisi yang dibekukan — tanpa optimasi ulang pada sinyal baru. A4 + ATR percentile expanded adalah kandidat riset utama; A0 adalah baseline produksi dan A4 + HOLD adalah pembanding exit. Hasil forward adalah observasi eksploratif, bukan validasi formal.",
       "panel.ignMatrix": "Matriks konsistensi kualitas entry — tiga karakteristik prioritas",
       "panel.jointExits": "Profitabilitas exit A0 vs A4 (+4H)",
@@ -3214,7 +3214,8 @@
       insufficient: ["st-unavailable", "ev.insufficient"]
     };
     var m = map[level] || map.historical;
-    return '<span class="status-badge ' + m[0] + '">' +
+    return '<span class="status-badge ' + m[0] + '"' +
+      ' style="white-space:nowrap">' +
       esc(t(m[1])) + "</span>";
   }
   /* Exit strategy identities (binding, RULES/exit research):
