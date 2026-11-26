@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_ts": 1795678009.5317097,
-  "generated_wib": "26 Nov 2026, 14:26 WIB",
+  "generated_ts": 1795678612.1292782,
+  "generated_wib": "26 Nov 2026, 14:36 WIB",
   "rules_version": "v2.1.2",
   "next_close_ts": 1795680000.0,
   "source": "Binance Futures Mainnet (local)"
@@ -9,19 +9,19 @@
  "kpis": {
   "total": 456,
   "last24": 66,
-  "win_rate": 12.471655328798185,
+  "win_rate": 12.44343891402715,
   "wins": 55,
-  "n_eval": 441,
-  "mean_net": 0.06290005076167575,
-  "median_net": -0.024843495420546667,
+  "n_eval": 442,
+  "mean_net": 0.06219296679513677,
+  "median_net": -0.02725185409358235,
   "eligible": 840,
   "gap_blocked": 0,
   "universe_total": 849,
   "classes": {
-   "SIDEWAYS": 341,
+   "SIDEWAYS": 342,
    "REVERSAL": 45,
    "PUMP CONTINUED": 55,
-   "INSUFFICIENT DATA": 15
+   "INSUFFICIENT DATA": 14
   },
   "first_signal_date": "21 Nov 2026"
  },
@@ -34,8 +34,8 @@
   "gap_blocked": 0,
   "universe_total": 849,
   "signals_total": 521,
-  "heartbeat_age_s": 21.0,
-  "uptime_s": 2954.8,
+  "heartbeat_age_s": 24.0,
+  "uptime_s": 3555.0,
   "backfill_missing": 50,
   "backfill_pending": 0,
   "backfill_filled": 3360
@@ -2876,133 +2876,140 @@
     "cum_net_pct": 24.1117422292064
    },
    {
+    "symbol": "BROCCOLIF3BUSDT",
+    "close_ts": 1795636800.0,
+    "close_wib": "26 Nov 03:00",
+    "net_pct": -0.2199335358539134,
+    "cum_net_pct": 23.83877888611181
+   },
+   {
     "symbol": "MOVEUSDT",
     "close_ts": 1795636800.0,
     "close_wib": "26 Nov 03:00",
     "net_pct": -1.9598035459386727,
-    "cum_net_pct": 21.679395904072152
+    "cum_net_pct": 21.411782106254627
    },
    {
     "symbol": "HIVEUSDT",
     "close_ts": 1795636800.0,
     "close_wib": "26 Nov 03:00",
     "net_pct": -0.024648177078675972,
-    "cum_net_pct": 21.649404151101457
+    "cum_net_pct": 21.381856315206704
    },
    {
     "symbol": "BANDUSDT",
     "close_ts": 1795636800.0,
     "close_wib": "26 Nov 03:00",
     "net_pct": 0.5092191911709324,
-    "cum_net_pct": 22.268866262983945
+    "cum_net_pct": 21.999956022163268
    },
    {
     "symbol": "BZUSDT",
     "close_ts": 1795636800.0,
     "close_wib": "26 Nov 03:00",
     "net_pct": -0.157210951377981,
-    "cum_net_pct": 22.076646215092822
+    "cum_net_pct": 21.808158730620097
    },
    {
     "symbol": "DKNGUSDT",
     "close_ts": 1795636800.0,
     "close_wib": "26 Nov 03:00",
     "net_pct": -0.5969442848937632,
-    "cum_net_pct": 21.347916652321853
+    "cum_net_pct": 21.081031888543333
    },
    {
     "symbol": "GMXUSDT",
     "close_ts": 1795636800.0,
     "close_wib": "26 Nov 03:00",
     "net_pct": -1.077146461145505,
-    "cum_net_pct": 20.04082186242757
+    "cum_net_pct": 19.776811838437425
    },
    {
     "symbol": "MOCAUSDT",
     "close_ts": 1795665600.0,
     "close_wib": "26 Nov 11:00",
     "net_pct": 0.6059334488296009,
-    "cum_net_pct": 20.76818935434197
+    "cum_net_pct": 20.502579605308213
    },
    {
     "symbol": "MEUSDT",
     "close_ts": 1795665600.0,
     "close_wib": "26 Nov 11:00",
     "net_pct": -0.2608166411944976,
-    "cum_net_pct": 20.453205819236576
+    "cum_net_pct": 20.18828882462893
    },
    {
     "symbol": "AIOTUSDT",
     "close_ts": 1795665600.0,
     "close_wib": "26 Nov 11:00",
     "net_pct": -1.2019635148543504,
-    "cum_net_pct": 19.005402232816927
+    "cum_net_pct": 18.743669443829127
    },
    {
     "symbol": "CARVUSDT",
     "close_ts": 1795665600.0,
     "close_wib": "26 Nov 11:00",
     "net_pct": 0.04171975979146037,
-    "cum_net_pct": 19.05505100076732
+    "cum_net_pct": 18.793209017488643
    },
    {
     "symbol": "LTCUSDT",
     "close_ts": 1795665600.0,
     "close_wib": "26 Nov 11:00",
     "net_pct": 0.26278662388796015,
-    "cum_net_pct": 19.367911749860344
+    "cum_net_pct": 19.10538168087388
    },
    {
     "symbol": "CKBUSDT",
     "close_ts": 1795665600.0,
     "close_wib": "26 Nov 11:00",
     "net_pct": -0.8643596569990324,
-    "cum_net_pct": 18.33614367729235
+    "cum_net_pct": 18.075882812309672
    },
    {
     "symbol": "JSTUSDT",
     "close_ts": 1795665600.0,
     "close_wib": "26 Nov 11:00",
     "net_pct": -0.3959736215734887,
-    "cum_net_pct": 17.86756376354297
+    "cum_net_pct": 17.60833346293291
    },
    {
     "symbol": "CLOUSDT",
     "close_ts": 1795665600.0,
     "close_wib": "26 Nov 11:00",
     "net_pct": -0.08001534281133202,
-    "cum_net_pct": 17.773251628334208
+    "cum_net_pct": 17.514228751737846
    },
    {
     "symbol": "LTCUSDC",
     "close_ts": 1795665600.0,
     "close_wib": "26 Nov 11:00",
     "net_pct": 0.263189203647647,
-    "cum_net_pct": 18.083218111404765
+    "cum_net_pct": 17.823513514562215
    },
    {
     "symbol": "ZETAUSDT",
     "close_ts": 1795665600.0,
     "close_wib": "26 Nov 11:00",
     "net_pct": 1.663399480718468,
-    "cum_net_pct": 20.047413748285535
+    "cum_net_pct": 19.783389226527714
    },
    {
     "symbol": "LTCUSD_PERP",
     "close_ts": 1795665600.0,
     "close_wib": "26 Nov 11:00",
     "net_pct": 0.1943458087582991,
-    "cum_net_pct": 20.28072086542807
+    "cum_net_pct": 20.016183223078123
    },
    {
     "symbol": "BWETUSDT",
     "close_ts": 1795665600.0,
     "close_wib": "26 Nov 11:00",
     "net_pct": -0.07040481778238737,
-    "cum_net_pct": 20.196037443075433
+    "cum_net_pct": 19.93168604797053
    }
   ],
-  "n_eval": 399,
+  "n_eval": 400,
   "n_total": 456
  },
  "tf_summary": {
@@ -7917,19 +7924,19 @@
    "qv24h": 368277.45158600004,
    "chart": "charts/BROCCOLIF3BUSDT_1795636800.png",
    "tracker": {
-    "classification": "INSUFFICIENT DATA",
-    "reason": null,
-    "r1": null,
-    "r5": null,
-    "r15": null,
-    "r30": null,
-    "mfe": null,
-    "mae": null,
-    "net": null,
-    "evaluated_ts": 1795639009.130653,
-    "candles_used": 0,
-    "insufficient_reason": "candle 1m prod lokal tidak lengkap: 30/31 candle (gap atau window sudah terpotong dari store rolling 120 bar)",
-    "insufficient_reason_en": "incomplete local prod 1m candles: 30/31 candles (gap, or window already trimmed from the rolling 120-bar store)"
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.07%, MFE +0.47%",
+    "r1": 0.0,
+    "r5": 0.0013995801259620855,
+    "r15": 0.0023326335432702905,
+    "r30": -0.0006997900629811538,
+    "mfe": 0.004665267086540803,
+    "mae": -0.0020993701889433503,
+    "net": -0.002199335358539134,
+    "evaluated_ts": 1795678400.923612,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
    },
    "tf": {
     "h4": {
