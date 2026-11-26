@@ -9,17 +9,17 @@
   "../assets/" (agent-page.css only — the one file that lives under
   dist/assets/) and {{ROOT_BASE}} is "../" (the dist root: style.css,
   branding/, characters/) and {{SITE_BASE}} is "../" on the rendered page.
-  NO Rive instances on this page — static portraits only. PRISM links
-  to /agents/prism/; every other agent shows an honest COMING SOON
-  status (RAPTOR additionally shows STRATEGY CORE) with NO dead links
-  and NO fake pages.
+  NO Rive instances on this page — static portraits only. PRISM and
+  RAPTOR link to /agents/prism/ and /agents/raptor/; every other agent
+  shows an honest COMING SOON status (RAPTOR additionally shows
+  STRATEGY CORE) with NO dead links and NO fake pages.
 -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AI Agents | Raptor Trade</title>
-<meta name="description" content="The twelve Raptor Trade AI research agents. One live character (PRISM); eleven coming soon. Research only — never a signal filter.">
+<meta name="description" content="The twelve Raptor Trade AI research agents. Two live characters (PRISM, RAPTOR); ten coming soon. Research only — never a signal filter.">
 <link rel="icon" href="{{ROOT_BASE}}branding/official-raptor-icon.png">
 <script>try{document.documentElement.lang=(localStorage.getItem('raptorLang')==='id'?'id':'en');}catch(e){}</script>
 <link rel="stylesheet" href="{{ROOT_BASE}}style.css">
@@ -43,8 +43,8 @@
 <header class="dir-hero">
   <p class="eyebrow" data-i18n="dir.eyebrow">RAPTOR TRADE &middot; AI AGENTS</p>
   <h1 data-i18n="dir.title">Twelve agents. One intelligence team.</h1>
-  <p class="dir-sub" data-i18n="dir.sub">Twelve research agents power the research on this page — they only observe and report; they never filter, approve, or block a signal. One character is live today; the rest are coming soon.</p>
-  <p class="dir-count" data-i18n="dir.count">1 live &middot; 11 coming soon</p>
+  <p class="dir-sub" data-i18n="dir.sub">Twelve research agents power the research on this page — they only observe and report; they never filter, approve, or block a signal. Two characters are live today; the rest are coming soon.</p>
+  <p class="dir-count" data-i18n="dir.count">2 live &middot; 10 coming soon</p>
   <div class="lang-switch" id="lang-switch" role="group" aria-label="Language / Bahasa"><span class="lang-switch-label" data-i18n="lang.label">Language</span><button type="button" class="lang-btn" data-lang="en" aria-pressed="true">EN</button><button type="button" class="lang-btn" data-lang="id" aria-pressed="false">ID</button></div>
 </header>
 
@@ -127,8 +127,8 @@
      and per-agent strings (.agent-i18n, data-en/data-id) — including
      on load, so a stored 'id' applies to the pre-rendered cards too. */
   var DIR_I18N = {
-    en: { 'dir.skip': 'Skip to the agent directory', 'dir.eyebrow': 'RAPTOR TRADE · AI AGENTS', 'dir.title': 'Twelve agents. One intelligence team.', 'dir.sub': 'Twelve research agents power the research on this page — they only observe and report; they never filter, approve, or block a signal. One character is live today; the rest are coming soon.', 'dir.count': '1 live · 11 coming soon', 'dir.note': 'Characters are research presenters, not trading signals. Every agent page carries its evidence and its limitations.', 'nav.dashboard': 'Dashboard', 'nav.research': 'Research', 'nav.agents': 'AI Agents', 'lang.label': 'Language', 'footer.motto': 'OBSERVE. VERIFY. DECIDE.', 'footer.disclaimer': 'Research only — this page never filters, approves, or blocks a signal. Nothing here is financial advice.' },
-    id: { 'dir.skip': 'Lewati ke direktori agent', 'dir.eyebrow': 'RAPTOR TRADE · AGEN AI', 'dir.title': 'Dua belas agent. Satu tim intelijen.', 'dir.sub': 'Dua belas agent riset menggerakkan riset di halaman ini — mereka hanya mengamati dan melaporkan; tidak pernah memfilter, menyetujui, atau memblokir sinyal. Satu karakter sudah live hari ini; sisanya segera hadir.', 'dir.count': '1 live · 11 segera hadir', 'dir.note': 'Karakter adalah presenter riset, bukan sinyal trading. Setiap halaman agent membawa bukti dan keterbatasannya.', 'nav.dashboard': 'Dashboard', 'nav.research': 'Riset', 'nav.agents': 'Agen AI', 'lang.label': 'Bahasa', 'footer.motto': 'AMATI. VERIFIKASI. PUTUSKAN.', 'footer.disclaimer': 'Hanya riset — halaman ini tidak pernah memfilter, menyetujui, atau memblokir sinyal. Bukan nasihat finansial.' }
+    en: { 'dir.skip': 'Skip to the agent directory', 'dir.eyebrow': 'RAPTOR TRADE · AI AGENTS', 'dir.title': 'Twelve agents. One intelligence team.', 'dir.sub': 'Twelve research agents power the research on this page — they only observe and report; they never filter, approve, or block a signal. Two characters are live today; the rest are coming soon.', 'dir.count': '2 live · 10 coming soon', 'dir.note': 'Characters are research presenters, not trading signals. Every agent page carries its evidence and its limitations.', 'nav.dashboard': 'Dashboard', 'nav.research': 'Research', 'nav.agents': 'AI Agents', 'lang.label': 'Language', 'footer.motto': 'OBSERVE. VERIFY. DECIDE.', 'footer.disclaimer': 'Research only — this page never filters, approves, or blocks a signal. Nothing here is financial advice.' },
+    id: { 'dir.skip': 'Lewati ke direktori agent', 'dir.eyebrow': 'RAPTOR TRADE · AGEN AI', 'dir.title': 'Dua belas agent. Satu tim intelijen.', 'dir.sub': 'Dua belas agent riset menggerakkan riset di halaman ini — mereka hanya mengamati dan melaporkan; tidak pernah memfilter, menyetujui, atau memblokir sinyal. Dua karakter sudah live hari ini; sisanya segera hadir.', 'dir.count': '2 live · 10 segera hadir', 'dir.note': 'Karakter adalah presenter riset, bukan sinyal trading. Setiap halaman agent membawa bukti dan keterbatasannya.', 'nav.dashboard': 'Dashboard', 'nav.research': 'Riset', 'nav.agents': 'Agen AI', 'lang.label': 'Bahasa', 'footer.motto': 'AMATI. VERIFIKASI. PUTUSKAN.', 'footer.disclaimer': 'Hanya riset — halaman ini tidak pernah memfilter, menyetujui, atau memblokir sinyal. Bukan nasihat finansial.' }
   };
   function applyDirI18n() {
     var l = lang();
