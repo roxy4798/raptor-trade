@@ -39,22 +39,40 @@
   }
   var T = {
     en: { avail: 'New data available', reload: 'Reload', close: 'Dismiss',
-      syncLast: 'Last successful sync', dataAsOf: 'data as of',
-      dataAge: 'data {m} min old', fresh: 'fresh', stale: 'stale',
-      statusUnknown: 'status unknown',
-      syncUnknown: 'Last successful sync: —' },
+      syncLast: 'Last successful sync', latestCandle: 'Latest 4H candle',
+      sync: 'Sync', fresh: 'fresh', ok: 'ok', degraded: 'degraded',
+      failed: 'failed', statusUnknown: 'status unknown',
+      researchAsOf: 'Research data as of',
+      researchUnknown: 'Research data as of —',
+      shadowLab: 'Shadow Lab as of', ageSec: '{s} s old',
+      ageMin: '{m} min old', ageH: '{h} h old', ageUnknown: 'age unknown' },
     id: { avail: 'Data baru tersedia', reload: 'Muat ulang', close: 'Tutup',
-      syncLast: 'Sinkronisasi terakhir berhasil', dataAsOf: 'data per',
-      dataAge: 'data {m} mnt lalu', fresh: 'fresh', stale: 'stale',
-      statusUnknown: 'status tidak diketahui',
-      syncUnknown: 'Sinkronisasi terakhir berhasil: —' }
+      syncLast: 'Sinkronisasi terakhir berhasil',
+      latestCandle: 'Candle 4H terakhir',
+      sync: 'Sync', fresh: 'fresh', ok: 'ok', degraded: 'degraded',
+      failed: 'failed', statusUnknown: 'status tidak diketahui',
+      researchAsOf: 'Data riset per',
+      researchUnknown: 'Data riset per —',
+      shadowLab: 'Shadow Lab per', ageSec: '{s} dtk lalu',
+      ageMin: '{m} mnt lalu', ageH: '{h} jam lalu',
+      ageUnknown: 'umur tidak diketahui' }
   };
-  /* Sync-status pill (26 Nov 2026): the footer #sync-status line is
-     server-rendered by build.py from dist/sync-status.json; this layer
-     refreshes it live on the same 5-min poll. FRESHNESS: fresh when
-     the last successful sync was within the last 15 minutes, else
-     stale. The pill shows the data age in minutes too. Fetch failures
-     are silent — the server-rendered text stays. */
+  /* Sync-status pill, Item 04 (26 Nov 2026): the footer #sync-status
+     line is server-rendered by build.py from dist/sync-status.json;
+     this layer refreshes it live on the same 5-min poll. Four
+     indicators, each from its own source, never mixed:
+       (a) last successful DATA push (last_successful_sync_wib),
+       (b) latest closed 4H candle (latest_candle_wib),
+       (c) sync health word (sync_health + consecutive_failures):
+           'fresh' means the SYNC loop is healthy AND pushed data in
+           the last 15 min - never a claim about the data itself;
+           'ok' = healthy but nothing new to push recently (quiet
+           market - not a problem); degraded/failed carry the count.
+       (d) research freshness lives on its OWN line
+           (#research-status), rendered by renderResearchLine below.
+     Missing fields (old sync-status.json) render as '—' / unknown -
+     never guessed. Fetch failures are silent - the server-rendered
+     text stays. */
   var lastSyncStatus = null;
   var syncRetryPending = false;
   var SYNC_FRESH_MS = 15 * 60 * 1000;
@@ -68,29 +86,64 @@
     } catch (e) { return ''; }
   }
 
+  function healthWord(s, nowMs, t) {
+    var health = s.sync_health;
+    if (!health && typeof s.consecutive_failures === 'number') {
+      if (s.consecutive_failures >= 3) health = 'failed';
+      else if (s.consecutive_failures >= 1) health = 'degraded';
+      else if (s.last_successful_sync_utc) health = 'ok';
+      else health = 'unknown';
+    }
+    if (health === 'ok') {
+      var lastMs = s.last_successful_sync_utc
+        ? Date.parse(s.last_successful_sync_utc) : NaN;
+      if (!isNaN(lastMs) && (nowMs - lastMs) <= SYNC_FRESH_MS) return t.fresh;
+      return t.ok;
+    }
+    if (health === 'degraded') {
+      return t.degraded + ' (' + (s.consecutive_failures || 0) + '/3)';
+    }
+    if (health === 'failed') return t.failed;
+    return t.statusUnknown;
+  }
+
+  function fmtAge(sec, t) {
+    if (sec < 60) return t.ageSec.replace('{s}', Math.max(0, Math.round(sec)));
+    if (sec < 3600) return t.ageMin.replace('{m}', Math.round(sec / 60));
+    return t.ageH.replace('{h}', (sec / 3600).toFixed(1));
+  }
+
   function renderSyncPill() {
     var el = document.getElementById('sync-status');
     if (!el || !lastSyncStatus) return;
     var t = T[lang()];
     var s = lastSyncStatus;
-    var nowMs = Date.now();
-    var dataAge = s.data_as_of_ts
-      ? Math.max(0, Math.round((nowMs / 1000 - s.data_as_of_ts) / 60))
-      : null;
-    var ageTxt = dataAge === null ? '' : ' · ' + t.dataAge.replace('{m}', dataAge);
-    var dataTxt = s.data_as_of_ts
-      ? t.dataAsOf + ' ' + fmtWib(s.data_as_of_ts) : t.dataAsOf + ' —';
-    if (!s.last_successful_sync_wib) {
-      el.textContent = t.syncUnknown + ' · ' + dataTxt + ageTxt +
-        ' · ' + t.statusUnknown;
-      return;
-    }
-    var lastMs = s.last_successful_sync_utc
-      ? Date.parse(s.last_successful_sync_utc) : NaN;
-    var fresh = !isNaN(lastMs) && (nowMs - lastMs) <= SYNC_FRESH_MS;
-    el.textContent = t.syncLast + ': ' + s.last_successful_sync_wib +
-      ' · ' + dataTxt + ageTxt + ' · ' + (fresh ? t.fresh : t.stale);
+    var lastWib = s.last_successful_sync_wib || '—';
+    var candleWib = s.latest_candle_wib || '—';
+    el.textContent = t.syncLast + ': ' + lastWib +
+      ' · ' + t.latestCandle + ': ' + candleWib +
+      ' · ' + t.sync + ': ' + healthWord(s, Date.now(), t);
   }
+
+  function renderResearchLine() {
+    var el = document.getElementById('research-status');
+    if (!el || !lastSyncStatus) return;
+    var t = T[lang()];
+    var s = lastSyncStatus;
+    var nowSec = Date.now() / 1000;
+    var researchPart;
+    if (s.research_as_of_ts) {
+      researchPart = t.researchAsOf + ' ' +
+        (s.research_as_of_wib || '—') + ' · ' +
+        fmtAge(Math.max(0, nowSec - s.research_as_of_ts), t);
+    } else {
+      researchPart = t.researchUnknown + ' · ' + t.ageUnknown;
+    }
+    var shadowPart = t.shadowLab + ' ' + (s.shadow_lab_as_of_wib || '—');
+    el.textContent = researchPart + ' · ' + shadowPart;
+  }
+
+  function renderStatusLines() { renderSyncPill(); renderResearchLine(); }
 
   function checkSyncStatus() {
     return fetch('sync-status.json', { cache: 'no-store' })
@@ -98,7 +151,7 @@
         if (!r.ok) throw new Error('HTTP ' + r.status);
         return r.json();
       })
-      .then(function (s) { lastSyncStatus = s; renderSyncPill(); })
+      .then(function (s) { lastSyncStatus = s; renderStatusLines(); })
       .catch(function () {
         /* Silent: keep the server-rendered text. One retry in 15s in
            case the server was briefly busy — the next 5-min poll
@@ -248,5 +301,5 @@
   document.addEventListener('visibilitychange', function () {
     if (!document.hidden) checkNow();
   });
-  document.addEventListener('raptor:lang', renderSyncPill);
+  document.addEventListener('raptor:lang', renderStatusLines);
 })();
