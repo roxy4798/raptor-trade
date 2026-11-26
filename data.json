@@ -1,14 +1,14 @@
 {
  "meta": {
-  "generated_ts": 1795720308.6210399,
-  "generated_wib": "27 Nov 2026, 02:11 WIB",
+  "generated_ts": 1795723310.5349035,
+  "generated_wib": "27 Nov 2026, 03:01 WIB",
   "rules_version": "v2.1.2",
-  "next_close_ts": 1795723200.0,
+  "next_close_ts": 1795737600.0,
   "source": "Binance Futures Mainnet (local)"
  },
  "kpis": {
-  "total": 476,
-  "last24": 63,
+  "total": 482,
+  "last24": 46,
   "win_rate": 12.554112554112553,
   "wins": 58,
   "n_eval": 462,
@@ -18,6 +18,7 @@
   "gap_blocked": 0,
   "universe_total": 849,
   "classes": {
+   "BELUM DINILAI": 6,
    "REVERSAL": 53,
    "PUMP CONTINUED": 58,
    "SIDEWAYS": 351,
@@ -33,9 +34,9 @@
   "eligible": 840,
   "gap_blocked": 0,
   "universe_total": 849,
-  "signals_total": 545,
-  "heartbeat_age_s": 3.0,
-  "uptime_s": 1772.6,
+  "signals_total": 554,
+  "heartbeat_age_s": 4.0,
+  "uptime_s": 4773.5,
   "backfill_missing": 50,
   "backfill_pending": 0,
   "backfill_filled": 3360
@@ -216,6 +217,11 @@
     "close_ts": 1795708800.0,
     "close_wib": "26 Nov 23:00",
     "count": 8
+   },
+   {
+    "close_ts": 1795723200.0,
+    "close_wib": "27 Nov 03:00",
+    "count": 6
    }
   ],
   "cum_net_curve": [
@@ -3165,7 +3171,7 @@
    }
   ],
   "n_eval": 420,
-  "n_total": 476
+  "n_total": 482
  },
  "tf_summary": {
   "horizons": {
@@ -6044,6 +6050,366 @@
   ]
  },
  "signals": [
+  {
+   "signal_id": "PROD WS:USD-M:IDOLUSDT:LONG SIGNAL:1795723200.0",
+   "symbol": "IDOLUSDT",
+   "market": "USD-M",
+   "close_ts": 1795723200.0,
+   "close_wib": "27 Nov 03:00",
+   "close_utc": "26 Nov 20:00",
+   "price": 0.018681,
+   "open": 0.016277,
+   "chg_4h": 14.76225580538149,
+   "ema20": 0.0172165286229951,
+   "ema50": 0.018698288352364024,
+   "ema500": 0.01652821584320336,
+   "rvol": 2.482961834719398,
+   "taker_buy": 0.4929873510067112,
+   "breakout_level": 0.01817,
+   "breakout_margin": 2.8123280132085915,
+   "hh": 2,
+   "hl": 3,
+   "atr14_pct": 9.228608449991128,
+   "rsi_5m": 67.72934287573196,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 54.98500720148011,
+   "spread": 4.284260697262138,
+   "impact": null,
+   "depth": 311.189547,
+   "book_delay_s": 1.9,
+   "liq_validated": false,
+   "quote_volume": 8712508.073122,
+   "qv24h": 20635750.897846,
+   "chart": "charts/IDOLUSDT_1795723200.png",
+   "tracker": null,
+   "tf": {
+    "h4": {
+     "status": null,
+     "return_pct": null
+    },
+    "h12": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h2d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h3d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1w": {
+     "status": null,
+     "return_pct": null
+    }
+   }
+  },
+  {
+   "signal_id": "PROD WS:USD-M:FETUSDT:LONG SIGNAL:1795723200.0",
+   "symbol": "FETUSDT",
+   "market": "USD-M",
+   "close_ts": 1795723200.0,
+   "close_wib": "27 Nov 03:00",
+   "close_utc": "26 Nov 20:00",
+   "price": 0.1207,
+   "open": 0.1157,
+   "chg_4h": 4.321521175453764,
+   "ema20": 0.11097161439260687,
+   "ema50": 0.11482506310966617,
+   "ema500": 0.1606315679350383,
+   "rvol": 2.270676317848335,
+   "taker_buy": 0.5456207274725419,
+   "breakout_level": 0.1199,
+   "breakout_margin": 0.6672226855713054,
+   "hh": 3,
+   "hl": 4,
+   "atr14_pct": 3.657875496481486,
+   "rsi_5m": 65.51724137931046,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 66.25511088474421,
+   "spread": 8.295313148071578,
+   "impact": 4.147656574036365,
+   "depth": 17220.6167,
+   "book_delay_s": 6.9,
+   "liq_validated": false,
+   "quote_volume": 10226140.8771,
+   "qv24h": 36010005.4507,
+   "chart": "charts/FETUSDT_1795723200.png",
+   "tracker": null,
+   "tf": {
+    "h4": {
+     "status": null,
+     "return_pct": null
+    },
+    "h12": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h2d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h3d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1w": {
+     "status": null,
+     "return_pct": null
+    }
+   }
+  },
+  {
+   "signal_id": "PROD WS:USD-M:COLLECTUSDT:LONG SIGNAL:1795723200.0",
+   "symbol": "COLLECTUSDT",
+   "market": "USD-M",
+   "close_ts": 1795723200.0,
+   "close_wib": "27 Nov 03:00",
+   "close_utc": "26 Nov 20:00",
+   "price": 0.02994,
+   "open": 0.02587,
+   "chg_4h": 15.777262180974477,
+   "ema20": 0.026548905931196725,
+   "ema50": 0.025914249244770107,
+   "ema500": 0.028792833390523617,
+   "rvol": 5.202653781694052,
+   "taker_buy": 0.49452601699163573,
+   "breakout_level": 0.02857,
+   "breakout_margin": 4.795239761988098,
+   "hh": 2,
+   "hl": 0,
+   "atr14_pct": 3.922580285593323,
+   "rsi_5m": 61.76470588235298,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 69.17212231651466,
+   "spread": 3.3372267645585163,
+   "impact": null,
+   "depth": 113.93627000000001,
+   "book_delay_s": 9.1,
+   "liq_validated": false,
+   "quote_volume": 1912213.48404,
+   "qv24h": 4545866.305790001,
+   "chart": "charts/COLLECTUSDT_1795723200.png",
+   "tracker": null,
+   "tf": {
+    "h4": {
+     "status": null,
+     "return_pct": null
+    },
+    "h12": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h2d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h3d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1w": {
+     "status": null,
+     "return_pct": null
+    }
+   }
+  },
+  {
+   "signal_id": "PROD WS:USD-M:EWZUSDT:LONG SIGNAL:1795723200.0",
+   "symbol": "EWZUSDT",
+   "market": "USD-M",
+   "close_ts": 1795723200.0,
+   "close_wib": "27 Nov 03:00",
+   "close_utc": "26 Nov 20:00",
+   "price": 31.29,
+   "open": 31.18,
+   "chg_4h": 0.3206155819172743,
+   "ema20": 30.07353926167638,
+   "ema50": 29.970575675205172,
+   "ema500": 34.89455331224388,
+   "rvol": 2.0581265804240094,
+   "taker_buy": 0.5910531631325013,
+   "breakout_level": 31.2,
+   "breakout_margin": 0.288461538461538,
+   "hh": 2,
+   "hl": 2,
+   "atr14_pct": 1.3397595472350425,
+   "rsi_5m": 74.99999999999926,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 73.56508792852203,
+   "spread": 3.1953986259790903,
+   "impact": null,
+   "depth": 1704.1104,
+   "book_delay_s": null,
+   "liq_validated": false,
+   "quote_volume": 210713.7291,
+   "qv24h": 574997.5626,
+   "chart": "charts/EWZUSDT_1795723200.png",
+   "tracker": null,
+   "tf": {
+    "h4": {
+     "status": null,
+     "return_pct": null
+    },
+    "h12": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h2d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h3d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1w": {
+     "status": null,
+     "return_pct": null
+    }
+   }
+  },
+  {
+   "signal_id": "PROD WS:USD-M:SONICUSDT:LONG SIGNAL:1795723200.0",
+   "symbol": "SONICUSDT",
+   "market": "USD-M",
+   "close_ts": 1795723200.0,
+   "close_wib": "27 Nov 03:00",
+   "close_utc": "26 Nov 20:00",
+   "price": 0.0186,
+   "open": 0.01803,
+   "chg_4h": 3.10421286031041,
+   "ema20": 0.01750657437989111,
+   "ema50": 0.017340640889081663,
+   "ema500": 0.02082459922264747,
+   "rvol": 1.9431839442804357,
+   "taker_buy": 0.5243357067999815,
+   "breakout_level": 0.01853,
+   "breakout_margin": 0.3777657852131524,
+   "hh": 3,
+   "hl": 2,
+   "atr14_pct": 3.3600741035163777,
+   "rsi_5m": 66.66666666666649,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 66.10995046277499,
+   "spread": null,
+   "impact": null,
+   "depth": null,
+   "book_delay_s": 21.4,
+   "liq_validated": false,
+   "quote_volume": 131604.474233,
+   "qv24h": 1469210.068821,
+   "chart": "charts/SONICUSDT_1795723200.png",
+   "tracker": null,
+   "tf": {
+    "h4": {
+     "status": null,
+     "return_pct": null
+    },
+    "h12": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h2d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h3d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1w": {
+     "status": null,
+     "return_pct": null
+    }
+   }
+  },
+  {
+   "signal_id": "PROD WS:USD-M:STABLEUSDT:LONG SIGNAL:1795723200.0",
+   "symbol": "STABLEUSDT",
+   "market": "USD-M",
+   "close_ts": 1795723200.0,
+   "close_wib": "27 Nov 03:00",
+   "close_utc": "26 Nov 20:00",
+   "price": 0.02537,
+   "open": 0.02444,
+   "chg_4h": 3.7627811860940725,
+   "ema20": 0.02401897460370972,
+   "ema50": 0.023760125724931632,
+   "ema500": 0.02696883030821206,
+   "rvol": 1.4825668295866548,
+   "taker_buy": 0.5112521093444867,
+   "breakout_level": 0.02521,
+   "breakout_margin": 0.6346687822292757,
+   "hh": 2,
+   "hl": 2,
+   "atr14_pct": 2.667550797202082,
+   "rsi_5m": 68.57142857142867,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 68.60067587656599,
+   "spread": 3.9408866995072285,
+   "impact": 18.715808637127992,
+   "depth": 76.06131,
+   "book_delay_s": 29.0,
+   "liq_validated": false,
+   "quote_volume": 529119.216071,
+   "qv24h": 1628886.83078,
+   "chart": "charts/STABLEUSDT_1795723200.png",
+   "tracker": null,
+   "tf": {
+    "h4": {
+     "status": null,
+     "return_pct": null
+    },
+    "h12": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h2d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h3d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1w": {
+     "status": null,
+     "return_pct": null
+    }
+   }
+  },
   {
    "signal_id": "PROD WS:USD-M:SSVUSDT:LONG SIGNAL:1795708800.0",
    "symbol": "SSVUSDT",
