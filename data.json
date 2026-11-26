@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_ts": 1795651911.1916318,
-  "generated_wib": "26 Nov 2026, 07:11 WIB",
+  "generated_ts": 1795653410.791148,
+  "generated_wib": "26 Nov 2026, 07:36 WIB",
   "rules_version": "v2.1.2",
   "next_close_ts": 1795665600.0,
   "source": "Binance Futures Mainnet (local)"
@@ -18,11 +18,10 @@
   "gap_blocked": 0,
   "universe_total": 849,
   "classes": {
-   "BELUM DINILAI": 8,
+   "INSUFFICIENT DATA": 16,
    "PUMP CONTINUED": 54,
    "SIDEWAYS": 330,
-   "REVERSAL": 44,
-   "INSUFFICIENT DATA": 8
+   "REVERSAL": 44
   },
   "first_signal_date": "21 Nov 2026"
  },
@@ -30,13 +29,13 @@
   "healthy": true,
   "telegram_paused": true,
   "ws_connected": true,
-  "ws_reconnects": 1,
+  "ws_reconnects": 0,
   "eligible": 840,
   "gap_blocked": 0,
   "universe_total": 849,
   "signals_total": 504,
-  "heartbeat_age_s": -1.0,
-  "uptime_s": 6586.5,
+  "heartbeat_age_s": 27.0,
+  "uptime_s": 555.1,
   "backfill_missing": 50,
   "backfill_pending": 0,
   "backfill_filled": 3360
@@ -5627,7 +5626,21 @@
    "quote_volume": 14734231.44876,
    "qv24h": 58124425.122209996,
    "chart": "charts/SSVUSDT_1795651200.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "INSUFFICIENT DATA",
+    "reason": null,
+    "r1": null,
+    "r5": null,
+    "r15": null,
+    "r30": null,
+    "mfe": null,
+    "mae": null,
+    "net": null,
+    "evaluated_ts": 1795653410.935664,
+    "candles_used": 0,
+    "insufficient_reason": "candle 1m prod lokal tidak lengkap: 27/31 candle (gap atau window sudah terpotong dari store rolling 120 bar)",
+    "insufficient_reason_en": "incomplete local prod 1m candles: 27/31 candles (gap, or window already trimmed from the rolling 120-bar store)"
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -5687,7 +5700,21 @@
    "quote_volume": 1921031.3515,
    "qv24h": 5493018.823,
    "chart": "charts/RUNEUSDT_1795651200.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "INSUFFICIENT DATA",
+    "reason": null,
+    "r1": null,
+    "r5": null,
+    "r15": null,
+    "r30": null,
+    "mfe": null,
+    "mae": null,
+    "net": null,
+    "evaluated_ts": 1795653410.935664,
+    "candles_used": 0,
+    "insufficient_reason": "candle 1m prod lokal tidak lengkap: 27/31 candle (gap atau window sudah terpotong dari store rolling 120 bar)",
+    "insufficient_reason_en": "incomplete local prod 1m candles: 27/31 candles (gap, or window already trimmed from the rolling 120-bar store)"
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -5747,7 +5774,21 @@
    "quote_volume": 1322987.32959,
    "qv24h": 4455516.37752,
    "chart": "charts/MINAUSDT_1795651200.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "INSUFFICIENT DATA",
+    "reason": null,
+    "r1": null,
+    "r5": null,
+    "r15": null,
+    "r30": null,
+    "mfe": null,
+    "mae": null,
+    "net": null,
+    "evaluated_ts": 1795653410.935664,
+    "candles_used": 0,
+    "insufficient_reason": "candle 1m prod lokal tidak lengkap: 27/31 candle (gap atau window sudah terpotong dari store rolling 120 bar)",
+    "insufficient_reason_en": "incomplete local prod 1m candles: 27/31 candles (gap, or window already trimmed from the rolling 120-bar store)"
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -5807,7 +5848,21 @@
    "quote_volume": 475098.568806,
    "qv24h": 5754576.9675940005,
    "chart": "charts/TUSDT_1795651200.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "INSUFFICIENT DATA",
+    "reason": null,
+    "r1": null,
+    "r5": null,
+    "r15": null,
+    "r30": null,
+    "mfe": null,
+    "mae": null,
+    "net": null,
+    "evaluated_ts": 1795653410.935664,
+    "candles_used": 0,
+    "insufficient_reason": "candle 1m prod lokal tidak lengkap: 27/31 candle (gap atau window sudah terpotong dari store rolling 120 bar)",
+    "insufficient_reason_en": "incomplete local prod 1m candles: 27/31 candles (gap, or window already trimmed from the rolling 120-bar store)"
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -5867,7 +5922,21 @@
    "quote_volume": 863680.34938,
    "qv24h": 3105195.36476,
    "chart": "charts/AIXBTUSDT_1795651200.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "INSUFFICIENT DATA",
+    "reason": null,
+    "r1": null,
+    "r5": null,
+    "r15": null,
+    "r30": null,
+    "mfe": null,
+    "mae": null,
+    "net": null,
+    "evaluated_ts": 1795653410.935664,
+    "candles_used": 0,
+    "insufficient_reason": "candle 1m prod lokal tidak lengkap: 27/31 candle (gap atau window sudah terpotong dari store rolling 120 bar)",
+    "insufficient_reason_en": "incomplete local prod 1m candles: 27/31 candles (gap, or window already trimmed from the rolling 120-bar store)"
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -5927,7 +5996,21 @@
    "quote_volume": 276042.89985,
    "qv24h": 1007118.6661299999,
    "chart": "charts/CATIUSDT_1795651200.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "INSUFFICIENT DATA",
+    "reason": null,
+    "r1": null,
+    "r5": null,
+    "r15": null,
+    "r30": null,
+    "mfe": null,
+    "mae": null,
+    "net": null,
+    "evaluated_ts": 1795653410.935664,
+    "candles_used": 0,
+    "insufficient_reason": "candle 1m prod lokal tidak lengkap: 28/31 candle (gap atau window sudah terpotong dari store rolling 120 bar)",
+    "insufficient_reason_en": "incomplete local prod 1m candles: 28/31 candles (gap, or window already trimmed from the rolling 120-bar store)"
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -5987,7 +6070,21 @@
    "quote_volume": 926765.763538,
    "qv24h": 2493535.955855,
    "chart": "charts/GPSUSDT_1795651200.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "INSUFFICIENT DATA",
+    "reason": null,
+    "r1": null,
+    "r5": null,
+    "r15": null,
+    "r30": null,
+    "mfe": null,
+    "mae": null,
+    "net": null,
+    "evaluated_ts": 1795653410.935664,
+    "candles_used": 0,
+    "insufficient_reason": "candle 1m prod lokal tidak lengkap: 27/31 candle (gap atau window sudah terpotong dari store rolling 120 bar)",
+    "insufficient_reason_en": "incomplete local prod 1m candles: 27/31 candles (gap, or window already trimmed from the rolling 120-bar store)"
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -6047,7 +6144,21 @@
    "quote_volume": 97770.3577,
    "qv24h": 829867.1468,
    "chart": "charts/GDXUSDT_1795651200.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "INSUFFICIENT DATA",
+    "reason": null,
+    "r1": null,
+    "r5": null,
+    "r15": null,
+    "r30": null,
+    "mfe": null,
+    "mae": null,
+    "net": null,
+    "evaluated_ts": 1795653410.935664,
+    "candles_used": 0,
+    "insufficient_reason": "candle 1m prod lokal tidak lengkap: 28/31 candle (gap atau window sudah terpotong dari store rolling 120 bar)",
+    "insufficient_reason_en": "incomplete local prod 1m candles: 28/31 candles (gap, or window already trimmed from the rolling 120-bar store)"
+   },
    "tf": {
     "h4": {
      "status": "pending",
