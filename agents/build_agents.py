@@ -200,6 +200,9 @@ def load_research_state(state_dir) -> dict:
     ig_embedded = get(learnings, "ignition_research") or {}
     ph_list = get(ph_file, "hypotheses") or get(ig_embedded, "hypotheses_ph") or []
     ih_list = get(ig_embedded, "hypotheses") or []
+    ch_file = _load_json(state_dir / "ignition" / "hypotheses_ch.json") or {}
+    ch_list = get(ch_file, "hypotheses") or []
+    validation_file = _load_json(state_dir / "validation_research.json") or {}
 
     # PRISM grep, computed live (not copied from the spec): how many
     # times does 'prism' appear in the state files the page cites?
@@ -218,6 +221,17 @@ def load_research_state(state_dir) -> dict:
             grep_counts[rel] = None
     grep_total = sum(c or 0 for c in grep_counts.values())
 
+    # RAPTOR grep, computed live (same files, keyword 'raptor').
+    raptor_grep_counts = {}
+    for rel in grep_files:
+        p = state_dir / rel
+        try:
+            text = p.read_text(encoding="utf-8", errors="ignore")
+            raptor_grep_counts[rel] = text.lower().count("raptor")
+        except OSError:
+            raptor_grep_counts[rel] = None
+    raptor_grep_total = sum(c or 0 for c in raptor_grep_counts.values())
+
     return {
         "dir": state_dir,
         "learnings": learnings,
@@ -231,6 +245,10 @@ def load_research_state(state_dir) -> dict:
         "ignition": ig_embedded,
         "grep_counts": grep_counts,
         "grep_total": grep_total,
+        "ch": ch_list,
+        "validation": validation_file,
+        "raptor_grep_counts": raptor_grep_counts,
+        "raptor_grep_total": raptor_grep_total,
         # Per-file "as of" stamps for the provenance foot.
         "asof": {
             "learnings": fmt_ts_wib(get(learnings, "updated_ts"))
@@ -240,6 +258,7 @@ def load_research_state(state_dir) -> dict:
             "split": fmt_ts_wib(get(split, "generated_ts")),
             "ignition": fmt_ts_wib(get(ig_embedded, "generated_ts")),
             "ph_mtime": file_mtime_wib(state_dir / "ignition" / "hypotheses_ph.json"),
+            "ch_mtime": file_mtime_wib(state_dir / "ignition" / "hypotheses_ch.json"),
             "registry_mtime": file_mtime_wib(state_dir / "hypotheses.json"),
         },
     }
@@ -1393,7 +1412,900 @@ def build_generic_sections(agent: dict) -> str:
 def build_agent_sections(agent: dict, state: dict, bake_ts: str) -> str:
     if agent.get("slug") == "prism":
         return build_prism_sections(state, agent, bake_ts)
+    if agent.get("slug") == "raptor":
+        return build_raptor_sections(state, agent, bake_ts)
     return build_generic_sections(agent)
+
+
+# RAPTOR sections (2-7) — LIVE since 26 Nov 2026 (promoted from the staging copy of build_agents.py).
+# Mirrors the PRISM builders where the data is shared (Shadow Lab configs,
+# LH1-LH7, PH/IH items, learning summary, split) and adds RAPTOR-only
+# content: the pump-bucket chart (pooled only, no toggle), CH1/CH2,
+# the PH/IH field-name warning, and the RAPTOR honesty line.
+# Baked from the LIVE research state, never from raptor-content.json.
+# ---------------------------------------------------------------------------
+
+RAPTOR_CSS = """<style>
+/* RAPTOR page additions (baked with the sections, framework CSS untouched):
+   same overflow guard as the PRISM additions. */
+.agent-section{min-width:0}
+.raptor-table-wrap{min-width:0}
+table.raptor-table th,table.raptor-table td{white-space:normal}
+table.raptor-table td.num,table.raptor-table th.num{white-space:nowrap}
+.raptor-chart-wrap{margin-top:12px}
+.raptor-chart-note{color:var(--text-2);font-size:.88rem;margin:8px 0 0}
+.raptor-table-wrap{overflow-x:auto;margin-top:12px}
+table.raptor-table{width:100%;border-collapse:collapse;font-size:.85rem;color:var(--text-2)}
+table.raptor-table th,table.raptor-table td{padding:7px 8px;border-top:1px solid var(--line);text-align:left;vertical-align:top;white-space:nowrap}
+table.raptor-table td.num,table.raptor-table th.num{text-align:right}
+table.raptor-table th{color:var(--text-1);font-size:.78rem;letter-spacing:.04em;text-transform:uppercase}
+table.raptor-table td.cfg{color:var(--text-1);font-weight:700}
+.raptor-verdict{font-weight:700;letter-spacing:.03em}
+.raptor-verdict.holds{color:var(--pos)}
+.raptor-verdict.nohold{color:var(--neg)}
+.raptor-verdict.incon{color:var(--warn)}
+.raptor-code{display:block;white-space:pre-wrap;word-break:break-word;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-family:var(--font-mono);font-size:.78rem;color:var(--text-2);margin:8px 0}
+.agent-section ul.raptor-list{margin:0 0 10px;padding-left:20px;color:var(--text-2);font-size:.95rem}
+.agent-section ul.raptor-list li{margin-bottom:6px}
+.agent-section ul.raptor-list li:last-child{margin-bottom:0}
+</style>"""
+
+RAPTOR_HONESTY_EN = (
+    "RAPTOR-specific finding in the research state: YES \u2014 the ignition "
+    "research on this page is RAPTOR\u2019s own domain (Agent 07 Pump "
+    "Ignition & Continuation, IGNITION_SPEC.md v1.1.0). But every result is "
+    "still descriptive or an early prospective read: PH1\u2013PH6 and "
+    "IH1\u2013IH6 are IN-SAMPLE (validation closes since the 23 Nov flood, "
+    "including closes before the hypotheses were frozen) and are NEVER "
+    "\u201cvalidated\u201d; LH1\u2013LH7 are prospective early reads on ~6 "
+    "closes; CH1/CH2 are awaiting validation with an empty prospective "
+    "set. A missing datum is shown as \u201cno data\u201d, never estimated.")
+RAPTOR_HONESTY_ID = (
+    "Temuan spesifik RAPTOR di research state: YA \u2014 riset ignition di "
+    "halaman ini adalah domain RAPTOR sendiri (Agen 07 Pemicu & "
+    "Kelanjutan Pump, IGNITION_SPEC.md v1.1.0). Namun setiap hasil tetap "
+    "deskriptif atau bacaan prospektif awal: PH1\u2013PH6 dan IH1\u2013IH6 "
+    "adalah IN-SAMPLE (close validasi sejak flood 23 Nov, termasuk close "
+    "sebelum hipotesis dibekukan) dan TIDAK PERNAH \u201cvalidated\u201d; "
+    "LH1\u2013LH7 adalah bacaan prospektif awal pada ~6 close; CH1/CH2 "
+    "menunggu validasi dengan set prospektif kosong. Datum yang tidak ada "
+    "ditampilkan sebagai \u201cno data\u201d, tidak pernah diestimasi.")
+
+BUCKET_ORDER = ["<1", "1-2", "2-3", "3-5", "5-10", "10-15", ">=15"]
+
+
+def _buckets_series(state: dict) -> list:
+    """One row per pump bucket, pooled over all closes, from the live
+    ignition state (embedded copy in learnings.json == standalone file)."""
+    ig = state["ignition"]
+    feats = get(ig, "features") or {}
+    raw = get(feats, "pump_abs_pct") or []
+    by_id = {b.get("bucket"): b for b in raw if isinstance(b, dict)}
+    rows = []
+    for bid in BUCKET_ORDER:
+        b = by_id.get(bid)
+        if not b:
+            continue
+        rows.append({
+            "id": bid,
+            "n": _num(b.get("n")),
+            "n_net": _num(b.get("n_net")),
+            "n_closes": _num(b.get("n_closes")),
+            "mean": _num(b.get("mean_net_exec_pct")),
+            "bullish": _num(b.get("bullish_close_rate_pct")),
+            "pos_gross": _num(b.get("positive_gross_rate_pct")),
+            "pos_net": _num(b.get("positive_net_rate_pct")),
+            "tp05": _num(b.get("tp_before_sl_05pct_pct")),
+            "tp1": _num(b.get("tp_before_sl_1pct_pct")),
+            "cont_fail": _num(b.get("continuation_failure_rate_pct")),
+            "reversal": _num(b.get("reversal_rate_pct")),
+            "continuation": _num(b.get("continuation_rate_pct")),
+        })
+    return rows
+
+
+def _buckets_chart_svg(rows: list) -> str:
+    """Hand-rolled SVG bar chart (no library, no toggle): mean net +4H
+    per pump bucket, pooled only. Hover (<title>) shows the six
+    separated next-candle rates + continuation rate + n / n_net."""
+    means = [r["mean"] for r in rows if r["mean"] is not None]
+    lo = math.floor((min(means) if means else -2) - 0.2)
+    hi = math.ceil((max(means) if means else 1) + 0.2)
+    W, H = 720, 360
+    ML, MR, MT, MB = 46, 10, 30, 56
+    plot_w, plot_h = W - ML - MR, H - MT - MB
+
+    def Y(v):
+        return MT + (hi - v) / (hi - lo) * plot_h
+
+    y0 = Y(0)
+    parts = [f'<svg id="raptor-chart-svg" viewBox="0 0 {W} {H}" width="100%" '
+             f'role="img" aria-label="Pump strength: mean net +4H per pump '
+             f'bucket" style="display:block">']
+    parts.append(f'<text x="14" y="{MT + plot_h / 2}" fill="#7f8fa8" '
+                 f'font-size="11" text-anchor="middle" '
+                 f'transform="rotate(-90 14 {MT + plot_h / 2})">'
+                 f'Mean net +4H (%)</text>')
+    for g in range(lo, hi + 1):
+        y = Y(g)
+        strong = ' stroke="#94a3b8" stroke-opacity="0.45"' if g == 0 else \
+            ' stroke="#94a3b8" stroke-opacity="0.14"'
+        parts.append(f'<line x1="{ML}" y1="{y:.1f}" x2="{W - MR}" '
+                     f'y2="{y:.1f}"{strong} stroke-width="1"/>')
+        parts.append(f'<text x="{ML - 6}" y="{y + 4:.1f}" fill="#7f8fa8" '
+                     f'font-size="11" text-anchor="end">{g}</text>')
+    parts.append('<g id="raptor-chart-bars">')
+    band = plot_w / max(len(rows), 1)
+    bar_w = 42
+    for i, r in enumerate(rows):
+        mean = r["mean"]
+        if mean is None:
+            continue
+        x = ML + i * band + (band - bar_w) / 2
+        y_top, h = (Y(mean), y0 - Y(mean)) if mean >= 0 else (y0, Y(mean) - y0)
+        fill = "#2ebd85" if mean >= 0 else "#ef5468"
+        # Gold stroke marks the only positive-mean bucket (<1%).
+        stroke = (' stroke="#fcd34d" stroke-width="2"'
+                  if r["id"] == "<1" else "")
+        n_txt = f'n={int(r["n"])}' if r["n"] is not None else "n=no data"
+        n_net = (f' (n_net={int(r["n_net"])})'
+                 if r.get("n_net") is not None else "")
+        n_cl = (f', {int(r["n_closes"])} closes'
+                if r.get("n_closes") is not None else "")
+        tip = (f'Pump {r["id"]}% \u2014 mean net +4H: {fmt_pct(mean)}\n'
+               f'{n_txt}{n_net}{n_cl}\n'
+               f'Bullish close: {fmt_pct(r["bullish"])}\n'
+               f'Positive gross: {fmt_pct(r["pos_gross"])}\n'
+               f'Positive net: {fmt_pct(r["pos_net"])}\n'
+               f'TP-before-SL +0.5%: {fmt_pct(r["tp05"])}\n'
+               f'TP-before-SL +1%: {fmt_pct(r["tp1"])}\n'
+               f'Continuation failure: {fmt_pct(r["cont_fail"])}\n'
+               f'Reversal: {fmt_pct(r["reversal"])}\n'
+               f'Continuation rate (gross \u2265 +1%): '
+               f'{fmt_pct(r["continuation"])}')
+        lab_y = y_top - 6 if mean >= 0 else y_top + h + 16
+        parts.append(
+            f'<g><title>{esc(tip)}</title>'
+            f'<rect x="{x:.1f}" y="{y_top:.1f}" width="{bar_w}" '
+            f'height="{max(h, 1):.1f}" fill="{fill}"{stroke} rx="2"/>'
+            f'<text x="{x + bar_w / 2:.1f}" y="{lab_y:.1f}" fill="#e8edf7" '
+            f'font-size="12" font-weight="700" text-anchor="middle">'
+            f'{fmt_pct(mean)}</text></g>')
+        cx = ML + i * band + band / 2
+        parts.append(
+            f'<text x="{cx:.1f}" y="326" fill="#e8edf7" font-size="12" '
+            f'font-weight="700" text-anchor="middle">{esc(r["id"])}</text>'
+            f'<text x="{cx:.1f}" y="342" fill="#7f8fa8" font-size="11" '
+            f'text-anchor="middle">{esc(n_txt)}</text>')
+    parts.append('</g>')
+    parts.append('</svg>')
+    return "".join(parts)
+
+
+def _buckets_chart_html(state: dict) -> str:
+    """Pump-bucket chart block: flood warning, SVG, data table. NO toggle:
+    the state stores bucket stats pooled only (no per-bucket ex-flood or
+    discovery split exists), so no series toggle may be offered."""
+    rows = _buckets_series(state)
+    if not rows:
+        return (f'<h3>{bi("Pump strength \u2014 mean net +4H per pump bucket", "Kekuatan pompa \u2014 rata-rata net +4J per bucket pompa")}</h3>\n'
+                f'<p class="panel-honest">{bi("no data", "no data")}</p>')
+    ig = state["ignition"]
+    n_replay = _num(get(ig, "n_signals_replay"))
+    share = _num(get(ig, "flood_share_pct"))
+    flood_n = (int(round(n_replay * share / 100.0))
+               if n_replay is not None and share is not None else None)
+    flood_ts = fmt_ts_wib_short(get(state["shadow"], "flood_close_ts"))
+    lt1 = next((r for r in rows if r["id"] == "<1"), None)
+    b35 = next((r for r in rows if r["id"] == "3-5"), None)
+    if flood_n is not None and lt1 and b35:
+        warn_en = (f"Pooled bars are flood-dominated: one close "
+                   f"({flood_ts}, {flood_n} of {int(n_replay)} replay "
+                   f"signals, {share:.1f}%) drives the pool. The only "
+                   f"positive-mean bucket is <1% ({fmt_pct(lt1['mean'])}, "
+                   f"n={int(lt1['n'])}, n_net={int(lt1['n_net'])} \u2014 "
+                   f"small and mostly non-flood closes); the largest "
+                   f"bucket, +3\u20135% (n={int(b35['n'])}), is the worst "
+                   f"({fmt_pct(b35['mean'])}).")
+        warn_id = (f"Batang pooled didominasi flood: satu close "
+                   f"({flood_ts}, {flood_n} dari {int(n_replay)} sinyal "
+                   f"replay, {share:.1f}%) menggerakkan pool. Satu-satunya "
+                   f"bucket dengan rata-rata positif adalah <1% "
+                   f"({fmt_pct(lt1['mean'])}, n={int(lt1['n'])}, "
+                   f"n_net={int(lt1['n_net'])} \u2014 kecil dan sebagian "
+                   f"besar close non-flood); bucket terbesar, +3\u20135% "
+                   f"(n={int(b35['n'])}), adalah yang terburuk "
+                   f"({fmt_pct(b35['mean'])}).")
+    else:
+        warn_en = ("Pooled bars are flood-dominated: one close drives the "
+                   "pool. Read the n on every bar.")
+        warn_id = ("Batang pooled didominasi flood: satu close "
+                   "menggerakkan pool. Baca n di setiap batang.")
+    trows = []
+    for r in rows:
+        def cell(v):
+            return (f'<td class="num">{fmt_pct(v)}</td>'
+                    if v is not None else '<td class="num">no data</td>')
+        trows.append(
+            f'<tr><td class="cfg">{esc(r["id"])}%</td>'
+            f'<td class="num">{fmt_int(r["n"])}</td>'
+            f'<td class="num">{fmt_int(r["n_net"])}</td>'
+            f'{cell(r["mean"])}{cell(r["bullish"])}{cell(r["pos_gross"])}'
+            f'{cell(r["pos_net"])}{cell(r["tp05"])}{cell(r["tp1"])}'
+            f'{cell(r["cont_fail"])}{cell(r["reversal"])}</tr>')
+    table = (
+        '<div class="raptor-table-wrap"><table class="raptor-table">'
+        '<thead><tr><th>Bucket</th>'
+        f'<th class="num">n</th><th class="num">n_net</th>'
+        f'<th class="num">{bi("Mean net +4H", "Rata-rata net +4J")}</th>'
+        f'<th class="num">{bi("Bullish close", "Bullish close")}</th>'
+        f'<th class="num">{bi("Positive gross", "Gross positif")}</th>'
+        f'<th class="num">{bi("Positive net", "Net positif")}</th>'
+        f'<th class="num">{bi("TP 0.5%", "TP 0,5%")}</th>'
+        f'<th class="num">{bi("TP 1%", "TP 1%")}</th>'
+        f'<th class="num">{bi("Cont. failure", "Gagal lanjut")}</th>'
+        f'<th class="num">{bi("Reversal", "Reversal")}</th>'
+        '</tr></thead><tbody>' + "".join(trows) + '</tbody></table></div>')
+    return f"""<div class="raptor-chart-wrap">
+<h3>{bi("Pump strength \u2014 mean net +4H per pump bucket (open-to-close of the signal candle)", "Kekuatan pompa \u2014 rata-rata net +4J per bucket pompa (open-to-close candle sinyal)")}</h3>
+<p class="panel-honest">{bi(warn_en, warn_id)}</p>
+{_buckets_chart_svg(rows)}
+<p class="raptor-chart-note">{bi("Pooled only: the state stores pump-bucket stats pooled over all closes (ignition_research.json features.pump_abs_pct). No per-bucket ex-flood or discovery split exists, so no series toggle is offered. The gold-outlined bar is the only positive-mean bucket.", "Hanya pooled: state menyimpan statistik bucket pompa secara pooled atas semua close (ignition_research.json features.pump_abs_pct). Tidak ada split ex-flood atau discovery per bucket, sehingga tidak ada toggle seri. Batang ber-outline emas adalah satu-satunya bucket dengan rata-rata positif.")}</p>
+{table}
+<p class="panel-foot">{bi("Hover a bar for bucket, n / n_net / closes, mean net +4H and the six separated next-candle rates + continuation rate. No continuation-rate overlay: different denominator logic. The A0\u2013A9 chart is deliberately NOT duplicated here \u2014 it lives on the PRISM page. Source: ignition_research.json features.pump_abs_pct.", "Arahkan kursor ke batang untuk bucket, n / n_net / close, rata-rata net +4J, dan enam rate candle berikutnya + continuation rate. Tanpa overlay continuation rate: logika denominator berbeda. Grafik A0\u2013A9 sengaja TIDAK diduplikasi di sini \u2014 grafik itu ada di halaman PRISM. Sumber: ignition_research.json features.pump_abs_pct.")}</p>
+</div>"""
+
+
+def _raptor_identity(state: dict, agent: dict) -> str:
+    cfgs = _configs(state)
+    rows = []
+    for c in cfgs:
+        ov = c.get("overall") or {}
+        rows.append(
+            f'<tr><td class="cfg">{esc(c.get("id", "?"))}</td>'
+            f'<td>{esc(c.get("label", ""))}</td>'
+            f'<td class="num">{esc(c.get("rvol_min", "no data"))}</td>'
+            f'<td class="num">{esc(c.get("lookback", "no data"))}</td>'
+            f'<td>{esc(GATE_LABEL.get(c.get("extra_gate"), str(c.get("extra_gate"))))}</td>'
+            f'<td class="num">{fmt_int(get(ov, "n"))}</td>'
+            f'<td class="num">{fmt_int(c.get("dedup_suppressed"))}</td></tr>')
+    table = ("<div class=\"raptor-table-wrap\"><table class=\"raptor-table\">"
+             "<thead><tr><th>Config</th>"
+             f"<th>{bi('Filter', 'Filter')}</th>"
+             f"<th class=\"num\">{bi('RVOL \u2265', 'RVOL \u2265')}</th>"
+             f"<th class=\"num\">{bi('Lookback', 'Lookback')}</th>"
+             f"<th>{bi('Extra gate', 'Gate tambahan')}</th>"
+             f"<th class=\"num\">{bi('Signals', 'Sinyal')}</th>"
+             f"<th class=\"num\">{bi('Dedup suppressed', 'Dedup ditekan')}</th>"
+             "</tr></thead><tbody>" + "".join(rows) + "</tbody></table></div>"
+             if rows else
+             f"<p>{bi('no data', 'no data')}</p>")
+    role_en = agent.get("desc_en", "")
+    role_id = agent.get("desc_id", "")
+    return f"""<section class="agent-section" id="identity">
+{section_head("AGENT 07 \u00b7 IDENTITY", "AGEN 07 \u00b7 IDENTITAS", "Identity & Specialization", "Identitas & Spesialisasi")}
+{bip(role_en, role_id)}
+{bip("RAPTOR\u2019s domain is pump ignition \u2014 whether the first 4H pump continues on the next 4H candle, and which first-pump characteristics predict it. Pump = open-to-close of the signal candle. Primary horizon +4H; +12H/+1D/+2D/+3D/+1W show continuation, reversal, and exits. Research only: never filters, approves, or blocks a signal.",
+     "Domain RAPTOR adalah ignisi pompa \u2014 apakah pompa 4J pertama berlanjut di candle 4J berikutnya, dan karakteristik pompa pertama apa yang memprediksinya. Pompa = open-to-close candle sinyal. Horizon utama +4J; +12J/+1H/+2H/+3H/+1M menunjukkan kelanjutan, reversal, dan exit. Hanya riset: tidak pernah memfilter, menyetujui, atau memblokir sinyal.")}
+{bip("What RAPTOR studies: 10 frozen filter configs (A0\u2013A9) + 12 ignition features + 6 pump hypotheses (PH1\u2013PH6) + 6 ignition hypotheses (IH1\u2013IH6) + 2 combination hypotheses (CH1\u2013CH2). Ignition features: squeeze_state, vol_accel_3bar_pct, atr_pctile, range_ratio, mom_accel_pp, oi_chg_24h_pct, pump_abs_pct, pump_atr_mult, body_to_range, close_position, upper_wick_pct, prev_bullish.",
+     "Yang dipelajari RAPTOR: 10 config filter beku (A0\u2013A9) + 12 fitur ignition + 6 hipotesis pompa (PH1\u2013PH6) + 6 hipotesis ignition (IH1\u2013IH6) + 2 hipotesis kombinasi (CH1\u2013CH2). Fitur ignition: squeeze_state, vol_accel_3bar_pct, atr_pctile, range_ratio, mom_accel_pp, oi_chg_24h_pct, pump_abs_pct, pump_atr_mult, body_to_range, close_position, upper_wick_pct, prev_bullish.")}
+<h3>{bi("Configs under test (frozen)", "Config yang diuji (beku)")}</h3>
+{table}
+<p class="panel-foot">{bi("Source: shadow_lab.json configs[] (labels, RVOL, lookback, extra gate, dedup_suppressed, overall n); ignition_research.json features.", "Sumber: shadow_lab.json configs[] (label, RVOL, lookback, gate tambahan, dedup_suppressed, overall n); ignition_research.json features.")}</p>
+<p class="panel-honest"><strong>{bi("RAPTOR-specific finding in the research state: YES.", "Temuan spesifik RAPTOR di research state: YA.")}</strong> {bi(RAPTOR_HONESTY_EN, RAPTOR_HONESTY_ID)}</p>
+</section>"""
+
+
+def _raptor_overview(state: dict) -> str:
+    """Shared Shadow Lab overview (same facts as PRISM) + RAPTOR-only
+    paragraphs: the six separated rates, entry simulation, funding
+    bounds, OI coverage, squeeze definition."""
+    base = _section_overview(state)
+    ig = state["ignition"]
+    oic = get(ig, "oi_coverage") or {}
+    oi_n = _num(get(oic, "n"))
+    oi_of = _num(get(oic, "of"))
+    oi_pct = _num(get(oic, "pct"))
+    if oi_n is not None and oi_of is not None:
+        oi_txt_en = (f"OI coverage: {fmt_int(oi_n)}/{fmt_int(oi_of)} signals "
+                     f"({fmt_pct(oi_pct)}) \u2014 daily Binance archive, "
+                     f"1-day lag; the newest signals have no OI yet.")
+        oi_txt_id = (f"Cakupan OI: {fmt_int(oi_n)}/{fmt_int(oi_of)} sinyal "
+                     f"({fmt_pct(oi_pct)}) \u2014 arsip harian Binance, lag "
+                     f"1 hari; sinyal terbaru belum punya OI.")
+    else:
+        oi_txt_en = "OI coverage: no data"
+        oi_txt_id = "Cakupan OI: no data"
+    extra = f"""
+{bip("The six separated next-candle rates (IGNITION_SPEC.md \\u00a713 \u2014 never merged into one number): bullish close (next candle close > open) \\u00b7 positive gross (gross +4H > 0) \\u00b7 positive net (net +4H > 0) \\u00b7 TP-before-SL +0.5% / +1% (vs fixed \\u22122% SL) \\u00b7 continuation failure (100 \\u2212 positive gross: next candle close \\u2264 signal close \u2014 technical failure, NOT the same as losing money after costs) \\u00b7 reversal (gross +4H \\u2264 \\u22121%). Continuation rate proper = gross +4H \\u2265 +1%.",
+     "Enam rate candle berikutnya yang terpisah (IGNITION_SPEC.md \\u00a713 \u2014 tidak pernah digabung jadi satu angka): bullish close (close candle berikutnya > open) \\u00b7 gross positif (gross +4J > 0) \\u00b7 net positif (net +4J > 0) \\u00b7 TP-before-SL +0,5% / +1% (vs SL tetap \\u22122%) \\u00b7 continuation failure (100 \\u2212 gross positif: close candle berikutnya \\u2264 close sinyal \u2014 kegagalan teknis, BUKAN sama dengan rugi setelah biaya) \\u00b7 reversal (gross +4J \\u2264 \\u22121%). Continuation rate yang benar = gross +4J \\u2265 +1%.")}
+{bip("Entry is a simulation: buy at ask +5bps slippage on the signal close (execution entry); the close is a benchmark, not a guaranteed execution price. Funding is NOT in net. October 2026 measured bounds: single-8h |funding| median 0.0050%, p95 0.0840%, p99 0.3433%, max 2.00% \u2014 typically small with a fat tail. November funding arrives in December.",
+     "Entry adalah simulasi: beli di ask +5bps slippage pada close sinyal (entry eksekusi); close adalah patokan, bukan harga eksekusi yang dijamin. Funding TIDAK masuk net. Batas terukur Oktober 2026: single-8h |funding| median 0,0050%, p95 0,0840%, p99 0,3433%, maks 2,00% \u2014 biasanya kecil dengan ekor gemuk. Funding November terbit Desember.")}
+{bip(oi_txt_en, oi_txt_id)}
+{bip("Squeeze uses a standard TTM-style definition, not predictive proof. Cohort definitions: Discovery = closes before the flood; Validation = flood + later closes. Ignition: 20 discovery + 14 validation closes (34 distinct; stored n_closes = 35 \u2014 one close counted in n_closes appears in neither list, reason not established in state; see Evidence).",
+     "Squeeze memakai definisi standar ala TTM, bukan bukti prediktif. Definisi kohort: Discovery = close sebelum flood; Validation = flood + close berikutnya. Ignition: 20 discovery + 14 close validasi (34 berbeda; n_closes tersimpan = 35 \u2014 satu close yang dihitung di n_closes tidak muncul di kedua daftar, alasan belum diketahui di state; lihat Bukti).")}
+"""
+    return base.replace("</section>", extra + "</section>", 1)
+
+
+def _raptor_latest(state: dict, bake_n_eval) -> str:
+    L, S = state["learnings"], state["shadow"]
+    ig = state["ignition"]
+    recs = get(ig, "recommendations") or []
+    n_rec = len(recs)
+    n_rec_ins = sum(1 for r in recs
+                    if (r.get("kind") or r.get("status")) == "INSUFFICIENT EVIDENCE")
+    lhs = get(S, "hypotheses") or []
+    n_lh = len(lhs)
+    lh_holds = sum(1 for h in lhs if h.get("status") == "holds")
+    lh_dnh = sum(1 for h in lhs if h.get("status") == "does_not_hold")
+    lh_inc = sum(1 for h in lhs if h.get("status") == "inconclusive")
+    lh_await = sum(1 for h in lhs if h.get("status") == "awaiting_validation")
+    banner_en = (f"INSUFFICIENT EVIDENCE \u2014 no validated filter, no "
+                 f"validated ignition rule. All {n_rec} Ignition "
+                 f"recommendations are INSUFFICIENT EVIDENCE. PH1\u2013PH6 "
+                 f"and IH1\u2013IH6 are descriptive / in-sample only. "
+                 f"LH1\u2013LH{n_lh} are prospective early reads on ~6 "
+                 f"closes ({lh_holds} holds, {lh_dnh} does_not_hold, "
+                 f"{lh_inc} inconclusive, {lh_await} awaiting_validation). "
+                 f"CH1/CH2 are awaiting validation with an empty "
+                 f"prospective set. n={fmt_int(bake_n_eval)} is too small "
+                 f"for out-of-sample or walk-forward validation. Every "
+                 f"pattern below is an observation or hypothesis, not a "
+                 f"conclusion.")
+    banner_id = (f"INSUFFICIENT EVIDENCE \u2014 belum ada filter yang "
+                 f"tervalidasi, belum ada aturan ignition yang tervalidasi. "
+                 f"Semua {n_rec} rekomendasi Ignition adalah INSUFFICIENT "
+                 f"EVIDENCE. PH1\u2013PH6 dan IH1\u2013IH6 hanya deskriptif "
+                 f"/ in-sample. LH1\u2013LH{n_lh} adalah bacaan prospektif "
+                 f"awal pada ~6 close ({lh_holds} holds, {lh_dnh} "
+                 f"does_not_hold, {lh_inc} inconclusive, {lh_await} "
+                 f"awaiting_validation). CH1/CH2 menunggu validasi dengan "
+                 f"set prospektif kosong. n={fmt_int(bake_n_eval)} terlalu "
+                 f"kecil untuk validasi out-of-sample atau walk-forward. "
+                 f"Setiap pola di bawah ini adalah observasi atau hipotesis, "
+                 f"bukan kesimpulan.")
+    lh_rows = []
+    lh1_flag = ""
+    for h in lhs:
+        gap_txt = _lh_gap_text(state, h)
+        val = h.get("validation_after_created") or {}
+        gap = _num(val.get("gap"))
+        post = (f"post-freeze gap {fmt_pp(gap)} \u00b7 baseline "
+                f"n={fmt_int(val.get('n_baseline'))}, config "
+                f"n={fmt_int(val.get('n_config'))}")
+        lh_rows.append(
+            f'<tr><td class="cfg">{esc(h.get("id", "?"))}</td>'
+            f'<td>{bi(h.get("text_en") or h.get("text") or "",
+                       h.get("text") or h.get("text_en") or "")}</td>'
+            f'<td>{esc(gap_txt)}</td>'
+            f'<td><span class="chip">{esc((h.get("status") or "no data").upper().replace("_", " "))}</span><br>'
+            f'<span style="color:var(--text-3);font-size:.8rem">{esc(post)}</span></td></tr>')
+        if h.get("id") == "LH1" and h.get("kind") == "directional" \
+                and h.get("metric") == "mean_net4h":
+            a0 = _cfg_by_id(state, "A0") or {}
+            a4 = _cfg_by_id(state, "A4") or {}
+            gm = _num(get(a4.get("discovery") or {}, "mean_net4h_pct"))
+            am = _num(get(a0.get("discovery") or {}, "mean_net4h_pct"))
+            if gm is not None and am is not None and gm - am < 0:
+                lh1_flag = bip(
+                    f"Flag on LH1: its frozen claim is NOT supported on the "
+                    f"pre-registered discovery cohort (A4 {fmt_pct(gm)} vs A0 "
+                    f"{fmt_pct(am)}, gap {fmt_pp(gm - am)}). Its positive "
+                    f"overall gap comes from the flood-dominated pool. Never "
+                    f"read an LH claim without its status and gap.",
+                    f"Tanda pada LH1: klaim bekunya TIDAK didukung kohort "
+                    f"discovery yang sudah pra-registrasi (A4 {fmt_pct(gm)} vs "
+                    f"A0 {fmt_pct(am)}, selisih {fmt_pp(gm - am)}). Selisih "
+                    f"overall yang positif berasal dari pool yang didominasi "
+                    f"flood. Jangan pernah membaca klaim LH tanpa status dan "
+                    f"selisihnya.")
+    lh_table = ("<div class=\"raptor-table-wrap\"><table class=\"raptor-table\">"
+                "<thead><tr><th>ID</th>"
+                f"<th>{bi('Claim (frozen)', 'Klaim (beku)')}</th>"
+                f"<th>{bi('Discovery gap vs A0', 'Selisih discovery vs A0')}</th>"
+                f"<th>{bi('Status', 'Status')}</th>"
+                "</tr></thead><tbody>" + "".join(lh_rows) + "</tbody></table></div>"
+                if lh_rows else f"<p>{bi('no data', 'no data')}</p>")
+    ph_items = "".join(_ph_ih_item(h, "PH") for h in state["ph"])
+    ih_items = "".join(_ph_ih_item(h, "IH") for h in state["ih"])
+    ch_items = []
+    for h in state.get("ch") or []:
+        cond = h.get("conditions") or {}
+        cond_txt = []
+        if cond.get("config"):
+            cond_txt.append(f"config {cond.get('config')}")
+        if cond.get("ema_alignment"):
+            cond_txt.append("EMA aligned (close > EMA50 > EMA500)")
+        if cond.get("upper_wick_pct_max") is not None:
+            cond_txt.append(f"upper wick \u2264 {cond.get('upper_wick_pct_max')}%")
+        if cond.get("oi_expansion_pct_min") is not None:
+            cond_txt.append(f"OI expansion > +{cond.get('oi_expansion_pct_min')}%")
+        text_en = h.get("text_en") or h.get("text") or ""
+        text_id = h.get("text") or text_en
+        ch_items.append(
+            f'<li><strong>{esc(h.get("id", "?"))}</strong> '
+            f'({esc("; ".join(cond_txt) or "no data")}) \u2014 '
+            f'{_verdict_chip(h.get("status", ""))}<br>'
+            f'{bi(text_en, text_id)}<br>'
+            f'<span style="color:var(--text-3);font-size:.85rem">'
+            f'{esc(h.get("evidence_note_en") or h.get("evidence_note") or "")}'
+            f'</span></li>')
+    ch_html = "".join(ch_items) if ch_items else "<li>no data</li>"
+    nc = get(ig, "next_candle") or {}
+    pooled = get(nc, "pooled") or {}
+    exf = get(nc, "ex_flood") or {}
+    cw = get(nc, "close_weighted") or {}
+    return f"""<section class="agent-section" id="latest">
+{section_head("LATEST INTELLIGENCE", "INTELIGENSI TERBARU", "Latest Intelligence", "Inteligensi Terbaru")}
+<p class="panel-honest"><strong>{bi(banner_en, banner_id)}</strong></p>
+<h3>{bi("Shadow Lab hypotheses LH1\u2013LH7 (frozen, prospective)", "Hipotesis Shadow Lab LH1\u2013LH7 (beku, prospektif)")}</h3>
+{lh_table}
+{lh1_flag}
+<p class="panel-foot">{bi("Discovery gap = stored config discovery value minus stored A0 discovery value (shadow_lab.json configs[].discovery); derived, not a stored field. Validation uses only closes after each hypothesis was created (25 Nov 2026 10:57 WIB) \u2014 verified in shadow_lab.py, so LH validation_after_created IS genuinely post-creation.", "Selisih discovery = nilai discovery config tersimpan dikurangi nilai discovery A0 tersimpan (shadow_lab.json configs[].discovery); turunan, bukan field tersimpan. Validasi hanya memakai close setelah setiap hipotesis dibuat (25 Nov 2026 10:57 WIB) \u2014 terverifikasi di shadow_lab.py, jadi LH validation_after_created BENAR-BENAR pasca-pembuatan.")}</p>
+<h3>{bi("Ignition PH1\u2013PH6 (validation closes, in-sample)", "Ignition PH1\u2013PH6 (close validasi, in-sample)")}</h3>
+<ul class="raptor-list">{ph_items or "<li>no data</li>"}</ul>
+<h3>{bi("Ignition IH1\u2013IH6 (validation closes, in-sample)", "Ignition IH1\u2013IH6 (close validasi, in-sample)")}</h3>
+<ul class="raptor-list">{ih_items or "<li>no data</li>"}</ul>
+<p class="panel-honest"><strong>{bi("Field-name warning (verified in ignition.py lines 1191\u20131292, 1259\u20131271):", "Peringatan nama field (terverifikasi di ignition.py baris 1191\u20131292, 1259\u20131271):")}</strong> {bi("the numbers stored under validation_after_created are computed on val_rows = ALL validation closes \u2265 flood (14 closes, flood + later), including closes BEFORE the hypothesis was created \u2014 they are the IN-SAMPLE verdict, NOT a prospective post-creation read. The truly prospective slice (3 closes after PH creation, 4 after IH creation) is NOT stored anywhere in state. Verdict rule: n\u22655/side + gap\u22652pp \u2192 holds; gap\u2264\u22122pp \u2192 does_not_hold; else inconclusive.", "angka yang tersimpan di validation_after_created dihitung pada val_rows = SEMUA close validasi \u2265 flood (14 close, flood + setelahnya), termasuk close SEBELUM hipotesis dibuat \u2014 itu adalah verdict IN-SAMPLE, BUKAN bacaan prospektif pasca-pembuatan. Irisan yang benar-benar prospektif (3 close setelah pembuatan PH, 4 setelah IH) TIDAK tersimpan di mana pun di state. Aturan verdict: n\u22655/sisi + selisih\u22652pp \u2192 holds; selisih\u2264\u22122pp \u2192 does_not_hold; selain itu inconclusive.")}</p>
+<h3>{bi("Combination hypotheses CH1\u2013CH2 (awaiting validation)", "Hipotesis kombinasi CH1\u2013CH2 (menunggu validasi)")}</h3>
+<ul class="raptor-list">{ch_html}</ul>
+<p class="panel-honest">{bi("No incremental value proven for CH1 or CH2 vs A4 alone. CH2 stays DESCRIPTIVE-ONLY: OI expansion is not available at entry (daily archive lag 10\u201330h, 0% of signals have it at entry). Never claim strategy validation from retrospective OI.", "Tidak ada nilai tambah terbukti untuk CH1 atau CH2 vs A4 saja. CH2 tetap DESCRIPTIVE-ONLY: ekspansi OI tidak tersedia saat entry (lag arsip harian 10\u201330 jam, 0% sinyal memilikinya saat entry). Jangan pernah klaim validasi strategi dari OI retrospektif.")}</p>
+<p class="panel-honest">{bi("PH5 \u201cholds\u201d and IH5 \u201cholds\u201d are single descriptive validation reads, not validated filters \u2014 they still sit under the INSUFFICIENT EVIDENCE banner above. Nothing in this section is a recommendation: no ADD FILTER language. That route runs only through the weekly report on Raka\u2019s approval.", "PH5 \u201cholds\u201d dan IH5 \u201cholds\u201d adalah satu bacaan validasi deskriptif, bukan filter tervalidasi \u2014 keduanya tetap berada di bawah banner INSUFFICIENT EVIDENCE di atas. Tidak ada bagian di seksi ini yang merupakan rekomendasi: tanpa bahasa ADD FILTER. Jalur itu hanya lewat laporan mingguan atas persetujuan Raka.")}</p>
+<h3>{bi("Ignition next candle (+4H)", "Ignition candle berikutnya (+4J)")}</h3>
+<dl class="facts">
+<div><dt>{bi("Pooled mean net (execution entry)", "Rata-rata net pooled (entry eksekusi)")}</dt><dd>{fmt_pct(get(pooled, "mean_net_exec_pct"))} \u00b7 continuation {fmt_pct(get(pooled, "continuation_rate_pct"))} (n={fmt_int(get(pooled, "n"))}, {fmt_int(get(pooled, "n_closes"))} closes)</dd>{src_line("ignition_research.json next_candle.pooled")}</div>
+<div><dt>{bi("Ex-flood mean net (execution entry)", "Rata-rata net ex-flood (entry eksekusi)")}</dt><dd>{fmt_pct(get(exf, "mean_net_exec_pct"))} \u00b7 continuation {fmt_pct(get(exf, "continuation_rate_pct"))} (n={fmt_int(get(exf, "n"))}, n_net={fmt_int(get(exf, "n_net"))})</dd>{src_line("ignition_research.json next_candle.ex_flood")}</div>
+<div><dt>{bi("Close-weighted mean net (execution entry)", "Rata-rata net close-weighted (entry eksekusi)")}</dt><dd>{fmt_pct(get(cw, "mean_net_exec_pct"))} \u00b7 continuation {fmt_pct(get(cw, "continuation_rate_pct"))} ({fmt_int(get(cw, "n_closes"))} closes)</dd>{src_line("ignition_research.json next_candle.close_weighted")}</div>
+<div><dt>{bi("Ignition recommendations", "Rekomendasi Ignition")}</dt><dd>{fmt_int(n_rec)} \u00d7 INSUFFICIENT EVIDENCE</dd>{src_line("ignition_research.json recommendations")}</div>
+</dl>
+</section>"""
+
+
+def _a0a9_table(state: dict) -> str:
+    """A0-A9 config table (means + n per series). NOT a second chart:
+    the chart lives on the PRISM page."""
+    rows = _chart_series(state)
+    if not rows:
+        return f"<p>{bi('no data', 'no data')}</p>"
+    trows = []
+    for r in rows:
+        def cell(s):
+            d = r[s]
+            if d["mean"] is None:
+                return '<td class="num">no data</td>'
+            n = f' (n={int(d["n"])})' if d["n"] is not None else ""
+            return f'<td class="num">{fmt_pct(d["mean"])}{n}</td>'
+        trows.append(
+            f'<tr><td class="cfg">{esc(r["id"])}</td>'
+            f'<td>{esc(r["label"])}</td>'
+            f'{cell("pooled")}{cell("ex_flood")}{cell("discovery")}</tr>')
+    return ('<div class="raptor-table-wrap"><table class="raptor-table">'
+            '<thead><tr><th>Config</th>'
+            f'<th>{bi("Filter", "Filter")}</th>'
+            f'<th class="num">{bi("Pooled mean +4H", "Rata-rata pooled +4J")}</th>'
+            f'<th class="num">{bi("Ex-flood mean +4H", "Rata-rata ex-flood +4J")}</th>'
+            f'<th class="num">{bi("Discovery mean +4H", "Rata-rata discovery +4J")}</th>'
+            '</tr></thead><tbody>' + "".join(trows) + '</tbody></table></div>')
+
+
+def _slice_txt(g: dict, key: str) -> str:
+    """Within-group ignition slice: 'mean% (n=..)' or 'no data' when the
+    slice is n<5 (stored as {'n': .., 'note': 'n<5 ...'}) or missing."""
+    d = g.get(key) or {}
+    if not isinstance(d, dict) or "mean_net_exec_pct" not in d:
+        return "no data"
+    n = _num(d.get("n"))
+    return (f"{fmt_pct(d.get('mean_net_exec_pct'))}"
+            f"{f' (n={fmt_int(n)})' if n is not None else ''}")
+
+
+def _raptor_metrics(state: dict) -> str:
+    L, S, SP = state["learnings"], state["shadow"], state["split"]
+    ig = state["ignition"]
+    nc = get(ig, "next_candle") or {}
+    pooled = get(nc, "pooled") or {}
+    exf = get(nc, "ex_flood") or {}
+    cw = get(nc, "close_weighted") or {}
+    a0 = _cfg_by_id(state, "A0") or {}
+    a0o = a0.get("overall") or {}
+    a4 = _cfg_by_id(state, "A4") or {}
+    a4o = a4.get("overall") or {}
+    cal = get(S, "calibration") or {}
+    oic = get(ig, "oi_coverage") or {}
+    kpis = [
+        ("Signals analysed", "Sinyal dianalisis",
+         fmt_int(get(L, "n_analyzed")), "learnings.json n_analyzed"),
+        ("Evaluable at +30m", "Dapat dievaluasi +30m",
+         fmt_int(get(L, "n_evaluable_30m")), "learnings.json n_evaluable_30m"),
+        ("Win rate (+30m)", "Win rate (+30m)",
+         fmt_pct(get(L, "overall", "win_rate_pct")),
+         "learnings.json overall.win_rate_pct"),
+        ("Mean net (+30m)", "Rata-rata net (+30m)",
+         fmt_pct(get(L, "overall", "mean_net30_pct")),
+         "learnings.json overall.mean_net30_pct"),
+        ("Next candle pooled mean net +4H", "Candle berikut pooled rata-rata net +4J",
+         fmt_pct(get(pooled, "mean_net_exec_pct")),
+         "ignition_research.json next_candle.pooled.mean_net_exec_pct"),
+        ("Next candle ex-flood mean net +4H", "Candle berikut ex-flood rata-rata net +4J",
+         fmt_pct(get(exf, "mean_net_exec_pct")),
+         "ignition_research.json next_candle.ex_flood.mean_net_exec_pct"),
+        ("Next candle close-weighted mean net +4H", "Candle berikut close-weighted rata-rata net +4J",
+         fmt_pct(get(cw, "mean_net_exec_pct")),
+         "ignition_research.json next_candle.close_weighted.mean_net_exec_pct"),
+        ("A0 pooled mean net +4H", "A0 pooled rata-rata net +4J",
+         fmt_pct(get(a0o, "mean_net4h_pct")),
+         "shadow_lab.json configs[A0].overall.mean_net4h_pct"),
+        ("A4 pooled mean net +4H", "A4 pooled rata-rata net +4J",
+         fmt_pct(get(a4o, "mean_net4h_pct")),
+         "shadow_lab.json configs[A4].overall.mean_net4h_pct"),
+        ("Replay calibration (dedup)", "Kalibrasi replay (dedup)",
+         fmt_pct(get(cal, "dedup_vs_sent_log", "match_pct")),
+         "shadow_lab.json calibration.dedup_vs_sent_log.match_pct"),
+        ("Flood share (one close)", "Pangsa flood (satu close)",
+         fmt_pct(get(ig, "flood_share_pct")),
+         "ignition_research.json flood_share_pct"),
+        ("OI coverage", "Cakupan OI",
+         fmt_pct(get(oic, "pct")),
+         "ignition_research.json oi_coverage.pct"),
+    ]
+    tiles = "".join(
+        f'<div class="kpi"><p class="kpi-label">{bi(a, b)}</p>'
+        f'<p class="kpi-value">{esc(v)}</p>'
+        f'<p class="kpi-sub">{esc(s)}</p></div>'
+        for a, b, v, s in kpis)
+    groups = get(SP, "groups") or {}
+    split_rows = []
+    for key, label_en, label_id in (
+            ("crypto", "CRYPTO", "CRYPTO"),
+            ("stock_token", "SAHAM (stock_token)", "SAHAM (stock_token)"),
+            ("other_traditional", "OTHER", "OTHER"),
+            ("uncertain", "UNCERTAIN", "UNCERTAIN")):
+        g = groups.get(key) or {}
+        agg = g.get("aggregates") or {}
+        pooled_g = agg.get("pooled") or {}
+        exf_g = agg.get("ex_flood") or {}
+        cw_g = agg.get("close_weighted") or {}
+        comp = g.get("pump_composition") or {}
+        largest = max(comp.items(), key=lambda kv: kv[1]) if comp else (None, None)
+        largest_txt = (f"{largest[0]} ({largest[1]})"
+                       if largest[0] is not None else "no data")
+        split_rows.append(
+            f'<div><dt>{bi(label_en, label_id)}</dt>'
+            f'<dd>{fmt_int(g.get("n"))} signals \u00b7 pooled mean net '
+            f'{fmt_pct(get(pooled_g, "mean_net_exec_pct"))} '
+            f'(n_net={fmt_int(get(pooled_g, "n_net"))}) \u00b7 ex-flood '
+            f'{fmt_pct(get(exf_g, "mean_net_exec_pct"))} '
+            f'(n={fmt_int(get(exf_g, "n"))}) \u00b7 close-weighted '
+            f'{fmt_pct(get(cw_g, "mean_net_exec_pct"))} \u00b7 largest pump '
+            f'bucket {esc(largest_txt)}</dd>'
+            f'{src_line("stock_crypto_split.json groups." + key + ".aggregates")}'
+            f'</div>' if g else
+            f'<div><dt>{bi(label_en, label_id)}</dt><dd>no data</dd></div>')
+    split_total = _num(get(SP, "n_signals"))
+    split_closes = _num(get(SP, "n_closes"))
+    crypto = groups.get("crypto") or {}
+    stock = groups.get("stock_token") or {}
+    c_rec, s_rec = crypto.get("reconciliation") or {}, stock.get("reconciliation") or {}
+    recon_en = (
+        f"Reconciliation: CRYPTO {fmt_int(crypto.get('n'))} + SAHAM "
+        f"{fmt_int(stock.get('n'))} + OTHER "
+        f"{fmt_int((groups.get('other_traditional') or {}).get('n'))} + "
+        f"UNCERTAIN {fmt_int((groups.get('uncertain') or {}).get('n'))} = "
+        f"{fmt_int(split_total)} = split n_signals ({fmt_int(split_closes)} "
+        f"closes). EMA known only from existing signal analyses (crypto "
+        f"{fmt_int(c_rec.get('ema_known_n'))}/{fmt_int(crypto.get('n'))}, "
+        f"stock {fmt_int(s_rec.get('ema_known_n'))}/{fmt_int(stock.get('n'))}); "
+        f"OI from the daily archive with 1-day lag (crypto "
+        f"{fmt_int(c_rec.get('oi_known_n'))}/{fmt_int(crypto.get('n'))}, "
+        f"stock {fmt_int(s_rec.get('oi_known_n'))}/{fmt_int(stock.get('n'))}); "
+        f"slices with n<5 are not reported.")
+    recon_id = (
+        f"Rekonsiliasi: CRYPTO {fmt_int(crypto.get('n'))} + SAHAM "
+        f"{fmt_int(stock.get('n'))} + OTHER "
+        f"{fmt_int((groups.get('other_traditional') or {}).get('n'))} + "
+        f"UNCERTAIN {fmt_int((groups.get('uncertain') or {}).get('n'))} = "
+        f"{fmt_int(split_total)} = split n_signals ({fmt_int(split_closes)} "
+        f"close). EMA hanya dari analisis sinyal yang ada (crypto "
+        f"{fmt_int(c_rec.get('ema_known_n'))}/{fmt_int(crypto.get('n'))}, "
+        f"saham {fmt_int(s_rec.get('ema_known_n'))}/{fmt_int(stock.get('n'))}); "
+        f"OI dari arsip harian dengan lag 1 hari (crypto "
+        f"{fmt_int(c_rec.get('oi_known_n'))}/{fmt_int(crypto.get('n'))}, "
+        f"saham {fmt_int(s_rec.get('oi_known_n'))}/{fmt_int(stock.get('n'))}); "
+        f"potongan n<5 tidak dilaporkan.")
+    slices_en = (
+        f"Within-group ignition slices (opposite directions \u2014 never "
+        f"merge the groups): CRYPTO EMA-aligned "
+        f"{_slice_txt(crypto, 'ema_aligned')} vs not-aligned "
+        f"{_slice_txt(crypto, 'ema_not_aligned')}; SAHAM EMA-aligned "
+        f"{_slice_txt(stock, 'ema_aligned')} vs not-aligned "
+        f"{_slice_txt(stock, 'ema_not_aligned')}. CRYPTO wick \u226410% "
+        f"{_slice_txt(crypto, 'wick_le10')} vs wick \u226530% "
+        f"{_slice_txt(crypto, 'wick_ge30')}. CRYPTO squeeze-on "
+        f"{_slice_txt(crypto, 'squeeze_on')} vs SAHAM squeeze-on "
+        f"{_slice_txt(stock, 'squeeze_on')}.")
+    slices_id = (
+        f"Potongan ignition dalam grup (arah berlawanan \u2014 jangan pernah "
+        f"gabungkan grup): CRYPTO EMA-aligned "
+        f"{_slice_txt(crypto, 'ema_aligned')} vs tidak-aligned "
+        f"{_slice_txt(crypto, 'ema_not_aligned')}; SAHAM EMA-aligned "
+        f"{_slice_txt(stock, 'ema_aligned')} vs tidak-aligned "
+        f"{_slice_txt(stock, 'ema_not_aligned')}. CRYPTO wick \u226410% "
+        f"{_slice_txt(crypto, 'wick_le10')} vs wick \u226530% "
+        f"{_slice_txt(crypto, 'wick_ge30')}. CRYPTO squeeze-on "
+        f"{_slice_txt(crypto, 'squeeze_on')} vs SAHAM squeeze-on "
+        f"{_slice_txt(stock, 'squeeze_on')}.")
+    return f"""<section class="agent-section" id="metrics">
+{RAPTOR_CSS}
+{section_head("RELEVANT METRICS & INTERACTIVE CHARTS", "METRIK RELEVAN & GRAFIK INTERAKTIF", "Relevant Metrics & Interactive Charts", "Metrik Relevan & Grafik Interaktif")}
+<div class="kpis">{tiles}</div>
+{_buckets_chart_html(state)}
+<h3>{bi("Shadow Lab configs A0\u2013A9 (table, not a second chart)", "Config Shadow Lab A0\u2013A9 (tabel, bukan grafik kedua)")}</h3>
+{_a0a9_table(state)}
+<p class="panel-foot">{bi("Discovery ranking: A8, A6, A2 lead. Pooled ranking moved with the rebuild (A4 now leads; A5/A9 turned negative). Neither ranking is a validated filter recommendation. Source: shadow_lab.json configs[].overall + configs[].discovery.", "Peringkat discovery: A8, A6, A2 memimpin. Peringkat pooled bergerak dengan rebuild (A4 kini memimpin; A5/A9 menjadi negatif). Tidak ada peringkat yang merupakan rekomendasi filter tervalidasi. Sumber: shadow_lab.json configs[].overall + configs[].discovery.")}</p>
+<h3>{bi("SAHAM vs CRYPTO \u2014 kept separate, never merged", "SAHAM vs CRYPTO \u2014 tetap terpisah, tidak pernah digabung")}</h3>
+<dl class="facts">{''.join(split_rows)}</dl>
+<p class="panel-foot">{bi(recon_en, recon_id)}</p>
+<p class="panel-foot">{bi(slices_en, slices_id)}</p>
+</section>"""
+
+
+def _raptor_history(state: dict) -> str:
+    L, S = state["learnings"], state["shadow"]
+    ls = get(L, "learning_summary") or {}
+    worked = ls.get("worked") or []
+    failed = ls.get("failed") or []
+    inconclusive = ls.get("inconclusive") or []
+    based = ls.get("based_on") or {}
+    base = state["baseline"]
+    base_n = _num(get(base, "coverage", "n_analyzed"))
+    base_at = base.get("captured_at") or "no data"
+    cps = get(L, "checkpoints", "reached") or []
+    cp_txt = (f"{len(cps)} checkpoints reached (40 / 60 / 100) \u2014 progress "
+              f"markers only, not significance claims; current n_paired = "
+              f"{fmt_int(get(L, 'checkpoints', 'current_n_paired'))}.")
+    cp_txt_id = (f"{len(cps)} checkpoint tercapai (40 / 60 / 100) \u2014 hanya "
+                 f"penanda progres, bukan klaim signifikansi; n_paired saat "
+                 f"ini = {fmt_int(get(L, 'checkpoints', 'current_n_paired'))}.")
+    def _created(ts_list):
+        for h in ts_list:
+            if h.get("created_ts"):
+                return fmt_ts_wib(h.get("created_ts"))
+        return None
+    lh_created = _created(get(S, "hypotheses") or [])
+    ph_created = _created(state["ph"])
+    ih_created = _created(state["ih"])
+    ch_created = _created(state.get("ch") or [])
+    def _status_line(items):
+        holds = [h.get("id") for h in items if h.get("status") == "holds"]
+        dnh = [h.get("id") for h in items if h.get("status") == "does_not_hold"]
+        inc = [h.get("id") for h in items if h.get("status") == "inconclusive"]
+        await_ = [h.get("id") for h in items if h.get("status") == "awaiting_validation"]
+        parts = []
+        if holds:
+            parts.append(f"{', '.join(holds)} hold{'s' if len(holds) == 1 else ''}")
+        if dnh:
+            parts.append(f"{', '.join(dnh)} do not hold")
+        if inc:
+            parts.append(f"{', '.join(inc)} inconclusive")
+        if await_:
+            parts.append(f"{', '.join(await_)} awaiting validation")
+        return "; ".join(parts) if parts else "no data"
+    mom = (ls.get("topics") or {}).get("momentum") or {}
+    mom_txt = mom.get("detail_en") or mom.get("detail") or ""
+    worked_items = "".join(
+        f"<li>{esc(w.get('text_en') or w.get('text') or '')} "
+        f"[{esc(w.get('topic', ''))}]</li>" for w in worked)
+    failed_items = "".join(
+        f"<li>{esc(w.get('text_en') or w.get('text') or '')} "
+        f"[{esc(w.get('topic', ''))}]</li>" for w in failed)
+    incon_items = "".join(
+        f"<li>{esc(w.get('text_en') or w.get('text') or '')} "
+        f"[{esc(w.get('topic', ''))}]</li>" for w in inconclusive)
+    topics = (ls.get("topics") or {})
+    topic_items = "".join(
+        f"<li><strong>{esc(t.get('label_en') or t.get('label') or k)}</strong>"
+        f" \u2014 {esc(t.get('detail_en') or t.get('detail') or 'no data')}</li>"
+        for k, t in topics.items() if isinstance(t, dict))
+    return f"""<section class="agent-section" id="history">
+{section_head("HISTORICAL FINDINGS", "TEMUAN HISTORIS", "Historical Findings", "Temuan Historis")}
+{bip("No RAPTOR-over-time series exists in the state, so there is no trend / history chart. This section is a dated list of frozen verdicts, not a timeline.",
+     "Tidak ada deret waktu per-agen RAPTOR di state, jadi tidak ada grafik tren / histori. Seksi ini adalah daftar verdict beku ber-tanggal, bukan timeline.")}
+<ul class="raptor-list">
+<li><strong>{esc(lh_created or "no data")}</strong> \u2014 {bi(f"LH1\u2013LH7 frozen; validation uses only closes after creation. First prospective verdicts arrived with the 26 Nov 08:00 WIB rebuild: {_status_line(get(S, 'hypotheses') or [])} (early read, ~6 closes).", f"LH1\u2013LH7 dibekukan; validasi hanya memakai close setelah pembuatan. Verdict prospektif pertama tiba dengan rebuild 26 Nov 08:00 WIB: {_status_line(get(S, 'hypotheses') or [])} (bacaan awal, ~6 close).")}</li>
+<li><strong>{esc(ih_created or "no data")}</strong> \u2014 {bi(f"IH1\u2013IH6 frozen (in-sample, descriptive only): {_status_line(state['ih'])}.", f"IH1\u2013IH6 dibekukan (in-sample, hanya deskriptif): {_status_line(state['ih'])}.")}</li>
+<li><strong>{esc(ph_created or "no data")}</strong> \u2014 {bi(f"PH1\u2013PH6 frozen (in-sample, descriptive only): {_status_line(state['ph'])}.", f"PH1\u2013PH6 dibekukan (in-sample, hanya deskriptif): {_status_line(state['ph'])}.")}</li>
+<li><strong>{esc(ch_created or "no data")}</strong> \u2014 {bi("CH1/CH2 pre-registered (A4 + EMA alignment + low upper wick / + OI expansion); prospective set empty; first prospective close 11:00 WIB, first outcome matures 15:00 WIB.", "CH1/CH2 pra-registrasi (A4 + EMA alignment + upper wick rendah / + ekspansi OI); set prospektif kosong; close prospektif pertama 11:00 WIB, outcome pertama matang 15:00 WIB.")}</li>
+<li><strong>23 Nov 2026</strong> \u2014 {bi(f"7-day observation baseline (week-0) frozen; n_analyzed = {fmt_int(base_n)} at capture ({esc(str(base_at))}). {cp_txt}", f"Baseline observasi 7 hari (week-0) dibekukan; n_analyzed = {fmt_int(base_n)} saat capture ({esc(str(base_at))}). {cp_txt_id}")}</li>
+</ul>
+<h3>{bi("Learning summary", "Ringkasan pembelajaran")}</h3>
+{bip(f"Based on n_analyzed={fmt_int(based.get('n_analyzed'))}, n_evaluable_30m={fmt_int(based.get('n_evaluable_30m'))}, n_paired={fmt_int(based.get('n_paired'))}. No finding \u201cworked\u201d as a filter claim \u2014 the {len(worked)} \u201cworked\u201d items below are reversal-marker consistencies, not filter recommendations.",
+     f"Berdasarkan n_analyzed={fmt_int(based.get('n_analyzed'))}, n_evaluable_30m={fmt_int(based.get('n_evaluable_30m'))}, n_paired={fmt_int(based.get('n_paired'))}. Tidak ada temuan yang \u201cworked\u201d sebagai klaim filter \u2014 {len(worked)} item \u201cworked\u201d di bawah ini adalah konsistensi marker reversal, bukan rekomendasi filter.")}
+<p><strong>{bi(f"Worked ({len(worked)})", f"Worked ({len(worked)})")}</strong></p>
+<ul class="raptor-list">{worked_items or "<li>no data</li>"}</ul>
+<p><strong>{bi(f"Failed / no clear association ({len(failed)})", f"Gagal / tanpa asosiasi jelas ({len(failed)})")}</strong></p>
+<ul class="raptor-list">{failed_items or "<li>no data</li>"}</ul>
+<p><strong>{bi(f"Inconclusive / no data ({len(inconclusive)})", f"Inconclusive / no data ({len(inconclusive)})")}</strong></p>
+<ul class="raptor-list">{incon_items or "<li>no data</li>"}</ul>
+<h3>{bi("Topics", "Topik")}</h3>
+<ul class="raptor-list">{topic_items or "<li>no data</li>"}</ul>
+<p class="panel-foot">{bi("Source: learnings.json learning_summary + checkpoints; shadow_lab.json hypotheses; ignition/hypotheses_ph.json; ignition/hypotheses_ch.json; observation_baseline.json. Do not present the flood close (294 signals) as 294 independent pieces of evidence \u2014 it is one market condition.", "Sumber: learnings.json learning_summary + checkpoints; shadow_lab.json hypotheses; ignition/hypotheses_ph.json; ignition/hypotheses_ch.json; observation_baseline.json. Jangan sajikan close flood (294 sinyal) sebagai 294 bukti independen \u2014 itu satu kondisi pasar.")}</p>
+</section>"""
+
+
+def _raptor_evidence(state: dict, bake_ts: str) -> str:
+    L, S, SP = state["learnings"], state["shadow"], state["split"]
+    asof = state["asof"]
+    grep_counts = state.get("raptor_grep_counts") or {}
+    grep_total = state.get("raptor_grep_total", 0)
+    grep_lines = "\n".join(
+        f"{rel}: {c if c is not None else 'no data'}"
+        for rel, c in grep_counts.items())
+    grep_cmd = ("grep -ri -c 'raptor' "
+                "~/workspace/pump-hunter-alerts/research/state/"
+                "ignition_research.json "
+                "~/workspace/pump-hunter-alerts/research/state/shadow_lab.json "
+                "~/workspace/pump-hunter-alerts/research/state/learnings.json "
+                "~/workspace/pump-hunter-alerts/research/state/"
+                "stock_crypto_split.json")
+    grep_result = ("0 hits in every file" if grep_total == 0
+                   else f"{grep_total} hits")
+    grep_result_id = ("0 hit di setiap file" if grep_total == 0
+                      else f"{grep_total} hit")
+    n_an = _num(get(L, "n_analyzed"))
+    n_ev = _num(get(L, "n_evaluable_30m"))
+    n_ig = _num(get(state["ignition"], "n_closes"))
+    n_sl = _num(get(S, "n_closes"))
+    n_sp = _num(get(SP, "n_closes"))
+    n_uniq = _num(get(L, "clusters", "n_unique_closes"))
+    n_evc = _num(get(L, "clusters", "n_evaluable_closes"))
+    val = state.get("validation") or {}
+    vsum = get(val, "summary") or {}
+    caveats = [
+        ("Descriptive only, flood-dominated: one close = 60.0% of replay "
+         "signals (63.5% of analysed signals). Pooled / close-weighted / "
+         "ex-flood side by side; losing closes never dropped.",
+         "Hanya deskriptif, didominasi flood: satu close = 60,0% sinyal "
+         "replay (63,5% sinyal yang dianalisis). Pooled / close-weighted / "
+         "ex-flood berdampingan; close yang merugi tidak pernah dibuang."),
+        (f"No validated filter, no validated ignition rule: 12 \\u00d7 "
+         "INSUFFICIENT EVIDENCE; PH/IH in-sample only; LH early "
+         "prospective reads on ~6 closes; CH1/CH2 awaiting validation with "
+         f"an empty prospective set; n={fmt_int(n_ev)} too small for out-of-sample or "
+         "walk-forward validation.",
+         f"Tidak ada filter tervalidasi, tidak ada aturan ignition "
+         "tervalidasi: 12 \\u00d7 INSUFFICIENT EVIDENCE; PH/IH hanya "
+         "in-sample; LH bacaan prospektif awal pada ~6 close; CH1/CH2 "
+         f"menunggu validasi dengan set prospektif kosong; n={fmt_int(n_ev)} terlalu "
+         "kecil untuk validasi out-of-sample atau walk-forward."),
+        ("PH/IH validation_after_created is a misnomer (verified in "
+         "ignition.py): it holds the full in-sample validation window (14 "
+         "closes \\u2265 flood), not a prospective post-creation read. The "
+         "prospective slices (3 closes for PH, 4 for IH) are not stored "
+         "anywhere. LH validation_after_created IS genuinely post-creation "
+         "(verified in shadow_lab.py) \\u2014 the same field name means "
+         "different things in the two builders; the page must never "
+         "conflate them.",
+         "PH/IH validation_after_created adalah misnomer (terverifikasi di "
+         "ignition.py): field itu berisi seluruh window validasi in-sample "
+         "(14 close \\u2265 flood), bukan bacaan prospektif pasca-pembuatan. "
+         "Irisan prospektif (3 close untuk PH, 4 untuk IH) tidak tersimpan "
+         "di mana pun. LH validation_after_created BENAR-BENAR "
+         "pasca-pembuatan (terverifikasi di shadow_lab.py) \\u2014 nama "
+         "field yang sama bermakna beda di dua builder; halaman ini tidak "
+         "boleh mencampuradukkan keduanya."),
+        (f"Outcomes are not fully independent (same-close signals share "
+         f"market conditions; effective sample < n; {fmt_int(n_evc)} evaluable closes, "
+         f"{fmt_int(n_uniq)} unique closes).",
+         f"Outcome tidak sepenuhnya independen (sinyal pada close yang sama "
+         f"berbagi kondisi pasar; sampel efektif < n; {fmt_int(n_evc)} close yang dapat "
+         f"dievaluasi, {fmt_int(n_uniq)} close unik)."),
+        ("Entry is a simulation: buy at ask +5bps slippage on the signal "
+         "close; the close is a benchmark, not a guaranteed execution "
+         "price. Funding NOT in net (Oct 2026 measured bounds: single-8h "
+         "|funding| median 0.0050%, p95 0.0840%, p99 0.3433%, max 2.00%).",
+         "Entry adalah simulasi: beli di ask +5bps slippage pada close "
+         "sinyal; close adalah patokan, bukan harga eksekusi yang dijamin. "
+         "Funding TIDAK masuk net (batas terukur Okt 2026: single-8h "
+         "|funding| median 0,0050%, p95 0,0840%, p99 0,3433%, maks 2,00%)."),
+        (f"Close-count reconciliation: learnings {fmt_int(n_uniq)} unique "
+         f"closes \\u00b7 ignition {fmt_int(n_ig)} \\u00b7 Shadow Lab "
+         f"{fmt_int(n_sl)} (including backfill-only) \\u00b7 split "
+         f"{fmt_int(n_sp)} \\u2014 different universes, do not force them "
+         f"to match.",
+         f"Rekonsiliasi jumlah close: learnings {fmt_int(n_uniq)} close "
+         f"unik \\u00b7 ignition {fmt_int(n_ig)} \\u00b7 Shadow Lab "
+         f"{fmt_int(n_sl)} (termasuk backfill-only) \\u00b7 split "
+         f"{fmt_int(n_sp)} \\u2014 universe berbeda, jangan dipaksakan "
+         f"sama."),
+        ("Snapshot timing: only learnings.json reflects the latest close; "
+         "Shadow Lab, Ignition, and split may predate it. Figures from "
+         "different files are different snapshots \\u2014 label each figure "
+         "with its source file.",
+         "Waktu snapshot: hanya learnings.json yang mencerminkan close "
+         "terbaru; Shadow Lab, Ignition, dan split mungkin lebih lama. "
+         "Angka dari file berbeda adalah snapshot berbeda \\u2014 beri label "
+         "sumber file pada setiap angka."),
+        ("CH2 stays descriptive-only: OI expansion is not available at "
+         "entry (10\\u201330h lag, 0% of signals have it at entry).",
+         "CH2 tetap descriptive-only: ekspansi OI tidak tersedia saat entry "
+         "(lag 10\\u201330 jam, 0% sinyal memilikinya saat entry)."),
+        ("Research freeze active \\u2014 this page is frontend only: no "
+         "scanner / strategy / filter / research-logic change, no state "
+         "file written, $0 spent.",
+         "Freeze riset aktif \\u2014 halaman ini hanya frontend: tanpa "
+         "perubahan scanner / strategi / filter / logika riset, tanpa file "
+         "state yang ditulis, $0 dikeluarkan."),
+    ]
+    caveat_items = "".join(
+        f"<li>{bi(a, b)}</li>" for a, b in caveats)
+    missing = [
+        ("No +1W statistics (n_evaluated=0, matures 28 Nov).",
+         "Tidak ada statistik +1W (n_evaluated=0, matang 28 Nov)."),
+        ("No November funding data (archive lands in December \\u2014 "
+         "October bounds only).",
+         "Tidak ada data funding November (arsip terbit Desember \\u2014 "
+         "hanya batas Oktober)."),
+        ("No BTC TRENDING_UP signals yet.",
+         "Belum ada sinyal BTC TRENDING_UP."),
+        ("No OI data for the newest signals (daily archive, 1-day lag).",
+         "Tidak ada data OI untuk sinyal terbaru (arsip harian, lag 1 hari)."),
+        ("No per-bucket ex-flood/discovery split (so the pump-bucket chart "
+         "has no toggle).",
+         "Tidak ada split ex-flood/discovery per bucket (sehingga grafik "
+         "bucket pompa tanpa toggle)."),
+        ("No prospective-only PH/IH slice in state.",
+         "Tidak ada irisan prospektif saja untuk PH/IH di state."),
+        ("No CH prospective closes with matured outcomes yet (first "
+         "matures 15:00 WIB 26 Nov).",
+         "Belum ada close prospektif CH dengan outcome yang matang (yang "
+         "pertama matang 15:00 WIB 26 Nov)."),
+        (f"{fmt_int((n_an or 0) - (n_ev or 0))} of the analysed signals "
+         "still have no +30m outcome yet.",
+         f"{fmt_int((n_an or 0) - (n_ev or 0))} dari sinyal yang "
+         "dianalisis masih belum punya outcome +30m."),
+        ("The n_closes=35 vs 34-lists discrepancy is unexplained.",
+         "Diskrepansi n_closes=35 vs 34 daftar tidak terjelaskan."),
+    ]
+    missing_items = "".join(f"<li>{bi(a, b)}</li>" for a, b in missing)
+    return f"""<section class="agent-section" id="evidence">
+{section_head("EVIDENCE & RESEARCH LIMITATIONS", "BUKTI & BATASAN RISET", "Evidence & Research Limitations", "Bukti & Batasan Riset")}
+<h3>{bi("Provenance", "Provenans")}</h3>
+<dl class="facts">
+<div><dt>shadow_lab.json</dt><dd>{bi("Configs A0\\u2013A9, LH1\\u2013LH7, calibration. Generated", "Config A0\\u2013A9, LH1\\u2013LH7, kalibrasi. Dibuat")} {esc(asof['shadow'])}.</dd>{src_line("~/workspace/pump-hunter-alerts/research/state/shadow_lab.json")}</div>
+<div><dt>learnings.json</dt><dd>{bi("Totals, ignition_research, validation_status. Updated", "Total, ignition_research, validation_status. Diperbarui")} {esc(asof['learnings'])}.</dd>{src_line("~/workspace/pump-hunter-alerts/research/state/learnings.json")}</div>
+<div><dt>ignition_research.json</dt><dd>{bi("Next-candle rates, pump + feature buckets, recommendations, OI coverage. Generated", "Rate candle berikutnya, bucket pompa + fitur, rekomendasi, cakupan OI. Dibuat")} {esc(asof['ignition'])}.</dd>{src_line("~/workspace/pump-hunter-alerts/research/state/ignition_research.json")}</div>
+<div><dt>ignition/hypotheses_ph.json</dt><dd>{bi("PH1\\u2013PH6. File modified", "PH1\\u2013PH6. File diubah")} {esc(asof['ph_mtime'])}.</dd>{src_line("~/workspace/pump-hunter-alerts/research/state/ignition/hypotheses_ph.json")}</div>
+<div><dt>ignition/hypotheses_ch.json</dt><dd>{bi("CH1\\u2013CH2. File modified", "CH1\\u2013CH2. File diubah")} {esc(asof.get('ch_mtime', 'no data'))}.</dd>{src_line("~/workspace/pump-hunter-alerts/research/state/ignition/hypotheses_ch.json")}</div>
+<div><dt>validation_research.json</dt><dd>{bi(f"Agent 10 integrity checks: {fmt_int(vsum.get('pass'))} pass / {fmt_int(vsum.get('warning'))} warning / {fmt_int(vsum.get('fail'))} fail / {fmt_int(vsum.get('not_computed'))} not computed.", f"Pemeriksaan integritas Agen 10: {fmt_int(vsum.get('pass'))} pass / {fmt_int(vsum.get('warning'))} warning / {fmt_int(vsum.get('fail'))} fail / {fmt_int(vsum.get('not_computed'))} not computed.")}</dd>{src_line("~/workspace/pump-hunter-alerts/research/state/validation_research.json")}</div>
+<div><dt>stock_crypto_split.json + asset_class.json</dt><dd>{bi("SAHAM vs CRYPTO split. Split generated", "Split SAHAM vs CRYPTO. Split dibuat")} {esc(asof['split'])}.</dd>{src_line("~/workspace/pump-hunter-alerts/research/state/stock_crypto_split.json")}</div>
+<div><dt>hypotheses.json</dt><dd>{bi("Top-level registry is EMPTY (entries: []) and learnings.json hypothesis_registry.n_registered = 0. LH1\\u2013LH7 live ONLY in shadow_lab.json \\u2014 do not cite hypotheses.json as their source.", "Registri tingkat atas KOSONG (entries: []) dan learnings.json hypothesis_registry.n_registered = 0. LH1\\u2013LH7 hanya ada di shadow_lab.json \\u2014 jangan jadikan hypotheses.json sebagai sumbernya.")}</dd>{src_line("~/workspace/pump-hunter-alerts/research/state/hypotheses.json")}</div>
+</dl>
+<h3>{bi("RAPTOR grep", "Grep RAPTOR")}</h3>
+<code class="raptor-code">{esc(grep_cmd)}</code>
+<p>{bi("Result: ", "Hasil: ")}{bi(grep_result, grep_result_id)} {bi("The state JSONs contain no literal \\u2018raptor\\u2019 string. The domain link is by spec ownership (IGNITION_SPEC.md v1.1.0 line 1: \\u201c# IGNITION_SPEC.md \\u2014 Agent 07 Pump Ignition Intelligence\\u201d) + config.json, not by keyword. This is the honest inverse of PRISM: PRISM had 0 specific findings and no domain ownership; RAPTOR owns the ignition domain by spec, and the numbers on this page are that domain\\u2019s real data.", "JSON state tidak mengandung string literal \\u2018raptor\\u2019. Kaitan domain berasal dari kepemilikan spec (IGNITION_SPEC.md v1.1.0 baris 1: \\u201c# IGNITION_SPEC.md \\u2014 Agent 07 Pump Ignition Intelligence\\u201d) + config.json, bukan dari keyword. Ini kebalikan jujur dari PRISM: PRISM punya 0 temuan spesifik dan tanpa kepemilikan domain; RAPTOR memiliki domain ignition berdasarkan spec, dan angka-angka di halaman ini adalah data nyata domain tersebut.")}</p>
+<pre class="raptor-code">{esc(grep_lines)}</pre>
+<h3>{bi("Caveats", "Caveat")}</h3>
+<ul class="raptor-list">{caveat_items}</ul>
+<h3>{bi("Missing data \\u2014 shown as \\u201cno data\\u201d, never filled in", "Data yang tidak ada \\u2014 ditampilkan sebagai \\u201cno data\\u201d, tidak pernah diisi")}</h3>
+<ul class="raptor-list">{missing_items}</ul>
+<p class="panel-honest"><strong>{bi(RAPTOR_HONESTY_EN, RAPTOR_HONESTY_ID)}</strong></p>
+<p class="panel-foot">{bi(f"Snapshot baked from the research state on {bake_ts}. Figures are a static snapshot; the live research state may have moved since this build.", f"Snapshot dibuat dari research state pada {bake_ts}. Angka-angka adalah snapshot statis; research state live mungkin sudah bergerak sejak build ini.")}</p>
+</section>"""
+
+
+def build_raptor_sections(state: dict, agent: dict, bake_ts: str) -> str:
+    """Sections 2-7 for RAPTOR, in order. Section 1 (character stage)
+    lives in the shared template."""
+    n_eval = _num(get(state["learnings"], "n_evaluable_30m"))
+    return "\\n".join([
+        _raptor_identity(state, agent),
+        _raptor_overview(state),
+        _raptor_latest(state, n_eval),
+        _raptor_metrics(state),
+        _raptor_history(state),
+        _raptor_evidence(state, bake_ts),
+    ])
 
 
 # ---------------------------------------------------------------------------
