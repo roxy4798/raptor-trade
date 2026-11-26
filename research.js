@@ -186,6 +186,94 @@
       "joint.candNote": "Net is round-trip and only on signals with a measured spread (n_net); hard-pump and TP rates cover all signals. Max DD is the drawdown of the chronological per-signal net sequence — signals overlap, so it is not a portfolio drawdown. Best by mean net is a description, not a validated recommendation.",
       "joint.hypNote": "Hypotheses are validated only on closes after they were frozen. JH1 and JH5 hold on early prospective closes (small n — JH1's gap is 0.0pp, i.e. no difference, not a win); JH3 and JH4 still await enough new closes.",
       "joint.recoNote": "All joint recommendations are INSUFFICIENT EVIDENCE in v1.1.0 — no candidate is applied to production. A non-INSUFFICIENT verdict needs a ≥1.0pp gap in the same direction on both discovery and validation, n≥10/side on validation closes, and survival of the ex-flood aggregation.",
+      "rail.forwardtest": "Forward Testing",
+      "sec.forwardtest.kicker": "10 — Forward Testing",
+      "sec.forwardtest.title": "Forward Testing — A0 vs A4 vs A4 + ATR Expanded",
+      "sec.forwardtest.sub": "New 4H closes after the historical research cutoff, judged with frozen thresholds and definitions — no re-optimization on new signals. A4 + ATR percentile expanded is the main research candidate; A0 is the production baseline and A4 + HOLD is the exit comparison. Forward results are exploratory observations, not formal validation.",
+      "panel.ignMatrix": "Entry quality consistency matrix — three priority characteristics",
+      "panel.jointExits": "A0 vs A4 exit profitability (+4H)",
+      "panel.jointQvf": "Quality vs frequency — A0 vs A4",
+      "panel.ftSetup": "Forward test — setup & evidence",
+      "panel.ftGroups": "Forward results — A0 vs A4 vs A4 + ATR Expanded (+4H)",
+      "panel.ftPerClose": "Performance per close (forward only)",
+      "panel.ftSplits": "A4 + ATR Expanded — CRYPTO vs SAHAM",
+      "panel.ftExits": "Forward exits — E0 vs E5 vs E18 (+4H)",
+      "ev.historical": "Historical",
+      "ev.exploratory": "Exploratory forward",
+      "ev.formalNone": "Formal validation: none",
+      "ev.insufficient": "Insufficient data",
+      "ev.historicalNote": "Historical, descriptive/in-sample data with frozen thresholds. Associations here are not predictions.",
+      "ev.exploratoryNote": "Exploratory forward observations on closes after the historical cutoff. No frozen formal validation exists for this candidate yet.",
+      "ev.formalNote": "Formal prospective validation runs on a separate frozen track (CH1/CH2). Forward-test numbers are never presented as formal validation.",
+      "mx.feature": "Feature",
+      "mx.bucket": "Bucket",
+      "mx.slice": "Slice",
+      "mx.n": "n",
+      "mx.nNet": "n_net",
+      "mx.closes": "Closes",
+      "mx.coverage": "Coverage",
+      "mx.freq": "Signals/close",
+      "mx.cont": "Continuation",
+      "mx.mean": "Mean net",
+      "mx.median": "Median net",
+      "mx.positive": "+Net",
+      "mx.tp1": "TP+1% before SL",
+      "mx.mfe": "Median MFE",
+      "mx.mae": "Median MAE",
+      "mx.pf": "Profit factor",
+      "mx.slicePooled": "Pooled",
+      "mx.sliceExFlood": "Ex-flood",
+      "mx.sliceCloseW": "Close-weighted",
+      "mx.sliceCrypto": "CRYPTO",
+      "mx.sliceSaham": "SAHAM",
+      "mx.sliceProspective": "Prospective",
+      "mx.featAtr": "ATR percentile",
+      "mx.featWick": "Upper wick",
+      "mx.featBody": "Body strength",
+      "jx.config": "Config",
+      "jx.exit": "Exit",
+      "jx.closeCons": "Close cons.",
+      "jx.maxDd": "MaxDD",
+      "jx.tpFirst": "TP first",
+      "jx.slFirst": "SL first",
+      "jx.neither": "Neither",
+      "jx.ambig": "Ambiguous",
+      "jx.top1": "Top-1 share",
+      "jx.cwMean": "CloseW mean",
+      "jx.discMean": "Discovery mean",
+      "jx.valMean": "Validation mean",
+      "jx.perfTitle": "Exit performance (+4H)",
+      "jx.outTitle": "Outcome accounting (+4H)",
+      "jx.ddNote": "MaxDD is a cumulative-signal diagnostic (peak-to-trough of the chronological per-signal net sum, 1 unit of notional per signal; signals overlap in time) — NOT portfolio drawdown, and not comparable across configs with different signal counts.",
+      "qv.union": "Union closes (all configs)",
+      "qv.meanClose": "Mean / close",
+      "qv.medianClose": "Median / close",
+      "qv.maxClose": "Max / close",
+      "qv.withSignals": "Closes with signals",
+      "qv.zeroCloses": "Zero-signal closes",
+      "qv.freqRatio": "Frequency ratio A4/A0",
+      "qv.freqChange": "Frequency change",
+      "qv.tradeoffTitle": "Trade-off — A4 vs A0 (lab overall, replay)",
+      "qv.cont": "Continuation",
+      "qv.mean": "Mean net",
+      "qv.median": "Median net",
+      "qv.cwMean": "Close-weighted mean net",
+      "qv.exMean": "Ex-flood mean net",
+      "ft.cutoff": "Historical cutoff",
+      "ft.frozen": "Candidate frozen",
+      "ft.fwdCloses": "Forward closes",
+      "ft.formal": "Formal prospective validation",
+      "ft.group": "Group",
+      "ft.mature": "Matured",
+      "ft.pending": "Pending",
+      "ft.signals": "Signals",
+      "ft.close": "Close (WIB)",
+      "ft.cwTitle": "Close-weighted view",
+      "ft.groupsNote": "Forward-only numbers — never mixed with historical data. A4 + ATR Expanded is exploratory until a frozen formal validation exists.",
+      "ft.pendingNote": "Signals from the latest forward close are still pending — their next 4H candle has not closed yet.",
+      "ft.splitNote": "CRYPTO/SAHAM split of the A4 + ATR Expanded forward signals. Small samples — observations only, never conclusions.",
+      "ft.exitsNote": "E0 HOLD is the exit baseline; E5 and E18 are research candidates, not approved strategies.",
+      "ft.notYet": "Forward test not built yet — the daily lab (08:00 WIB) has not run since the cutoff.",
       "panel.exitTpBsl": "TP before SL (vs SL −2%)",
       "panel.exitRiskReward": "Risk–reward by exit family (+4H)",
       "panel.exitFunding": "Funding cost — measured evidence",
@@ -193,7 +281,7 @@
       "exit.rrNote": "One family pools every (signal × strategy) in it — not an average of strategy means. Payoff = avg win / |avg loss|. Break-even win rate = |avg loss| / (avg win + |avg loss|): the minimum win rate for expected net = 0 if win/loss sizes stay at their historical averages. Structure SL (E17/E18) uses the same TP +3% as E2 — the only difference is the stop placement.",
       "exit.fundingNote": "Funding is NOT in exit net (the monthly archive publishes the following month, so November funding lands in December). The bounds below are measured from the October 2026 archive: a +4H hold crosses at most one 8h funding payment, a +12H hold at most two consecutive ones. Median funding is small, but the tail is fat — the worst single 8h payment in the sample was 2.00pp.",
       "rail.risk": "Risk & Portfolio",
-      "sec.risk.kicker": "10 — Risk & Portfolio",
+      "sec.risk.kicker": "11 — Risk & Portfolio",
       "sec.risk.title": "Agent 12 — Risk & Portfolio",
       "sec.risk.sub": "What a strategy risks, not just what it wins — and what happens when many LONG signals fire at once. Portfolio curves are research simulations (simple cumulative sums of per-close returns, no compounding), not real trading results. Two sizing variants are compared on the same signals: fixed-notional (1 unit per signal, exposure grows with the batch) vs fixed-capital (1 unit per close, split equally). Risk of ruin is not computed — block bootstrap needs at least 60 closes, and there are only 30 so far. Everything here is research — nothing sizes a real position or sets real leverage.",
       "panel.riskOverview": "Risk overview — exposure & correlation",
@@ -216,7 +304,7 @@
       "risk.hypNote": "Hypotheses are validated only on closes after they were frozen, on per-close portfolio means (fixed-capital). Until new closes arrive, every verdict is awaiting_validation.",
       "risk.recoNote": "All risk recommendations are INSUFFICIENT EVIDENCE in v1.0.0 — nothing is applied to production. A non-INSUFFICIENT verdict needs a ≥1.0pp gap in the same direction on both discovery and validation, n≥10/side on validation closes, survival of the ex-flood aggregation, and drawdown no worse than baseline.",
       "rail.ignition": "Pump Ignition",
-      "sec.ignition.kicker": "11 — Pump Ignition",
+      "sec.ignition.kicker": "12 — Pump Ignition",
       "sec.ignition.title": "Agent 07 — Pump Ignition & Continuation",
       "sec.ignition.sub": "What the pre-entry picture looks like before a signal fires — squeeze, Bollinger Band width, ATR contraction, volume acceleration, price compression, momentum acceleration, and pre-breakout open interest — measured only on bars before the signal close, never after. The goal is not the biggest pump: it is the entry that is immediately followed by a rise, so a realistic small TP is reached more often. Every number here is descriptive — one close (the 23 Nov flood) dominates the sample, and hypotheses IH1–IH6 are frozen and awaiting prospective closes. v1.1.0 adds the first pump candle itself: pump strength (open-to-close, vs ATR, vs the contract's own history), candle structure (body, wicks, close position, previous candle, exhaustion), and six separated next-candle rates — bullish close, positive gross, positive net, TP-before-SL, continuation failure, and reversal — with pooled, close-weighted, and ex-flood views. Hypotheses PH1–PH6 are frozen alongside IH1–IH6.",
       "panel.ignOverview": "Ignition overview — coverage",
@@ -243,7 +331,7 @@
       "ign.phNote": "PH verdicts are gap-based on in-sample closes (flood 23 Nov 23:00 WIB and later — including closes from before the hypothesis was frozen, so this is descriptive, not prospective validation): holds needs n≥5/side and a gap ≥2pp in the expected direction. PH5 (small upper wick) holds on the in-sample numbers — check its closes per side before believing it; the flood close still dominates every verdict.",
       "ign.execNote": "The signal close is a benchmark entry, not a guaranteed fill. The execution model buys at the ask (half a spread above the close); its total cost equals the benchmark model, so the two nets differ by less than 0.02pp on every signal — the spread is already fully costed. Funding is excluded from net (measured October bounds in the funding note).",
       "rail.missed": "Missed Opportunity",
-      "sec.missed.kicker": "12 — Missed Opportunity",
+      "sec.missed.kicker": "13 — Missed Opportunity",
       "sec.missed.title": "Agent 08 — Missed Opportunity",
       "sec.missed.sub": "Eligible contracts that never signalled but then rose — which gate blocked them, how far they were from the threshold, and what removing or loosening one gate would have added, winners AND losers together. Counterfactual impact is in gross +4H return only: the spread of a non-signal is unmeasured, so net is never computed here. Scope is v2.1.2 closes only (from 22 Nov 15:00 WIB).",
       "panel.missedOverview": "Missed-opportunity overview",
@@ -264,7 +352,7 @@
       "missed.hypNote": "MH verdicts are gap-based on in-sample closes (flood and later — including closes from before the hypothesis was frozen, so this is descriptive, not prospective validation). MH1 and MH3 still await enough data; MH2 does not hold — only about a quarter of in-sample validation winners were blocked by a single gate.",
       "missed.recoNote": "All missed recommendations are INSUFFICIENT EVIDENCE in v1.0.0 — attribution covers v2.1.2 closes only and hypotheses MH1–MH3 are not yet prospectively validated.",
       "rail.validation": "Independent Validation",
-      "sec.validation.kicker": "13 — Independent Validation",
+      "sec.validation.kicker": "14 — Independent Validation",
       "sec.validation.title": "Agent 10 — Independent Strategy Validation",
       "sec.validation.sub": "This agent audits the research process itself — look-ahead bias, data leakage, survivorship bias, selection bias, overfitting, multiple testing, parameter sensitivity, walk-forward validation, prospective validation, cluster dependency, and reproducibility. It never blocks a production signal; it grades how much the research conclusions can be trusted.",
       "panel.valSummary": "Validation summary",
@@ -723,6 +811,94 @@
       "joint.candNote": "Net adalah round-trip dan hanya pada sinyal dengan spread terukur (n_net); hard-pump dan TP rate mencakup semua sinyal. Max DD adalah drawdown dari urutan net per sinyal secara kronologis — sinyal tumpang tindih, jadi ini bukan drawdown portofolio. Terbaik menurut mean net adalah deskripsi, bukan rekomendasi tervalidasi.",
       "joint.hypNote": "Hipotesis divalidasi hanya pada close setelah dibekukan. JH1 dan JH5 holds pada close prospektif awal (n kecil — gap JH1 0,0pp, artinya tidak ada perbedaan, bukan kemenangan); JH3 dan JH4 masih menunggu cukup close baru.",
       "joint.recoNote": "Semua rekomendasi gabungan masih INSUFFICIENT EVIDENCE di v1.1.0 — tidak ada kandidat yang diterapkan ke produksi. Verdict non-INSUFFICIENT butuh gap ≥1,0pp searah di discovery dan validation, n≥10/sisi pada close validasi, dan lolos agregasi ex-flood.",
+      "rail.forwardtest": "Forward Testing",
+      "sec.forwardtest.kicker": "10 — Forward Testing",
+      "sec.forwardtest.title": "Forward Testing — A0 vs A4 vs A4 + ATR Expanded",
+      "sec.forwardtest.sub": "Close 4J baru setelah cutoff riset historis, dinilai dengan threshold dan definisi yang dibekukan — tanpa optimasi ulang pada sinyal baru. A4 + ATR percentile expanded adalah kandidat riset utama; A0 adalah baseline produksi dan A4 + HOLD adalah pembanding exit. Hasil forward adalah observasi eksploratif, bukan validasi formal.",
+      "panel.ignMatrix": "Matriks konsistensi kualitas entry — tiga karakteristik prioritas",
+      "panel.jointExits": "Profitabilitas exit A0 vs A4 (+4H)",
+      "panel.jointQvf": "Kualitas vs frekuensi — A0 vs A4",
+      "panel.ftSetup": "Forward test — setup & bukti",
+      "panel.ftGroups": "Hasil forward — A0 vs A4 vs A4 + ATR Expanded (+4H)",
+      "panel.ftPerClose": "Performa per close (forward saja)",
+      "panel.ftSplits": "A4 + ATR Expanded — CRYPTO vs SAHAM",
+      "panel.ftExits": "Exit forward — E0 vs E5 vs E18 (+4H)",
+      "ev.historical": "Historis",
+      "ev.exploratory": "Forward eksploratif",
+      "ev.formalNone": "Validasi formal: belum ada",
+      "ev.insufficient": "Data tidak memadai",
+      "ev.historicalNote": "Data historis, deskriptif/in-sample dengan threshold beku. Asosiasi di sini bukan prediksi.",
+      "ev.exploratoryNote": "Observasi forward eksploratif pada close setelah cutoff historis. Belum ada validasi formal yang dibekukan untuk kandidat ini.",
+      "ev.formalNote": "Validasi prospektif formal berjalan pada jalur beku yang terpisah (CH1/CH2). Angka forward test tidak pernah disajikan sebagai validasi formal.",
+      "mx.feature": "Karakteristik",
+      "mx.bucket": "Bucket",
+      "mx.slice": "Irisan",
+      "mx.n": "n",
+      "mx.nNet": "n_net",
+      "mx.closes": "Close",
+      "mx.coverage": "Cakupan",
+      "mx.freq": "Sinyal/close",
+      "mx.cont": "Continuation",
+      "mx.mean": "Mean net",
+      "mx.median": "Median net",
+      "mx.positive": "+Net",
+      "mx.tp1": "TP+1% sebelum SL",
+      "mx.mfe": "Median MFE",
+      "mx.mae": "Median MAE",
+      "mx.pf": "Profit factor",
+      "mx.slicePooled": "Pooled",
+      "mx.sliceExFlood": "Ex-flood",
+      "mx.sliceCloseW": "Close-weighted",
+      "mx.sliceCrypto": "CRYPTO",
+      "mx.sliceSaham": "SAHAM",
+      "mx.sliceProspective": "Prospektif",
+      "mx.featAtr": "ATR percentile",
+      "mx.featWick": "Upper wick",
+      "mx.featBody": "Body strength",
+      "jx.config": "Config",
+      "jx.exit": "Exit",
+      "jx.closeCons": "Kons. close",
+      "jx.maxDd": "MaxDD",
+      "jx.tpFirst": "TP dulu",
+      "jx.slFirst": "SL dulu",
+      "jx.neither": "Tidak keduanya",
+      "jx.ambig": "Ambigu",
+      "jx.top1": "Top-1 share",
+      "jx.cwMean": "CloseW mean",
+      "jx.discMean": "Discovery mean",
+      "jx.valMean": "Validation mean",
+      "jx.perfTitle": "Performa exit (+4H)",
+      "jx.outTitle": "Perhitungan outcome (+4H)",
+      "jx.ddNote": "MaxDD adalah diagnostik kumulatif-sinyal (peak-to-trough dari jumlah kumulatif net per sinyal menurut urutan kronologis, 1 unit notional per sinyal; sinyal tumpang tindih dalam waktu) — BUKAN drawdown portofolio, dan tidak bisa dibandingkan antar config dengan jumlah sinyal berbeda.",
+      "qv.union": "Union close (semua config)",
+      "qv.meanClose": "Mean / close",
+      "qv.medianClose": "Median / close",
+      "qv.maxClose": "Maks / close",
+      "qv.withSignals": "Close bersinyal",
+      "qv.zeroCloses": "Close tanpa sinyal",
+      "qv.freqRatio": "Rasio frekuensi A4/A0",
+      "qv.freqChange": "Perubahan frekuensi",
+      "qv.tradeoffTitle": "Trade-off — A4 vs A0 (lab overall, replay)",
+      "qv.cont": "Continuation",
+      "qv.mean": "Mean net",
+      "qv.median": "Median net",
+      "qv.cwMean": "Close-weighted mean net",
+      "qv.exMean": "Ex-flood mean net",
+      "ft.cutoff": "Cutoff historis",
+      "ft.frozen": "Kandidat dibekukan",
+      "ft.fwdCloses": "Close forward",
+      "ft.formal": "Validasi prospektif formal",
+      "ft.group": "Grup",
+      "ft.mature": "Matang",
+      "ft.pending": "Pending",
+      "ft.signals": "Sinyal",
+      "ft.close": "Close (WIB)",
+      "ft.cwTitle": "Tampilan close-weighted",
+      "ft.groupsNote": "Angka forward-only — tidak pernah dicampur dengan data historis. A4 + ATR Expanded bersifat eksploratif sampai ada validasi formal yang dibekukan.",
+      "ft.pendingNote": "Sinyal dari close forward terbaru masih pending — candle 4H berikutnya belum ditutup.",
+      "ft.splitNote": "Split CRYPTO/SAHAM dari sinyal forward A4 + ATR Expanded. Sampel kecil — observasi saja, bukan kesimpulan.",
+      "ft.exitsNote": "E0 HOLD adalah baseline exit; E5 dan E18 adalah kandidat riset, bukan strategi yang disetujui.",
+      "ft.notYet": "Forward test belum dibangun — lab harian (08:00 WIB) belum berjalan sejak cutoff.",
       "panel.exitTpBsl": "TP sebelum SL (vs SL −2%)",
       "panel.exitRiskReward": "Risk–reward per keluarga exit (+4H)",
       "panel.exitFunding": "Biaya funding — bukti terukur",
@@ -730,7 +906,7 @@
       "exit.rrNote": "Satu keluarga mem-pool semua (sinyal × strategi) di dalamnya — bukan rata-rata dari mean strategi. Payoff = avg win / |avg loss|. Break-even win rate = |avg loss| / (avg win + |avg loss|): win rate minimum supaya expected net = 0 bila ukuran win/loss tetap seperti rata-rata historis. Structure SL (E17/E18) memakai TP +3% yang sama dengan E2 — satu-satunya perbedaan adalah penempatan stop.",
       "exit.fundingNote": "Funding TIDAK masuk exit net (arsip bulanan terbit bulan berikutnya, jadi funding November baru ada di Desember). Batas di bawah ini terukur dari arsip Oktober 2026: hold +4H melewati maksimal satu pembayaran funding 8 jam, hold +12H maksimal dua pembayaran berurutan. Median funding kecil, tapi ekornya gemuk — pembayaran 8 jam terburuk di sampel adalah 2,00pp.",
       "rail.risk": "Risk & Portfolio",
-      "sec.risk.kicker": "10 — Risk & Portfolio",
+      "sec.risk.kicker": "11 — Risk & Portfolio",
       "sec.risk.title": "Agent 12 — Risiko & Portofolio",
       "sec.risk.sub": "Apa risiko sebuah strategi, bukan cuma apa yang bisa dimenangkan — dan apa yang terjadi saat banyak sinyal LONG muncul sekaligus. Kurva portofolio adalah simulasi riset (jumlah kumulatif sederhana return per close, tanpa compounding), bukan hasil trading nyata. Dua varian sizing dibandingkan pada sinyal yang sama: fixed-notional (1 unit per sinyal, exposure membesar bersama batch) vs fixed-capital (1 unit per close, dibagi rata). Risk of ruin tidak dihitung — block bootstrap butuh minimal 60 close, dan sejauh ini baru 30. Semua di sini adalah riset — tidak ada yang mengatur ukuran posisi nyata atau leverage nyata.",
       "panel.riskOverview": "Gambaran risiko — exposure & korelasi",
@@ -753,7 +929,7 @@
       "risk.hypNote": "Hipotesis divalidasi hanya pada close setelah dibekukan, memakai mean portofolio per close (fixed-capital). Sampai ada close baru, semua verdict masih awaiting_validation.",
       "risk.recoNote": "Semua rekomendasi risiko masih INSUFFICIENT EVIDENCE di v1.0.0 — tidak ada yang diterapkan ke produksi. Verdict non-INSUFFICIENT butuh gap ≥1,0pp searah di discovery dan validation, n≥10/sisi pada close validasi, lolos agregasi ex-flood, dan drawdown tidak lebih buruk dari baseline.",
       "rail.ignition": "Ignisi Pump",
-      "sec.ignition.kicker": "11 — Ignisi Pump",
+      "sec.ignition.kicker": "12 — Ignisi Pump",
       "sec.ignition.title": "Agent 07 — Pemicu & Kelanjutan Pump",
       "sec.ignition.sub": "Seperti apa gambaran pra-entry sebelum sinyal muncul — squeeze, lebar Bollinger Band, kontraksi ATR, akselerasi volume, kompresi harga, akselerasi momentum, dan open interest pra-breakout — diukur hanya dari bar sebelum close sinyal, tidak pernah sesudahnya. Tujuannya bukan pump terbesar: melainkan entry yang langsung diikuti kenaikan, supaya TP kecil yang realistis lebih sering tercapai. Semua angka di sini deskriptif — satu close (flood 23 Nov) mendominasi sampel, dan hipotesis IH1–IH6 dibekukan dan masih menunggu close prospektif. v1.1.0 menambahkan candle pump pertamanya sendiri: kekuatan pump (open-to-close, vs ATR, vs histori kontrak itu sendiri), struktur candle (body, wick, close position, candle sebelumnya, exhaustion), dan enam rate candle berikutnya yang dipisah — bullish close, positive gross, positive net, TP-before-SL, continuation failure, dan reversal — dengan pandangan pooled, close-weighted, dan ex-flood. Hipotesis PH1–PH6 dibekukan bersama IH1–IH6.",
       "panel.ignOverview": "Gambaran ignisi — cakupan",
@@ -780,7 +956,7 @@
       "ign.phNote": "Verdict PH berbasis gap pada close in-sample (flood 23 Nov 23:00 WIB dan sesudahnya — termasuk close dari sebelum hipotesis dibekukan, jadi ini deskriptif, bukan validasi prospektif): holds butuh n≥5/sisi dan gap ≥2pp searah yang diharapkan. PH5 (upper wick kecil) holds secara angka in-sample — cek closes per sisi sebelum mempercayainya; close flood masih mendominasi setiap verdict.",
       "ign.execNote": "Close sinyal adalah benchmark entry, bukan harga fill yang pasti tersedia. Model eksekusi membeli di ask (setengah spread di atas close); total biayanya sama dengan model benchmark, jadi kedua net berbeda kurang dari 0,02pp pada setiap sinyal — spread sudah sepenuhnya diperhitungkan. Funding tidak termasuk dalam net (batas terukur Oktober di catatan funding).",
       "rail.missed": "Peluang Terlewat",
-      "sec.missed.kicker": "12 — Peluang Terlewat",
+      "sec.missed.kicker": "13 — Peluang Terlewat",
       "sec.missed.title": "Agent 08 — Peluang Terlewat",
       "sec.missed.sub": "Kontrak eligible yang tidak pernah memberi sinyal tapi kemudian naik — gate mana yang memblokirnya, seberapa jauh dari threshold, dan apa yang akan ditambahkan bila satu gate dihapus atau dilonggarkan, winner DAN loser sekaligus. Dampak counterfactual hanya dalam gross return +4H: spread non-sinyal tidak terukur, jadi net tidak pernah dihitung di sini. Cakupan hanya close v2.1.2 (sejak 22 Nov 15:00 WIB).",
       "panel.missedOverview": "Gambaran peluang terlewat",
@@ -801,7 +977,7 @@
       "missed.hypNote": "Verdict MH berbasis gap pada close in-sample (flood dan sesudahnya — termasuk close dari sebelum hipotesis dibekukan, jadi ini deskriptif, bukan validasi prospektif). MH1 dan MH3 masih menunggu cukup data; MH2 tidak holds — hanya sekitar seperempat winner validasi in-sample yang diblokir satu gate saja.",
       "missed.recoNote": "Semua rekomendasi missed masih INSUFFICIENT EVIDENCE di v1.0.0 — atribusi hanya mencakup close v2.1.2 dan hipotesis MH1–MH3 belum tervalidasi prospektif.",
       "rail.validation": "Validasi Independen",
-      "sec.validation.kicker": "13 — Validasi Independen",
+      "sec.validation.kicker": "14 — Validasi Independen",
       "sec.validation.title": "Agent 10 — Validasi Strategi Independen",
       "sec.validation.sub": "Agent ini mengaudit proses riset itu sendiri — look-ahead bias, data leakage, survivorship bias, selection bias, overfitting, multiple testing, sensitivitas parameter, walk-forward validation, validasi prospektif, ketergantungan klaster, dan reproduksibilitas. Ia tidak pernah memblokir sinyal produksi; ia menilai seberapa jauh kesimpulan riset bisa dipercaya.",
       "panel.valSummary": "Ringkasan validasi",
@@ -1299,6 +1475,7 @@
     renderRideTheWave();
     renderExit();
     renderJoint();
+    renderForwardTest();
     renderRisk();
     renderIgnition();
     renderMissed();
@@ -3024,10 +3201,64 @@
         t("exit.hypNote") + "</p>";
   }
 
+  /* Evidence badges (v1.2.0+): three levels, never mixed.
+     historical = frozen descriptive/in-sample data (green);
+     exploratory = forward observations, no frozen formal validation
+     (amber); formal-none = no formal validation exists yet (red);
+     insufficient = sample too small for any conclusion (red). */
+  function evidenceBadge(level) {
+    var map = {
+      historical: ["st-completed", "ev.historical"],
+      exploratory: ["st-partial", "ev.exploratory"],
+      "formal-none": ["st-unavailable", "ev.formalNone"],
+      insufficient: ["st-unavailable", "ev.insufficient"]
+    };
+    var m = map[level] || map.historical;
+    return '<span class="status-badge ' + m[0] + '">' +
+      esc(t(m[1])) + "</span>";
+  }
+  /* Exit strategy identities (binding, RULES/exit research):
+     E0 Hold, E13 TP+0.5%, E14 TP+1%, E1 TP+2%, E4 TP+10%,
+     E5 TP+15%, E11 Partial Exit, E18 Structure SL. */
+  var EXIT_LABELS = {
+    E0: "Hold", E13: "TP +0.5%", E14: "TP +1%", E1: "TP +2%",
+    E4: "TP +10%", E5: "TP +15%", E11: "Partial Exit",
+    E18: "Structure SL"
+  };
+  function exitLabel(id) {
+    return id + " — " + (EXIT_LABELS[id] || id);
+  }
+  /* Full WIB timestamp (day + month + year + time), for frozen
+     cutoffs where the year matters. fmtWib omits the year. */
+  function fmtTs(ts) {
+    if (ts == null) return null;
+    try {
+      return new Intl.DateTimeFormat(lang() === "id" ? "id-ID" : "en-GB", {
+        timeZone: "Asia/Jakarta", day: "2-digit", month: "short",
+        year: "numeric", hour: "2-digit", minute: "2-digit",
+        hour12: false
+      }).format(new Date(ts * 1000));
+    } catch (e) { return null; }
+  }
+  /* Consistency-matrix labels (v1.2.0 feature_consistency). */
+  var MATRIX_FEATURES = ["atr_pctile", "upper_wick_pct", "body_to_range"];
+  var MATRIX_FEATURE_KEYS = {
+    atr_pctile: "mx.featAtr", upper_wick_pct: "mx.featWick",
+    body_to_range: "mx.featBody"
+  };
+  var MATRIX_SLICES = ["pooled", "ex_flood", "close_weighted",
+    "crypto", "saham", "prospective"];
+  var MATRIX_SLICE_KEYS = {
+    pooled: "mx.slicePooled", ex_flood: "mx.sliceExFlood",
+    close_weighted: "mx.sliceCloseW", crypto: "mx.sliceCrypto",
+    saham: "mx.sliceSaham", prospective: "mx.sliceProspective"
+  };
+
   function renderJoint() {
     var JN = ((DATA.learnings || {}).joint_research) || null;
     var ids = ["joint-perconfig", "joint-candidates",
-               "joint-hypotheses", "joint-recommendations"];
+               "joint-hypotheses", "joint-recommendations",
+               "joint-exits", "joint-qvf"];
     if (!JN || JN.status === "ERROR") {
       ids.forEach(function (id) {
         var el = $(id);
@@ -3140,6 +3371,395 @@
       '<ul class="missing-list">' + recos + "</ul>" +
       "<p class='panel-sub' style='margin-top:12px'>" +
         t("joint.recoNote") + "</p>";
+
+    /* A0 vs A4 exit profitability — per-config exits (v1.2.0).
+       Historical (replay) data only; never mixed with forward. */
+    var PE = JN.per_config_exits || [];
+    var pfCellJ = function (v) {
+      if (v == null) return "—";
+      if (typeof v === "number") return nm(v, 2);
+      return esc(String(v));
+    };
+    var th = function (k) { return "<th>" + esc(t(k)) + "</th>"; };
+    if (!PE.length) {
+      $("joint-exits").innerHTML =
+        '<p class="panel-sub" style="margin:0">' +
+        t("joint.notYet") + "</p>";
+    } else {
+      var perfRows = PE.map(function (e) {
+        var h = e.h4 || {};
+        return "<tr><td>" + esc(e.entry_config || "") + "</td>" +
+          "<td>" + esc(exitLabel(e.exit_strategy || "")) + "</td>" +
+          "<td>" + (e.n_signals == null ? "—" : e.n_signals) +
+          "</td>" +
+          "<td>" + (h.n_closes == null ? "—" : h.n_closes) +
+          "</td>" +
+          "<td>" + pc(h.mean_net_rt_pct) + "</td>" +
+          "<td>" + pc(h.median_net_rt_pct) + "</td>" +
+          "<td>" + (h.pct_positive_net_rt == null ? "—" :
+            nm(h.pct_positive_net_rt, 1) + "%") + "</td>" +
+          "<td>" + pfCellJ(h.profit_factor) + "</td>" +
+          "<td>" + (h.close_consistency_pct == null ? "—" :
+            nm(h.close_consistency_pct, 1) + "%") + "</td>" +
+          "<td>" + (h.max_drawdown_pp == null ? "—" :
+            nm(h.max_drawdown_pp, 1)) + "</td></tr>";
+      }).join("");
+      var outRows = PE.map(function (e) {
+        var o = e.outcomes_h4 || {};
+        var ol = e.outlier_h4 || {};
+        var ag = (e.agg_h4 || {}).close_weighted || {};
+        var dc = e.discovery_h4 || {};
+        var vc = e.validation_h4 || {};
+        return "<tr><td>" + esc(e.entry_config || "") + "</td>" +
+          "<td>" + esc(exitLabel(e.exit_strategy || "")) + "</td>" +
+          "<td>" + (o.tp_first_n == null ? "—" : o.tp_first_n) +
+          "</td>" +
+          "<td>" + (o.sl_first_n == null ? "—" : o.sl_first_n) +
+          "</td>" +
+          "<td>" + (o.neither_n == null ? "—" : o.neither_n) +
+          "</td>" +
+          "<td>" + (o.ambiguous_n == null ? "—" : o.ambiguous_n) +
+          "</td>" +
+          "<td>" + (ol.top1_share_of_positive_sum_pct == null ?
+            "—" : nm(ol.top1_share_of_positive_sum_pct, 1) + "%") +
+          "</td>" +
+          "<td>" + pc(e.median_mfe_h4_pct) + "</td>" +
+          "<td>" + pc(e.median_mae_h4_pct) + "</td>" +
+          "<td>" + pc(ag.mean_net_rt_pct) + "</td>" +
+          "<td>" + pc(dc.mean_net_rt_pct) + "</td>" +
+          "<td>" + pc(vc.mean_net_rt_pct) + "</td></tr>";
+      }).join("");
+      $("joint-exits").innerHTML =
+        "<p class='panel-sub' style='margin:0 0 12px'>" +
+        evidenceBadge("historical") + " " +
+        esc(t("ev.historicalNote")) + "</p>" +
+        "<p class='panel-sub' style='margin:0 0 6px'><strong>" +
+        esc(t("jx.perfTitle")) + "</strong></p>" +
+        '<div style="overflow-x:auto"><table class="version-table">' +
+        "<thead><tr>" + th("jx.config") + th("jx.exit") +
+        th("mx.n") + th("mx.closes") + th("mx.mean") +
+        th("mx.median") + th("mx.positive") + th("mx.pf") +
+        th("jx.closeCons") + th("jx.maxDd") +
+        "</tr></thead><tbody>" + perfRows + "</tbody></table></div>" +
+        "<p class='panel-sub' style='margin:14px 0 6px'><strong>" +
+        esc(t("jx.outTitle")) + "</strong></p>" +
+        '<div style="overflow-x:auto"><table class="version-table">' +
+        "<thead><tr>" + th("jx.config") + th("jx.exit") +
+        th("jx.tpFirst") + th("jx.slFirst") + th("jx.neither") +
+        th("jx.ambig") + th("jx.top1") + th("mx.mfe") +
+        th("mx.mae") + th("jx.cwMean") + th("jx.discMean") +
+        th("jx.valMean") +
+        "</tr></thead><tbody>" + outRows + "</tbody></table></div>" +
+        "<p class='panel-sub' style='margin-top:12px'>" +
+        esc(JN.per_config_exits_note || "") + "</p>" +
+        "<p class='panel-sub' style='margin-top:12px'>" +
+        esc(t("jx.ddNote")) + "</p>";
+    }
+
+    /* Quality vs frequency — A0 vs A4 (v1.2.0). Historical
+       (replay) data only; frequency counts every close in the
+       union, including closes with zero signals. */
+    var QV = JN.quality_vs_frequency || null;
+    if (!QV || !QV.distribution) {
+      $("joint-qvf").innerHTML =
+        '<p class="panel-sub" style="margin:0">' +
+        t("joint.notYet") + "</p>";
+    } else {
+      var dist = QV.distribution || {};
+      var qvRows = ["A0", "A4"].map(function (cfg) {
+        var d = dist[cfg] || {};
+        return "<tr><td>" + cfg + "</td>" +
+          "<td>" + (d.n_signals == null ? "—" : d.n_signals) +
+          "</td>" +
+          "<td>" + nm(d.mean_per_close, 2) + "</td>" +
+          "<td>" + nm(d.median_per_close, 1) + "</td>" +
+          "<td>" + (d.max_per_close == null ? "—" :
+            d.max_per_close) + "</td>" +
+          "<td>" + (d.n_closes_with_signals == null ? "—" :
+            d.n_closes_with_signals) + "</td>" +
+          "<td>" + (d.n_closes_zero == null ? "—" :
+            d.n_closes_zero) + "</td></tr>";
+      }).join("");
+      var to = QV.trade_off_a4_vs_a0 || {};
+      var toRows = [
+        [t("qv.cont"), to.continuation_rate_a0_pct,
+          to.continuation_rate_a4_pct],
+        [t("qv.mean"), to.mean_net_a0_pct, to.mean_net_a4_pct],
+        [t("qv.median"), to.median_net_a0_pct, to.median_net_a4_pct],
+        [t("qv.cwMean"), to.close_weighted_mean_net_a0_pct,
+          to.close_weighted_mean_net_a4_pct],
+        [t("qv.exMean"), to.ex_flood_mean_net_a0_pct,
+          to.ex_flood_mean_net_a4_pct]
+      ].map(function (row) {
+        return "<li><span>" + esc(row[0]) + "</span>" +
+          "<span class='num'>A0 " + pc(row[1]) + " → A4 " +
+          pc(row[2]) + "</span></li>";
+      }).join("");
+      $("joint-qvf").innerHTML =
+        "<p class='panel-sub' style='margin:0 0 12px'>" +
+        evidenceBadge("historical") + " " +
+        esc(t("ev.historicalNote")) + "</p>" +
+        '<div style="overflow-x:auto"><table class="version-table">' +
+        "<thead><tr>" + th("jx.config") + th("ft.signals") +
+        th("qv.meanClose") + th("qv.medianClose") +
+        th("qv.maxClose") + th("qv.withSignals") +
+        th("qv.zeroCloses") +
+        "</tr></thead><tbody>" + qvRows + "</tbody></table></div>" +
+        '<ul class="missing-list">' +
+        "<li><span>" + esc(t("qv.union")) + "</span>" +
+        "<span class='num'>" +
+        (QV.n_closes_union == null ? "—" : QV.n_closes_union) +
+        "</span></li>" +
+        "<li><span>" + esc(t("qv.freqRatio")) + "</span>" +
+        "<span class='num'>" + nm(to.frequency_ratio, 3) +
+        "</span></li>" +
+        "<li><span>" + esc(t("qv.freqChange")) + "</span>" +
+        "<span class='num'>" + pc(to.frequency_change_pct, 1) +
+        "</span></li>" +
+        "</ul>" +
+        "<p class='panel-sub' style='margin:14px 0 6px'><strong>" +
+        esc(t("qv.tradeoffTitle")) + "</strong></p>" +
+        '<ul class="missing-list">' + toRows + "</ul>" +
+        "<p class='panel-sub' style='margin-top:12px'>" +
+        esc(bi(to.note, to.note_en) || "") + "</p>";
+    }
+  }
+
+  /* ------------------------------------------- forward test (v1.2.0) */
+  function renderForwardTest() {
+    var FT = ((DATA.learnings || {}).forward_test) || null;
+    var ids = ["forwardtest-overview", "forwardtest-groups",
+               "forwardtest-perclose", "forwardtest-splits",
+               "forwardtest-exits"];
+    if (!FT || FT.status === "ERROR" || FT.status === "not yet") {
+      ids.forEach(function (id) {
+        var el = $(id);
+        if (el) el.innerHTML = '<p class="panel-sub" style="margin:0">' +
+          t("ft.notYet") + "</p>";
+      });
+      return;
+    }
+    var pc = function (v, dec) {
+      return v == null ? "—" : fmtPct(v, dec == null ? 2 : dec);
+    };
+    var nm = function (v, dec) {
+      return v == null ? "—" : fmtNum(v, dec == null ? 1 : dec);
+    };
+    var pfCell = function (v) {
+      if (v == null) return "—";
+      if (typeof v === "number") return nm(v, 2);
+      return esc(String(v));
+    };
+    var th = function (k) { return "<th>" + esc(t(k)) + "</th>"; };
+    var GROUP_ORDER = ["A0", "A4", "A4_ATR_expanded"];
+    var GROUP_NAMES = { A0: "A0", A4: "A4",
+      A4_ATR_expanded: "A4 + ATR Expanded" };
+
+    /* Setup & evidence — cutoff, freeze, closes, formal status. */
+    var fv = FT.formal_validation || {};
+    $("forwardtest-overview").innerHTML =
+      "<p class='panel-sub' style='margin:0 0 12px'>" +
+      evidenceBadge("exploratory") + " " +
+      esc(t("ev.exploratoryNote")) + "</p>" +
+      '<ul class="missing-list">' +
+      "<li><span>" + esc(t("ft.cutoff")) + "</span>" +
+      "<span class='num'>" +
+      (fmtTs(FT.cutoff_close_ts) == null ? "—" :
+        esc(fmtTs(FT.cutoff_close_ts))) + "</span></li>" +
+      "<li><span>" + esc(t("ft.frozen")) + "</span>" +
+      "<span class='num'>" +
+      (fmtTs(FT.candidate_frozen_ts) == null ? "—" :
+        esc(fmtTs(FT.candidate_frozen_ts))) + "</span></li>" +
+      "<li><span>" + esc(t("ft.fwdCloses")) + "</span>" +
+      "<span class='num'>" +
+      (FT.n_forward_closes == null ? "—" : FT.n_forward_closes) +
+      "</span></li>" +
+      "<li><span>" + esc(t("ft.formal")) + "</span>" +
+      "<span class='num'>" + evidenceBadge("formal-none") +
+      "</span></li>" +
+      "</ul>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+      esc(FT.cutoff_note || "") + "</p>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+      esc(FT.candidate_note || "") + "</p>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+      esc(FT.evidence_note || "") + "</p>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+      esc(fv.note || "") + "</p>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+      esc(t("ev.formalNote")) + "</p>";
+
+    /* Groups — forward-only comparison. Numbers are shown with an
+       INSUFFICIENT DATA badge when the group is too small; no
+       conclusion is drawn from such rows. */
+    var grpCell = function (g, key, isPct, dec) {
+      var v = g[key];
+      if (v == null) return "<td>—</td>";
+      return "<td>" + (isPct ? pc(v, dec) : nm(v, dec)) + "</td>";
+    };
+    var grpRows = GROUP_ORDER.map(function (k) {
+      var g = (FT.groups || {})[k] || {};
+      var badge = g.status === "insufficient_data" ?
+        " " + evidenceBadge("insufficient") : "";
+      return "<tr><td>" + esc(GROUP_NAMES[k] || k) + badge +
+        "</td>" +
+        "<td>" + (g.n_signals_total == null ? "—" :
+          g.n_signals_total) + "</td>" +
+        "<td>" + (g.n_mature_h4 == null ? "—" : g.n_mature_h4) +
+        "</td>" +
+        "<td>" + (g.n_pending_h4 == null ? "—" : g.n_pending_h4) +
+        "</td>" +
+        "<td>" + (g.n_closes_with_signals == null ? "—" :
+          g.n_closes_with_signals) + "</td>" +
+        "<td>" + (g.net_return_coverage_pct == null ? "—" :
+          nm(g.net_return_coverage_pct, 1) + "%") + "</td>" +
+        grpCell(g, "continuation_rate_pct", true, 1) +
+        grpCell(g, "mean_net_pct", true, 2) +
+        grpCell(g, "median_net_pct", true, 2) +
+        grpCell(g, "positive_net_rate_pct", true, 1) +
+        "<td>" + pfCell(g.profit_factor) + "</td>" +
+        grpCell(g, "median_mfe_pct", true, 2) +
+        grpCell(g, "median_mae_pct", true, 2) +
+        grpCell(g, "tp_before_sl_1pct_pct", true, 1) +
+        "<td>" + (g.signals_per_close_all_fwd_closes == null ?
+          "—" : nm(g.signals_per_close_all_fwd_closes, 2)) +
+        "</td>" +
+        "<td>" + (g.zero_signal_fwd_closes == null ? "—" :
+          g.zero_signal_fwd_closes) + "</td></tr>";
+    }).join("");
+    var cwRows = GROUP_ORDER.map(function (k) {
+      var g = (FT.groups || {})[k] || {};
+      var cw = g.close_weighted || {};
+      return "<tr><td>" + esc(GROUP_NAMES[k] || k) + "</td>" +
+        "<td>" + pc(cw.continuation_rate_pct, 1) + "</td>" +
+        "<td>" + pc(cw.mean_net_pct) + "</td>" +
+        "<td>" + pc(cw.median_net_pct) + "</td>" +
+        "<td>" + pc(cw.positive_net_rate_pct, 1) + "</td>" +
+        "<td>" + pfCell(cw.profit_factor) + "</td></tr>";
+    }).join("");
+    $("forwardtest-groups").innerHTML =
+      "<p class='panel-sub' style='margin:0 0 12px'>" +
+      evidenceBadge("exploratory") + " " +
+      esc(t("ev.exploratoryNote")) + "</p>" +
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr>" + th("ft.group") + th("ft.signals") +
+      th("ft.mature") + th("ft.pending") + th("mx.closes") +
+      th("mx.coverage") + th("mx.cont") + th("mx.mean") +
+      th("mx.median") + th("mx.positive") + th("mx.pf") +
+      th("mx.mfe") + th("mx.mae") + th("mx.tp1") +
+      th("mx.freq") + th("qv.zeroCloses") +
+      "</tr></thead><tbody>" + grpRows + "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin:14px 0 6px'><strong>" +
+      esc(t("ft.cwTitle")) + "</strong></p>" +
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr>" + th("ft.group") + th("mx.cont") +
+      th("mx.mean") + th("mx.median") + th("mx.positive") +
+      th("mx.pf") +
+      "</tr></thead><tbody>" + cwRows + "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+      esc(t("ft.groupsNote")) + "</p>";
+
+    /* Per-close performance (forward only, mature closes). */
+    var pcRows = [];
+    GROUP_ORDER.forEach(function (k) {
+      var g = (FT.groups || {})[k] || {};
+      (g.per_close || []).forEach(function (r) {
+        pcRows.push({ ts: r.close_ts, grp: k, r: r });
+      });
+    });
+    pcRows.sort(function (a, b) {
+      if (a.ts !== b.ts) return a.ts - b.ts;
+      return GROUP_ORDER.indexOf(a.grp) - GROUP_ORDER.indexOf(b.grp);
+    });
+    var pcHtml = pcRows.map(function (o) {
+      var r = o.r;
+      return "<tr><td>" + (fmtTs(o.ts) == null ? "—" :
+        esc(fmtTs(o.ts))) + "</td>" +
+        "<td>" + esc(GROUP_NAMES[o.grp] || o.grp) + "</td>" +
+        "<td>" + (r.n == null ? "—" : r.n) + "</td>" +
+        "<td>" + (r.n_net == null ? "—" : r.n_net) + "</td>" +
+        "<td>" + pc(r.continuation_rate_pct, 1) + "</td>" +
+        "<td>" + pc(r.mean_net_pct) + "</td>" +
+        "<td>" + pc(r.median_net_pct) + "</td>" +
+        "<td>" + pc(r.positive_net_rate_pct, 1) + "</td></tr>";
+    }).join("");
+    $("forwardtest-perclose").innerHTML =
+      (pcHtml ? '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr>" + th("ft.close") + th("ft.group") +
+      th("mx.n") + th("mx.nNet") + th("mx.cont") + th("mx.mean") +
+      th("mx.median") + th("mx.positive") +
+      "</tr></thead><tbody>" + pcHtml + "</tbody></table></div>" :
+      '<p class="panel-sub" style="margin:0">' +
+      evidenceBadge("insufficient") + "</p>") +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+      esc(t("ft.pendingNote")) + "</p>";
+
+    /* CRYPTO vs SAHAM split of A4 + ATR Expanded (forward). */
+    var splitRows = [
+      ["CRYPTO", FT.a4_atr_expanded_crypto || {}],
+      ["SAHAM", FT.a4_atr_expanded_saham || {}]
+    ].map(function (pair) {
+      var name = pair[0];
+      var g = pair[1];
+      var badge = g.status === "insufficient_data" ?
+        " " + evidenceBadge("insufficient") : "";
+      return "<tr><td>" + name + badge + "</td>" +
+        "<td>" + (g.n_signals_total == null ? "—" :
+          g.n_signals_total) + "</td>" +
+        "<td>" + (g.n_closes_with_signals == null ? "—" :
+          g.n_closes_with_signals) + "</td>" +
+        "<td>" + pc(g.continuation_rate_pct, 1) + "</td>" +
+        "<td>" + pc(g.mean_net_pct) + "</td>" +
+        "<td>" + pc(g.median_net_pct) + "</td>" +
+        "<td>" + pc(g.positive_net_rate_pct, 1) + "</td>" +
+        "<td>" + pfCell(g.profit_factor) + "</td>" +
+        "<td>" + pc(g.median_mfe_pct) + "</td>" +
+        "<td>" + pc(g.median_mae_pct) + "</td>" +
+        "<td>" + pc(g.tp_before_sl_1pct_pct, 1) + "</td></tr>";
+    }).join("");
+    $("forwardtest-splits").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr><th>" + esc(t("ft.group")) + "</th>" +
+      th("ft.signals") + th("mx.closes") + th("mx.cont") +
+      th("mx.mean") + th("mx.median") + th("mx.positive") +
+      th("mx.pf") + th("mx.mfe") + th("mx.mae") + th("mx.tp1") +
+      "</tr></thead><tbody>" + splitRows + "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+      esc(t("ft.splitNote")) + "</p>";
+
+    /* Forward exits — E0 vs E5 vs E18 on A4 and A4 + ATR Expanded. */
+    var exRows = [];
+    ["A4", "A4_ATR_expanded"].forEach(function (k) {
+      var ex = ((FT.exits_forward || {})[k] || {}).exits || {};
+      ["E0", "E5", "E18"].forEach(function (sid) {
+        var s = ex[sid] || {};
+        exRows.push("<tr><td>" + esc(GROUP_NAMES[k] || k) +
+          "</td>" +
+          "<td>" + esc(exitLabel(sid)) + "</td>" +
+          "<td>" + (s.n == null ? "—" : s.n) + "</td>" +
+          "<td>" + pc(s.mean_net_pct) + "</td>" +
+          "<td>" + pc(s.median_net_pct) + "</td>" +
+          "<td>" + pc(s.positive_rate_pct, 1) + "</td>" +
+          "<td>" + (s.tp_first_n == null ? "—" : s.tp_first_n) +
+          "</td>" +
+          "<td>" + (s.sl_first_n == null ? "—" : s.sl_first_n) +
+          "</td>" +
+          "<td>" + (s.neither_n == null ? "—" : s.neither_n) +
+          "</td>" +
+          "<td>" + (s.ambiguous_n == null ? "—" : s.ambiguous_n) +
+          "</td></tr>");
+      });
+    });
+    $("forwardtest-exits").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr>" + th("ft.group") + th("jx.exit") +
+      th("mx.n") + th("mx.mean") + th("mx.median") +
+      th("mx.positive") + th("jx.tpFirst") + th("jx.slFirst") +
+      th("jx.neither") + th("jx.ambig") +
+      "</tr></thead><tbody>" + exRows.join("") +
+      "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+      esc(t("ft.exitsNote")) + "</p>";
   }
 
   function renderRisk() {
@@ -3431,7 +4051,8 @@
                "ignition-features", "ignition-nextcandle",
                "ignition-pump", "ignition-structure",
                "ignition-hypotheses", "ignition-hypotheses-ph",
-               "ignition-entry", "ignition-recommendations"];
+               "ignition-entry", "ignition-recommendations",
+               "ignition-matrix"];
     if (!IG || IG.status === "ERROR") {
       ids.forEach(function (id) {
         var el = $(id);
@@ -3730,6 +4351,81 @@
       '<ul class="missing-list">' + recos + "</ul>" +
       "<p class='panel-sub' style='margin-top:12px'>" +
         t("ign.recoNote") + "</p>";
+
+    /* Entry quality consistency matrix — three priority
+       characteristics x six slices (v1.2.0 feature_consistency).
+       Historical (replay) data only; never mixed with forward. */
+    var FC = IG.feature_consistency || null;
+    if (!FC || !FC.features) {
+      $("ignition-matrix").innerHTML =
+        '<p class="panel-sub" style="margin:0">' +
+        t("ign.notYet") + "</p>";
+    } else {
+      var mxTh = function (k) { return "<th>" + esc(t(k)) + "</th>"; };
+      var mxRows = MATRIX_FEATURES.map(function (f) {
+        var fd = (FC.features || {})[f] || {};
+        var featLabel = t(MATRIX_FEATURE_KEYS[f] || f);
+        return (fd.buckets || []).map(function (b) {
+          return MATRIX_SLICES.map(function (sn) {
+            var s = (b.slices || {})[sn] || {};
+            var st = s.status;
+            var badge = st === "insufficient_data" ?
+              " " + evidenceBadge("insufficient") : "";
+            var cell = function (v, isPct, dec) {
+              if (st === "unavailable" || v == null) {
+                return "<td>—</td>";
+              }
+              return "<td>" + (isPct ? pc(v, dec) : nm(v, dec)) +
+                "</td>";
+            };
+            return "<tr><td>" + esc(featLabel) + "</td>" +
+              "<td>" + esc(String(b.bucket)) + "</td>" +
+              "<td>" + esc(t(MATRIX_SLICE_KEYS[sn] || sn)) +
+              badge + "</td>" +
+              "<td>" + (s.n == null ? "—" : s.n) + "</td>" +
+              "<td>" + (s.n_closes == null ? "—" : s.n_closes) +
+              "</td>" +
+              "<td>" + (st === "unavailable" ||
+                s.coverage_pct == null ? "—" :
+                nm(s.coverage_pct, 1) + "%") + "</td>" +
+              cell(s.signals_per_close, false, 2) +
+              cell(s.continuation_rate_pct, true, 1) +
+              cell(s.mean_net_rt_pct, true, 2) +
+              cell(s.median_net_rt_pct, true, 2) +
+              cell(s.positive_net_rate_pct, true, 1) +
+              cell(s.tp_before_sl_1pct_pct, true, 1) +
+              cell(s.median_mfe_pct, true, 2) +
+              cell(s.median_mae_pct, true, 2) +
+              "<td>" + (st === "unavailable" ?
+                "—" : pfCell(s.profit_factor)) + "</td></tr>";
+          }).join("");
+        }).join("");
+      }).join("");
+      var mxNotes = (FC.notes || []).map(function (note, i) {
+        var txt = i === 0 ? bi(note, FC.note_en) : note;
+        return "<p class='panel-sub' style='margin-top:12px'>" +
+          esc(txt || "") + "</p>";
+      }).join("");
+      var mxExcl = FC.excluded_from_crypto_saham || {};
+      $("ignition-matrix").innerHTML =
+        "<p class='panel-sub' style='margin:0 0 12px'>" +
+        evidenceBadge("historical") + " " +
+        esc(t("ev.historicalNote")) + "</p>" +
+        '<div style="overflow-x:auto"><table class="version-table">' +
+        "<thead><tr>" + mxTh("mx.feature") + mxTh("mx.bucket") +
+        mxTh("mx.slice") + mxTh("mx.n") + mxTh("mx.closes") +
+        mxTh("mx.coverage") + mxTh("mx.freq") + mxTh("mx.cont") +
+        mxTh("mx.mean") + mxTh("mx.median") + mxTh("mx.positive") +
+        mxTh("mx.tp1") + mxTh("mx.mfe") + mxTh("mx.mae") +
+        mxTh("mx.pf") +
+        "</tr></thead><tbody>" + mxRows + "</tbody></table></div>" +
+        mxNotes +
+        "<p class='panel-sub' style='margin-top:12px'>" +
+        esc(mxExcl.note || "") +
+        (mxExcl.n_other_traditional != null ?
+          " (other_traditional: " + mxExcl.n_other_traditional +
+          ", uncertain: " + mxExcl.n_uncertain + ")" : "") + "</p>";
+    }
   }
 
   /* --------------------------------------------------- missed (v48) */

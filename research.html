@@ -27,6 +27,7 @@
     <a class="rail-link" href="#ridethewave" data-section="ridethewave" aria-label="Ride the Wave" title="Ride the Wave"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17c3-6 6-9 9-9s6 3 9 9"/><path d="M12 8V3"/></svg><span data-i18n="rail.ridethewave">Ride the Wave</span></a>
     <a class="rail-link" href="#exit" data-section="exit" aria-label="Take Profit &amp; Exit" title="Take Profit &amp; Exit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v10"/><path d="M7 8l5-5 5 5"/><path d="M4 21h16"/></svg><span data-i18n="rail.exit">Take Profit &amp; Exit</span></a>
     <a class="rail-link" href="#joint" data-section="joint" aria-label="Joint Entry &amp; Exit" title="Joint Entry &amp; Exit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16"/><path d="M12 4v16"/></svg><span data-i18n="rail.joint">Joint Entry &amp; Exit</span></a>
+    <a class="rail-link" href="#forwardtest" data-section="forwardtest" aria-label="Forward Testing" title="Forward Testing"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16"/><path d="M13 5l7 7-7 7"/></svg><span data-i18n="rail.forwardtest">Forward Testing</span></a>
     <a class="rail-link" href="#risk" data-section="risk" aria-label="Risk &amp; Portfolio" title="Risk &amp; Portfolio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg><span data-i18n="rail.risk">Risk &amp; Portfolio</span></a>
     <a class="rail-link" href="#ignition" data-section="ignition" aria-label="Pump Ignition" title="Pump Ignition"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c1.5 3 4 4.5 4 8a4 4 0 0 1-8 0c0-1.5.7-2.6 1.6-3.6.4 1.2 1.2 1.8 1.9 1.8 0-2.2.1-4.2.5-6.2z"/><path d="M12 21a3 3 0 0 0 3-3"/></svg><span data-i18n="rail.ignition">Pump Ignition</span></a>
     <a class="rail-link" href="#missed" data-section="missed" aria-label="Missed Opportunity" title="Missed Opportunity"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M1 12h4M19 12h4"/></svg><span data-i18n="rail.missed">Missed Opportunity</span></a>
@@ -492,6 +493,14 @@
         <h3 data-i18n="panel.jointCandidates">Joint candidates J0–J8 (+4H primary)</h3>
         <div id="joint-candidates"></div>
       </div>
+      <div class="panel card">
+        <h3 data-i18n="panel.jointExits">A0 vs A4 exit profitability (+4H)</h3>
+        <div id="joint-exits"></div>
+      </div>
+      <div class="panel card">
+        <h3 data-i18n="panel.jointQvf">Quality vs frequency — A0 vs A4</h3>
+        <div id="joint-qvf"></div>
+      </div>
       <div class="panel-grid">
         <div class="panel card">
           <h3 data-i18n="panel.jointHyps">Joint hypotheses (frozen, awaiting new closes)</h3>
@@ -504,10 +513,40 @@
       </div>
     </section>
 
+    <section id="forwardtest" class="section">
+      <div class="section-head">
+        <p class="section-kicker" data-i18n="sec.forwardtest.kicker">10 — Forward Testing</p>
+        <h2 data-i18n="sec.forwardtest.title">Forward Testing — A0 vs A4 vs A4 + ATR Expanded</h2>
+        <p class="section-sub" data-i18n="sec.forwardtest.sub">New 4H closes after the historical research cutoff, judged with frozen thresholds and definitions — no re-optimization on new signals. A4 + ATR percentile expanded is the main research candidate; A0 is the production baseline and A4 + HOLD is the exit comparison. Forward results are exploratory observations, not formal validation.</p>
+      </div>
+      <div class="panel card">
+        <h3 data-i18n="panel.ftSetup">Forward test — setup &amp; evidence</h3>
+        <div id="forwardtest-overview"></div>
+      </div>
+      <div class="panel card">
+        <h3 data-i18n="panel.ftGroups">Forward results — A0 vs A4 vs A4 + ATR Expanded (+4H)</h3>
+        <div id="forwardtest-groups"></div>
+      </div>
+      <div class="panel card">
+        <h3 data-i18n="panel.ftPerClose">Performance per close (forward only)</h3>
+        <div id="forwardtest-perclose"></div>
+      </div>
+      <div class="panel-grid">
+        <div class="panel card">
+          <h3 data-i18n="panel.ftSplits">A4 + ATR Expanded — CRYPTO vs SAHAM</h3>
+          <div id="forwardtest-splits"></div>
+        </div>
+        <div class="panel card">
+          <h3 data-i18n="panel.ftExits">Forward exits — E0 vs E5 vs E18 (+4H)</h3>
+          <div id="forwardtest-exits"></div>
+        </div>
+      </div>
+    </section>
+
     <section id="risk" class="section">
       <div class="section-head">
         <div class="agent-char agent-char--head" data-agent="12" aria-hidden="true"></div>
-        <p class="section-kicker" data-i18n="sec.risk.kicker">10 — Risk &amp; Portfolio</p>
+        <p class="section-kicker" data-i18n="sec.risk.kicker">11 — Risk &amp; Portfolio</p>
         <h2 data-i18n="sec.risk.title">Agent 12 — Risk &amp; Portfolio Intelligence</h2>
         <p class="section-sub" data-i18n="sec.risk.sub">What a strategy risks, not just what it wins — and what happens when many LONG signals fire at once. Portfolio curves are research simulations (simple cumulative sums of per-close returns, no compounding), not real trading results. Two sizing variants are compared on the same signals: fixed-notional (1 unit per signal, exposure grows with the batch) vs fixed-capital (1 unit per close, split equally). Risk of ruin is not computed — block bootstrap needs at least 60 closes, and there are only 30 so far. Everything here is research — nothing sizes a real position or sets real leverage.</p>
       </div>
@@ -558,7 +597,7 @@
     <section id="ignition" class="section">
       <div class="section-head">
         <div class="agent-char agent-char--head" data-agent="07" aria-hidden="true"></div>
-        <p class="section-kicker" data-i18n="sec.ignition.kicker">11 — Pump Ignition</p>
+        <p class="section-kicker" data-i18n="sec.ignition.kicker">12 — Pump Ignition</p>
         <h2 data-i18n="sec.ignition.title">Agent 07 — Pump Ignition & Continuation</h2>
         <p class="section-sub" data-i18n="sec.ignition.sub">What the pre-entry picture looks like before a signal fires — squeeze, Bollinger Band width, ATR contraction, volume acceleration, price compression, momentum acceleration, and pre-breakout open interest — measured only on bars before the signal close, never after. The goal is not the biggest pump: it is the entry that is immediately followed by a rise, so a realistic small TP is reached more often. Every number here is descriptive — one close (the 23 Nov flood) dominates the sample, and hypotheses IH1–IH6 are frozen and awaiting prospective closes. v1.1.0 adds the first pump candle itself: pump strength (open-to-close, vs ATR, vs the contract's own history), candle structure (body, wicks, close position, previous candle, exhaustion), and six separated next-candle rates — bullish close, positive gross, positive net, TP-before-SL, continuation failure, and reversal — with pooled, close-weighted, and ex-flood views. Hypotheses PH1–PH6 are frozen alongside IH1–IH6.</p>
       </div>
@@ -612,12 +651,16 @@
           <div id="ignition-recommendations"></div>
         </div>
       </div>
+      <div class="panel card">
+        <h3 data-i18n="panel.ignMatrix">Entry quality consistency matrix — three priority characteristics</h3>
+        <div id="ignition-matrix"></div>
+      </div>
     </section>
 
     <section id="missed" class="section">
       <div class="section-head">
         <div class="agent-char agent-char--head" data-agent="08" aria-hidden="true"></div>
-        <p class="section-kicker" data-i18n="sec.missed.kicker">12 — Missed Opportunity</p>
+        <p class="section-kicker" data-i18n="sec.missed.kicker">13 — Missed Opportunity</p>
         <h2 data-i18n="sec.missed.title">Agent 08 — Missed Opportunity</h2>
         <p class="section-sub" data-i18n="sec.missed.sub">Eligible contracts that never signalled but then rose — which gate blocked them, how far they were from the threshold, and what removing or loosening one gate would have added, winners AND losers together. Counterfactual impact is in gross +4H return only: the spread of a non-signal is unmeasured, so net is never computed here. Scope is v2.1.2 closes only (from 22 Nov 15:00 WIB).</p>
       </div>
@@ -662,7 +705,7 @@
     <section id="validation" class="section">
       <div class="section-head">
         <div class="agent-char agent-char--head" data-agent="10" aria-hidden="true"></div>
-        <p class="section-kicker" data-i18n="sec.validation.kicker">13 — Independent Validation</p>
+        <p class="section-kicker" data-i18n="sec.validation.kicker">14 — Independent Validation</p>
         <h2 data-i18n="sec.validation.title">Agent 10 — Independent Strategy Validation</h2>
         <p class="section-sub" data-i18n="sec.validation.sub">This agent audits the research process itself — look-ahead bias, data leakage, survivorship bias, selection bias, overfitting, multiple testing, parameter sensitivity, walk-forward validation, prospective validation, cluster dependency, and reproducibility. It never blocks a production signal; it grades how much the research conclusions can be trusted.</p>
       </div>
