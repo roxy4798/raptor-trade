@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_ts": 1795665706.9372506,
-  "generated_wib": "26 Nov 2026, 11:01 WIB",
+  "generated_ts": 1795666007.4788814,
+  "generated_wib": "26 Nov 2026, 11:06 WIB",
   "rules_version": "v2.1.2",
   "next_close_ts": 1795680000.0,
   "source": "Binance Futures Mainnet (local)"
@@ -36,7 +36,7 @@
   "universe_total": 849,
   "signals_total": 521,
   "heartbeat_age_s": 13.0,
-  "uptime_s": 5655.4,
+  "uptime_s": 5955.5,
   "backfill_missing": 50,
   "backfill_pending": 0,
   "backfill_filled": 3360
@@ -2918,10 +2918,10 @@
  "tf_summary": {
   "horizons": {
    "h4": {
-    "n": 436,
-    "mean": -1.15004226699857,
-    "median": -1.6811108272552333,
-    "pct_positive": 22.706422018348622,
+    "n": 444,
+    "mean": -1.119393758206816,
+    "median": -1.649696217503649,
+    "pct_positive": 23.423423423423422,
     "best": {
      "symbol": "BIGTIMEUSDT",
      "value": 42.33642743943853,
@@ -2929,10 +2929,10 @@
     }
    },
    "h12": {
-    "n": 406,
-    "mean": -1.7184114311571195,
-    "median": -2.5155392589882197,
-    "pct_positive": 19.458128078817737,
+    "n": 413,
+    "mean": -1.71108470295395,
+    "median": -2.485909225749039,
+    "pct_positive": 19.612590799031477,
     "best": {
      "symbol": "MANTRAUSDT",
      "value": 53.98481973434534,
@@ -2940,10 +2940,10 @@
     }
    },
    "h1d": {
-    "n": 388,
-    "mean": -5.329126776179897,
-    "median": -5.694300949680853,
-    "pct_positive": 14.175257731958762,
+    "n": 390,
+    "mean": -5.225006841898983,
+    "median": -5.640038469589825,
+    "pct_positive": 14.358974358974358,
     "best": {
      "symbol": "BULLAUSDT",
      "value": 44.18604651162789,
@@ -2951,10 +2951,10 @@
     }
    },
    "h2d": {
-    "n": 351,
-    "mean": -9.052897498977364,
-    "median": -8.909048615957193,
-    "pct_positive": 8.547008547008547,
+    "n": 356,
+    "mean": -9.005805969148348,
+    "median": -8.903676850351482,
+    "pct_positive": 9.269662921348315,
     "best": {
      "symbol": "LISTAUSDT",
      "value": 44.18117554653751,
@@ -2962,10 +2962,10 @@
     }
    },
    "h3d": {
-    "n": 27,
-    "mean": -1.6423656793915615,
-    "median": -1.6657638136511443,
-    "pct_positive": 40.74074074074074,
+    "n": 34,
+    "mean": -1.435884582479858,
+    "median": -1.413313084271678,
+    "pct_positive": 44.11764705882353,
     "best": {
      "symbol": "BULLAUSDT",
      "value": 51.279069767441875,
@@ -5596,6 +5596,54 @@
     "close_ts": 1795636800.0,
     "close_wib": "26 Nov 03:00",
     "mean_pct": -1.1500422669985713
+   },
+   {
+    "symbol": "SSVUSDT",
+    "close_ts": 1795651200.0,
+    "close_wib": "26 Nov 07:00",
+    "mean_pct": -1.136428984038595
+   },
+   {
+    "symbol": "RUNEUSDT",
+    "close_ts": 1795651200.0,
+    "close_wib": "26 Nov 07:00",
+    "mean_pct": -1.1332112791339586
+   },
+   {
+    "symbol": "MINAUSDT",
+    "close_ts": 1795651200.0,
+    "close_wib": "26 Nov 07:00",
+    "mean_pct": -1.134305641513235
+   },
+   {
+    "symbol": "TUSDT",
+    "close_ts": 1795651200.0,
+    "close_wib": "26 Nov 07:00",
+    "mean_pct": -1.1287951228265114
+   },
+   {
+    "symbol": "AIXBTUSDT",
+    "close_ts": 1795651200.0,
+    "close_wib": "26 Nov 07:00",
+    "mean_pct": -1.1224532053855765
+   },
+   {
+    "symbol": "CATIUSDT",
+    "close_ts": 1795651200.0,
+    "close_wib": "26 Nov 07:00",
+    "mean_pct": -1.119978881037007
+   },
+   {
+    "symbol": "GPSUSDT",
+    "close_ts": 1795651200.0,
+    "close_wib": "26 Nov 07:00",
+    "mean_pct": -1.1220415135615796
+   },
+   {
+    "symbol": "GDXUSDT",
+    "close_ts": 1795651200.0,
+    "close_wib": "26 Nov 07:00",
+    "mean_pct": -1.1193937582068174
    }
   ]
  },
@@ -5635,27 +5683,27 @@
    "tracker": null,
    "tf": {
     "h4": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h12": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h1d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h2d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h3d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h1w": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     }
    }
@@ -5695,27 +5743,27 @@
    "tracker": null,
    "tf": {
     "h4": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h12": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h1d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h2d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h3d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h1w": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     }
    }
@@ -5755,27 +5803,27 @@
    "tracker": null,
    "tf": {
     "h4": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h12": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h1d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h2d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h3d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h1w": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     }
    }
@@ -5815,27 +5863,27 @@
    "tracker": null,
    "tf": {
     "h4": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h12": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h1d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h2d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h3d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h1w": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     }
    }
@@ -5875,27 +5923,27 @@
    "tracker": null,
    "tf": {
     "h4": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h12": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h1d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h2d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h3d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h1w": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     }
    }
@@ -5935,27 +5983,27 @@
    "tracker": null,
    "tf": {
     "h4": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h12": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h1d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h2d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h3d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h1w": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     }
    }
@@ -5995,27 +6043,27 @@
    "tracker": null,
    "tf": {
     "h4": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h12": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h1d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h2d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h3d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h1w": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     }
    }
@@ -6055,27 +6103,27 @@
    "tracker": null,
    "tf": {
     "h4": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h12": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h1d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h2d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h3d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h1w": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     }
    }
@@ -6115,27 +6163,27 @@
    "tracker": null,
    "tf": {
     "h4": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h12": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h1d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h2d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h3d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h1w": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     }
    }
@@ -6175,27 +6223,27 @@
    "tracker": null,
    "tf": {
     "h4": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h12": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h1d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h2d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h3d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h1w": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     }
    }
@@ -6235,27 +6283,27 @@
    "tracker": null,
    "tf": {
     "h4": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h12": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h1d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h2d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h3d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h1w": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     }
    }
@@ -6295,27 +6343,27 @@
    "tracker": null,
    "tf": {
     "h4": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h12": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h1d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h2d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h3d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h1w": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     }
    }
@@ -6369,8 +6417,8 @@
    },
    "tf": {
     "h4": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": 4.798962386511008
     },
     "h12": {
      "status": "pending",
@@ -6443,8 +6491,8 @@
    },
    "tf": {
     "h4": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": 0.27292576419215564
     },
     "h12": {
      "status": "pending",
@@ -6517,8 +6565,8 @@
    },
    "tf": {
     "h4": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -1.6136363636363504
     },
     "h12": {
      "status": "pending",
@@ -6591,8 +6639,8 @@
    },
    "tf": {
     "h4": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": 1.2903225806451646
     },
     "h12": {
      "status": "pending",
@@ -6665,8 +6713,8 @@
    },
    "tf": {
     "h4": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": 1.6679904686258906
     },
     "h12": {
      "status": "pending",
@@ -6739,8 +6787,8 @@
    },
    "tf": {
     "h4": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -0.028801843317982634
     },
     "h12": {
      "status": "pending",
@@ -6813,8 +6861,8 @@
    },
    "tf": {
     "h4": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -2.033725089422578
     },
     "h12": {
      "status": "pending",
@@ -6887,8 +6935,8 @@
    },
    "tf": {
     "h4": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": 0.05356186395284457
     },
     "h12": {
      "status": "pending",
@@ -8667,8 +8715,8 @@
      "return_pct": -13.855820105820094
     },
     "h12": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -16.2037037037037
     },
     "h1d": {
      "status": "pending",
@@ -8741,8 +8789,8 @@
      "return_pct": 8.40098835157077
     },
     "h12": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": 6.247793858100947
     },
     "h1d": {
      "status": "pending",
@@ -8815,8 +8863,8 @@
      "return_pct": 1.8275890845364184
     },
     "h12": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": 1.9026954852708
     },
     "h1d": {
      "status": "pending",
@@ -8889,8 +8937,8 @@
      "return_pct": -0.34644889878743257
     },
     "h12": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -0.19797079930711226
     },
     "h1d": {
      "status": "pending",
@@ -8963,8 +9011,8 @@
      "return_pct": 0.8991577509674498
     },
     "h12": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -0.03414523104939837
     },
     "h1d": {
      "status": "pending",
@@ -9037,8 +9085,8 @@
      "return_pct": -0.04565262502593814
     },
     "h12": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -0.08715501141314252
     },
     "h1d": {
      "status": "pending",
@@ -9111,8 +9159,8 @@
      "return_pct": 0.6304558680892525
     },
     "h12": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -0.6304558680892303
     },
     "h1d": {
      "status": "pending",
@@ -10373,8 +10421,8 @@
      "return_pct": 44.98528412949967
     },
     "h1d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": 31.378763866877968
     },
     "h2d": {
      "status": "pending",
@@ -10447,8 +10495,8 @@
      "return_pct": -2.7286697118366954
     },
     "h1d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -1.4302430496814011
     },
     "h2d": {
      "status": "pending",
@@ -12893,8 +12941,8 @@
      "return_pct": -29.11479944674966
     },
     "h2d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -25.795297372060855
     },
     "h3d": {
      "status": "pending",
@@ -12967,8 +13015,8 @@
      "return_pct": -8.545962950017472
     },
     "h2d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -9.454736106256556
     },
     "h3d": {
      "status": "pending",
@@ -13041,8 +13089,8 @@
      "return_pct": -1.9136887326694052
     },
     "h2d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": 2.1675454012888062
     },
     "h3d": {
      "status": "pending",
@@ -13115,8 +13163,8 @@
      "return_pct": -0.8669556518839494
     },
     "h2d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": 0.533511170390133
     },
     "h3d": {
      "status": "pending",
@@ -13189,8 +13237,8 @@
      "return_pct": 5.387880766898334
     },
     "h2d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": 4.0490740308811946
     },
     "h3d": {
      "status": "pending",
@@ -36725,8 +36773,8 @@
      "return_pct": -15.350811857589742
     },
     "h3d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -13.995233129748241
     },
     "h1w": {
      "status": "pending",
@@ -36799,8 +36847,8 @@
      "return_pct": 7.911816215102507
     },
     "h3d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": 3.894097043370759
     },
     "h1w": {
      "status": "pending",
@@ -36873,8 +36921,8 @@
      "return_pct": -3.5687811076988263
     },
     "h3d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": 1.5143492534152259
     },
     "h1w": {
      "status": "pending",
@@ -36947,8 +36995,8 @@
      "return_pct": 21.41368809104023
     },
     "h3d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -2.0195544157717515
     },
     "h1w": {
      "status": "pending",
@@ -37021,8 +37069,8 @@
      "return_pct": -9.98095238095238
     },
     "h3d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -9.257142857142853
     },
     "h1w": {
      "status": "pending",
@@ -37095,8 +37143,8 @@
      "return_pct": -27.909063715225845
     },
     "h3d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": 13.799980057832272
     },
     "h1w": {
      "status": "pending",
@@ -37169,8 +37217,8 @@
      "return_pct": -1.116990005878904
     },
     "h3d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": 1.5873015873015817
     },
     "h1w": {
      "status": "pending",
