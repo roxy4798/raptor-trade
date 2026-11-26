@@ -33,17 +33,17 @@
      color = the agent's canonical color, used for its name everywhere. */
   var IDENTITY = {
     "01": { name: "AXIOM",   short: "BREAKOUT",           spec: "Breakout Intelligence",               color: "#22d3ee" },
-    "02": { name: "VEX",     short: "REVERSAL",           spec: "Reversal Intelligence",               color: "#a78bfa" },
-    "03": { name: "FLUX",    short: "ORDER FLOW",         spec: "Order Flow Intelligence",             color: "#4ade80" },
-    "04": { name: "ATLAS",   short: "MARKET REGIME",      spec: "Market Regime Intelligence",          color: "#facc15" },
-    "05": { name: "NEXUS",   short: "LIQUIDITY",          spec: "Liquidity Intelligence",              color: "#60a5fa" },
+    "02": { name: "VEX",     short: "REVERSAL",           spec: "Reversal & Exhaustion",               color: "#a78bfa" },
+    "03": { name: "FLUX",    short: "ORDER FLOW",         spec: "Order Flow",             color: "#4ade80" },
+    "04": { name: "ATLAS",   short: "MARKET REGIME",      spec: "Market Regime",          color: "#facc15" },
+    "05": { name: "NEXUS",   short: "LIQUIDITY",          spec: "Liquidity & Execution",              color: "#60a5fa" },
     "06": { name: "SYNAPSE", short: "PERFORMANCE",        spec: "Performance Learning",                color: "#fb7185" },
-    "07": { name: "RAPTOR",  short: "PUMP IGNITION",      spec: "Pump Ignition Intelligence",          color: "#fcd34d" },
-    "08": { name: "SPECTRE", short: "MISSED OPPORTUNITY", spec: "Missed Opportunity Intelligence",     color: "#a3e635" },
+    "07": { name: "RAPTOR",  short: "PUMP IGNITION",      spec: "Pump Ignition & Continuation",          color: "#fcd34d" },
+    "08": { name: "SPECTRE", short: "MISSED OPPORTUNITY", spec: "Missed Opportunity",     color: "#a3e635" },
     "09": { name: "PRISM",   short: "FILTER DISCOVERY",   spec: "Filter Discovery & Optimization",     color: "#e879f9" },
     "10": { name: "VERITAS", short: "VALIDATION",         spec: "Independent Strategy Validation",     color: "#cbd5e1" },
-    "11": { name: "APEX",    short: "TAKE PROFIT & EXIT", spec: "Take Profit & Exit Intelligence",     color: "#2dd4bf" },
-    "12": { name: "AEGIS",   short: "RISK & PORTFOLIO",    spec: "Risk & Portfolio Intelligence",       color: "#f87171" }
+    "11": { name: "APEX",    short: "TAKE PROFIT & EXIT", spec: "Take Profit & Exit",     color: "#2dd4bf" },
+    "12": { name: "AEGIS",   short: "RISK & PORTFOLIO",    spec: "Risk & Portfolio",       color: "#f87171" }
   };
 
   function renderSlot(slot) {
