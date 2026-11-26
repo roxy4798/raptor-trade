@@ -56,6 +56,7 @@
      stale. The pill shows the data age in minutes too. Fetch failures
      are silent — the server-rendered text stays. */
   var lastSyncStatus = null;
+  var syncRetryPending = false;
   var SYNC_FRESH_MS = 15 * 60 * 1000;
 
   function fmtWib(tsSec) {
@@ -98,7 +99,17 @@
         return r.json();
       })
       .then(function (s) { lastSyncStatus = s; renderSyncPill(); })
-      .catch(function () { /* silent: keep server-rendered text */ });
+      .catch(function () {
+        /* Silent: keep the server-rendered text. One retry in 15s in
+           case the server was briefly busy — the next 5-min poll
+           retries anyway, so this never loops. */
+        if (!syncRetryPending) {
+          syncRetryPending = true;
+          setTimeout(function () {
+            syncRetryPending = false; checkSyncStatus();
+          }, 15000);
+        }
+      });
   }
 
   /* Embedded fingerprint for this page, or null when the page data
