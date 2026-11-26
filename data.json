@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_ts": 1795680410.419657,
-  "generated_wib": "26 Nov 2026, 15:06 WIB",
+  "generated_ts": 1795682208.1785073,
+  "generated_wib": "26 Nov 2026, 15:36 WIB",
   "rules_version": "v2.1.2",
   "next_close_ts": 1795694400.0,
   "source": "Binance Futures Mainnet (local)"
@@ -9,34 +9,33 @@
  "kpis": {
   "total": 463,
   "last24": 62,
-  "win_rate": 12.44343891402715,
-  "wins": 55,
-  "n_eval": 442,
-  "mean_net": 0.06219296679513677,
-  "median_net": -0.02725185409358235,
+  "win_rate": 12.47216035634744,
+  "wins": 56,
+  "n_eval": 449,
+  "mean_net": 0.06126287906119445,
+  "median_net": -0.031399871930495676,
   "eligible": 840,
   "gap_blocked": 0,
   "universe_total": 849,
   "classes": {
-   "BELUM DINILAI": 7,
-   "SIDEWAYS": 342,
-   "REVERSAL": 45,
-   "PUMP CONTINUED": 55,
+   "PUMP CONTINUED": 56,
+   "SIDEWAYS": 347,
+   "REVERSAL": 46,
    "INSUFFICIENT DATA": 14
   },
   "first_signal_date": "21 Nov 2026"
  },
  "health": {
-  "healthy": true,
+  "healthy": false,
   "telegram_paused": true,
-  "ws_connected": true,
-  "ws_reconnects": 0,
+  "ws_connected": false,
+  "ws_reconnects": 1,
   "eligible": 840,
   "gap_blocked": 0,
   "universe_total": 849,
   "signals_total": 528,
-  "heartbeat_age_s": 22.0,
-  "uptime_s": 5355.6,
+  "heartbeat_age_s": 205.0,
+  "uptime_s": 6970.4,
   "backfill_missing": 50,
   "backfill_pending": 0,
   "backfill_filled": 3360
@@ -3013,9 +3012,58 @@
     "close_wib": "26 Nov 11:00",
     "net_pct": -0.07040481778238737,
     "cum_net_pct": 19.93168604797053
+   },
+   {
+    "symbol": "BULLAUSDT",
+    "close_ts": 1795680000.0,
+    "close_wib": "26 Nov 15:00",
+    "net_pct": 2.551109175140735,
+    "cum_net_pct": 22.991274294641293
+   },
+   {
+    "symbol": "ANIMEUSDT",
+    "close_ts": 1795680000.0,
+    "close_wib": "26 Nov 15:00",
+    "net_pct": 0.26628236129156313,
+    "cum_net_pct": 23.318778364015635
+   },
+   {
+    "symbol": "OUSDT",
+    "close_ts": 1795680000.0,
+    "close_wib": "26 Nov 15:00",
+    "net_pct": -0.11012501746181552,
+    "cum_net_pct": 23.18297353780856
+   },
+   {
+    "symbol": "BLUAIUSDT",
+    "close_ts": 1795680000.0,
+    "close_wib": "26 Nov 15:00",
+    "net_pct": -0.8904531701076995,
+    "cum_net_pct": 22.086086844908227
+   },
+   {
+    "symbol": "BUSDT",
+    "close_ts": 1795680000.0,
+    "close_wib": "26 Nov 15:00",
+    "net_pct": -0.07954660360762138,
+    "cum_net_pct": 21.988971509345667
+   },
+   {
+    "symbol": "MUSDT",
+    "close_ts": 1795680000.0,
+    "close_wib": "26 Nov 15:00",
+    "net_pct": -0.49904389887091716,
+    "cum_net_pct": 21.380192989732883
+   },
+   {
+    "symbol": "SPACEUSDT",
+    "close_ts": 1795680000.0,
+    "close_wib": "26 Nov 15:00",
+    "net_pct": -1.1814177865328115,
+    "cum_net_pct": 19.94618580042433
    }
   ],
-  "n_eval": 400,
+  "n_eval": 407,
   "n_total": 463
  },
  "tf_summary": {
@@ -5855,7 +5903,21 @@
    "quote_volume": 41809118.86413,
    "qv24h": 92709191.03956999,
    "chart": "charts/BULLAUSDT_1795680000.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "PUMP CONTINUED",
+    "reason": "return +30m +2.68% >= +1,00%",
+    "r1": 0.013154747668022049,
+    "r5": 0.018177469504903065,
+    "r15": 0.012437215977038951,
+    "r30": 0.026787849796699348,
+    "mfe": 0.03157139440325296,
+    "mae": -0.004544367376225877,
+    "net": 0.025511091751407353,
+    "evaluated_ts": 1795682208.8867533,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -5915,7 +5977,21 @@
    "quote_volume": 1334176.383192,
    "qv24h": 5218888.403137,
    "chart": "charts/ANIMEUSDT_1795680000.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m +0.43%, MFE +0.95%",
+    "r1": -0.0008661758336941938,
+    "r5": 0.0,
+    "r15": 0.00043308791684726344,
+    "r30": 0.004330879168471302,
+    "mfe": 0.009527934170636687,
+    "mae": -0.0047639670853182325,
+    "net": 0.0026628236129156314,
+    "evaluated_ts": 1795682208.8867533,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -5975,7 +6051,21 @@
    "quote_volume": 1707938.1898,
    "qv24h": 3815771.1276000002,
    "chart": "charts/OUSDT_1795680000.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m +0.03%, MFE +0.59%",
+    "r1": 0.0013552175877127315,
+    "r5": 0.0012046378557446502,
+    "r15": 0.0013552175877127315,
+    "r30": 0.00030115946393616255,
+    "mfe": 0.005872609546754948,
+    "mae": -0.0034633338352657583,
+    "net": -0.0011012501746181552,
+    "evaluated_ts": 1795682208.8867533,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -6035,7 +6125,21 @@
    "quote_volume": 537430.391405,
    "qv24h": 1523681.777025,
    "chart": "charts/BLUAIUSDT_1795680000.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.76%, MFE +0.19%",
+    "r1": -0.0021141649048626032,
+    "r5": -0.0019379844961240345,
+    "r15": -0.004580690627202233,
+    "r30": -0.007575757575757458,
+    "mfe": 0.0019379844961240345,
+    "mae": -0.011451726568005638,
+    "net": -0.008904531701076995,
+    "evaluated_ts": 1795682208.8867533,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -6095,7 +6199,21 @@
    "quote_volume": 1131999.6667,
    "qv24h": 2388477.9923,
    "chart": "charts/BUSDT_1795680000.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m +0.10%, MFE +0.91%",
+    "r1": 0.006036217303822866,
+    "r5": 0.004024144869215318,
+    "r15": -0.004024144869215318,
+    "r30": 0.001006036217303885,
+    "mfe": 0.0090543259557343,
+    "mae": -0.00905432595573441,
+    "net": -0.0007954660360762137,
+    "evaluated_ts": 1795682208.8867533,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -6155,7 +6273,21 @@
    "quote_volume": 305213.857,
    "qv24h": 1614985.8368,
    "chart": "charts/MUSDT_1795680000.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.33%, MFE +0.35%",
+    "r1": 0.00034944670937675504,
+    "r5": -0.001630751310425227,
+    "r15": -0.003261502620850343,
+    "r30": -0.003261502620850343,
+    "mfe": 0.0034944670937682165,
+    "mae": -0.012230634828188758,
+    "net": -0.004990438988709172,
+    "evaluated_ts": 1795682208.8867533,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -6215,7 +6347,21 @@
    "quote_volume": 1264201.906666,
    "qv24h": 4464039.808035,
    "chart": "charts/SPACEUSDT_1795680000.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "REVERSAL",
+    "reason": "return +30m -1.02% <= -1,00%",
+    "r1": -0.00403009134873733,
+    "r5": -0.00591080064481464,
+    "r15": 0.004030091348737219,
+    "r30": -0.010209564750134348,
+    "mfe": 0.006716818914562106,
+    "mae": -0.012627619559376746,
+    "net": -0.011814177865328115,
+    "evaluated_ts": 1795682208.8867533,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
