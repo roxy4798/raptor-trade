@@ -38,9 +38,68 @@
     return 'en';
   }
   var T = {
-    en: { avail: 'New data available', reload: 'Reload', close: 'Dismiss' },
-    id: { avail: 'Data baru tersedia', reload: 'Muat ulang', close: 'Tutup' }
+    en: { avail: 'New data available', reload: 'Reload', close: 'Dismiss',
+      syncLast: 'Last successful sync', dataAsOf: 'data as of',
+      dataAge: 'data {m} min old', fresh: 'fresh', stale: 'stale',
+      statusUnknown: 'status unknown',
+      syncUnknown: 'Last successful sync: —' },
+    id: { avail: 'Data baru tersedia', reload: 'Muat ulang', close: 'Tutup',
+      syncLast: 'Sinkronisasi terakhir berhasil', dataAsOf: 'data per',
+      dataAge: 'data {m} mnt lalu', fresh: 'fresh', stale: 'stale',
+      statusUnknown: 'status tidak diketahui',
+      syncUnknown: 'Sinkronisasi terakhir berhasil: —' }
   };
+  /* Sync-status pill (26 Nov 2026): the footer #sync-status line is
+     server-rendered by build.py from dist/sync-status.json; this layer
+     refreshes it live on the same 5-min poll. FRESHNESS: fresh when
+     the last successful sync was within the last 15 minutes, else
+     stale. The pill shows the data age in minutes too. Fetch failures
+     are silent — the server-rendered text stays. */
+  var lastSyncStatus = null;
+  var SYNC_FRESH_MS = 15 * 60 * 1000;
+
+  function fmtWib(tsSec) {
+    try {
+      return new Intl.DateTimeFormat(lang() === 'id' ? 'id-ID' : 'en-GB',
+        { timeZone: 'Asia/Jakarta', day: 'numeric', month: 'short',
+          year: 'numeric', hour: '2-digit', minute: '2-digit',
+          hour12: false }).format(new Date(tsSec * 1000)) + ' WIB';
+    } catch (e) { return ''; }
+  }
+
+  function renderSyncPill() {
+    var el = document.getElementById('sync-status');
+    if (!el || !lastSyncStatus) return;
+    var t = T[lang()];
+    var s = lastSyncStatus;
+    var nowMs = Date.now();
+    var dataAge = s.data_as_of_ts
+      ? Math.max(0, Math.round((nowMs / 1000 - s.data_as_of_ts) / 60))
+      : null;
+    var ageTxt = dataAge === null ? '' : ' · ' + t.dataAge.replace('{m}', dataAge);
+    var dataTxt = s.data_as_of_ts
+      ? t.dataAsOf + ' ' + fmtWib(s.data_as_of_ts) : t.dataAsOf + ' —';
+    if (!s.last_successful_sync_wib) {
+      el.textContent = t.syncUnknown + ' · ' + dataTxt + ageTxt +
+        ' · ' + t.statusUnknown;
+      return;
+    }
+    var lastMs = s.last_successful_sync_utc
+      ? Date.parse(s.last_successful_sync_utc) : NaN;
+    var fresh = !isNaN(lastMs) && (nowMs - lastMs) <= SYNC_FRESH_MS;
+    el.textContent = t.syncLast + ': ' + s.last_successful_sync_wib +
+      ' · ' + dataTxt + ageTxt + ' · ' + (fresh ? t.fresh : t.stale);
+  }
+
+  function checkSyncStatus() {
+    return fetch('sync-status.json', { cache: 'no-store' })
+      .then(function (r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+      .then(function (s) { lastSyncStatus = s; renderSyncPill(); })
+      .catch(function () { /* silent: keep server-rendered text */ });
+  }
 
   /* Embedded fingerprint for this page, or null when the page data
      has not loaded yet (research page fetches async). */
@@ -143,6 +202,7 @@
   }
 
   function checkNow() {
+    checkSyncStatus();
     var emb = embedded();
     if (!emb) return Promise.resolve('not-ready');
     return fetch('meta.json', { cache: 'no-store' })
@@ -177,4 +237,5 @@
   document.addEventListener('visibilitychange', function () {
     if (!document.hidden) checkNow();
   });
+  document.addEventListener('raptor:lang', renderSyncPill);
 })();
