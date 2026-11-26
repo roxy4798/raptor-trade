@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_ts": 1795651312.5656,
-  "generated_wib": "26 Nov 2026, 07:01 WIB",
+  "generated_ts": 1795651613.9858944,
+  "generated_wib": "26 Nov 2026, 07:06 WIB",
   "rules_version": "v2.1.2",
   "next_close_ts": 1795665600.0,
   "source": "Binance Futures Mainnet (local)"
@@ -35,8 +35,8 @@
   "gap_blocked": 0,
   "universe_total": 849,
   "signals_total": 504,
-  "heartbeat_age_s": 1.0,
-  "uptime_s": 5986.3,
+  "heartbeat_age_s": 2.0,
+  "uptime_s": 6286.4,
   "backfill_missing": 50,
   "backfill_pending": 0,
   "backfill_filled": 3360
@@ -2946,10 +2946,10 @@
     }
    },
    "h2d": {
-    "n": 350,
-    "mean": -9.064901329423392,
-    "median": -8.952931951290699,
-    "pct_positive": 8.571428571428571,
+    "n": 351,
+    "mean": -9.052897498977364,
+    "median": -8.909048615957193,
+    "pct_positive": 8.547008547008547,
     "best": {
      "symbol": "LISTAUSDT",
      "value": 44.18117554653751,
@@ -2957,10 +2957,10 @@
     }
    },
    "h3d": {
-    "n": 25,
-    "mean": -4.99832009803247,
-    "median": -2.597338590438647,
-    "pct_positive": 36.0,
+    "n": 27,
+    "mean": -1.6423656793915615,
+    "median": -1.6657638136511443,
+    "pct_positive": 40.74074074074074,
     "best": {
      "symbol": "BULLAUSDT",
      "value": 51.279069767441875,
@@ -12288,8 +12288,8 @@
      "return_pct": 0.2413709872073344
     },
     "h2d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -4.851556842867478
     },
     "h3d": {
      "status": "pending",
@@ -36268,8 +36268,8 @@
      "return_pct": 0.9748172217709294
     },
     "h3d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": 44.313566206336304
     },
     "h1w": {
      "status": "pending",
@@ -36342,8 +36342,8 @@
      "return_pct": 44.18117554653751
     },
     "h3d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": 36.300562900903266
     },
     "h1w": {
      "status": "pending",
