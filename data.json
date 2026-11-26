@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_ts": 1795710117.8687468,
-  "generated_wib": "26 Nov 2026, 23:21 WIB",
+  "generated_ts": 1795711008.8286304,
+  "generated_wib": "26 Nov 2026, 23:36 WIB",
   "rules_version": "v2.1.2",
   "next_close_ts": 1795723200.0,
   "source": "Binance Futures Mainnet (local)"
@@ -9,19 +9,18 @@
  "kpis": {
   "total": 476,
   "last24": 63,
-  "win_rate": 12.555066079295155,
-  "wins": 57,
-  "n_eval": 454,
-  "mean_net": 0.05342542637503647,
-  "median_net": -0.038698815802097296,
+  "win_rate": 12.554112554112553,
+  "wins": 58,
+  "n_eval": 462,
+  "mean_net": 0.03930948219042424,
+  "median_net": -0.04764998386546038,
   "eligible": 840,
   "gap_blocked": 0,
   "universe_total": 849,
   "classes": {
-   "BELUM DINILAI": 8,
-   "PUMP CONTINUED": 57,
-   "REVERSAL": 48,
-   "SIDEWAYS": 349,
+   "REVERSAL": 53,
+   "PUMP CONTINUED": 58,
+   "SIDEWAYS": 351,
    "INSUFFICIENT DATA": 14
   },
   "first_signal_date": "21 Nov 2026"
@@ -35,8 +34,8 @@
   "gap_blocked": 0,
   "universe_total": 849,
   "signals_total": 545,
-  "heartbeat_age_s": 27.0,
-  "uptime_s": 5955.5,
+  "heartbeat_age_s": 18.0,
+  "uptime_s": 6855.8,
   "backfill_missing": 50,
   "backfill_pending": 0,
   "backfill_filled": 3360
@@ -3107,9 +3106,65 @@
     "close_wib": "26 Nov 19:00",
     "net_pct": -0.4552540076766699,
     "cum_net_pct": 16.452677007876225
+   },
+   {
+    "symbol": "SSVUSDT",
+    "close_ts": 1795708800.0,
+    "close_wib": "26 Nov 23:00",
+    "net_pct": -0.5829320169040261,
+    "cum_net_pct": 15.773837069055485
+   },
+   {
+    "symbol": "SEIUSDT",
+    "close_ts": 1795708800.0,
+    "close_wib": "26 Nov 23:00",
+    "net_pct": -1.4056914625684491,
+    "cum_net_pct": 14.146414125487873
+   },
+   {
+    "symbol": "AIOTUSDT",
+    "close_ts": 1795708800.0,
+    "close_wib": "26 Nov 23:00",
+    "net_pct": 3.881240459486545,
+    "cum_net_pct": 18.576710933579378
+   },
+   {
+    "symbol": "WIFUSDT",
+    "close_ts": 1795708800.0,
+    "close_wib": "26 Nov 23:00",
+    "net_pct": -0.6716340060723374,
+    "cum_net_pct": 17.78030941966735
+   },
+   {
+    "symbol": "STBLUSDT",
+    "close_ts": 1795708800.0,
+    "close_wib": "26 Nov 23:00",
+    "net_pct": -4.476665204997462,
+    "cum_net_pct": 12.507679289538753
+   },
+   {
+    "symbol": "WIFUSDC",
+    "close_ts": 1795708800.0,
+    "close_wib": "26 Nov 23:00",
+    "net_pct": -0.6719351300369856,
+    "cum_net_pct": 11.751700668403009
+   },
+   {
+    "symbol": "RUNEUSDT",
+    "close_ts": 1795708800.0,
+    "close_wib": "26 Nov 23:00",
+    "net_pct": -0.6710784605128767,
+    "cum_net_pct": 11.001759075960527
+   },
+   {
+    "symbol": "GUSDT",
+    "close_ts": 1795708800.0,
+    "close_wib": "26 Nov 23:00",
+    "net_pct": -0.902597324931253,
+    "cum_net_pct": 9.999860167914276
    }
   ],
-  "n_eval": 412,
+  "n_eval": 420,
   "n_total": 476
  },
  "tf_summary": {
@@ -6021,7 +6076,21 @@
    "quote_volume": 87729715.22072,
    "qv24h": 250731412.46348,
    "chart": "charts/SSVUSDT_1795708800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "REVERSAL",
+    "reason": "pump lalu dump: MFE +3.74% lalu return +30m -0.47%",
+    "r1": 0.002155946819978549,
+    "r5": -0.0014372978799855884,
+    "r15": 0.0064678404599354256,
+    "r30": -0.004671218109953301,
+    "mfe": 0.03736974487962641,
+    "mae": -0.008623787279913753,
+    "net": -0.005829320169040261,
+    "evaluated_ts": 1795711006.7976367,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -6081,7 +6150,21 @@
    "quote_volume": 23140593.72147,
    "qv24h": 42298000.99309,
    "chart": "charts/SEIUSDT_1795708800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "REVERSAL",
+    "reason": "return +30m -1.30% <= -1,00%",
+    "r1": 0.010137769690668152,
+    "r5": -0.001039771250324839,
+    "r15": -0.009617884065505455,
+    "r30": -0.012997140629061654,
+    "mfe": 0.010397712503249501,
+    "mae": -0.015336625942292681,
+    "net": -0.01405691462568449,
+    "evaluated_ts": 1795711006.7976367,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -6141,7 +6224,21 @@
    "quote_volume": 15614034.88815,
    "qv24h": 29523716.09109,
    "chart": "charts/AIOTUSDT_1795708800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "PUMP CONTINUED",
+    "reason": "return +30m +4.01% >= +1,00%",
+    "r1": 0.005998588567395879,
+    "r5": 0.02470007057163026,
+    "r15": 0.013143966125617412,
+    "r30": 0.04013761467889898,
+    "mfe": 0.05478122794636553,
+    "mae": -0.0006175017642907621,
+    "net": 0.03881240459486545,
+    "evaluated_ts": 1795711006.7976367,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -6201,7 +6298,21 @@
    "quote_volume": 5490383.86319,
    "qv24h": 16891947.3875,
    "chart": "charts/WIFUSDT_1795708800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "REVERSAL",
+    "reason": "pump lalu dump: MFE +1.33% lalu return +30m -0.52%",
+    "r1": 0.004437869822485396,
+    "r5": 0.0,
+    "r15": 0.00887573964497057,
+    "r30": -0.005177514792899296,
+    "mfe": 0.013313609467455745,
+    "mae": -0.00665680473372765,
+    "net": -0.006716340060723374,
+    "evaluated_ts": 1795711006.7976367,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -6261,7 +6372,21 @@
    "quote_volume": 2042053.02053,
    "qv24h": 4747573.71004,
    "chart": "charts/STBLUSDT_1795708800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "REVERSAL",
+    "reason": "return +30m -4.35% <= -1,00%",
+    "r1": -0.005144995322731494,
+    "r5": -0.010757717492984153,
+    "r15": -0.03835360149672595,
+    "r30": -0.04349859681945745,
+    "mfe": 0.00467726847521055,
+    "mae": -0.04724041159962589,
+    "net": -0.044766652049974626,
+    "evaluated_ts": 1795711006.7976367,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -6321,7 +6446,21 @@
    "quote_volume": 821143.84917,
    "qv24h": 3677481.17832,
    "chart": "charts/WIFUSDC_1795708800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "REVERSAL",
+    "reason": "pump lalu dump: MFE +1.26% lalu return +30m -0.44%",
+    "r1": 0.0037009622501851247,
+    "r5": 0.0007401924500369805,
+    "r15": 0.008142116950407008,
+    "r30": -0.004441154700221994,
+    "mfe": 0.012583271650629113,
+    "mae": -0.005921539600296066,
+    "net": -0.006719351300369856,
+    "evaluated_ts": 1795711006.7976367,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -6381,7 +6520,21 @@
    "quote_volume": 1026058.5803,
    "qv24h": 6573573.2407,
    "chart": "charts/RUNEUSDT_1795708800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.57%, MFE +0.38%",
+    "r1": 0.0008955758552748883,
+    "r5": -0.006985491671144595,
+    "r15": -0.005373455131649663,
+    "r30": -0.0057316854737595735,
+    "mfe": 0.0037614185921548415,
+    "mae": -0.009851334408024437,
+    "net": -0.0067107846051287666,
+    "evaluated_ts": 1795711006.7976367,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -6441,7 +6594,21 @@
    "quote_volume": 362269.651508,
    "qv24h": 1671860.087641,
    "chart": "charts/GUSDT_1795708800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "SIDEWAYS",
+    "reason": "pergerakan kecil: return +30m -0.79%, MFE +0.04%",
+    "r1": -0.0007153075822603494,
+    "r5": -0.0032188841201716833,
+    "r15": -0.005007153075822446,
+    "r30": -0.007868383404864066,
+    "mfe": 0.0003576537911302857,
+    "mae": -0.008583690987124415,
+    "net": -0.00902597324931253,
+    "evaluated_ts": 1795711006.7976367,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
