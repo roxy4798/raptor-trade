@@ -189,21 +189,27 @@
       "rail.forwardtest": "Forward Testing",
       "sec.forwardtest.kicker": "10 — Forward Testing",
       "sec.forwardtest.title": "Forward Testing — A0 vs A4 vs A4 + ATR Expanded",
-      "sec.forwardtest.sub": "New 4H closes after the historical research cutoff, judged with frozen thresholds and definitions — no re-optimization on new signals. A4 + ATR percentile expanded is the main research candidate; A0 is the production baseline and A4 + HOLD is the exit comparison. Forward results are exploratory observations, not formal validation.",
+      "sec.forwardtest.sub": "New 4H closes after the historical research cutoff, judged with frozen thresholds and definitions — no re-optimization on new signals. A4 + ATR percentile expanded is the main research candidate; A0 is the production baseline and A4 + HOLD is the exit comparison. Forward results are split into three evidence tiers — historical, exploratory forward, and strictly prospective (only closes after the candidate freeze) — and judged against evaluation criteria frozen 27 Nov 2026 09:47 WIB.",
       "panel.ignMatrix": "Entry quality consistency matrix — three priority characteristics",
       "panel.jointExits": "A0 vs A4 exit profitability (+4H)",
       "panel.jointQvf": "Quality vs frequency — A0 vs A4",
       "panel.ftSetup": "Forward test — setup & evidence",
+      "panel.ftTiers": "Three evidence tiers — historical / exploratory / strictly prospective",
       "panel.ftGroups": "Forward results — A0 vs A4 vs A4 + ATR Expanded (+4H)",
+      "panel.ftStrict": "Strictly prospective — closes after the candidate freeze (+4H)",
       "panel.ftPerClose": "Performance per close (forward only)",
+      "panel.ftOverlap": "Signal overlap — A0 vs A4 per close",
       "panel.ftSplits": "A4 + ATR Expanded — CRYPTO vs SAHAM",
       "panel.ftExits": "Forward exits — E0 vs E5 vs E18 (+4H)",
+      "panel.ftCriteria": "Evaluation criteria — frozen 27 Nov 2026 09:47 WIB",
       "ev.historical": "Historical",
       "ev.exploratory": "Exploratory forward",
+      "ev.strictly": "Strictly prospective",
       "ev.formalNone": "Formal validation: none",
       "ev.insufficient": "Insufficient data",
       "ev.historicalNote": "Historical, descriptive/in-sample data with frozen thresholds. Associations here are not predictions.",
       "ev.exploratoryNote": "Exploratory forward observations on closes after the historical cutoff. No frozen formal validation exists for this candidate yet.",
+      "ev.strictlyNote": "Strictly-prospective slice: only closes after the candidate freeze (27 Nov 2026 01:02 WIB) count. Small n — observations only, never conclusions.",
       "ev.formalNote": "Formal prospective validation runs on a separate frozen track (CH1/CH2). Forward-test numbers are never presented as formal validation.",
       "mx.feature": "Feature",
       "mx.bucket": "Bucket",
@@ -273,6 +279,29 @@
       "ft.pendingNote": "Signals from the latest forward close are still pending — their next 4H candle has not closed yet.",
       "ft.splitNote": "CRYPTO/SAHAM split of the A4 + ATR Expanded forward signals. Small samples — observations only, never conclusions.",
       "ft.exitsNote": "E0 HOLD is the exit baseline; E5 and E18 are research candidates, not approved strategies.",
+      "ft.tiersNote": "Pre-freeze forward closes are exploratory, not prospective validation. Only closes after the candidate freeze count as strictly prospective. Pre-freeze data is kept, never deleted.",
+      "ft.strictNote": "Strictly-prospective slice: only closes after the candidate freeze (27 Nov 2026 01:02 WIB). A4 + ATR Expanded stays exploratory until the frozen criteria checkpoint is reached.",
+      "ft.overlapNote": "A4 is not a perfect subset of A0: the dedup cooldown is computed per config, so one close can hold config-only signals on either side. Closes with identical signal sets are not evidence of superiority.",
+      "ft.criteriaNote": "Criteria frozen separately from the candidate freeze (27 Nov 2026 09:47 WIB). Only closes after the criteria freeze count toward the 10-close checkpoint. 10 closes is an early checkpoint, not final proof — sample size, coverage, clustering, costs and statistical uncertainty still apply.",
+      "ft.tier": "Tier",
+      "ft.window": "Window",
+      "ft.identical": "Identical",
+      "ft.shared": "Shared",
+      "ft.a0Only": "A0 only",
+      "ft.a4Only": "A4 only",
+      "ft.criterion": "Criterion",
+      "ft.threshold": "Threshold",
+      "ft.value": "Value",
+      "ft.checkStatus": "Status",
+      "ft.progress": "Checkpoint progress",
+      "ft.criteriaFrozen": "Criteria frozen",
+      "ft.riskTitle": "Risk — assessed at checkpoint",
+      "ft.freqTitle": "Frequency — assessed at checkpoint",
+      "ft.maxShare": "Max single-winner share",
+      "ft.awaiting": "Awaiting data",
+      "ft.checkpointReached": "Checkpoint reached",
+      "ft.pass": "Pass",
+      "ft.fail": "Fail",
       "ft.notYet": "Forward test not built yet — the daily lab (08:00 WIB) has not run since the cutoff.",
       "panel.exitTpBsl": "TP before SL (vs SL −2%)",
       "panel.exitRiskReward": "Risk–reward by exit family (+4H)",
@@ -814,21 +843,27 @@
       "rail.forwardtest": "Forward Testing",
       "sec.forwardtest.kicker": "10 — Forward Testing",
       "sec.forwardtest.title": "Pengujian Forward — A0 vs A4 vs A4 + ATR Expanded",
-      "sec.forwardtest.sub": "Close 4J baru setelah cutoff riset historis, dinilai dengan threshold dan definisi yang dibekukan — tanpa optimasi ulang pada sinyal baru. A4 + ATR percentile expanded adalah kandidat riset utama; A0 adalah baseline produksi dan A4 + HOLD adalah pembanding exit. Hasil forward adalah observasi eksploratif, bukan validasi formal.",
+      "sec.forwardtest.sub": "Close 4J baru setelah cutoff riset historis, dinilai dengan threshold dan definisi yang dibekukan — tanpa optimasi ulang pada sinyal baru. A4 + ATR percentile expanded adalah kandidat riset utama; A0 adalah baseline produksi dan A4 + HOLD adalah pembanding exit. Hasil forward dipisah ke tiga tier bukti — historis, forward eksploratif, dan prospektif ketat (hanya close setelah kandidat dibekukan) — dan dinilai terhadap kriteria evaluasi yang dibekukan 27 Nov 2026 09:47 WIB.",
       "panel.ignMatrix": "Matriks konsistensi kualitas entry — tiga karakteristik prioritas",
       "panel.jointExits": "Profitabilitas exit A0 vs A4 (+4H)",
       "panel.jointQvf": "Kualitas vs frekuensi — A0 vs A4",
       "panel.ftSetup": "Forward test — setup & bukti",
+      "panel.ftTiers": "Tiga tier bukti — historis / eksploratif / prospektif ketat",
       "panel.ftGroups": "Hasil forward — A0 vs A4 vs A4 + ATR Expanded (+4H)",
+      "panel.ftStrict": "Prospektif ketat — close setelah kandidat dibekukan (+4H)",
       "panel.ftPerClose": "Performa per close (forward saja)",
+      "panel.ftOverlap": "Overlap sinyal — A0 vs A4 per close",
       "panel.ftSplits": "A4 + ATR Expanded — CRYPTO vs SAHAM",
       "panel.ftExits": "Exit forward — E0 vs E5 vs E18 (+4H)",
+      "panel.ftCriteria": "Kriteria evaluasi — dibekukan 27 Nov 2026 09:47 WIB",
       "ev.historical": "Historis",
       "ev.exploratory": "Forward eksploratif",
+      "ev.strictly": "Prospektif ketat",
       "ev.formalNone": "Validasi formal: belum ada",
       "ev.insufficient": "Data tidak memadai",
       "ev.historicalNote": "Data historis, deskriptif/in-sample dengan threshold beku. Asosiasi di sini bukan prediksi.",
       "ev.exploratoryNote": "Observasi forward eksploratif pada close setelah cutoff historis. Belum ada validasi formal yang dibekukan untuk kandidat ini.",
+      "ev.strictlyNote": "Irisan prospektif ketat: hanya close setelah kandidat dibekukan (27 Nov 2026 01:02 WIB) yang dihitung. n kecil — observasi saja, bukan kesimpulan.",
       "ev.formalNote": "Validasi prospektif formal berjalan pada jalur beku yang terpisah (CH1/CH2). Angka forward test tidak pernah disajikan sebagai validasi formal.",
       "mx.feature": "Karakteristik",
       "mx.bucket": "Bucket",
@@ -898,6 +933,29 @@
       "ft.pendingNote": "Sinyal dari close forward terbaru masih pending — candle 4H berikutnya belum ditutup.",
       "ft.splitNote": "Split CRYPTO/SAHAM dari sinyal forward A4 + ATR Expanded. Sampel kecil — observasi saja, bukan kesimpulan.",
       "ft.exitsNote": "E0 HOLD adalah baseline exit; E5 dan E18 adalah kandidat riset, bukan strategi yang disetujui.",
+      "ft.tiersNote": "Close forward pra-freeze bersifat eksploratif, bukan validasi prospektif. Hanya close setelah kandidat dibekukan yang dihitung prospektif ketat. Data pra-freeze disimpan, tidak pernah dihapus.",
+      "ft.strictNote": "Irisan prospektif ketat: hanya close setelah kandidat dibekukan (27 Nov 2026 01:02 WIB). A4 + ATR Expanded tetap eksploratif sampai checkpoint kriteria beku tercapai.",
+      "ft.overlapNote": "A4 bukan subset sempurna A0: dedup cooldown dihitung per config, jadi satu close bisa berisi sinyal config-only di kedua sisi. Close dengan set sinyal identik bukan bukti superioritas.",
+      "ft.criteriaNote": "Kriteria dibekukan terpisah dari pembekuan kandidat (27 Nov 2026 09:47 WIB). Hanya close setelah kriteria dibekukan yang dihitung menuju checkpoint 10 close. 10 close adalah checkpoint awal, bukan bukti final — ukuran sampel, cakupan, clustering, biaya, dan ketidakpastian statistik tetap berlaku.",
+      "ft.tier": "Tier",
+      "ft.window": "Jendela",
+      "ft.identical": "Identik",
+      "ft.shared": "Bersama",
+      "ft.a0Only": "Hanya A0",
+      "ft.a4Only": "Hanya A4",
+      "ft.criterion": "Kriteria",
+      "ft.threshold": "Ambang",
+      "ft.value": "Nilai",
+      "ft.checkStatus": "Status",
+      "ft.progress": "Progres checkpoint",
+      "ft.criteriaFrozen": "Kriteria dibekukan",
+      "ft.riskTitle": "Risiko — dinilai saat checkpoint",
+      "ft.freqTitle": "Frekuensi — dinilai saat checkpoint",
+      "ft.maxShare": "Share winner terbesar",
+      "ft.awaiting": "Menunggu data",
+      "ft.checkpointReached": "Checkpoint tercapai",
+      "ft.pass": "Lolos",
+      "ft.fail": "Gagal",
       "ft.notYet": "Forward test belum dibangun — lab harian (08:00 WIB) belum berjalan sejak cutoff.",
       "panel.exitTpBsl": "TP sebelum SL (vs SL −2%)",
       "panel.exitRiskReward": "Risk–reward per keluarga exit (+4H)",
@@ -3210,6 +3268,7 @@
     var map = {
       historical: ["st-completed", "ev.historical"],
       exploratory: ["st-partial", "ev.exploratory"],
+      strictly: ["st-completed", "ev.strictly"],
       "formal-none": ["st-unavailable", "ev.formalNone"],
       insufficient: ["st-unavailable", "ev.insufficient"]
     };
@@ -3529,9 +3588,11 @@
   /* ------------------------------------------- forward test (v1.2.0) */
   function renderForwardTest() {
     var FT = ((DATA.learnings || {}).forward_test) || null;
-    var ids = ["forwardtest-overview", "forwardtest-groups",
-               "forwardtest-perclose", "forwardtest-splits",
-               "forwardtest-exits"];
+    var ids = ["forwardtest-overview", "forwardtest-tiers",
+               "forwardtest-groups", "forwardtest-strict",
+               "forwardtest-perclose", "forwardtest-overlap",
+               "forwardtest-splits", "forwardtest-exits",
+               "forwardtest-criteria"];
     if (!FT || FT.status === "ERROR" || FT.status === "not yet") {
       ids.forEach(function (id) {
         var el = $(id);
@@ -3590,16 +3651,41 @@
       "<p class='panel-sub' style='margin-top:12px'>" +
       esc(t("ev.formalNote")) + "</p>";
 
+    /* Three evidence tiers — historical / exploratory / strictly
+       prospective. Pre-freeze data is kept, never deleted, and never
+       presented as prospective validation. */
+    var tiers = FT.evidence_tiers || {};
+    var tierOrder = ["historical", "exploratory_forward",
+                     "strictly_prospective"];
+    var tierRows = tierOrder.map(function (k) {
+      var tr = tiers[k] || {};
+      return "<tr><td>" + esc(tr.label || k) + "</td>" +
+        "<td>" + esc(tr.window || "—") + "</td>" +
+        "<td>" + (tr.n_closes == null ? "—" : tr.n_closes) +
+        "</td>" +
+        "<td>" + esc(tr.status || "—") + "</td></tr>";
+    }).join("");
+    $("forwardtest-tiers").innerHTML =
+      '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr>" + th("ft.tier") + th("ft.window") +
+      th("mx.closes") + th("ft.checkStatus") +
+      "</tr></thead><tbody>" + tierRows + "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+      esc(t("ft.tiersNote")) + "</p>";
+
     /* Groups — forward-only comparison. Numbers are shown with an
        INSUFFICIENT DATA badge when the group is too small; no
-       conclusion is drawn from such rows. */
+       conclusion is drawn from such rows. Shared by the main groups
+       panel and the strictly-prospective panel. */
     var grpCell = function (g, key, isPct, dec) {
       var v = g[key];
       if (v == null) return "<td>—</td>";
       return "<td>" + (isPct ? pc(v, dec) : nm(v, dec)) + "</td>";
     };
+    var groupTableHtml = function (groupsObj, badgeLevel,
+                                   badgeNoteKey, noteKey) {
     var grpRows = GROUP_ORDER.map(function (k) {
-      var g = (FT.groups || {})[k] || {};
+      var g = (groupsObj || {})[k] || {};
       var badge = g.status === "insufficient_data" ?
         " " + evidenceBadge("insufficient") : "";
       return "<tr><td>" + esc(GROUP_NAMES[k] || k) + badge +
@@ -3629,7 +3715,7 @@
           g.zero_signal_fwd_closes) + "</td></tr>";
     }).join("");
     var cwRows = GROUP_ORDER.map(function (k) {
-      var g = (FT.groups || {})[k] || {};
+      var g = (groupsObj || {})[k] || {};
       var cw = g.close_weighted || {};
       return "<tr><td>" + esc(GROUP_NAMES[k] || k) + "</td>" +
         "<td>" + pc(cw.continuation_rate_pct, 1) + "</td>" +
@@ -3638,10 +3724,9 @@
         "<td>" + pc(cw.positive_net_rate_pct, 1) + "</td>" +
         "<td>" + pfCell(cw.profit_factor) + "</td></tr>";
     }).join("");
-    $("forwardtest-groups").innerHTML =
-      "<p class='panel-sub' style='margin:0 0 12px'>" +
-      evidenceBadge("exploratory") + " " +
-      esc(t("ev.exploratoryNote")) + "</p>" +
+    return "<p class='panel-sub' style='margin:0 0 12px'>" +
+      evidenceBadge(badgeLevel) + " " +
+      esc(t(badgeNoteKey)) + "</p>" +
       '<div style="overflow-x:auto"><table class="version-table">' +
       "<thead><tr>" + th("ft.group") + th("ft.signals") +
       th("ft.mature") + th("ft.pending") + th("mx.closes") +
@@ -3658,7 +3743,17 @@
       th("mx.pf") +
       "</tr></thead><tbody>" + cwRows + "</tbody></table></div>" +
       "<p class='panel-sub' style='margin-top:12px'>" +
-      esc(t("ft.groupsNote")) + "</p>";
+      esc(t(noteKey)) + "</p>";
+    };
+    $("forwardtest-groups").innerHTML =
+      groupTableHtml(FT.groups || {}, "exploratory",
+                     "ev.exploratoryNote", "ft.groupsNote");
+
+    /* Strictly prospective — only closes after the candidate freeze.
+       Same table shape as the main groups panel. */
+    $("forwardtest-strict").innerHTML =
+      groupTableHtml(((FT.strictly_prospective || {}).groups) || {},
+                     "strictly", "ev.strictlyNote", "ft.strictNote");
 
     /* Per-close performance (forward only, mature closes). */
     var pcRows = [];
@@ -3694,6 +3789,40 @@
       evidenceBadge("insufficient") + "</p>") +
       "<p class='panel-sub' style='margin-top:12px'>" +
       esc(t("ft.pendingNote")) + "</p>";
+
+    /* Signal overlap — A4 is not a perfect subset of A0 (dedup is
+       per-config). Identical-signal closes are not evidence of
+       superiority. */
+    var ov = FT.signal_overlap || {};
+    var ovRows = (ov.per_close || []).map(function (r) {
+      return "<tr><td>" + (fmtTs(r.close_ts) == null ? "—" :
+        esc(fmtTs(r.close_ts))) + "</td>" +
+        "<td>" + (r.n_a0 == null ? "—" : r.n_a0) + "</td>" +
+        "<td>" + (r.n_a4 == null ? "—" : r.n_a4) + "</td>" +
+        "<td>" + (r.n_shared == null ? "—" : r.n_shared) +
+        "</td>" +
+        "<td>" + (r.n_a0_only == null ? "—" : r.n_a0_only) +
+        "</td>" +
+        "<td>" + (r.n_a4_only == null ? "—" : r.n_a4_only) +
+        "</td>" +
+        "<td>" + (r.identical ? esc(t("ft.identical")) : "—") +
+        "</td></tr>";
+    }).join("");
+    $("forwardtest-overlap").innerHTML =
+      (ovRows ? '<div style="overflow-x:auto"><table class="version-table">' +
+      "<thead><tr>" + th("ft.close") + "<th>A0</th><th>A4</th>" +
+      th("ft.shared") + th("ft.a0Only") + th("ft.a4Only") +
+      th("ft.identical") +
+      "</tr></thead><tbody>" + ovRows + "</tbody></table></div>" :
+      '<p class="panel-sub" style="margin:0">' +
+      evidenceBadge("insufficient") + "</p>") +
+      '<ul class="missing-list" style="margin-top:12px">' +
+      "<li><span>" + esc(t("ft.identical")) + "</span>" +
+      "<span class='num'>" +
+      (ov.n_identical_closes == null ? "—" :
+        ov.n_identical_closes) + "</span></li></ul>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+      esc(t("ft.overlapNote")) + "</p>";
 
     /* CRYPTO vs SAHAM split of A4 + ATR Expanded (forward). */
     var splitRows = [
@@ -3761,6 +3890,80 @@
       "</tbody></table></div>" +
       "<p class='panel-sub' style='margin-top:12px'>" +
       esc(t("ft.exitsNote")) + "</p>";
+
+    /* Evaluation criteria — frozen separately from the candidate
+       freeze (27 Nov 2026 09:47 WIB). Only post-freeze closes count
+       toward the 10-close checkpoint; 10 closes is an early
+       checkpoint, not final proof. */
+    var ce = FT.criteria_evaluation || {};
+    var ck = ce.checks || {};
+    var ckSpec = [
+      ["mean_net_pct", "mx.mean", ">", "threshold_gt", true],
+      ["median_net_pct", "mx.median", ">", "threshold_gt", true],
+      ["continuation_rate_pct", "mx.cont", "≥", "threshold_gte",
+       true],
+      ["profit_factor", "mx.pf", "≥", "threshold_gte", false],
+      ["max_single_winner_share_pct", "ft.maxShare", "≤",
+       "threshold_lte", true]
+    ];
+    var ckRows = ckSpec.map(function (spec) {
+      var c = ck[spec[0]] || {};
+      var thr = c[spec[3]];
+      var st = c.status === "pass" ? t("ft.pass") :
+        c.status === "fail" ? t("ft.fail") : t("ft.awaiting");
+      return "<tr><td>" + esc(t(spec[1])) + "</td>" +
+        "<td>" + spec[2] + " " + (thr == null ? "—" :
+          (spec[4] ? pc(thr, 2) : nm(thr, 2))) + "</td>" +
+        "<td>" + (c.value == null ? "—" :
+          (spec[4] ? pc(c.value, 2) : nm(c.value, 2))) + "</td>" +
+        "<td>" + esc(st) + "</td></tr>";
+    }).join("");
+    var ckRisk = ce.risk || {};
+    var ckFreq = ce.frequency || {};
+    $("forwardtest-criteria").innerHTML =
+      '<ul class="missing-list">' +
+      "<li><span>" + esc(t("ft.criteriaFrozen")) + "</span>" +
+      "<span class='num'>" +
+      (fmtTs(ce.criteria_frozen_ts) == null ? "—" :
+        esc(fmtTs(ce.criteria_frozen_ts))) + "</span></li>" +
+      "<li><span>" + esc(t("ft.progress")) + "</span>" +
+      "<span class='num'>" +
+      (ce.criteria_closes_with_mature_expanded == null ? "—" :
+        ce.criteria_closes_with_mature_expanded) + " / " +
+      (ce.checkpoint_closes_target == null ? "—" :
+        ce.checkpoint_closes_target) + " — " +
+      esc(ce.status === "checkpoint_reached" ?
+        t("ft.checkpointReached") : t("ft.awaiting")) +
+      "</span></li></ul>" +
+      '<div style="overflow-x:auto;margin-top:12px"><table class="version-table">' +
+      "<thead><tr>" + th("ft.criterion") + th("ft.threshold") +
+      th("ft.value") + th("ft.checkStatus") +
+      "</tr></thead><tbody>" + ckRows + "</tbody></table></div>" +
+      "<p class='panel-sub' style='margin:14px 0 6px'><strong>" +
+      esc(t("ft.riskTitle")) + "</strong></p>" +
+      '<ul class="missing-list">' +
+      "<li><span>" + esc(t("mx.mae")) + "</span>" +
+      "<span class='num'>" + pc(ckRisk.median_mae_pct) +
+      "</span></li>" +
+      "<li><span>Worst single net</span>" +
+      "<span class='num'>" + pc(ckRisk.worst_single_net_pct) +
+      "</span></li>" +
+      "<li><span>Worst close mean</span>" +
+      "<span class='num'>" + pc(ckRisk.worst_close_mean_net_pct) +
+      "</span></li></ul>" +
+      "<p class='panel-sub' style='margin:14px 0 6px'><strong>" +
+      esc(t("ft.freqTitle")) + "</strong></p>" +
+      '<ul class="missing-list">' +
+      "<li><span>" + esc(t("mx.freq")) + "</span>" +
+      "<span class='num'>" +
+      nm(ckFreq.signals_per_close_all_criteria_closes, 2) +
+      "</span></li>" +
+      "<li><span>" + esc(t("qv.zeroCloses")) + "</span>" +
+      "<span class='num'>" +
+      (ckFreq.zero_signal_criteria_closes == null ? "—" :
+        ckFreq.zero_signal_criteria_closes) + "</span></li></ul>" +
+      "<p class='panel-sub' style='margin-top:12px'>" +
+      esc(t("ft.criteriaNote")) + "</p>";
   }
 
   function renderRisk() {
