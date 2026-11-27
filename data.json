@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_ts": 1795781209.3650308,
-  "generated_wib": "27 Nov 2026, 19:06 WIB",
+  "generated_ts": 1795781511.8435135,
+  "generated_wib": "27 Nov 2026, 19:11 WIB",
   "rules_version": "v2.1.2",
   "next_close_ts": 1795795200.0,
   "source": "Binance Futures Mainnet (local)"
@@ -35,8 +35,8 @@
   "gap_blocked": 0,
   "universe_total": 849,
   "signals_total": 105,
-  "heartbeat_age_s": 27.0,
-  "uptime_s": 4755.3,
+  "heartbeat_age_s": -0.0,
+  "uptime_s": 5085.4,
   "backfill_missing": 50,
   "backfill_pending": 0,
   "backfill_filled": 0
@@ -8536,27 +8536,27 @@
    "tracker": null,
    "tf": {
     "h4": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h12": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h1d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h2d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h3d": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     },
     "h1w": {
-     "status": null,
+     "status": "pending",
      "return_pct": null
     }
    }
