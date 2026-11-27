@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_ts": 1795737712.0708387,
-  "generated_wib": "27 Nov 2026, 07:01 WIB",
+  "generated_ts": 1795738012.9131765,
+  "generated_wib": "27 Nov 2026, 07:06 WIB",
   "rules_version": "v2.1.2",
   "next_close_ts": 1795752000.0,
   "source": "Binance Futures Mainnet (local)"
@@ -35,8 +35,8 @@
   "gap_blocked": 0,
   "universe_total": 849,
   "signals_total": 4,
-  "heartbeat_age_s": 24.0,
-  "uptime_s": 4754.2,
+  "heartbeat_age_s": 25.0,
+  "uptime_s": 5054.3,
   "backfill_missing": 50,
   "backfill_pending": 0,
   "backfill_filled": 0
@@ -3260,10 +3260,10 @@
     }
    },
    "h3d": {
-    "n": 350,
-    "mean": -4.008042538059011,
-    "median": -3.706537367261925,
-    "pct_positive": 20.57142857142857,
+    "n": 351,
+    "mean": -4.008451479488946,
+    "median": -3.7634408602150504,
+    "pct_positive": 20.51282051282051,
     "best": {
      "symbol": "BULLAUSDT",
      "value": 51.279069767441875,
@@ -16077,8 +16077,8 @@
      "return_pct": -4.851556842867478
     },
     "h3d": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": -4.151580979966218
     },
     "h1w": {
      "status": "pending",
