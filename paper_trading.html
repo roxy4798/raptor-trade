@@ -18,10 +18,13 @@
   <nav class="rail-nav" aria-label="Paper trading sections">
     <a class="rail-link active" href="#account" data-section="account" aria-label="Account" title="Account"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg><span data-i18n="rail.account">Account</span></a>
     <a class="rail-link" href="#positions" data-section="positions" aria-label="Open positions" title="Open positions"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17 9 11l4 3 8-9"/><path d="M16 5h5v5"/></svg><span data-i18n="rail.positions">Positions</span></a>
+    <a class="rail-link" href="#orders" data-section="orders" aria-label="Order history" title="Order history"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg><span data-i18n="rail.orders">Orders</span></a>
     <a class="rail-link" href="#history" data-section="history" aria-label="Trade history" title="Trade history"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-i18n="rail.history">History</span></a>
     <a class="rail-link" href="#liquidations" data-section="liquidations" aria-label="Liquidations" title="Liquidations"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v10"/><path d="M7 8l5-5 5 5"/><path d="M4 21h16"/></svg><span data-i18n="rail.liquidations">Liquidations</span></a>
     <a class="rail-link" href="#skipped" data-section="skipped" aria-label="Skipped signals" title="Skipped signals"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span data-i18n="rail.skipped">Skipped</span></a>
     <a class="rail-link" href="#fees" data-section="fees" aria-label="Fees and funding" title="Fees and funding"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M7 12h10M10 17h4"/></svg><span data-i18n="rail.fees">Fees</span></a>
+    <a class="rail-link" href="#intel" data-section="intel" aria-label="Performance intelligence" title="Performance intelligence"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg><span data-i18n="rail.intel">Intelligence</span></a>
+    <a class="rail-link" href="#system" data-section="system" aria-label="System health" title="System health"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg><span data-i18n="rail.system">System</span></a>
     <a class="rail-link" href="research.html" aria-label="AI Research" title="AI Research"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6M11 8v6"/></svg><span data-i18n="rail.research">Research</span></a>
     <a class="rail-link" href="index.html" aria-label="Back to Signal Observatory" title="Back to Signal Observatory"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/></svg><span data-i18n="rail.home">Home</span></a>
   </nav>
@@ -33,6 +36,11 @@
     <span class="sim-banner-dot" aria-hidden="true"></span>
     <strong data-i18n="banner.title">PAPER TRADING — SIMULATION</strong>
     <span data-i18n="banner.sub">Virtual money only. No real orders, no real funds.</span>
+  </div>
+
+  <div id="capital-exhausted" class="exhausted-banner" role="alert" hidden>
+    <strong data-i18n="exhausted.title">CAPITAL EXHAUSTED — no new positions</strong>
+    <span data-i18n="exhausted.sub">All virtual capital is gone. A liquidated sub-wallet is never topped up or reset — the experiment stops opening positions, and the loss history below is kept.</span>
   </div>
 
   <div id="loading" class="state-card" role="status">
@@ -55,7 +63,7 @@
     <section class="hero">
       <p class="eyebrow" data-i18n="hero.eyebrow">PAPER TRADING · VIRTUAL $100 · LONG ONLY</p>
       <h1 data-i18n-html="hero.title">Simulated trading, <span>real signals</span></h1>
-      <p class="hero-sub" data-i18n="hero.sub">Every production 4H LONG SIGNAL opens a virtual LONG position at a realistic post-signal price: $2 margin, TP +2%, no stop loss, cross margin. Positions close only on TP or liquidation. Nothing here moves real money.</p>
+      <p class="hero-sub" data-i18n="hero.sub">Every production 4H LONG SIGNAL opens a virtual LONG position at a realistic post-signal price: $2 margin, TP +2% (+40% gross ROI at 20x fixed leverage), no stop loss, cross margin. Positions close only on TP or liquidation. Nothing here moves real money.</p>
       <p class="hero-meta" id="hero-meta"></p>
       <p class="hero-freshness" id="data-freshness"></p>
       <p class="hero-disclaimer" data-i18n="hero.disclaimer">Simulation results are not trading results. Leverage and maintenance-margin data are labeled where they are estimates — see the constraints at the bottom of this page.</p>
@@ -74,6 +82,41 @@
       <div class="stat-grid" id="acct-stats"></div>
       <div class="panel-grid" id="venue-cards"></div>
       <div class="panel card">
+        <h3 data-i18n="panel.margin">Margin analysis</h3>
+        <p class="panel-sub" data-i18n="panel.margin.sub">Per-venue cross-margin state. The margin ratio is the most at-risk (highest) sub-wallet ratio in that venue; a venue stops opening when its sub-wallets are stopped or its available balance falls below the $2.02 needed for one position.</p>
+        <div class="table-scroll">
+          <table class="paper-table" id="margin-table">
+            <thead>
+              <tr>
+                <th data-i18n="th.venue">Venue</th>
+                <th class="num" data-i18n="th.marginRatio">Margin ratio</th>
+                <th class="num" data-i18n="th.used">Used margin</th>
+                <th class="num" data-i18n="th.available">Available</th>
+                <th data-i18n="th.status">Status</th>
+              </tr>
+            </thead>
+            <tbody id="margin-body"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel card" id="stopped-panel" hidden>
+        <h3 data-i18n="stopped.title">Stopped sub-wallets</h3>
+        <p class="panel-sub" data-i18n="stopped.sub">A liquidated sub-wallet stops operating forever — no top-up, no reset. Its loss history stays visible in the liquidation history below.</p>
+        <div class="table-scroll">
+          <table class="paper-table" id="stopped-table">
+            <thead>
+              <tr>
+                <th data-i18n="stopped.wallet">Wallet</th>
+                <th class="num" data-i18n="stopped.balance">Balance at stop</th>
+                <th class="num" data-i18n="stopped.deficit">Liquidation deficit</th>
+                <th class="num" data-i18n="stopped.when">Stopped (WIB)</th>
+              </tr>
+            </thead>
+            <tbody id="stopped-body"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel card">
         <h3 data-i18n="panel.equity">Equity curve</h3>
         <p class="panel-sub" data-i18n="panel.equity.sub">Total virtual equity over time, from the $100 start. The dashed line is the starting balance.</p>
         <div id="equity-chart" class="equity-chart"></div>
@@ -85,7 +128,7 @@
       <div class="section-head">
         <p class="section-kicker" data-i18n="sec.positions.kicker">02 — Open positions</p>
         <h2 data-i18n="sec.positions.title">Open Positions</h2>
-        <p class="section-sub" data-i18n="sec.positions.sub">Virtual LONG positions currently open. Mark price comes from the mark-price stream, sampled once per engine tick; TP triggers on the first 1m close at or above the TP price.</p>
+        <p class="section-sub" data-i18n="sec.positions.sub">Virtual LONG positions currently open. Mark price is evaluated on every live markPrice update (continuous, event-driven — liquidation is checked on each update); TP fires the moment a live best bid reaches the TP price.</p>
       </div>
       <p class="section-count" id="open-count"></p>
       <div class="table-scroll">
@@ -111,9 +154,40 @@
       <p class="table-empty" id="open-empty" hidden data-i18n="open.empty">No open positions right now.</p>
     </section>
 
+    <section id="orders" class="section">
+      <div class="section-head">
+        <p class="section-kicker" data-i18n="sec.orders.kicker">03 — Order history</p>
+        <h2 data-i18n="sec.orders.title">Order History</h2>
+        <p class="section-sub" data-i18n="sec.orders.sub">Every open attempt is an order: FILLED (with fill price and detection-to-fill latency — the time from signal detection to fill, not exchange matching latency) or REJECTED with the real reason. Orders are distinct from trades: a FILLED order becomes a position; a REJECTED order never does.</p>
+      </div>
+      <p class="section-count" id="order-count"></p>
+      <div class="table-scroll">
+        <table class="paper-table" id="orders-table">
+          <thead>
+            <tr>
+              <th data-i18n="th.symbol">Symbol</th>
+              <th data-i18n="th.orderState">State</th>
+              <th class="num" data-i18n="th.fill">Fill price / reason</th>
+              <th class="num" data-i18n="th.latency">Detection-to-fill</th>
+              <th class="num" data-i18n="th.lev">Leverage</th>
+              <th data-i18n="th.time">Time (WIB)</th>
+            </tr>
+          </thead>
+          <tbody id="orders-body"></tbody>
+        </table>
+      </div>
+      <p class="table-empty" id="orders-empty" hidden data-i18n="orders.empty">No orders yet.</p>
+      <div class="panel card">
+        <h3 data-i18n="panel.exec">Execution analytics</h3>
+        <p class="panel-sub" data-i18n="panel.exec.sub">Built only from recorded orders — no estimated latency, no fabricated fills. Partial fills are not modeled (the engine fills whole orders at the live best bid/ask); depth-based fills are UNAVAILABLE until the depth feed is subscribed.</p>
+        <div class="stat-grid" id="exec-stats"></div>
+        <p class="panel-sub" id="exec-rejects"></p>
+      </div>
+    </section>
+
     <section id="history" class="section">
       <div class="section-head">
-        <p class="section-kicker" data-i18n="sec.history.kicker">03 — Trade history</p>
+        <p class="section-kicker" data-i18n="sec.history.kicker">04 — Trade history</p>
         <h2 data-i18n="sec.history.title">Closed Positions</h2>
         <p class="section-sub" data-i18n="sec.history.sub">Every closed virtual trade: TP exits and liquidations. Net PnL is after entry fee, exit/liquidation fee, and funding.</p>
       </div>
@@ -142,7 +216,7 @@
 
     <section id="liquidations" class="section">
       <div class="section-head">
-        <p class="section-kicker" data-i18n="sec.liq.kicker">04 — Liquidations</p>
+        <p class="section-kicker" data-i18n="sec.liq.kicker">05 — Liquidations</p>
         <h2 data-i18n="sec.liq.title">Liquidation History</h2>
         <p class="section-sub" data-i18n="sec.liq.sub">Cross margin puts the whole sub-wallet at risk: when the margin ratio reaches 100%, all open positions in that wallet close at the triggering mark price.</p>
       </div>
@@ -165,7 +239,7 @@
 
     <section id="skipped" class="section">
       <div class="section-head">
-        <p class="section-kicker" data-i18n="sec.skipped.kicker">05 — Skipped signals</p>
+        <p class="section-kicker" data-i18n="sec.skipped.kicker">06 — Skipped signals</p>
         <h2 data-i18n="sec.skipped.title">Skipped Signals</h2>
         <p class="section-sub" data-i18n="sec.skipped.sub">Production signals that did NOT open a virtual position, and why. Skips are fail-closed: no price is ever invented to open a position.</p>
       </div>
@@ -188,11 +262,16 @@
 
     <section id="fees" class="section">
       <div class="section-head">
-        <p class="section-kicker" data-i18n="sec.fees.kicker">06 — Costs &amp; performance</p>
+        <p class="section-kicker" data-i18n="sec.fees.kicker">07 — Costs &amp; performance</p>
         <h2 data-i18n="sec.fees.title">Fees, Funding &amp; Stats</h2>
-        <p class="section-sub" data-i18n="sec.fees.sub">Costs use the public Binance VIP 0 schedule (taker 0.05%). Funding accrues from the mark-price stream (sampled once per engine tick) at each 8h settlement.</p>
+        <p class="section-sub" data-i18n="sec.fees.sub">Costs use the public Binance VIP 0 schedule (taker 0.05%). Funding accrues from the mark-price stream at each contract's own settlement boundary (typically every 8h, per contract — never assumed).</p>
       </div>
       <div class="stat-grid" id="stats-grid"></div>
+      <div class="panel card">
+        <h3 data-i18n="panel.pnl">PnL analytics</h3>
+        <p class="panel-sub" data-i18n="panel.pnl.sub">Price change, gross ROI, and net ROI are three different numbers: a TP close is +2% price, +40% gross ROI at 20x, and a lower net ROI after entry/exit fees and funding. Unrealized PnL is floating (mark-to-market), not yet realized.</p>
+        <div class="stat-grid" id="pnl-stats"></div>
+      </div>
       <div class="panel card">
         <h3 data-i18n="panel.costs">Fees &amp; funding breakdown</h3>
         <p class="panel-sub" data-i18n="panel.costs.sub">Totals across all closed trades and open positions. A negative funding total means the virtual account paid funding; a positive total means it received funding.</p>
@@ -202,6 +281,49 @@
         <h3 data-i18n="panel.feeds">Data feeds &amp; constraints</h3>
         <p class="panel-sub" id="feeds-line"></p>
         <ul class="constraint-list" id="constraints-list"></ul>
+      </div>
+    </section>
+
+    <section id="intel" class="section">
+      <div class="section-head">
+        <p class="section-kicker" data-i18n="sec.intel.kicker">08 — Performance intelligence</p>
+        <h2 data-i18n="sec.intel.title">Performance Intelligence</h2>
+        <p class="section-sub" data-i18n="sec.intel.sub">Thin by design for now: the numbers below are computed from the running simulation. Agent insights and recommendations arrive through the daily and weekly paper-trading reports (read-only — agents never change the strategy, add a stop loss, close a position, or auto-optimize the experiment).</p>
+      </div>
+      <div class="stat-grid" id="intel-stats"></div>
+      <div class="panel card">
+        <h3 data-i18n="panel.learning">What the research agents are learning</h3>
+        <p class="panel-sub" data-i18n="panel.learning.sub">Fourteen topics, studied from the paper-trading ledgers (positions, trades, skips, funding, liquidations, execution records) — the same evidence the daily and weekly reports are built from.</p>
+        <ul class="constraint-list" id="learning-list"></ul>
+      </div>
+    </section>
+
+    <section id="system" class="section">
+      <div class="section-head">
+        <p class="section-kicker" data-i18n="sec.system.kicker">09 — System health</p>
+        <h2 data-i18n="sec.system.title">System Health</h2>
+        <p class="section-sub" data-i18n="sec.system.sub">Live market-data health. When data disconnects or goes stale, new entries pause (never a fill on a stale quote), position state is kept, and the gap is reconciled after recovery — positions are never assumed safe while monitoring is interrupted.</p>
+      </div>
+      <div class="stat-grid" id="system-stats"></div>
+      <div class="panel card">
+        <h3 data-i18n="panel.gaps">Monitoring gaps</h3>
+        <p class="panel-sub" data-i18n="panel.gaps.sub">Every interruption of market-data monitoring, with its reconciliation outcome. A gap reconciles once fresh marks exist for every open symbol, or after the 30s bounded wait (then marked incomplete).</p>
+        <div class="table-scroll">
+          <table class="paper-table" id="gaps-table">
+            <thead>
+              <tr>
+                <th data-i18n="th.gapStart">Gap start (WIB)</th>
+                <th class="num" data-i18n="th.gapDur">Duration</th>
+                <th data-i18n="th.gapReason">Reason</th>
+                <th class="num" data-i18n="th.gapOpen">Open at gap</th>
+                <th class="num" data-i18n="th.gapLiq">Liquidations on reconcile</th>
+                <th data-i18n="th.gapMarks">Marks</th>
+              </tr>
+            </thead>
+            <tbody id="gaps-body"></tbody>
+          </table>
+        </div>
+        <p class="table-empty" id="gaps-empty" hidden data-i18n="gaps.empty">No monitoring gaps so far.</p>
       </div>
     </section>
 
