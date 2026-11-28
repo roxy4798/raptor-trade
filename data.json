@@ -1,14 +1,14 @@
 {
  "meta": {
-  "generated_ts": 1795846017.2352953,
-  "generated_wib": "28 Nov 2026, 13:06 WIB",
+  "generated_ts": 1795852909.6350782,
+  "generated_wib": "28 Nov 2026, 15:01 WIB",
   "rules_version": "v2.1.2",
-  "next_close_ts": 1795852800.0,
+  "next_close_ts": 1795867200.0,
   "source": "Binance Futures Mainnet (local)"
  },
  "kpis": {
-  "total": 621,
-  "last24": 104,
+  "total": 623,
+  "last24": 81,
   "win_rate": 12.077294685990339,
   "wins": 75,
   "n_eval": 621,
@@ -18,6 +18,7 @@
   "gap_blocked": 48,
   "universe_total": 832,
   "classes": {
+   "BELUM DINILAI": 2,
    "PUMP CONTINUED": 75,
    "REVERSAL": 79,
    "SIDEWAYS": 467
@@ -32,11 +33,11 @@
   "eligible": 768,
   "gap_blocked": 48,
   "universe_total": 832,
-  "signals_total": 175,
-  "heartbeat_age_s": -2.0,
-  "uptime_s": 131.3,
+  "signals_total": 177,
+  "heartbeat_age_s": 1.0,
+  "uptime_s": 2683.7,
   "backfill_missing": 338,
-  "backfill_pending": 1,
+  "backfill_pending": 0,
   "backfill_filled": 0
  },
  "series": {
@@ -260,6 +261,11 @@
     "close_ts": 1795838400.0,
     "close_wib": "28 Nov 11:00",
     "count": 4
+   },
+   {
+    "close_ts": 1795852800.0,
+    "close_wib": "28 Nov 15:00",
+    "count": 2
    }
   ],
   "cum_net_curve": [
@@ -4168,7 +4174,7 @@
    }
   ],
   "n_eval": 557,
-  "n_total": 621
+  "n_total": 623
  },
  "tf_summary": {
   "horizons": {
@@ -7945,6 +7951,126 @@
   ]
  },
  "signals": [
+  {
+   "signal_id": "PROD WS:USD-M:BTWUSDT:LONG SIGNAL:1795852800.0",
+   "symbol": "BTWUSDT",
+   "market": "USD-M",
+   "close_ts": 1795852800.0,
+   "close_wib": "28 Nov 15:00",
+   "close_utc": "28 Nov 08:00",
+   "price": 1.3994,
+   "open": 1.1877,
+   "chg_4h": 17.824366422497263,
+   "ema20": 1.0248375892119583,
+   "ema50": 0.8765731576885775,
+   "ema500": 0.9697926964479296,
+   "rvol": 9.043160202701154,
+   "taker_buy": 0.5117091679090271,
+   "breakout_level": 1.206,
+   "breakout_margin": 16.03648424543947,
+   "hh": 3,
+   "hl": 4,
+   "atr14_pct": 6.319775750278304,
+   "rsi_5m": 64.52987198848928,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 86.72186709796298,
+   "spread": 2.845557373550231,
+   "impact": 9.287602878475251,
+   "depth": 118.0792,
+   "book_delay_s": 3.2,
+   "liq_validated": false,
+   "quote_volume": 81734469.1216,
+   "qv24h": 157649100.0187,
+   "chart": "charts/BTWUSDT_1795852800.png",
+   "tracker": null,
+   "tf": {
+    "h4": {
+     "status": null,
+     "return_pct": null
+    },
+    "h12": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h2d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h3d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1w": {
+     "status": null,
+     "return_pct": null
+    }
+   }
+  },
+  {
+   "signal_id": "PROD WS:USD-M:TAGUSDT:LONG SIGNAL:1795852800.0",
+   "symbol": "TAGUSDT",
+   "market": "USD-M",
+   "close_ts": 1795852800.0,
+   "close_wib": "28 Nov 15:00",
+   "close_utc": "28 Nov 08:00",
+   "price": 0.0004867,
+   "open": 0.0004648,
+   "chg_4h": 4.666666666666663,
+   "ema20": 0.0004554253976205879,
+   "ema50": 0.0004656334479046077,
+   "ema500": 0.0006732083250968686,
+   "rvol": 74.81787913054059,
+   "taker_buy": 0.4637229549325598,
+   "breakout_level": 0.0004705,
+   "breakout_margin": 3.4431455897980903,
+   "hh": 3,
+   "hl": 3,
+   "atr14_pct": 4.1958354626989465,
+   "rsi_5m": 50.21463989453286,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 67.0732354226715,
+   "spread": 8.213552361396504,
+   "impact": null,
+   "depth": 77.67593360000001,
+   "book_delay_s": 9.4,
+   "liq_validated": false,
+   "quote_volume": 10413162.5647468,
+   "qv24h": 11136981.7503372,
+   "chart": "charts/TAGUSDT_1795852800.png",
+   "tracker": null,
+   "tf": {
+    "h4": {
+     "status": null,
+     "return_pct": null
+    },
+    "h12": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h2d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h3d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1w": {
+     "status": null,
+     "return_pct": null
+    }
+   }
+  },
   {
    "signal_id": "PROD WS:USD-M:ROBOUSDT:LONG SIGNAL:1795838400.0",
    "symbol": "ROBOUSDT",
