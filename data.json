@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_ts": 1795854409.710307,
-  "generated_wib": "28 Nov 2026, 15:26 WIB",
+  "generated_ts": 1795855015.7079358,
+  "generated_wib": "28 Nov 2026, 15:36 WIB",
   "rules_version": "v2.1.2",
   "next_close_ts": 1795867200.0,
   "source": "Binance Futures Mainnet (local)"
@@ -9,18 +9,17 @@
  "kpis": {
   "total": 623,
   "last24": 81,
-  "win_rate": 12.077294685990339,
-  "wins": 75,
-  "n_eval": 621,
-  "mean_net": -0.019848222778719796,
+  "win_rate": 12.199036918138042,
+  "wins": 76,
+  "n_eval": 623,
+  "mean_net": 0.05250102483592167,
   "median_net": -0.07996738980852758,
   "eligible": 799,
   "gap_blocked": 17,
   "universe_total": 832,
   "classes": {
-   "BELUM DINILAI": 2,
-   "PUMP CONTINUED": 75,
-   "REVERSAL": 79,
+   "REVERSAL": 80,
+   "PUMP CONTINUED": 76,
    "SIDEWAYS": 467
   },
   "first_signal_date": "21 Nov 2026"
@@ -34,8 +33,8 @@
   "gap_blocked": 17,
   "universe_total": 832,
   "signals_total": 177,
-  "heartbeat_age_s": 1.0,
-  "uptime_s": 4184.1,
+  "heartbeat_age_s": 6.0,
+  "uptime_s": 4784.3,
   "backfill_missing": 152,
   "backfill_pending": 0,
   "backfill_filled": 186
@@ -4171,9 +4170,23 @@
     "close_wib": "28 Nov 11:00",
     "net_pct": -0.4510602033608689,
     "cum_net_pct": -17.578336292669295
+   },
+   {
+    "symbol": "BTWUSDT",
+    "close_ts": 1795852800.0,
+    "close_wib": "28 Nov 15:00",
+    "net_pct": -0.30139540509178925,
+    "cum_net_pct": -17.82675139988339
+   },
+   {
+    "symbol": "TAGUSDT",
+    "close_ts": 1795852800.0,
+    "close_wib": "28 Nov 15:00",
+    "net_pct": 40.70492837611893,
+    "cum_net_pct": 15.62181058712422
    }
   ],
-  "n_eval": 557,
+  "n_eval": 559,
   "n_total": 623
  },
  "tf_summary": {
@@ -8007,7 +8020,21 @@
    "quote_volume": 81734469.1216,
    "qv24h": 157649100.0187,
    "chart": "charts/BTWUSDT_1795852800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "REVERSAL",
+    "reason": "pump lalu dump: MFE +2.44% lalu return +30m -0.19%",
+    "r1": -0.0005716735743889201,
+    "r5": 0.008217807631842211,
+    "r15": -0.0020723167071601267,
+    "r30": -0.001929398313562869,
+    "mfe": 0.024439045305130858,
+    "mae": -0.008789481206231242,
+    "net": -0.0030139540509178924,
+    "evaluated_ts": 1795855015.3899205,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
@@ -8067,7 +8094,21 @@
    "quote_volume": 10413162.5647468,
    "qv24h": 11136981.7503372,
    "chart": "charts/TAGUSDT_1795852800.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "PUMP CONTINUED",
+    "reason": "return +30m +40.87% >= +1,00%",
+    "r1": 0.08115882473803171,
+    "r5": 0.18245325662625844,
+    "r15": 0.35750975960550635,
+    "r30": 0.4086706389973289,
+    "mfe": 0.43127183069652775,
+    "mae": -0.00164372303266902,
+    "net": 0.40704928376118926,
+    "evaluated_ts": 1795855015.3899205,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
