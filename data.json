@@ -1,14 +1,14 @@
 {
  "meta": {
-  "generated_ts": 1795880509.1219652,
-  "generated_wib": "28 Nov 2026, 22:41 WIB",
+  "generated_ts": 1795881711.2763605,
+  "generated_wib": "28 Nov 2026, 23:01 WIB",
   "rules_version": "v2.1.2",
-  "next_close_ts": 1795881600.0,
+  "next_close_ts": 1795896000.0,
   "source": "Binance Futures Mainnet (local)"
  },
  "kpis": {
-  "total": 628,
-  "last24": 59,
+  "total": 629,
+  "last24": 41,
   "win_rate": 12.579617834394904,
   "wins": 79,
   "n_eval": 628,
@@ -18,6 +18,7 @@
   "gap_blocked": 4,
   "universe_total": 832,
   "classes": {
+   "BELUM DINILAI": 1,
    "PUMP CONTINUED": 79,
    "REVERSAL": 81,
    "SIDEWAYS": 468
@@ -32,9 +33,9 @@
   "eligible": 750,
   "gap_blocked": 4,
   "universe_total": 832,
-  "signals_total": 184,
-  "heartbeat_age_s": 3.0,
-  "uptime_s": 15862.4,
+  "signals_total": 187,
+  "heartbeat_age_s": 5.0,
+  "uptime_s": 17062.7,
   "backfill_missing": 25,
   "backfill_pending": 1,
   "backfill_filled": 288
@@ -270,6 +271,11 @@
     "close_ts": 1795867200.0,
     "close_wib": "28 Nov 19:00",
     "count": 5
+   },
+   {
+    "close_ts": 1795881600.0,
+    "close_wib": "28 Nov 23:00",
+    "count": 1
    }
   ],
   "cum_net_curve": [
@@ -4227,7 +4233,7 @@
    }
   ],
   "n_eval": 564,
-  "n_total": 628
+  "n_total": 629
  },
  "tf_summary": {
   "horizons": {
@@ -4287,10 +4293,10 @@
     }
    },
    "h1w": {
-    "n": 4,
-    "mean": 23.51051537353378,
-    "median": -0.25258387038418206,
-    "pct_positive": 25.0,
+    "n": 5,
+    "mean": 19.123503509440628,
+    "median": -0.11610969620792222,
+    "pct_positive": 40.0,
     "best": {
      "symbol": "BTWUSDT",
      "value": 103.15915755798453,
@@ -8040,6 +8046,66 @@
   ]
  },
  "signals": [
+  {
+   "signal_id": "PROD WS:USD-M:PARTIUSDT:LONG SIGNAL:1795881600.0",
+   "symbol": "PARTIUSDT",
+   "market": "USD-M",
+   "close_ts": 1795881600.0,
+   "close_wib": "28 Nov 23:00",
+   "close_utc": "28 Nov 16:00",
+   "price": 0.03744,
+   "open": 0.03416,
+   "chg_4h": 9.56979806848113,
+   "ema20": 0.03583238788415674,
+   "ema50": 0.03620990503622734,
+   "ema500": 0.034991515495506886,
+   "rvol": 19.529314983211528,
+   "taker_buy": 0.512162867689487,
+   "breakout_level": 0.03738,
+   "breakout_margin": 0.16051364365972312,
+   "hh": 2,
+   "hl": 2,
+   "atr14_pct": 3.9829094946959964,
+   "rsi_5m": 56.79009839711575,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 59.46185730157017,
+   "spread": 2.695054574854096,
+   "impact": null,
+   "depth": 110.38938999999999,
+   "book_delay_s": 5.5,
+   "liq_validated": false,
+   "quote_volume": 9966897.17054,
+   "qv24h": 11381609.25573,
+   "chart": "charts/PARTIUSDT_1795881600.png",
+   "tracker": null,
+   "tf": {
+    "h4": {
+     "status": null,
+     "return_pct": null
+    },
+    "h12": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h2d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h3d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1w": {
+     "status": null,
+     "return_pct": null
+    }
+   }
+  },
   {
    "signal_id": "PROD WS:USD-M:IDOLUSDT:LONG SIGNAL:1795867200.0",
    "symbol": "IDOLUSDT",
@@ -53989,8 +54055,8 @@
      "return_pct": -1.1608623548922115
     },
     "h1w": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": 1.575456053068014
     }
    }
   },
