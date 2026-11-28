@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_ts": 1795884410.8872619,
-  "generated_wib": "28 Nov 2026, 23:46 WIB",
+  "generated_ts": 1795884711.6150243,
+  "generated_wib": "28 Nov 2026, 23:51 WIB",
   "rules_version": "v2.1.2",
   "next_close_ts": 1795896000.0,
   "source": "Binance Futures Mainnet (local)"
@@ -33,8 +33,8 @@
   "gap_blocked": 4,
   "universe_total": 832,
   "signals_total": 187,
-  "heartbeat_age_s": -1.0,
-  "uptime_s": 1483.6,
+  "heartbeat_age_s": -0.0,
+  "uptime_s": 1783.7,
   "backfill_missing": 25,
   "backfill_pending": 1,
   "backfill_filled": 288
