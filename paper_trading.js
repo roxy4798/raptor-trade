@@ -1,4 +1,4 @@
-/* Raptor Trade — Live Paper Trading page.
+/* Raptor Trade — Paper Trading page.
    Renders paper_trading.json (design doc §7.1, built by build.py from
    the paper-trading engine's output). Read-only: this page never
    touches the scanner, the engine, or publication. Missing data is
@@ -29,7 +29,7 @@
       "retry": "Retry",
       "awaiting.title": "Awaiting the first paper trading run.",
       "awaiting.sub": "The paper trading engine has not published its first result yet. This page fills in automatically once the engine runs — no positions, no trades, nothing simulated so far.",
-      "hero.eyebrow": "LIVE PAPER TRADING · VIRTUAL $100 · LONG ONLY",
+      "hero.eyebrow": "PAPER TRADING · VIRTUAL $100 · LONG ONLY",
       "hero.title": "Simulated trading, <span>real signals</span>",
       "hero.sub": "Every production 4H LONG SIGNAL opens a virtual LONG position at a realistic post-signal price: $2 margin, TP +2%, no stop loss, cross margin. Positions close only on TP or liquidation. Nothing here moves real money.",
       "hero.disclaimer": "Simulation results are not trading results. Leverage and maintenance-margin data are labeled where they are estimates — see the constraints at the bottom of this page.",
@@ -38,7 +38,7 @@
       "sec.account.sub": "Virtual account across both wallets. Equity = wallet balance + unrealized PnL of open positions.",
       "sec.positions.kicker": "02 — Open positions",
       "sec.positions.title": "Open Positions",
-      "sec.positions.sub": "Virtual LONG positions currently open. Mark price comes from the live mark-price stream; TP triggers on the first 1m close at or above the TP price.",
+      "sec.positions.sub": "Virtual LONG positions currently open. Mark price comes from the mark-price stream, sampled once per engine tick; TP triggers on the first 1m close at or above the TP price.",
       "sec.history.kicker": "03 — Trade history",
       "sec.history.title": "Closed Positions",
       "sec.history.sub": "Every closed virtual trade: TP exits and liquidations. Net PnL is after entry fee, exit/liquidation fee, and funding.",
@@ -50,7 +50,7 @@
       "sec.skipped.sub": "Production signals that did NOT open a virtual position, and why. Skips are fail-closed: no price is ever invented to open a position.",
       "sec.fees.kicker": "06 — Costs & performance",
       "sec.fees.title": "Fees, Funding & Stats",
-      "sec.fees.sub": "Costs use the public Binance VIP 0 schedule (taker 0.05%). Funding accrues from the live mark-price stream at each 8h settlement.",
+      "sec.fees.sub": "Costs use the public Binance VIP 0 schedule (taker 0.05%). Funding accrues from the mark-price stream (sampled once per engine tick) at each 8h settlement.",
       "panel.equity": "Equity curve",
       "panel.equity.sub": "Total virtual equity over time, from the $100 start. The dashed line is the starting balance.",
       "panel.costs": "Fees & funding breakdown",
@@ -58,7 +58,7 @@
       "panel.feeds": "Data feeds & constraints",
       "th.symbol": "Symbol", "th.side": "Side", "th.entry": "Entry",
       "th.mark": "Mark", "th.tp": "TP", "th.lev": "Leverage",
-      "th.size": "Size", "th.unrl": "Unreal. PnL", "th.roi": "ROI",
+      "th.size": "Size", "th.unrl": "Unreal. PnL (floating)", "th.roi": "ROI",
       "th.margin": "Margin", "th.feed": "Entry feed",
       "th.exitReason": "Exit", "th.exit": "Exit", "th.holding": "Holding",
       "th.gross": "Gross PnL", "th.net": "Net PnL", "th.fees": "Fees",
@@ -86,7 +86,7 @@
       "stat.skipped": "Signals skipped",
       "stat.ofClosed": "of {n} closed", "stat.positions": "positions",
       "fee.total": "Total fees", "fee.funding": "Total funding",
-      "fee.netClosed": "Net PnL (closed)", "fee.unrl": "Unrealized PnL (open)",
+      "fee.netClosed": "Net PnL (closed)", "fee.unrl": "Unrealized PnL (floating)",
       "fee.noteFees": "Entry + exit / liquidation fees",
       "fee.noteFunding": "Paid (−) / received (+) at 8h settlements",
       "fee.noteNet": "After fees and funding",
@@ -115,6 +115,7 @@
       "reason.symbol_not_in_universe": "Symbol not in universe",
       "reason.excluded_symbol": "Excluded symbol",
       "hero.meta": "Updated {t} · Config: ${i} virtual · $2 margin / position · TP +2% · leverage {lev} · MMR {mmr}",
+      "data.freshness": "Data as of {t} WIB · Snapshot — updated when the engine publishes a new tick, then synced to this site about every 5 min. This page does not auto-refresh — reload for the latest snapshot.",
       "motion.on": "MOTION ON", "motion.off": "MOTION OFF"
     },
     id: {
@@ -131,7 +132,7 @@
       "retry": "Coba lagi",
       "awaiting.title": "Menunggu run paper trading pertama.",
       "awaiting.sub": "Engine paper trading belum menerbitkan hasil pertamanya. Halaman ini terisi otomatis begitu engine berjalan — belum ada posisi, belum ada trade, belum ada yang disimulasikan.",
-      "hero.eyebrow": "LIVE PAPER TRADING · VIRTUAL $100 · LONG ONLY",
+      "hero.eyebrow": "PAPER TRADING · VIRTUAL $100 · LONG ONLY",
       "hero.title": "Trading simulasi, <span>sinyal nyata</span>",
       "hero.sub": "Setiap LONG SIGNAL 4H produksi membuka posisi virtual LONG pada harga realistis pasca-sinyal: margin $2, TP +2%, tanpa stop loss, cross margin. Posisi tutup hanya saat TP atau likuidasi. Tidak ada uang nyata yang bergerak di sini.",
       "hero.disclaimer": "Hasil simulasi bukan hasil trading. Data leverage dan maintenance margin diberi label bila berupa estimasi — lihat batasan di bawah halaman ini.",
@@ -140,7 +141,7 @@
       "sec.account.sub": "Akun virtual di kedua wallet. Equity = saldo wallet + PnL belum terealisasi dari posisi terbuka.",
       "sec.positions.kicker": "02 — Posisi terbuka",
       "sec.positions.title": "Posisi Terbuka",
-      "sec.positions.sub": "Posisi virtual LONG yang sedang terbuka. Harga mark berasal dari stream mark-price live; TP terpicu pada close 1m pertama di atau di atas harga TP.",
+      "sec.positions.sub": "Posisi virtual LONG yang sedang terbuka. Harga mark berasal dari stream mark-price, diambil sekali per tick engine; TP terpicu pada close 1m pertama di atau di atas harga TP.",
       "sec.history.kicker": "03 — Riwayat trade",
       "sec.history.title": "Posisi Tertutup",
       "sec.history.sub": "Setiap trade virtual yang tertutup: exit TP dan likuidasi. PnL bersih sudah dikurangi fee entry, fee exit/likuidasi, dan funding.",
@@ -152,7 +153,7 @@
       "sec.skipped.sub": "Sinyal produksi yang TIDAK membuka posisi virtual, beserta alasannya. Dilewati dengan fail-closed: harga tidak pernah dikarang untuk membuka posisi.",
       "sec.fees.kicker": "06 — Biaya & performa",
       "sec.fees.title": "Biaya, Funding & Statistik",
-      "sec.fees.sub": "Biaya memakai jadwal publik Binance VIP 0 (taker 0,05%). Funding terakru dari stream mark-price live di setiap settlement 8 jam.",
+      "sec.fees.sub": "Biaya memakai jadwal publik Binance VIP 0 (taker 0,05%). Funding terakru dari stream mark-price (diambil sekali per tick engine) di setiap settlement 8 jam.",
       "panel.equity": "Kurva equity",
       "panel.equity.sub": "Total equity virtual dari waktu ke waktu, mulai dari $100. Garis putus-putus adalah saldo awal.",
       "panel.costs": "Rincian biaya & funding",
@@ -160,7 +161,7 @@
       "panel.feeds": "Feed data & batasan",
       "th.symbol": "Simbol", "th.side": "Sisi", "th.entry": "Entry",
       "th.mark": "Mark", "th.tp": "TP", "th.lev": "Leverage",
-      "th.size": "Ukuran", "th.unrl": "PnL belum real.", "th.roi": "ROI",
+      "th.size": "Ukuran", "th.unrl": "PnL belum real. (floating)", "th.roi": "ROI",
       "th.margin": "Margin", "th.feed": "Feed entry",
       "th.exitReason": "Exit", "th.exit": "Keluar", "th.holding": "Durasi",
       "th.gross": "PnL kotor", "th.net": "PnL bersih", "th.fees": "Biaya",
@@ -188,7 +189,7 @@
       "stat.skipped": "Sinyal dilewati",
       "stat.ofClosed": "dari {n} tertutup", "stat.positions": "posisi",
       "fee.total": "Total biaya", "fee.funding": "Total funding",
-      "fee.netClosed": "PnL bersih (tertutup)", "fee.unrl": "PnL belum real. (terbuka)",
+      "fee.netClosed": "PnL bersih (tertutup)", "fee.unrl": "PnL belum terealisasi (floating)",
       "fee.noteFees": "Fee entry + exit / likuidasi",
       "fee.noteFunding": "Dibayar (−) / diterima (+) tiap settlement 8 jam",
       "fee.noteNet": "Setelah biaya dan funding",
@@ -217,6 +218,7 @@
       "reason.symbol_not_in_universe": "Simbol di luar universe",
       "reason.excluded_symbol": "Simbol dikecualikan",
       "hero.meta": "Diperbarui {t} · Konfigurasi: ${i} virtual · margin $2 / posisi · TP +2% · leverage {lev} · MMR {mmr}",
+      "data.freshness": "Data per {t} WIB · Snapshot — diperbarui saat engine menerbitkan tick baru, lalu disinkronkan ke situs ini sekitar tiap 5 menit. Halaman ini tidak auto-refresh — muat ulang untuk snapshot terbaru.",
       "motion.on": "MOTION ON", "motion.off": "MOTION OFF"
     }
   };
@@ -524,6 +526,7 @@
       i: cfg.initial_balance_usd == null ? "100" : String(cfg.initial_balance_usd),
       lev: lev, mmr: cfg.mmr_mode || "—"
     });
+    $("data-freshness").textContent = t("data.freshness", { t: fmtWib(DATA.generated_ts) });
   }
 
   function renderAll() {

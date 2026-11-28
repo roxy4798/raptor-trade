@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Raptor Trade — Live Paper Trading</title>
-<meta name="description" content="Live paper trading experiment for Raptor Trade 4H signals: simulated LONG positions, virtual $100 account, TP +2%, no real money, no real orders.">
+<title>Raptor Trade — Paper Trading</title>
+<meta name="description" content="Paper trading experiment for Raptor Trade 4H signals: simulated LONG positions, virtual $100 account, TP +2%, no real money, no real orders.">
 <link rel="icon" href="branding/official-raptor-icon.png">
 <script>try{if(localStorage.getItem('raptorMotionOff')==='1')document.documentElement.classList.add('motion-off');}catch(e){}</script>
 <script>try{document.documentElement.lang=(localStorage.getItem('raptorLang')==='id'?'id':'en');}catch(e){}</script>
@@ -53,10 +53,11 @@
 
   <div id="app" hidden>
     <section class="hero">
-      <p class="eyebrow" data-i18n="hero.eyebrow">LIVE PAPER TRADING · VIRTUAL $100 · LONG ONLY</p>
+      <p class="eyebrow" data-i18n="hero.eyebrow">PAPER TRADING · VIRTUAL $100 · LONG ONLY</p>
       <h1 data-i18n-html="hero.title">Simulated trading, <span>real signals</span></h1>
       <p class="hero-sub" data-i18n="hero.sub">Every production 4H LONG SIGNAL opens a virtual LONG position at a realistic post-signal price: $2 margin, TP +2%, no stop loss, cross margin. Positions close only on TP or liquidation. Nothing here moves real money.</p>
       <p class="hero-meta" id="hero-meta"></p>
+      <p class="hero-freshness" id="data-freshness"></p>
       <p class="hero-disclaimer" data-i18n="hero.disclaimer">Simulation results are not trading results. Leverage and maintenance-margin data are labeled where they are estimates — see the constraints at the bottom of this page.</p>
       <div class="hero-tools">
         <div class="lang-switch" id="lang-switch" role="group" aria-label="Language / Bahasa"><span class="lang-switch-label">Language</span><button type="button" class="lang-btn" data-lang="en" aria-pressed="true">EN</button><button type="button" class="lang-btn" data-lang="id" aria-pressed="false">ID</button></div>
@@ -84,7 +85,7 @@
       <div class="section-head">
         <p class="section-kicker" data-i18n="sec.positions.kicker">02 — Open positions</p>
         <h2 data-i18n="sec.positions.title">Open Positions</h2>
-        <p class="section-sub" data-i18n="sec.positions.sub">Virtual LONG positions currently open. Mark price comes from the live mark-price stream; TP triggers on the first 1m close at or above the TP price.</p>
+        <p class="section-sub" data-i18n="sec.positions.sub">Virtual LONG positions currently open. Mark price comes from the mark-price stream, sampled once per engine tick; TP triggers on the first 1m close at or above the TP price.</p>
       </div>
       <p class="section-count" id="open-count"></p>
       <div class="table-scroll">
@@ -189,7 +190,7 @@
       <div class="section-head">
         <p class="section-kicker" data-i18n="sec.fees.kicker">06 — Costs &amp; performance</p>
         <h2 data-i18n="sec.fees.title">Fees, Funding &amp; Stats</h2>
-        <p class="section-sub" data-i18n="sec.fees.sub">Costs use the public Binance VIP 0 schedule (taker 0.05%). Funding accrues from the live mark-price stream at each 8h settlement.</p>
+        <p class="section-sub" data-i18n="sec.fees.sub">Costs use the public Binance VIP 0 schedule (taker 0.05%). Funding accrues from the mark-price stream (sampled once per engine tick) at each 8h settlement.</p>
       </div>
       <div class="stat-grid" id="stats-grid"></div>
       <div class="panel card">
