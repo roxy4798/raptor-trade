@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Raptor Trade — Live Paper Trading</title>
+<meta name="description" content="Live paper trading experiment for Raptor Trade 4H signals: simulated LONG positions, virtual $100 account, TP +2%, no real money, no real orders.">
+<link rel="icon" href="branding/official-raptor-icon.png">
+<script>try{if(localStorage.getItem('raptorMotionOff')==='1')document.documentElement.classList.add('motion-off');}catch(e){}</script>
+<script>try{document.documentElement.lang=(localStorage.getItem('raptorLang')==='id'?'id':'en');}catch(e){}</script>
+<link rel="stylesheet" href="fx.css">
+<link rel="stylesheet" href="research.css">
+<link rel="stylesheet" href="paper_trading.css">
+</head>
+<body>
+<aside class="app-rail" aria-label="Paper trading navigation">
+  <a class="rail-logo" href="index.html" aria-label="Back to Signal Observatory"><img class="brand-symbol" src="branding/official-raptor-logo.webp" alt="" width="45" height="45"></a>
+  <nav class="rail-nav" aria-label="Paper trading sections">
+    <a class="rail-link active" href="#account" data-section="account" aria-label="Account" title="Account"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg><span data-i18n="rail.account">Account</span></a>
+    <a class="rail-link" href="#positions" data-section="positions" aria-label="Open positions" title="Open positions"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17 9 11l4 3 8-9"/><path d="M16 5h5v5"/></svg><span data-i18n="rail.positions">Positions</span></a>
+    <a class="rail-link" href="#history" data-section="history" aria-label="Trade history" title="Trade history"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-i18n="rail.history">History</span></a>
+    <a class="rail-link" href="#liquidations" data-section="liquidations" aria-label="Liquidations" title="Liquidations"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v10"/><path d="M7 8l5-5 5 5"/><path d="M4 21h16"/></svg><span data-i18n="rail.liquidations">Liquidations</span></a>
+    <a class="rail-link" href="#skipped" data-section="skipped" aria-label="Skipped signals" title="Skipped signals"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span data-i18n="rail.skipped">Skipped</span></a>
+    <a class="rail-link" href="#fees" data-section="fees" aria-label="Fees and funding" title="Fees and funding"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M7 12h10M10 17h4"/></svg><span data-i18n="rail.fees">Fees</span></a>
+    <a class="rail-link" href="research.html" aria-label="AI Research" title="AI Research"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6M11 8v6"/></svg><span data-i18n="rail.research">Research</span></a>
+    <a class="rail-link" href="index.html" aria-label="Back to Signal Observatory" title="Back to Signal Observatory"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/></svg><span data-i18n="rail.home">Home</span></a>
+  </nav>
+  <div class="rail-base"><span class="rail-base-line"></span><span class="rail-orientation">R / PAPER TRADE • 2026</span></div>
+</aside>
+
+<main>
+  <div class="sim-banner" role="note">
+    <span class="sim-banner-dot" aria-hidden="true"></span>
+    <strong data-i18n="banner.title">PAPER TRADING — SIMULATION</strong>
+    <span data-i18n="banner.sub">Virtual money only. No real orders, no real funds.</span>
+  </div>
+
+  <div id="loading" class="state-card" role="status">
+    <div class="spinner" aria-hidden="true"></div>
+    <p data-i18n="loading">Loading paper trading data…</p>
+  </div>
+
+  <div id="load-error" class="state-card error" hidden>
+    <p class="state-title" data-i18n="loadError.title">Paper trading data could not be loaded.</p>
+    <p class="state-sub" data-i18n="loadError.sub">The paper trading file (paper_trading.json) could not be parsed. The signal dashboard is unaffected.</p>
+    <button id="retry-load" type="button" data-i18n="retry">Retry</button>
+  </div>
+
+  <div id="awaiting" class="state-card" hidden>
+    <p class="state-title" data-i18n="awaiting.title">Awaiting the first paper trading run.</p>
+    <p class="state-sub" data-i18n="awaiting.sub">The paper trading engine has not published its first result yet. This page fills in automatically once the engine runs — no positions, no trades, nothing simulated so far.</p>
+  </div>
+
+  <div id="app" hidden>
+    <section class="hero">
+      <p class="eyebrow" data-i18n="hero.eyebrow">LIVE PAPER TRADING · VIRTUAL $100 · LONG ONLY</p>
+      <h1 data-i18n-html="hero.title">Simulated trading, <span>real signals</span></h1>
+      <p class="hero-sub" data-i18n="hero.sub">Every production 4H LONG SIGNAL opens a virtual LONG position at a realistic post-signal price: $2 margin, TP +2%, no stop loss, cross margin. Positions close only on TP or liquidation. Nothing here moves real money.</p>
+      <p class="hero-meta" id="hero-meta"></p>
+      <p class="hero-disclaimer" data-i18n="hero.disclaimer">Simulation results are not trading results. Leverage and maintenance-margin data are labeled where they are estimates — see the constraints at the bottom of this page.</p>
+      <div class="hero-tools">
+        <div class="lang-switch" id="lang-switch" role="group" aria-label="Language / Bahasa"><span class="lang-switch-label">Language</span><button type="button" class="lang-btn" data-lang="en" aria-pressed="true">EN</button><button type="button" class="lang-btn" data-lang="id" aria-pressed="false">ID</button></div>
+        <button type="button" class="motion-toggle" id="motion-toggle" aria-label="Turn off visual motion" aria-pressed="false"><span class="motion-icon">✳</span> <span class="motion-text">MOTION ON</span></button>
+      </div>
+    </section>
+
+    <section id="account" class="section">
+      <div class="section-head">
+        <p class="section-kicker" data-i18n="sec.account.kicker">01 — Account</p>
+        <h2 data-i18n="sec.account.title">Account Summary</h2>
+        <p class="section-sub" data-i18n="sec.account.sub">Virtual account across both wallets. Equity = wallet balance + unrealized PnL of open positions.</p>
+      </div>
+      <div class="stat-grid" id="acct-stats"></div>
+      <div class="panel-grid" id="venue-cards"></div>
+      <div class="panel card">
+        <h3 data-i18n="panel.equity">Equity curve</h3>
+        <p class="panel-sub" data-i18n="panel.equity.sub">Total virtual equity over time, from the $100 start. The dashed line is the starting balance.</p>
+        <div id="equity-chart" class="equity-chart"></div>
+        <p class="panel-sub equity-meta" id="equity-meta"></p>
+      </div>
+    </section>
+
+    <section id="positions" class="section">
+      <div class="section-head">
+        <p class="section-kicker" data-i18n="sec.positions.kicker">02 — Open positions</p>
+        <h2 data-i18n="sec.positions.title">Open Positions</h2>
+        <p class="section-sub" data-i18n="sec.positions.sub">Virtual LONG positions currently open. Mark price comes from the live mark-price stream; TP triggers on the first 1m close at or above the TP price.</p>
+      </div>
+      <p class="section-count" id="open-count"></p>
+      <div class="table-scroll">
+        <table class="paper-table" id="open-table">
+          <thead>
+            <tr>
+              <th data-i18n="th.symbol">Symbol</th>
+              <th data-i18n="th.side">Side</th>
+              <th class="num" data-i18n="th.entry">Entry</th>
+              <th class="num" data-i18n="th.mark">Mark</th>
+              <th class="num" data-i18n="th.tp">TP</th>
+              <th class="num" data-i18n="th.lev">Leverage</th>
+              <th class="num" data-i18n="th.size">Size</th>
+              <th class="num" data-i18n="th.unrl">Unreal. PnL</th>
+              <th class="num" data-i18n="th.roi">ROI</th>
+              <th class="num" data-i18n="th.margin">Margin</th>
+              <th data-i18n="th.feed">Entry feed</th>
+            </tr>
+          </thead>
+          <tbody id="open-body"></tbody>
+        </table>
+      </div>
+      <p class="table-empty" id="open-empty" hidden data-i18n="open.empty">No open positions right now.</p>
+    </section>
+
+    <section id="history" class="section">
+      <div class="section-head">
+        <p class="section-kicker" data-i18n="sec.history.kicker">03 — Trade history</p>
+        <h2 data-i18n="sec.history.title">Closed Positions</h2>
+        <p class="section-sub" data-i18n="sec.history.sub">Every closed virtual trade: TP exits and liquidations. Net PnL is after entry fee, exit/liquidation fee, and funding.</p>
+      </div>
+      <p class="section-count" id="closed-count"></p>
+      <div class="table-scroll">
+        <table class="paper-table" id="closed-table">
+          <thead>
+            <tr>
+              <th data-i18n="th.symbol">Symbol</th>
+              <th data-i18n="th.exitReason">Exit</th>
+              <th class="num" data-i18n="th.entry">Entry</th>
+              <th class="num" data-i18n="th.exit">Exit</th>
+              <th class="num" data-i18n="th.holding">Holding</th>
+              <th class="num" data-i18n="th.gross">Gross PnL</th>
+              <th class="num" data-i18n="th.net">Net PnL</th>
+              <th class="num" data-i18n="th.roi">ROI</th>
+              <th class="num" data-i18n="th.fees">Fees</th>
+              <th class="num" data-i18n="th.funding">Funding</th>
+            </tr>
+          </thead>
+          <tbody id="closed-body"></tbody>
+        </table>
+      </div>
+      <p class="table-empty" id="closed-empty" hidden data-i18n="closed.empty">No closed trades yet.</p>
+    </section>
+
+    <section id="liquidations" class="section">
+      <div class="section-head">
+        <p class="section-kicker" data-i18n="sec.liq.kicker">04 — Liquidations</p>
+        <h2 data-i18n="sec.liq.title">Liquidation History</h2>
+        <p class="section-sub" data-i18n="sec.liq.sub">Cross margin puts the whole sub-wallet at risk: when the margin ratio reaches 100%, all open positions in that wallet close at the triggering mark price.</p>
+      </div>
+      <div class="table-scroll">
+        <table class="paper-table" id="liq-table">
+          <thead>
+            <tr>
+              <th data-i18n="th.time">Time (WIB)</th>
+              <th data-i18n="th.wallet">Wallet</th>
+              <th class="num" data-i18n="th.marginRatio">Margin ratio</th>
+              <th class="num" data-i18n="th.posClosed">Positions closed</th>
+              <th class="num" data-i18n="th.loss">Loss</th>
+            </tr>
+          </thead>
+          <tbody id="liq-body"></tbody>
+        </table>
+      </div>
+      <p class="table-empty" id="liq-empty" hidden data-i18n="liq.empty">No liquidations so far.</p>
+    </section>
+
+    <section id="skipped" class="section">
+      <div class="section-head">
+        <p class="section-kicker" data-i18n="sec.skipped.kicker">05 — Skipped signals</p>
+        <h2 data-i18n="sec.skipped.title">Skipped Signals</h2>
+        <p class="section-sub" data-i18n="sec.skipped.sub">Production signals that did NOT open a virtual position, and why. Skips are fail-closed: no price is ever invented to open a position.</p>
+      </div>
+      <p class="section-count" id="skip-count"></p>
+      <div class="table-scroll">
+        <table class="paper-table" id="skip-table">
+          <thead>
+            <tr>
+              <th data-i18n="th.symbol">Symbol</th>
+              <th data-i18n="th.time">Signal time (WIB)</th>
+              <th data-i18n="th.reason">Reason</th>
+              <th data-i18n="th.detail">Detail</th>
+            </tr>
+          </thead>
+          <tbody id="skip-body"></tbody>
+        </table>
+      </div>
+      <p class="table-empty" id="skip-empty" hidden data-i18n="skip.empty">No skipped signals so far.</p>
+    </section>
+
+    <section id="fees" class="section">
+      <div class="section-head">
+        <p class="section-kicker" data-i18n="sec.fees.kicker">06 — Costs &amp; performance</p>
+        <h2 data-i18n="sec.fees.title">Fees, Funding &amp; Stats</h2>
+        <p class="section-sub" data-i18n="sec.fees.sub">Costs use the public Binance VIP 0 schedule (taker 0.05%). Funding accrues from the live mark-price stream at each 8h settlement.</p>
+      </div>
+      <div class="stat-grid" id="stats-grid"></div>
+      <div class="panel card">
+        <h3 data-i18n="panel.costs">Fees &amp; funding breakdown</h3>
+        <p class="panel-sub" data-i18n="panel.costs.sub">Totals across all closed trades and open positions. A negative funding total means the virtual account paid funding; a positive total means it received funding.</p>
+        <div id="fees-body"></div>
+      </div>
+      <div class="panel card">
+        <h3 data-i18n="panel.feeds">Data feeds &amp; constraints</h3>
+        <p class="panel-sub" id="feeds-line"></p>
+        <ul class="constraint-list" id="constraints-list"></ul>
+      </div>
+    </section>
+
+    <footer class="page-foot">
+      <p data-i18n="foot.1">Paper trading data is computed on the Raptor Trade VM from production 4H signals and official Binance data. Nothing here is a trading recommendation, and no virtual result predicts real trading.</p>
+      <p><a href="index.html" data-i18n="foot.2">← Back to Signal Observatory</a> · <a href="research.html" data-i18n="foot.3">AI Research →</a></p>
+    </footer>
+  </div>
+</main>
+<script src="fx.js" defer></script>
+<script src="paper_trading.js" defer></script>
+</body>
+</html>

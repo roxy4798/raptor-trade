@@ -1,0 +1,78 @@
+/* Raptor Trade — Live Paper Trading page.
+   Builds on research.css tokens (:root vars, .app-rail, .state-card,
+   .hero, .stat-grid, .panel, .table-scroll). Page-specific: the
+   SIMULATION banner, account bar, equity chart, futures-style tables.
+   Tables scroll horizontally inside their container on narrow screens
+   (same approach as research.css r5 fix) — never clipped, never
+   overlapping. */
+
+/* ---- SIMULATION banner: sticky, visible without scrolling ---- */
+.sim-banner{position:sticky;top:0;z-index:40;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:0 -28px;padding:10px 28px;background:linear-gradient(90deg,#3a2a05,#241a02);border-bottom:1px solid rgba(242,197,120,.55);color:#ffe1a1;font-size:13px;line-height:1.4}
+.sim-banner strong{letter-spacing:.12em;font-size:12.5px;color:#ffd97a}
+.sim-banner-dot{width:9px;height:9px;border-radius:50%;background:#f2c578;box-shadow:0 0 10px rgba(242,197,120,.9);flex:0 0 auto;animation:sim-pulse 1.8s ease-in-out infinite}
+@keyframes sim-pulse{50%{opacity:.45}}
+html.motion-off .sim-banner-dot{animation:none}
+
+/* ---- account / stats ---- */
+.section-count{margin:10px 0 0;font-family:var(--font-mono);font-size:12.5px;color:var(--text-3)}
+.stat-card .stat-value.neg{color:var(--neg)}
+.stat-card .stat-value.pos{color:var(--pos)}
+.stat-card .stat-value.warn{color:var(--warn)}
+.venue-name{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3)}
+.venue-equity{font-family:var(--font-mono);font-size:26px;font-weight:600;margin:6px 0 2px}
+.venue-rows{margin-top:12px}
+.venue-row{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid var(--line);font-size:13px}
+.venue-row:last-child{border-bottom:0}
+.venue-row span:first-child{color:var(--text-2)}
+.venue-row span:last-child{font-family:var(--font-mono);white-space:nowrap}
+.venue-sub{font-size:12.5px;color:var(--text-2);margin:10px 0 0}
+.venue-sub span{font-family:var(--font-mono);color:var(--text-1)}
+
+/* ---- equity chart ---- */
+.equity-chart{width:100%}
+.equity-chart svg{display:block;width:100%;height:auto}
+.equity-meta{margin-top:10px}
+
+/* ---- futures-style tables ---- */
+.paper-table{width:100%;min-width:760px;border-collapse:collapse;font-size:13px}
+.paper-table th,.paper-table td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+.paper-table th{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);position:sticky;top:0;background:var(--bg-1);z-index:2}
+.paper-table td.num,.paper-table th.num{text-align:right;font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.paper-table td.sym{font-weight:700}
+.paper-table td.sym small{display:block;font-weight:400;font-size:11px;color:var(--text-3)}
+.paper-table tr:hover td{background:rgba(185,243,138,.03)}
+.side-long{display:inline-block;padding:2px 8px;border-radius:999px;background:var(--pos-dim);color:var(--pos);font-size:11px;font-weight:700;letter-spacing:.08em}
+.exit-tp{display:inline-block;padding:2px 8px;border-radius:999px;background:var(--pos-dim);color:var(--pos);font-size:11px;font-weight:700}
+.exit-liq{display:inline-block;padding:2px 8px;border-radius:999px;background:var(--neg-dim);color:var(--neg);font-size:11px;font-weight:700}
+.reason-code{font-family:var(--font-mono);font-size:12px;color:var(--warn);white-space:nowrap}
+.paper-table td.detail{white-space:normal;min-width:220px;color:var(--text-2);font-size:12.5px}
+.table-empty{margin:14px 0 0;color:var(--text-2);font-size:13.5px}
+
+/* ---- fees / constraints ---- */
+.fee-rows{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.fee-row{background:var(--bg-0);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.fee-row .fee-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3)}
+.fee-row .fee-value{font-family:var(--font-mono);font-size:20px;font-weight:600;margin-top:4px}
+.fee-row .fee-note{font-size:12px;color:var(--text-2);margin-top:2px}
+.constraint-list{margin:0;padding-left:18px;color:var(--text-2);font-size:13.5px}
+.constraint-list li{margin:6px 0}
+.constraint-list code{font-family:var(--font-mono);font-size:12px;color:var(--warn)}
+
+/* ---- responsive ---- */
+@media (max-width: 1080px){
+  .sim-banner{margin:0 -28px}
+}
+@media (max-width: 780px){
+  .sim-banner{margin:0 -16px;padding:10px 16px}
+}
+@media (max-width: 650px){
+  main{padding:0 16px 94px}
+  .sim-banner{font-size:12px}
+  .stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stat-value{font-size:22px}
+  .venue-equity{font-size:22px}
+  .fee-rows{grid-template-columns:minmax(0,1fr)}
+}
+@media (prefers-reduced-motion: reduce){
+  .sim-banner-dot{animation:none}
+}

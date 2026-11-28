@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_ts": 1795882318.3600085,
-  "generated_wib": "28 Nov 2026, 23:11 WIB",
+  "generated_ts": 1795883815.935929,
+  "generated_wib": "28 Nov 2026, 23:36 WIB",
   "rules_version": "v2.1.2",
   "next_close_ts": 1795896000.0,
   "source": "Binance Futures Mainnet (local)"
@@ -9,18 +9,17 @@
  "kpis": {
   "total": 629,
   "last24": 41,
-  "win_rate": 12.579617834394904,
+  "win_rate": 12.559618441971383,
   "wins": 79,
-  "n_eval": 628,
-  "mean_net": 0.0658656832033608,
-  "median_net": -0.07996344996478913,
+  "n_eval": 629,
+  "mean_net": 0.05955610754664235,
+  "median_net": -0.07996738980852758,
   "eligible": 750,
   "gap_blocked": 4,
   "universe_total": 832,
   "classes": {
-   "BELUM DINILAI": 1,
+   "REVERSAL": 82,
    "PUMP CONTINUED": 79,
-   "REVERSAL": 81,
    "SIDEWAYS": 468
   },
   "first_signal_date": "21 Nov 2026"
@@ -29,13 +28,13 @@
   "healthy": true,
   "telegram_paused": false,
   "ws_connected": true,
-  "ws_reconnects": 1,
+  "ws_reconnects": 0,
   "eligible": 750,
   "gap_blocked": 4,
   "universe_total": 832,
   "signals_total": 187,
-  "heartbeat_age_s": 12.0,
-  "uptime_s": 17662.8,
+  "heartbeat_age_s": 4.0,
+  "uptime_s": 883.4,
   "backfill_missing": 25,
   "backfill_pending": 1,
   "backfill_filled": 288
@@ -4230,9 +4229,16 @@
     "close_wib": "28 Nov 19:00",
     "net_pct": -0.9284635580095143,
     "cum_net_pct": 24.784189620542495
+   },
+   {
+    "symbol": "PARTIUSDT",
+    "close_ts": 1795881600.0,
+    "close_wib": "28 Nov 23:00",
+    "net_pct": -3.499044562842557,
+    "cum_net_pct": 20.417935218337767
    }
   ],
-  "n_eval": 564,
+  "n_eval": 565,
   "n_total": 629
  },
  "tf_summary": {
@@ -8108,7 +8114,21 @@
    "quote_volume": 9966897.17054,
    "qv24h": 11381609.25573,
    "chart": "charts/PARTIUSDT_1795881600.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "REVERSAL",
+    "reason": "return +30m -3.39% <= -1,00%",
+    "r1": -0.04460470085470081,
+    "r5": -0.03872863247863245,
+    "r15": -0.03472222222222232,
+    "r30": -0.03392094017094016,
+    "mfe": -0.00026709401709412717,
+    "mae": -0.05021367521367526,
+    "net": -0.03499044562842557,
+    "evaluated_ts": 1795883815.589764,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
