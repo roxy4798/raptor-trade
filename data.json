@@ -1,23 +1,24 @@
 {
  "meta": {
-  "generated_ts": 1795894417.7682338,
-  "generated_wib": "29 Nov 2026, 02:33 WIB",
+  "generated_ts": 1795896112.8791142,
+  "generated_wib": "29 Nov 2026, 03:01 WIB",
   "rules_version": "v2.1.2",
-  "next_close_ts": 1795896000.0,
+  "next_close_ts": 1795910400.0,
   "source": "Binance Futures Mainnet (local)"
  },
  "kpis": {
-  "total": 629,
-  "last24": 41,
+  "total": 630,
+  "last24": 22,
   "win_rate": 12.559618441971383,
   "wins": 79,
   "n_eval": 629,
   "mean_net": 0.05955610754664235,
   "median_net": -0.07996738980852758,
   "eligible": 750,
-  "gap_blocked": 4,
+  "gap_blocked": 6,
   "universe_total": 832,
   "classes": {
+   "BELUM DINILAI": 1,
    "REVERSAL": 82,
    "PUMP CONTINUED": 79,
    "SIDEWAYS": 468
@@ -30,11 +31,11 @@
   "ws_connected": true,
   "ws_reconnects": 0,
   "eligible": 750,
-  "gap_blocked": 4,
+  "gap_blocked": 6,
   "universe_total": 832,
-  "signals_total": 187,
-  "heartbeat_age_s": 15.0,
-  "uptime_s": 3677.9,
+  "signals_total": 188,
+  "heartbeat_age_s": -1.0,
+  "uptime_s": 5388.7,
   "backfill_missing": 25,
   "backfill_pending": 1,
   "backfill_filled": 288
@@ -274,6 +275,11 @@
    {
     "close_ts": 1795881600.0,
     "close_wib": "28 Nov 23:00",
+    "count": 1
+   },
+   {
+    "close_ts": 1795896000.0,
+    "close_wib": "29 Nov 03:00",
     "count": 1
    }
   ],
@@ -4239,7 +4245,7 @@
    }
   ],
   "n_eval": 565,
-  "n_total": 629
+  "n_total": 630
  },
  "tf_summary": {
   "horizons": {
@@ -4299,10 +4305,10 @@
     }
    },
    "h1w": {
-    "n": 8,
-    "mean": 6.97031976349127,
-    "median": -0.25258387038418206,
-    "pct_positive": 37.5,
+    "n": 9,
+    "mean": 7.309216493009815,
+    "median": -0.11610969620792222,
+    "pct_positive": 44.44444444444444,
     "best": {
      "symbol": "BTWUSDT",
      "value": 103.15915755798453,
@@ -8082,6 +8088,66 @@
   ]
  },
  "signals": [
+  {
+   "signal_id": "PROD WS:USD-M:GRVTUSDT:LONG SIGNAL:1795896000.0",
+   "symbol": "GRVTUSDT",
+   "market": "USD-M",
+   "close_ts": 1795896000.0,
+   "close_wib": "29 Nov 03:00",
+   "close_utc": "28 Nov 20:00",
+   "price": 0.1501,
+   "open": 0.1329,
+   "chg_4h": 12.85714285714286,
+   "ema20": 0.13301879219123358,
+   "ema50": 0.13912080735253368,
+   "ema500": 0.19731507814919397,
+   "rvol": 11.863360750300243,
+   "taker_buy": 0.5015359296758223,
+   "breakout_level": 0.1417,
+   "breakout_margin": 5.928016937191263,
+   "hh": 3,
+   "hl": 2,
+   "atr14_pct": 4.793649891910881,
+   "rsi_5m": 67.56168046928917,
+   "rsi_15m": null,
+   "rsi_1h": null,
+   "rsi_4h": 69.22162642529314,
+   "spread": 13.38688085676076,
+   "impact": 44.07232854756118,
+   "depth": 775.4884,
+   "book_delay_s": 2.0,
+   "liq_validated": false,
+   "quote_volume": 6206906.0518,
+   "qv24h": 8223297.942799999,
+   "chart": "charts/GRVTUSDT_1795896000.png",
+   "tracker": null,
+   "tf": {
+    "h4": {
+     "status": null,
+     "return_pct": null
+    },
+    "h12": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h2d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h3d": {
+     "status": null,
+     "return_pct": null
+    },
+    "h1w": {
+     "status": null,
+     "return_pct": null
+    }
+   }
+  },
   {
    "signal_id": "PROD WS:USD-M:PARTIUSDT:LONG SIGNAL:1795881600.0",
    "symbol": "PARTIUSDT",
@@ -54031,8 +54097,8 @@
      "return_pct": 0.815613166326834
     },
     "h1w": {
-     "status": "pending",
-     "return_pct": null
+     "status": "evaluated",
+     "return_pct": 10.020390329158179
     }
    }
   },
