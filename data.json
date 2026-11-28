@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_ts": 1795896710.5618606,
-  "generated_wib": "29 Nov 2026, 03:11 WIB",
+  "generated_ts": 1795898207.7087696,
+  "generated_wib": "29 Nov 2026, 03:36 WIB",
   "rules_version": "v2.1.2",
   "next_close_ts": 1795910400.0,
   "source": "Binance Futures Mainnet (local)"
@@ -9,17 +9,16 @@
  "kpis": {
   "total": 630,
   "last24": 22,
-  "win_rate": 12.559618441971383,
+  "win_rate": 12.53968253968254,
   "wins": 79,
-  "n_eval": 629,
-  "mean_net": 0.05955610754664235,
-  "median_net": -0.07996738980852758,
+  "n_eval": 630,
+  "mean_net": 0.05460015262484994,
+  "median_net": -0.07998060566129128,
   "eligible": 750,
   "gap_blocked": 6,
   "universe_total": 832,
   "classes": {
-   "BELUM DINILAI": 1,
-   "REVERSAL": 82,
+   "REVERSAL": 83,
    "PUMP CONTINUED": 79,
    "SIDEWAYS": 468
   },
@@ -34,8 +33,8 @@
   "gap_blocked": 6,
   "universe_total": 832,
   "signals_total": 188,
-  "heartbeat_age_s": 26.0,
-  "uptime_s": 5958.8,
+  "heartbeat_age_s": 28.0,
+  "uptime_s": 853.9,
   "backfill_missing": 25,
   "backfill_pending": 1,
   "backfill_filled": 288
@@ -4242,9 +4241,16 @@
     "close_wib": "28 Nov 23:00",
     "net_pct": -3.499044562842557,
     "cum_net_pct": 20.417935218337767
+   },
+   {
+    "symbol": "GRVTUSDT",
+    "close_ts": 1795896000.0,
+    "close_wib": "29 Nov 03:00",
+    "net_pct": -2.7455143781878633,
+    "cum_net_pct": 17.111843493001366
    }
   ],
-  "n_eval": 565,
+  "n_eval": 566,
   "n_total": 630
  },
  "tf_summary": {
@@ -8126,7 +8132,21 @@
    "quote_volume": 6206906.0518,
    "qv24h": 8223297.942799999,
    "chart": "charts/GRVTUSDT_1795896000.png",
-   "tracker": null,
+   "tracker": {
+    "classification": "REVERSAL",
+    "reason": "return +30m -2.53% <= -1,00%",
+    "r1": 0.0019986675549632515,
+    "r5": -0.005329780146569152,
+    "r15": -0.009327115256495766,
+    "r30": -0.025316455696202556,
+    "mfe": 0.01065956029313786,
+    "mae": -0.03797468354430389,
+    "net": -0.027455143781878633,
+    "evaluated_ts": 1795898207.9185288,
+    "candles_used": 31,
+    "insufficient_reason": null,
+    "insufficient_reason_en": null
+   },
    "tf": {
     "h4": {
      "status": "pending",
