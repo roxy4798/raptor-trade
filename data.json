@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_ts": 1795871209.6589384,
-  "generated_wib": "28 Nov 2026, 20:06 WIB",
+  "generated_ts": 1795880509.1219652,
+  "generated_wib": "28 Nov 2026, 22:41 WIB",
   "rules_version": "v2.1.2",
   "next_close_ts": 1795881600.0,
   "source": "Binance Futures Mainnet (local)"
@@ -14,8 +14,8 @@
   "n_eval": 628,
   "mean_net": 0.0658656832033608,
   "median_net": -0.07996344996478913,
-  "eligible": 816,
-  "gap_blocked": 2,
+  "eligible": 750,
+  "gap_blocked": 4,
   "universe_total": 832,
   "classes": {
    "PUMP CONTINUED": 79,
@@ -28,14 +28,14 @@
   "healthy": true,
   "telegram_paused": false,
   "ws_connected": true,
-  "ws_reconnects": 0,
-  "eligible": 816,
-  "gap_blocked": 2,
+  "ws_reconnects": 1,
+  "eligible": 750,
+  "gap_blocked": 4,
   "universe_total": 832,
   "signals_total": 184,
-  "heartbeat_age_s": 7.0,
-  "uptime_s": 6558.3,
-  "backfill_missing": 60,
+  "heartbeat_age_s": 3.0,
+  "uptime_s": 15862.4,
+  "backfill_missing": 25,
   "backfill_pending": 1,
   "backfill_filled": 288
  },
